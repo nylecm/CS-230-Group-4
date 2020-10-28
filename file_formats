@@ -3,7 +3,7 @@ player id` name` number of wins` number of losses
 
 --- Gameboard File Format ---
 
-gameboard name` width` height` number of fixed tiles` x pos` y pos` NESW` NESW` ...` action tile number` type of action tile` number of action tiles of that type` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` Player 2 Starting Pos x` Player 2 Starting Pos y` Player 3 Starting Pos x` Player 3 Starting Pos y` Player 4 Starting Pos x` Player 4 Starting Pos y
+gameboard name` width` height` number of fixed tiles` x pos` y pos` NESW` NESW` number of floor tiles of that type` ...` ...` action tile number` type of action tile` number of action tiles of that type` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` Player 2 Starting Pos x` Player 2 Starting Pos y` Player 3 Starting Pos x` Player 3 Starting Pos y` Player 4 Starting Pos x` Player 4 Starting Pos y
 
 --- Gameboard Supplimentary Data Format ---
 
