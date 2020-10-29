@@ -1,14 +1,28 @@
+--- This is a comment. Comments should be used before any manually typed record eg. game board. ---          <-- The dashes at the end are optional but good practice ;)
+
 --- Player File Format ---
-player id` name` number of wins` number of losses
 
---- Gameboard File Format ---
+nickname` password` number of wins` number of losses
 
-gameboard name` width` height` number of fixed tiles` x pos` y pos` NESW` NESW` number of floor tiles of that type` ...` ...` action tile number` type of action tile` number of action tiles of that type` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` Player 2 Starting Pos x` Player 2 Starting Pos y` Player 3 Starting Pos x` Player 3 Starting Pos y` Player 4 Starting Pos x` Player 4 Starting Pos y
+--- Game board File Format ---
+--- (fixed action tiles have coords prior to NESW) | (non-fixed action tiles)                                               
+game board name` width` height` x pos` y pos` NESW` NESW` number of floor tiles of that type` ...` ...` type of action tile` number of action tiles of that type` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` Player 2 Starting Pos x` Player 2 Starting Pos y` Player 3 Starting Pos x` Player 3 Starting Pos y` Player 4 Starting Pos x` Player 4 Starting Pos y
 
---- Gameboard Supplimentary Data Format ---
+--- Game board Supplimentary Data Format ---
 
-gameboard name` description` difficulty` preview image
+game board name` description` difficulty` preview image directory
 
---- Game File Format ---
+--- Game File Format --- Each saved game shall be saved into a separate file named <game id>.txt ---
 
-player id` gameboard id` number of turns` Player 1 Pos x` Player 1 Pos y` Player 2 Pos x` Player 2 Pos y` Player 3 Pos x` Player 3 Pos y` Player 4 Pos x` Player 4 Pos y
+number of players` game board id` number of turns already made` NESW*` ...` number of area effects currently applied` area effect type
+
+--- The next 2 to 4 lines shall have deatils about the player instance. ---
+
+--- Player Instance Format ---
+
+player id` player x position` player y position` type of action tile**` number of action tiles of that type` ...` ...` action tile type previously applied to this player` ...
+
+** These are the action tiles that the player is keeping on them ready to use.
+* NESW values of tile on that game board for each row from top row to bottom row.
+
+A database would be nice :)
