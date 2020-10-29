@@ -6,7 +6,7 @@ nickname` password` number of wins` number of losses
 
 --- Game board File Format ---
 --- (fixed action tiles have coords prior to NESW) | (non-fixed action tiles)                                               
-game board name` width` height` x pos` y pos` NESW` NESW` number of floor tiles of that type` ...` ...` type of action tile` number of action tiles of that type` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` Player 2 Starting Pos x` Player 2 Starting Pos y` Player 3 Starting Pos x` Player 3 Starting Pos y` Player 4 Starting Pos x` Player 4 Starting Pos y
+game board name` width` height` x pos` y pos` NESW` ...` ...` ...` NESW` number of floor tiles of that type` ...` ...` type of action tile` number of action tiles of that type` ...` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` ...` ...
 
 --- Game board Supplimentary Data Format ---
 
