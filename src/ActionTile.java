@@ -1,2 +1,2 @@
-public class ActionTile {
+public class ActionTile extends Tile {
 }
