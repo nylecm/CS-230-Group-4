@@ -5,8 +5,9 @@
 nickname` password` number of wins` number of losses
 
 --- Game board File Format ---
---- (fixed action tiles have coords prior to NESW) | (non-fixed action tiles)                                               
-game board name` width` height` x pos` y pos` NESW` ...` ...` ...` NESW` number of floor tiles of that type` ...` ...` type of action tile` number of action tiles of that type` ...` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` ...` ...
+--- (fixed action tiles have coords prior to NESW!) | (non-fixed action tiles)                                               
+game board name` width` height` x pos` y pos` NESW!` ...` ...` ...` NESW!` number of floor tiles of that type` ...` ...` type of action tile` number of action tiles of that type` ...` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` ...` ...
+                                                  ^ ! menas goal tile
 
 --- Game board Supplimentary Data Format ---
 
@@ -14,7 +15,7 @@ game board name` description` difficulty` preview image directory
 
 --- Game File Format --- Each saved game shall be saved into a separate file named <game id>.txt ---
 
-number of players` game board id` number of turns already made` NESW*` ...` number of area effects currently applied` area effect type
+number of players` game board id` number of turns already made` NESW!*` ...` number of area effects currently applied` area effect type
 
 --- The next 2 to 4 lines shall have deatils about the player instance. ---
 
@@ -23,6 +24,6 @@ number of players` game board id` number of turns already made` NESW*` ...` numb
 player id` player x position` player y position` type of action tile**` number of action tiles of that type` ...` ...` action tile type previously applied to this player` ...
 
 ** These are the action tiles that the player is keeping on them ready to use.
-* NESW values of tile on that game board for each row from top row to bottom row.
+* NESW! values of tile on that game board for each row from top row to bottom row.
 
 A database would be nice :)
