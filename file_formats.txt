@@ -4,7 +4,10 @@
 
 nickname` password` number of wins` number of losses
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 --- Game board File Format ---
+
 --- (fixed action tiles have coords prior to NESW!) | (non-fixed action tiles)                                               
 game board name` width` height` x pos` y pos` NESW!` ...` ...` ...` NESW!` number of floor tiles of that type` ...` ...` type of action tile` number of action tiles of that type` ...` ...` Player 1 Starting Pos x` Player 1 Starting Pos y` ...` ...
                                                   ^ ! menas goal tile
@@ -12,6 +15,8 @@ game board name` width` height` x pos` y pos` NESW!` ...` ...` ...` NESW!` numbe
 --- Game board Supplimentary Data Format ---
 
 game board name` description` difficulty` preview image directory
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --- Game File Format --- Each saved game shall be saved into a separate file named <game id>.txt ---
 
@@ -22,6 +27,10 @@ number of players` game board id` number of turns already made` NESW!*` ...` num
 --- Player Instance Format ---
 
 player id` player x position` player y position` type of action tile**` number of action tiles of that type` ...` ...` action tile type previously applied to this player` ...
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--- Notes ---
 
 ** These are the action tiles that the player is keeping on them ready to use.
 * NESW! values of tile on that game board for each row from top row to bottom row.
