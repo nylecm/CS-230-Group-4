@@ -1,3 +1,10 @@
-# CS-230-Group-4
+# The Moons of Uranus
 
-2020 Group Project
+## Introduction
+
+A game written in Java, using the Java FX platform that has been inspired by 
+Ravensburger's Labyrinth.
+
+## How to Run
+
+## Instructions
