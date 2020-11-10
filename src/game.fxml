@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+   <children>
+      <BorderPane layoutX="223.0" layoutY="106.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
+         <left>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <content>
+                  <VBox prefHeight="586.0" prefWidth="182.0" />
+               </content>
+            </ScrollPane>
+         </left>
+         <bottom>
+            <HBox alignment="BOTTOM_LEFT" prefHeight="79.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="78.0" stroke="BLACK" strokeType="INSIDE" width="79.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                  <Button mnemonicParsing="false" text="Move Complete" />
+               </children></HBox>
+         </bottom>
+         <top>
+            <HBox prefHeight="20.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" text="Exit Game" />
+                  <Button mnemonicParsing="false" text="Save Game" />
+                   <Button mnemonicParsing="false" text="Help" />
+               </children>
+            </HBox>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
