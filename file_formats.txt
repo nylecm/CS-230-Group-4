@@ -2,7 +2,7 @@
 
 --- Player File Format ---
 
-nickname` password` number of wins` number of losses
+email` nickname` password` number of wins` number of losses
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
