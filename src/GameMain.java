@@ -10,12 +10,12 @@ import javafx.application.Application;
 public class GameMain extends Application {
     public void start(Stage primaryStage) {
         try {
-            Pane root = (Pane) FXMLLoader.load(getClass().getResource("game.fxml"));
-            Scene scene = new Scene(root,720,576);
+            Pane root = (Pane) FXMLLoader.load(getClass().getResource("defaultLogin.fxml"));
+            Scene scene = new Scene(root, 720, 576);
 
             primaryStage.setScene(scene);
             primaryStage.show();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
