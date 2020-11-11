@@ -30,7 +30,7 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="E-Mail">
+                  <Label text="E-Main">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
