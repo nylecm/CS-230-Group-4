@@ -48,4 +48,13 @@ public class FloorTile extends Tile {
     public boolean isGoalTile() {
         return isGoalTile;
     }
+
+    @Override
+    public String toString() {
+        return "FloorTile{" +
+                "isFixed=" + isFixed +
+                ", paths=" + paths +
+                ", isGoalTile=" + isGoalTile +
+                '}';
+    }
 }
