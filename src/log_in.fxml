@@ -5,71 +5,114 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="anchor" prefHeight="207.0" prefWidth="281.0" stylesheets="log_in.css" xmlns="http://javafx.com/javafx/8.0.202-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LogInController">
-   <children>
-      <BorderPane prefHeight="207.0" prefWidth="281.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <GridPane BorderPane.alignment="CENTER">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="106.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="205.0" minWidth="10.0" prefWidth="176.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="217.0" text="Log In" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets left="50.0" right="10.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <Label text="Password" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="10.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="E-Mail">
-                     <GridPane.margin>
-                        <Insets left="10.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </PasswordField>
-                  <TextField GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </TextField>
-               </children>
-            </GridPane>
-         </center>
-         <top>
-            <GridPane prefHeight="43.0" prefWidth="282.0" BorderPane.alignment="CENTER">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.4" minWidth="10.0" prefWidth="212.4" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="69.99999999999997" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="61.0" text="Back" GridPane.columnIndex="1" />
-                  <Label text="Log In" translateX="15.0">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets top="10.0" />
-                     </GridPane.margin>
-                  </Label>
-               </children>
-            </GridPane>
-         </top>
-      </BorderPane>
-   </children>
+<AnchorPane id="anchor" prefHeight="220.0" prefWidth="280.0" stylesheets="log_in.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LogInController">
+    <children>
+        <BorderPane prefHeight="215.0" prefWidth="281.0" AnchorPane.bottomAnchor="-8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <VBox prefHeight="244.0" prefWidth="282.0">
+                    <GridPane prefHeight="99.0" prefWidth="282.0" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="106.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="176.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="45.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                            <Label text="Password" GridPane.rowIndex="1">
+                                <GridPane.margin>
+                                    <Insets left="10.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <Label text="E-Mail">
+                                <GridPane.margin>
+                                    <Insets left="10.0" />
+                                </GridPane.margin>
+                            </Label>
+                            <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" right="10.0" top="5.0" />
+                                </GridPane.margin>
+                            </PasswordField>
+                            <TextField maxWidth="1.7976931348623157E308" GridPane.columnIndex="1">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" right="10.0" />
+                                </GridPane.margin>
+                            </TextField>
+                            <VBox alignment="TOP_RIGHT" prefHeight="29.0" prefWidth="176.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                <children>
+                                    <Button mnemonicParsing="false" text="Log In">
+                                        <VBox.margin>
+                                            <Insets right="10.0" />
+                                        </VBox.margin>
+                                    </Button>
+                                    <Hyperlink text="Forgot Password?">
+                                        <VBox.margin>
+                                            <Insets right="10.0" />
+                                        </VBox.margin>
+                                    </Hyperlink>
+                                </children>
+                            </VBox>
+                        </children>
+                    </GridPane>
+
+
+                    <Label text="Register" GridPane.rowIndex="1">
+                        <VBox.margin>
+                            <Insets left="10.0" />
+                        </VBox.margin>
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </Label>
+                    <Button mnemonicParsing="false" text="Register">
+                        <opaqueInsets>
+                            <Insets />
+                        </opaqueInsets>
+                        <VBox.margin>
+                            <Insets left="10.0" />
+                        </VBox.margin>
+                    </Button>
+
+
+                </VBox>
+
+
+            </center>
+            <top>
+                <GridPane prefHeight="43.0" prefWidth="282.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.2" minWidth="10.0" prefWidth="210.2" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="56.0" prefWidth="69.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="61.0" text="Back">
+
+                                <GridPane.margin>
+                                    <Insets />
+                                </GridPane.margin>
+                        <HBox.margin>
+                           <Insets right="10.0" />
+                        </HBox.margin>
+                            </Button>
+                        </HBox>
+                        <Label text="Log In" translateX="15.0">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <GridPane.margin>
+                                <Insets top="10.0" />
+                            </GridPane.margin>
+                        </Label>
+                    </children>
+                </GridPane>
+            </top>
+        </BorderPane>
+    </children>
 </AnchorPane>
