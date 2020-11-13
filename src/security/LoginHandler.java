@@ -2,6 +2,8 @@ package security;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Scanner;
 
 public class LoginHandler {
@@ -15,18 +17,18 @@ public class LoginHandler {
                 String line = sc.nextLine();
                 String[] credentials = line.split(",");
                 String savedUsername = credentials[0];
-                String savedPasswordHash = credentials[2];
-                if (username.equals(savedUsername) && PasswordEncoder.encodePassword(password).equals(savedPasswordHash)) {
+                String encodedPassword = credentials[2];
+                if (username.equals(savedUsername) && PasswordEncoder.validatePassword(password, encodedPassword)) {
                     return true;
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     public static void main(String[] args) {
-        System.out.println(login("GirionBorec", "Hello7_Hi"));
+        System.out.println(login("GirionBorec", "Hello5_Hi"));
     }
 }
