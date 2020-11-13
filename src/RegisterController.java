@@ -32,7 +32,7 @@ public class RegisterController {
     private PasswordField passwordRepeat;
 
     @FXML
-    private void register(ActionEvent event) {
+    private void onRegisterButtonClicked(ActionEvent event) {
         String username = this.username.getText();
         String email = this.email.getText();
         String password = this.password.getText();

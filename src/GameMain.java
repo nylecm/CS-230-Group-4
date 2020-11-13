@@ -10,7 +10,7 @@ import javafx.application.Application;
 public class GameMain extends Application {
     public void start(Stage primaryStage) {
         try {
-            Pane root = (Pane) FXMLLoader.load(getClass().getResource("register.fxml"));
+            Pane root = (Pane) FXMLLoader.load(getClass().getResource("log_in.fxml"));
             Scene scene = new Scene(root, 720, 576);
 
             primaryStage.setScene(scene);
