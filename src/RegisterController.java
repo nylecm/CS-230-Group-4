@@ -37,7 +37,5 @@ public class RegisterController {
         boolean repeatPasswordValid;
     }
 
-    private boolean validatePassword
-
 
 }
