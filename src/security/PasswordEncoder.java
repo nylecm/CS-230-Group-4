@@ -63,7 +63,6 @@ public class PasswordEncoder {
         return bigInteger.toString(16);
     }
 
-
     public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
         String passwordToStore = "Hello5_Hi";
         String enteredPassword = "Hello5_Hi";
