@@ -3,6 +3,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import security.RegisterHandler;
 
 public class RegisterController {
 
@@ -36,8 +37,9 @@ public class RegisterController {
         String email = this.email.getText();
         String password = this.password.getText();
         String passwordRepeat = this.passwordRepeat.getText();
-        String output = validate(username, email, password, passwordRepeat) ? "Registration successful!" : "Registration failed!";
-        System.out.println(output);
+        if (validate(username, email, password, passwordRepeat)) {
+            RegisterHandler.register(username, email, password);
+        }
     }
 
     //Printlns for testing, to be replaced with status texts
