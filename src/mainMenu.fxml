@@ -14,6 +14,7 @@
                </font>
             </Label>
             <Label fx:id="messageOfTheDay" wrapText="true" />
+            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" text="New Game" />
             <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" text="Load Game" />
             <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" text="Customise Profile" />
             <Button layoutX="283.0" layoutY="226.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" text="Leaderboards" />
