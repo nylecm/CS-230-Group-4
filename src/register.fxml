@@ -79,7 +79,7 @@
             </PasswordField>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
-                  <Button fx:id="registerButton" layoutX="156.0" layoutY="14.0" mnemonicParsing="false" onAction="#register" prefHeight="25.0" prefWidth="68.0" text="Register" />
+                  <Button fx:id="registerButton" layoutX="156.0" layoutY="14.0" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="25.0" prefWidth="68.0" text="Register" />
                   <Button fx:id="backButton" layoutX="76.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Back" />
                </children>
             </AnchorPane>

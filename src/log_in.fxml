@@ -53,7 +53,7 @@
                             </TextField>
                             <VBox alignment="TOP_RIGHT" prefHeight="29.0" prefWidth="176.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP">
                                 <children>
-                                    <Button fx:id="logInButton" mnemonicParsing="false" text="Log In">
+                                    <Button fx:id="logInButton" mnemonicParsing="false" onAction="#onLoginButtonClicked" text="Log In">
                                         <VBox.margin>
                                             <Insets right="10.0" />
                                         </VBox.margin>

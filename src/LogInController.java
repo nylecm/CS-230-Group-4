@@ -3,11 +3,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import security.LoginHandler;
 
 public class LogInController {
-
-    @FXML
-    private Button button;
 
     @FXML
     private TextField username;
@@ -19,9 +17,9 @@ public class LogInController {
     private Button logInButton;
 
     @FXML
-    private void handleCalculateButtonAction(ActionEvent event) {
-        String x = username.getText();
-        String y = password.getText();
-
+    private void onLoginButtonClicked(ActionEvent event) {
+        String username = this.username.getText();
+        String password = this.password.getText();
+        System.out.println(LoginHandler.login(username, password));
     }
 }
