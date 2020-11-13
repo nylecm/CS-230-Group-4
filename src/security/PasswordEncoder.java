@@ -35,7 +35,7 @@ public class PasswordEncoder {
         encodePassword("Ah0j");
         encodePassword("Ahoi");
         encodePassword("ahoj");
-        encodePassword("Fm3/45sGhgf45");
+        encodePassword("df15m3/45sGhgf45");
     }
 }
 

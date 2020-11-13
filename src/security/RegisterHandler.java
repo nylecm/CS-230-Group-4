@@ -6,7 +6,7 @@ public class RegisterHandler {
 
     }
 
-    private boolean usernameValid(String username) {
-
-    }
+//    private boolean usernameValid(String username) {
+//
+//    }
 }
