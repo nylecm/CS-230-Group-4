@@ -68,17 +68,4 @@ public class MessageOfTheDayService {
         }
         return String.valueOf(puzzleLetters);
     }
-
-    /**
-     * Main method, used for testing only.
-     *
-     * @param args the command-line arguments.
-     */
-    public static void main(String[] args) {
-        try {
-            System.out.println(getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
