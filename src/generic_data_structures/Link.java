@@ -4,7 +4,7 @@ package generic_data_structures;
  * Represents a link that has an object it refers to, and a reference to another
  * link.
  *
- * @author nylecM
+ * @author nylecm
  * @param <E> the type parameter
  */
 public class Link<E> {

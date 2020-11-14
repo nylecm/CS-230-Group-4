@@ -5,6 +5,7 @@ import java.util.TreeSet;
 /**
  * A queue which is a data structure based in the FIFO principle; where the
  * presence of an element that is in a set of elements can be confirmed.
+ * @author nylecm
  *
  * @param <T> the type parameter
  */
@@ -13,7 +14,7 @@ public class SearchQueue<T> extends Queue<T> {
      * Checks if an element that equals a member of a given set exits within
      * a queue.
      *
-     * @param s the set of elements who's member todo continue java doc here
+     * @param s the set of elements who you are trying to find a member of.
      * @return true if
      */
     public boolean isMemberOfPresent(TreeSet<T> s) {

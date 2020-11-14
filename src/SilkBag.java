@@ -1,5 +1,7 @@
 import generic_data_structures.SearchQueue;
 
+import java.util.NoSuchElementException;
+
 /**
  * A silk bag holds tiles of arbitrary type. Tiles can be put into the silk bag,
  * a random tile can be taken out of a silk bag, and a random floor tile can be
@@ -31,12 +33,12 @@ public class SilkBag {
     }
 
     /**
-     * Takes a random tile out of the silk bag.
+     * Takes a tile out of the silk bag.
      *
      * @return a random tile from the silk bag.
-     * @throws IllegalStateException when no tiles are in the silk bag.
+     * @throws NoSuchElementException when no tiles are in the silk bag.
      */
-    public Tile take() {
+    public Tile take() throws NoSuchElementException {
         String tileType = tiles.peek();
 
         if (Tile.FLOOR_TILE_TYPES.contains(tileType)) {
@@ -51,14 +53,14 @@ public class SilkBag {
     }
 
     /**
-     * Takes a random floor tile out of the silk bag.
+     * Takes a floor tile out of the silk bag.
      *
      * @return a random floor tile from the silk bag.
-     * @throws IllegalStateException when no floor tiles are in the silk bag.
+     * @throws NoSuchElementException when no floor tiles are in the silk bag.
      */
-    public FloorTile takeFloor() throws IllegalStateException {
-        if (! tiles.isMemberOfPresent(Tile.FLOOR_TILE_TYPES)) {
-            throw new IllegalStateException("No floor tiles in silk bag!");
+    public FloorTile takeFloor() throws NoSuchElementException {
+        if (isLackingFloorTiles()) {
+            throw new NoSuchElementException("No floor tiles in silk bag!");
         } else {
             while (!Tile.FLOOR_TILE_TYPES.contains(tiles.peek())) {
                 String oldHead = tiles.peek();
@@ -78,6 +80,15 @@ public class SilkBag {
      */
     public boolean isEmpty() {
         return tiles.isEmpty();
+    }
+
+    /**
+     * Checks if there are any tiles in the silk bag.
+     *
+     * @return true if no tiles are found.
+     */
+    public boolean isLackingFloorTiles() {
+        return tiles.isEmpty() || !tiles.isMemberOfPresent(Tile.FLOOR_TILE_TYPES);
     }
 
     @Override
@@ -116,20 +127,10 @@ public class SilkBag {
         s.take();
         s.take();
         s.take();
-
-
-
-
-        /*s.take();
         s.take();
         s.take();
         s.take();
         s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();*/
-
+        // s.take();
     }
 }
