@@ -3,7 +3,7 @@ public class EffectFactory {
         if (effectName == null) {
             throw new IllegalArgumentException("");
         }
-        if (Tile.ACTION_TILE_TYPES.contains(effectName)) {
+        if (ActionTile.ACTION_TILE_TYPES.contains(effectName)) {
             if (effectName.equals("ice")) {
                 return new AreaEffect(EffectType.ICE, 2, 4); //todo update duration, and get rid of magic numbers.
             } else if (effectName.equals("fire")) {

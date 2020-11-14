@@ -42,7 +42,7 @@ public class SilkBag {
     public Tile take() throws NoSuchElementException {
         TileType tileType = tiles.peek();
 
-        if (Tile.FLOOR_TILE_TYPES.contains(tileType)) {
+        if (FloorTile.FLOOR_TILE_TYPES.contains(tileType)) {
             tiles.dequeue();
             return new FloorTile(tileType, false, false);
         } else {
