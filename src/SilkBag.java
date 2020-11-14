@@ -1,5 +1,4 @@
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import generic_data_structures.SearchQueue;
 
 /**
  * A silk bag holds tiles of arbitrary type. Tiles can be put into the silk bag,
@@ -9,26 +8,16 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author nylecm, paired with ashrw0
  */
 public class SilkBag {
-    private final HashMap<String, Integer> tiles = new HashMap<>();
-    //todo consider storing in tile class. *************************************
-    public final static TreeSet<String> FLOOR_TILE_TYPES = new TreeSet<>(Arrays.asList
-            ("corner", "straight", "t_shaped", "goal"));
-    public final static TreeSet<String> ACTION_TILE_TYPES = new TreeSet<>(Arrays.asList
-            ("ice", "fire", "double_move", "backtrack"));
-    public final static TreeSet<String> TILE_TYPES =
-            mergeSets(FLOOR_TILE_TYPES, ACTION_TILE_TYPES);
-
-    private static TreeSet<String> mergeSets(TreeSet<String> s, TreeSet<String> s2) {
-        s.addAll(s2);
-        return s;
-    }
+    private final SearchQueue<String> tiles = new SearchQueue<>();
 
     /**
-     * Instantiates a new Silk bag
+     * Instantiates a new Silk bag, filling it with tiles.
+     *
+     * @param newTiles the tiles that ought to be added, in random order.
      */
-    public SilkBag() {
-        for (String tile_type : TILE_TYPES) {
-            tiles.put(tile_type, 0);
+    public SilkBag(Tile[] newTiles) {
+        for (Tile tile : newTiles) {
+            tiles.enqueue(tile.getTypeName());
         }
     }
 
@@ -38,16 +27,7 @@ public class SilkBag {
      * @param t the tile to be put into the silk bag.
      */
     public void put(Tile t) {
-       // boolean isTileAdded = false;
-
-        if (TILE_TYPES.contains(t.getTypeName())) {
-            Integer numType = tiles.get(t.getTypeName()); //todo null check?? TILES MUST BE NAMED CORRECTLY!!!!
-            numType++;
-            tiles.put(t.getTypeName(), numType);
-        } else {
-            throw new IllegalArgumentException("This type of tile is not " +
-                    "supported by the silk bag.");
-        }
+        tiles.enqueue(t.getTypeName());
     }
 
     /**
@@ -56,40 +36,17 @@ public class SilkBag {
      * @return a random tile from the silk bag.
      * @throws IllegalStateException when no tiles are in the silk bag.
      */
-    public Tile take() throws IllegalStateException {
-        if (isTileLess()) {
-            throw new IllegalStateException("No tiles in silk bag!");
+    public Tile take() {
+        String tileType = tiles.peek();
+
+        if (Tile.FLOOR_TILE_TYPES.contains(tileType)) {
+            tiles.dequeue();
+            return new FloorTile(tileType, false, 0, false);
+        } else if (Tile.ACTION_TILE_TYPES.contains(tileType)) {
+            tiles.dequeue();
+            return new ActionTile(tileType);
         } else {
-            int[] tally = new int[TILE_TYPES.size()];
-            String[] types = new String[TILE_TYPES.size()];
-            int tileCount = 0;
-            int i = 0;
-
-            for (String tileType : TILE_TYPES) {
-                types[i] = tileType;
-
-                tally[i] = tiles.get(tileType);
-                tileCount += tally[i];
-                i++;
-            }
-            int random = ThreadLocalRandom.current().nextInt(0, tileCount);
-
-            i = 0;
-
-            while (random > 0) { //todo check
-                random -= tally[i];
-                i++;
-            }
-
-            if (FLOOR_TILE_TYPES.contains(types[i])) {
-                tiles.put(types[i], tally[i] - 1);
-                return new FloorTile(types[i], false, 999, false); //todo update floor tile.
-            } else if (ACTION_TILE_TYPES.contains(types[i])) {
-                tiles.put(types[i], tally[i] - 1);
-                return new ActionTile(types[i]);
-            } else {
-                throw new IllegalStateException(""); //todo write
-            }
+            throw new IllegalStateException("Tile of invalid type found!");
         }
     }
 
@@ -100,35 +57,17 @@ public class SilkBag {
      * @throws IllegalStateException when no floor tiles are in the silk bag.
      */
     public FloorTile takeFloor() throws IllegalStateException {
-        if (isFloorTileLess()) {
+        if (! tiles.isMemberOfPresent(Tile.FLOOR_TILE_TYPES)) {
             throw new IllegalStateException("No floor tiles in silk bag!");
         } else {
-            int[] tally = new int[FLOOR_TILE_TYPES.size()];
-            String[] types = new String[FLOOR_TILE_TYPES.size()];
-            int tileCount = 0;
-            int i = 0;
-
-            for (String tileType : FLOOR_TILE_TYPES) {
-                types[i] = tileType;
-
-                tally[i] = tiles.get(tileType);
-                tileCount += tally[i];
-                i++;
+            while (!Tile.FLOOR_TILE_TYPES.contains(tiles.peek())) {
+                String oldHead = tiles.peek();
+                tiles.dequeue();
+                tiles.enqueue(oldHead);
             }
-            int random = ThreadLocalRandom.current().nextInt(0, tileCount);
-
-            i = 0;
-
-            while (random > 0) { //todo check
-                random -= tally[i];
-                i++;
-            }
-
-            if (FLOOR_TILE_TYPES.contains(types[i])) {
-                tiles.put(types[i], tally[i] - 1);
-                return new FloorTile(types[i], false, 999, false); //todo update floor tile.
-            } else
-                throw new IllegalStateException(""); //todo write
+            FloorTile returnTile = new FloorTile(tiles.peek(), false, 0, false);
+            tiles.dequeue();
+            return returnTile;
         }
     }
 
@@ -137,34 +76,16 @@ public class SilkBag {
      *
      * @return true if no tiles are found.
      */
-    private boolean isTileLess() {
-        int tileCount = 0;
-        for (String tileType : TILE_TYPES) {
-            tileCount += tiles.get(tileType);
-        }
-        return tileCount == 0;
-    }
-
-    /**
-     * Checks if there are any floor tiles in the silk bag.
-     *
-     * @return true if no floor tiles are found.
-     */
-    private boolean isFloorTileLess() {
-        int tileCount = 0;
-        for (String tileType : FLOOR_TILE_TYPES) {
-            tileCount += tiles.get(tileType);
-        }
-        return tileCount == 0;
+    public boolean isEmpty() {
+        return tiles.isEmpty();
     }
 
     @Override
     public String toString() {
-        String s = "{";
-        for (String tileType : TILE_TYPES) {
-            s += "{ " + tileType + ": " + tiles.get(tileType) + "}";
-        }
-        return s += "}";
+        /*return "SilkBag{" +
+                "tiles=" + Arrays.toString(tiles) +
+                '}';*/
+        return ""; //todo silk bag to string
     }
 
     /**
@@ -173,7 +94,9 @@ public class SilkBag {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-        SilkBag s = new SilkBag(); //todo rewrite
+        Tile[] ts = {new ActionTile("fire")};
+
+        SilkBag s = new SilkBag(ts);
 
         s.put(new ActionTile("fire"));
         s.put(new ActionTile("ice"));
@@ -184,9 +107,29 @@ public class SilkBag {
         s.put(new ActionTile("fire"));
         s.put(new ActionTile("fire"));
         s.put(new ActionTile("fire"));
-        s.put(new ActionTile("fire"));
 
-        System.out.println(s.toString());
+        System.out.println(s.takeFloor());
+        //System.out.println(s.takeFloor());
+
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+
+
+
+
+        /*s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();*/
+
     }
 }
-

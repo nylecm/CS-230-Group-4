@@ -1,8 +1,17 @@
+import java.util.Arrays;
+import java.util.TreeSet;
+
 /**
  * The type Tile.
  * @author mnabina
  */
 public abstract class Tile {
+
+    public final static TreeSet<String> FLOOR_TILE_TYPES = new TreeSet<>(Arrays.asList
+            ("corner", "straight", "t_shaped", "goal"));
+    public final static TreeSet<String> ACTION_TILE_TYPES = new TreeSet<>(Arrays.asList
+            ("ice", "fire", "double_move", "backtrack"));
+
 
     private final String typeName;
 
