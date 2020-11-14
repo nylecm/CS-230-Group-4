@@ -3,7 +3,7 @@
  *
  * @author nylecm
  */
-public enum EffectTypes {
+public enum EffectType {
     FIRE {
 
     }, ICE {

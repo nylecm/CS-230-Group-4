@@ -1,7 +1,7 @@
 public class PlayerEffect extends Effect {
     private Player target;
 
-    public PlayerEffect(EffectTypes effectType, Player target) {
+    public PlayerEffect(EffectType effectType, Player target) {
         super(effectType);
         this.target = target;
     }

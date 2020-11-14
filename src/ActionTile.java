@@ -1,3 +1,5 @@
+import game.tile.TileType;
+
 /**
  * The type Action tile.
  * @author mnabina
@@ -8,7 +10,7 @@ public class ActionTile extends Tile {
      *
      * @param typeName the type name
      */
-    public ActionTile(String typeName) {
+    public ActionTile(TileType typeName) {
         super(typeName);
     }
 

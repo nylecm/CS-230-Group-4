@@ -2,7 +2,7 @@ public class AreaEffect extends Effect {
     private int radius;
     private int remainingDuration;
 
-    public AreaEffect(EffectTypes effectType, int radius, int duration) {
+    public AreaEffect(EffectType effectType, int radius, int duration) {
         super(effectType);
         this.radius = radius;
         this.remainingDuration = duration;

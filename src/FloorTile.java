@@ -1,10 +1,12 @@
+import game.tile.TileType;
+
 /**
  * The type Floor tile.
  * @author mnabina
  */
 public class FloorTile extends Tile {
     private final boolean isFixed;
-    private final int paths;
+    private int paths;
     private final boolean isGoalTile;
 
     /**
@@ -15,11 +17,12 @@ public class FloorTile extends Tile {
      * @param paths      the paths
      * @param isGoalTile the is goal tile
      */
-    public FloorTile(String typeName, boolean isFixed, int paths, boolean isGoalTile) {
+    public FloorTile(TileType typeName, boolean isFixed, boolean isGoalTile) {
         super(typeName);
         this.isFixed = isFixed;
         this.paths = paths;
         this.isGoalTile = isGoalTile;
+        //todo calculate paths
     }
 
     /**

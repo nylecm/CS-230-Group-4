@@ -46,7 +46,7 @@ public class Queue<T> {
     /**
      * Removes the item at the front of the queue.
      */
-    public void dequeue() {
+    public void dequeue() throws NoSuchElementException {
         if (!isEmpty()) {
             if (head == tail) {
                 tail = null;

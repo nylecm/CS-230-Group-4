@@ -1,43 +1,30 @@
-import java.util.Arrays;
-import java.util.TreeSet;
+import game.tile.TileType;
+
+import java.util.EnumSet;
+
+import static game.tile.TileType.*;
 
 /**
  * The type Tile.
- * @author mnabina
+ *
+ * @author mnabina & nylecm
  */
 public abstract class Tile {
 
-    public final static TreeSet<String> FLOOR_TILE_TYPES = new TreeSet<>(Arrays.asList
-            ("corner", "straight", "t_shaped", "goal"));
-    public final static TreeSet<String> ACTION_TILE_TYPES = new TreeSet<>(Arrays.asList
-            ("ice", "fire", "double_move", "backtrack"));
+    public final static EnumSet<TileType> FLOOR_TILE_TYPES =
+            EnumSet.of(STRAIGHT, CORNER, T_SHAPED, GOAL);
+    public final static EnumSet<TileType> ACTION_TILE_TYPES =
+            EnumSet.of(ICE, FIRE, BACKTRACK, DOUBLE_MOVE);
+    //public final static EnumMap<TileType, EffectType> = ; //todo
 
+    private final TileType type;
 
-    private final String typeName;
-
-    /**
-     * Instantiates a new Tile.
-     *
-     * @param typeName the type name
-     */
-    public Tile(String typeName) {
-        this.typeName = typeName;
+    public Tile(TileType type) {
+        this.type = type;
     }
 
-    /**
-     * Gets type name.
-     *
-     * @return the type name
-     */
-    public String getTypeName() {
-        return typeName;
-    }
-
-    @Override
-    public String toString() {
-        return "Tile{" +
-                "typeName='" + typeName + '\'' +
-                '}';
+    public TileType getType() {
+        return type;
     }
 }
 

@@ -1,4 +1,5 @@
-import generic_data_structures.SearchQueue;
+import game.tile.TileType;
+import generic_data_structures.Queue;
 
 import java.util.NoSuchElementException;
 
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
  * @author nylecm, paired with ashrw0
  */
 public class SilkBag {
-    private final SearchQueue<String> tiles = new SearchQueue<>();
+    private final Queue<TileType> tiles = new Queue<>();
 
     /**
      * Instantiates a new Silk bag, filling it with tiles.
@@ -19,7 +20,7 @@ public class SilkBag {
      */
     public SilkBag(Tile[] newTiles) {
         for (Tile tile : newTiles) {
-            tiles.enqueue(tile.getTypeName());
+            tiles.enqueue(tile.getType());
         }
     }
 
@@ -29,7 +30,7 @@ public class SilkBag {
      * @param t the tile to be put into the silk bag.
      */
     public void put(Tile t) {
-        tiles.enqueue(t.getTypeName());
+        tiles.enqueue(t.getType());
     }
 
     /**
@@ -39,37 +40,14 @@ public class SilkBag {
      * @throws NoSuchElementException when no tiles are in the silk bag.
      */
     public Tile take() throws NoSuchElementException {
-        String tileType = tiles.peek();
+        TileType tileType = tiles.peek();
 
         if (Tile.FLOOR_TILE_TYPES.contains(tileType)) {
             tiles.dequeue();
-            return new FloorTile(tileType, false, 0, false);
-        } else if (Tile.ACTION_TILE_TYPES.contains(tileType)) {
+            return new FloorTile(tileType, false, false);
+        } else {
             tiles.dequeue();
             return new ActionTile(tileType);
-        } else {
-            throw new IllegalStateException("Tile of invalid type found!");
-        }
-    }
-
-    /**
-     * Takes a floor tile out of the silk bag.
-     *
-     * @return a random floor tile from the silk bag.
-     * @throws NoSuchElementException when no floor tiles are in the silk bag.
-     */
-    public FloorTile takeFloor() throws NoSuchElementException {
-        if (isLackingFloorTiles()) {
-            throw new NoSuchElementException("No floor tiles in silk bag!");
-        } else {
-            while (!Tile.FLOOR_TILE_TYPES.contains(tiles.peek())) {
-                String oldHead = tiles.peek();
-                tiles.dequeue();
-                tiles.enqueue(oldHead);
-            }
-            FloorTile returnTile = new FloorTile(tiles.peek(), false, 0, false);
-            tiles.dequeue();
-            return returnTile;
         }
     }
 
@@ -87,9 +65,6 @@ public class SilkBag {
      *
      * @return true if no tiles are found.
      */
-    public boolean isLackingFloorTiles() {
-        return isEmpty() || !tiles.isMemberOfPresent(Tile.FLOOR_TILE_TYPES);
-    }
 
     /*@Override
     public String toString() {
@@ -102,21 +77,20 @@ public class SilkBag {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-        Tile[] ts = {new ActionTile("fire")};
+        Tile[] ts = {new ActionTile(TileType.FIRE)};
 
         SilkBag s = new SilkBag(ts);
 
-        s.put(new ActionTile("fire"));
-        s.put(new ActionTile("ice"));
-        s.put(new ActionTile("backtrack"));
-        s.put(new ActionTile("double_move"));
-        s.put(new FloorTile("goal", false, 1111, false));
-        s.put(new ActionTile("fire"));
-        s.put(new ActionTile("fire"));
-        s.put(new ActionTile("fire"));
-        s.put(new ActionTile("fire"));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.ICE));
+        s.put(new ActionTile(TileType.BACKTRACK));
+        s.put(new ActionTile(TileType.DOUBLE_MOVE));
+        s.put(new FloorTile(TileType.STRAIGHT, false, false));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.FIRE));
 
-        System.out.println(s.takeFloor());
         //System.out.println(s.takeFloor());
 
         s.take();

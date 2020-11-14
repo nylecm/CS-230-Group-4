@@ -1,7 +1,7 @@
 public abstract class Effect {
-    private EffectTypes effectType;
+    private EffectType effectType;
 
-    public Effect(EffectTypes effectType) {
+    public Effect(EffectType effectType) {
         this.effectType = effectType;
     }
 
@@ -12,7 +12,7 @@ public abstract class Effect {
                 '}';
     }
 
-    public EffectTypes getEffectType() {
+    public EffectType getEffectType() {
         return effectType;
     }
 }
