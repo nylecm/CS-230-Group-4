@@ -9,7 +9,7 @@ public class RegisterController {
 
     private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
 
-    private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple?
+    private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple? xxx@xxx.xxxx
 
     private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //Might be broken
 

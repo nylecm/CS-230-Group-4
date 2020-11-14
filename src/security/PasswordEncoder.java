@@ -46,13 +46,10 @@ public class PasswordEncoder {
     }
 
     private static byte[] hexStringToByteArray(String string) {
-        byte[] byteArray = new BigInteger(string, 16)
-                .toByteArray();
+        byte[] byteArray = new BigInteger(string, 16).toByteArray();
         if (byteArray[0] == 0) {
             byte[] output = new byte[byteArray.length - 1];
-            System.arraycopy(
-                    byteArray, 1, output,
-                    0, output.length);
+            System.arraycopy(byteArray, 1, output, 0, output.length);
             return output;
         }
         return byteArray;
