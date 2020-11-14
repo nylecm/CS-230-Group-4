@@ -81,6 +81,19 @@ public class Queue<T> {
         return (head == null) && (tail == null);
     }
 
+    public String toString() {
+        String returnString = "{";
+
+        Link<T> curLink = head;
+        while (curLink != null) {
+            returnString += curLink.getData() + ", ";
+            curLink = curLink.getNext();
+        }
+
+        returnString += "{";
+        return returnString;
+    }
+
     /**
      * The entry point of application. //todo remove psvm ...
      *

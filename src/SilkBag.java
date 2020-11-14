@@ -51,25 +51,10 @@ public class SilkBag {
         }
     }
 
-    /**
-     * Checks if there are any tiles in the silk bag.
-     *
-     * @return true if no tiles are found.
-     */
-    public boolean isEmpty() {
-        return tiles.isEmpty();
-    }
-
-    /**
-     * Checks if there are any tiles in the silk bag.
-     *
-     * @return true if no tiles are found.
-     */
-
-    /*@Override
+    @Override
     public String toString() {
-        return ""; //todo silk bag to string
-    }*/
+        return tiles.toString();
+    }
 
     /**
      * The entry point of application, for testing only. todo remove this.
