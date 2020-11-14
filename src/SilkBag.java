@@ -88,16 +88,13 @@ public class SilkBag {
      * @return true if no tiles are found.
      */
     public boolean isLackingFloorTiles() {
-        return tiles.isEmpty() || !tiles.isMemberOfPresent(Tile.FLOOR_TILE_TYPES);
+        return isEmpty() || !tiles.isMemberOfPresent(Tile.FLOOR_TILE_TYPES);
     }
 
-    @Override
+    /*@Override
     public String toString() {
-        /*return "SilkBag{" +
-                "tiles=" + Arrays.toString(tiles) +
-                '}';*/
         return ""; //todo silk bag to string
-    }
+    }*/
 
     /**
      * The entry point of application, for testing only. todo remove this.
