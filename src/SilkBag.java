@@ -76,17 +76,23 @@ public class SilkBag {
         s.put(new ActionTile(TileType.FIRE));
         s.put(new ActionTile(TileType.FIRE));
 
-        //System.out.println(s.takeFloor());
+        System.out.println(s);
 
         s.take();
         s.take();
         s.take();
         s.take();
         s.take();
+
+        System.out.println(s);
+
         s.take();
         s.take();
         s.take();
         s.take();
-        // s.take();
+        s.take();
+
+        System.out.println(s);
+        //s.take();
     }
 }

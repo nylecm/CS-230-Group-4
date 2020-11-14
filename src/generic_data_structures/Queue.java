@@ -5,8 +5,8 @@ import java.util.NoSuchElementException;
 /**
  * The type Queue, a data structure based in the FIFO principle.
  *
- * @author nylecm
  * @param <T> the type parameter
+ * @author nylecm
  */
 public class Queue<T> {
     /**
@@ -86,11 +86,16 @@ public class Queue<T> {
 
         Link<T> curLink = head;
         while (curLink != null) {
-            returnString += curLink.getData() + ", ";
+            returnString += curLink.getData();
+
+            if (curLink.getNext() != null) {
+                returnString += ", ";
+            }
+
             curLink = curLink.getNext();
         }
 
-        returnString += "{";
+        returnString += "}";
         return returnString;
     }
 
