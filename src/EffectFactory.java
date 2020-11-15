@@ -1,16 +1,18 @@
+import game.tile.TileType;
+
 public class EffectFactory {
-    public Effect getEffect(String effectName) {
-        if (effectName == null) {
+    public static Effect getEffect(TileType type) {
+        if (type == null) {
             throw new IllegalArgumentException("");
         }
-        if (ActionTile.ACTION_TILE_TYPES.contains(effectName)) {
-            if (effectName.equals("ice")) {
+        if (ActionTile.ACTION_TILE_TYPES.contains(type)) {
+            if (type == TileType.ICE) {
                 return new AreaEffect(EffectType.ICE, 2, 4); //todo update duration, and get rid of magic numbers.
-            } else if (effectName.equals("fire")) {
+            } else if (type == TileType.FIRE) {
                 return new AreaEffect(EffectType.FIRE, 2, 4); //todo update duration, and get rid of magic numbers.
-            } else if (effectName.equals("backtrack")) {
+            } else if (type == TileType.BACKTRACK) {
                 return new PlayerEffect(EffectType.BACKTRACK, null); //todo get user input for target...
-            } else if (effectName.equals("double_move")) {
+            } else if (type == TileType.DOUBLE_MOVE) {
                 return new PlayerEffect(EffectType.DOUBLE_MOVE, null); //todo -"-
             }
         }
@@ -18,10 +20,9 @@ public class EffectFactory {
     }
 
     public static void main(String[] args) {
-        EffectFactory f = new EffectFactory();
-        AreaEffect ae = (AreaEffect) f.getEffect("fire");
+        AreaEffect ae = (AreaEffect) getEffect(TileType.FIRE);
         System.out.println(ae);
-        PlayerEffect pe = (PlayerEffect) f.getEffect("backtrack");
+        PlayerEffect pe = (PlayerEffect) getEffect(TileType.BACKTRACK);
         System.out.println(pe);
     }
 }
