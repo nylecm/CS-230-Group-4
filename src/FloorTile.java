@@ -116,7 +116,6 @@ public class FloorTile extends Tile {
         }
     }
 
-
     /**
      * Gets paths.
      *
@@ -164,7 +163,7 @@ public class FloorTile extends Tile {
 
         System.out.println();
 
-        FloorTile t2 = new FloorTile(CORNER, false, false);
+        FloorTile t2 = new FloorTile(T_SHAPED, false, false);
         System.out.println(t2);
         t2.rotateClockwise();
         System.out.println(t2);
@@ -177,11 +176,23 @@ public class FloorTile extends Tile {
 
         System.out.println();
 
-
-
-
         System.out.println(t2);
-        t1.rotateAntiClockwise();
+        t2.rotateAntiClockwise();
         System.out.println(t2);
+        t2.rotateAntiClockwise();
+        System.out.println(t2);
+        t2.rotateAntiClockwise();
+        System.out.println(t2);
+        t2.rotateAntiClockwise();
+        System.out.println(t2);
+
+        System.out.println();
+
+        FloorTile t3 = new FloorTile(GOAL, false, false);
+        System.out.println(t3);
+        t3.rotateClockwise();
+        System.out.println(t3);
+        t3.rotateAntiClockwise();
+        System.out.println(t3);
     }
 }
