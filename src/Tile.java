@@ -12,7 +12,7 @@ public abstract class Tile {
 
     public Tile(TileType type, EnumSet<TileType> typesAllowed) {
         if (typesAllowed.contains(type)) {
-            this.type = type;
+            this.type = type ;
         } else {
             throw new IllegalArgumentException("Floor tile must have a floor tile typeName.");
         }
