@@ -1,5 +1,5 @@
 public abstract class Effect {
-    private EffectType effectType;
+    protected EffectType effectType;
 
     public Effect(EffectType effectType) {
         this.effectType = effectType;

@@ -8,7 +8,7 @@ import java.util.EnumSet;
  * @author mnabina, nylecm
  */
 public abstract class Tile {
-    private final TileType type;
+    protected final TileType type;
 
     public Tile(TileType type, EnumSet<TileType> typesAllowed) {
         if (typesAllowed.contains(type)) {

@@ -26,7 +26,7 @@ public class ActionTile extends Tile {
     /**
      * Use.
      */
-    public void use() {
-
+    public Effect use() {
+        return EffectFactory.getEffect(type);
     }
 }
