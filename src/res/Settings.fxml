@@ -6,9 +6,9 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="516.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="516.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="res.SettingsController">
    <children>
-      <Button layoutX="33.0" layoutY="477.0" mnemonicParsing="false" text="Back" />
+      <Button layoutX="33.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back" />
       <Button layoutX="399.0" layoutY="140.0" mnemonicParsing="false" text="Setting 1" />
       <Button layoutX="398.0" layoutY="190.0" mnemonicParsing="false" text="Setting 2" />
       <Button layoutX="398.0" layoutY="239.0" mnemonicParsing="false" text="Setting 3" />
