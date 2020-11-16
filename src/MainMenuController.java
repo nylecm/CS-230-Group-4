@@ -48,7 +48,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onCustomiseProfileButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane customiseProfile = (Pane) FXMLLoader.load(getClass().getResource("./res/customiseProfile.fxml"));
+        Pane customiseProfile = (Pane) FXMLLoader.load(getClass().getResource("./res/customiseProfile.fxml")); //todo change to login
         currentStage.setScene(new Scene(customiseProfile));
     }
 
