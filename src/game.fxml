@@ -13,7 +13,7 @@
             <left>
                 <ScrollPane prefHeight="295.0" prefWidth="183.0" BorderPane.alignment="CENTER">
                     <content>
-                        <VBox prefHeight="587.0" prefWidth="165.0" />
+                        <VBox prefHeight="606.0" prefWidth="166.0" />
                     </content>
                 </ScrollPane>
             </left>
@@ -29,6 +29,7 @@
                     <children>
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                             <children>
+                        <Button mnemonicParsing="false" text="Button" />
                                 <Button mnemonicParsing="false" text="Help" />
                                 <Button mnemonicParsing="false" text="Save Game" />
                                 <Button mnemonicParsing="false" text="Exit Game" />
