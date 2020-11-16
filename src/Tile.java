@@ -1,27 +1,32 @@
+import game.tile.TileType;
+
+import java.util.EnumSet;
+
 /**
  * The type Tile.
- * @author mnabina
+ *
+ * @author mnabina, nylecm
  */
 public abstract class Tile {
+    protected final TileType type;
 
-    private final String typeName;
-
-    /**
-     * Instantiates a new Tile.
-     *
-     * @param typeName the type name
-     */
-    public Tile(String typeName) {
-        this.typeName = typeName;
+    public Tile(TileType type, EnumSet<TileType> typesAllowed) {
+        if (typesAllowed.contains(type)) {
+            this.type = type ;
+        } else {
+            throw new IllegalArgumentException("Floor tile must have a floor tile typeName.");
+        }
     }
 
-    /**
-     * Gets type name.
-     *
-     * @return the type name
-     */
-    public String getTypeName() {
-        return typeName;
+    public TileType getType() {
+        return type;
+    }
+
+    @Override
+    public String toString() {
+        return "Tile{" +
+                "typeName='" + typeName + '\'' +
+                '}';
     }
 }
 

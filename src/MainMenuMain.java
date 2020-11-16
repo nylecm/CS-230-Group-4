@@ -4,10 +4,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-/**
- * The type Main.
- */
-public class Main extends Application {
+public class MainMenuMain extends Application {
+    /**
+     * The type Main.
+     */
     public void start(Stage primaryStage) {
         try {
             Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenu.fxml"));

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane id="anchor" prefHeight="576.0" prefWidth="720.0" stylesheets="@game.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+<AnchorPane id="anchor" prefHeight="576.0" prefWidth="780.0" stylesheets="@game.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
     <children>
         <BorderPane layoutX="223.0" layoutY="106.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
@@ -13,7 +13,7 @@
             <left>
                 <ScrollPane prefHeight="295.0" prefWidth="183.0" BorderPane.alignment="CENTER">
                     <content>
-                        <VBox prefHeight="587.0" prefWidth="165.0" />
+                        <VBox prefHeight="606.0" prefWidth="166.0" />
                     </content>
                 </ScrollPane>
             </left>
@@ -30,9 +30,9 @@
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                             <children>
                         <Button mnemonicParsing="false" text="Button" />
-                                <Button mnemonicParsing="false" text="Help" />
-                                <Button mnemonicParsing="false" text="Save Game" />
-                                <Button mnemonicParsing="false" text="Exit Game" />
+                                <Button mnemonicParsing="false" onAction="#onSaveButtonClicked" text="Save" />
+                                <Button mnemonicParsing="false" onAction="#onSaveExitButtonClicked" text="Save &amp; Exit Game" />
+                                <Button mnemonicParsing="false" onAction="#onExitButtonClicked" text="Exit Game" />
                             </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="447.0">

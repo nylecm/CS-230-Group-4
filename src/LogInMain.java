@@ -8,10 +8,13 @@ import javafx.stage.Stage;
  * The type Main.
  */
 public class LogInMain extends Application {
+    private final static int WIDTH = 280;
+    private final static int HEIGHT = 220 + 20; //todo discuss windows height problem...
+
     public void start(Stage primaryStage) {
         try {
             Pane root = (Pane) FXMLLoader.load(getClass().getResource("log_in.fxml"));
-            Scene scene = new Scene(root,400,200);
+            Scene scene = new Scene(root,WIDTH,HEIGHT);
 
             primaryStage.setScene(scene);
             primaryStage.show();
