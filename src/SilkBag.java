@@ -1,5 +1,7 @@
-import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
+import game.tile.TileType;
+import generic_data_structures.Queue;
+
+import java.util.NoSuchElementException;
 
 /**
  * A silk bag holds tiles of arbitrary type. Tiles can be put into the silk bag,
@@ -9,15 +11,17 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author nylecm, paired with ashrw0
  */
 public class SilkBag {
-    private final Tile[] tiles;
+    private final Queue<TileType> tiles = new Queue<>();
 
     /**
-     * Instantiates a new Silk bag, of a set capacity.
+     * Instantiates a new Silk bag, filling it with tiles.
      *
-     * @param cap The capacity of the silk bag.
+     * @param newTiles the tiles that ought to be added, in random order.
      */
-    public SilkBag(int cap) {
-        tiles = new Tile[cap];
+    public SilkBag(Tile[] newTiles) {
+        for (Tile tile : newTiles) {
+            tiles.enqueue(tile.getType());
+        }
     }
 
     /**
@@ -26,95 +30,30 @@ public class SilkBag {
      * @param t the tile to be put into the silk bag.
      */
     public void put(Tile t) {
-        boolean isTileAdded = false;
-        int i = 0;
-
-        while (!isTileAdded && i < tiles.length) {
-            if (tiles[i] == null) {
-                tiles[i] = t;
-                isTileAdded = true;
-            }
-            i++;
-        }
+        tiles.enqueue(t.getType());
     }
 
     /**
-     * Takes a random tile out of the silk bag.
+     * Takes a tile out of the silk bag.
      *
      * @return a random tile from the silk bag.
-     * @throws IllegalStateException when no tiles are in the silk bag.
+     * @throws NoSuchElementException when no tiles are in the silk bag.
      */
-    public Tile take() throws IllegalStateException {
-        if (isTileLess()) {
-            throw new IllegalStateException("No tiles in silk bag!");
+    public Tile take() throws NoSuchElementException {
+        TileType tileType = tiles.peek();
+
+        if (FloorTile.FLOOR_TILE_TYPES.contains(tileType)) {
+            tiles.dequeue();
+            return new FloorTile(tileType, false, false);
+        } else {
+            tiles.dequeue();
+            return new ActionTile(tileType);
         }
-
-        while (true) {
-            int random = ThreadLocalRandom.current().nextInt(0, tiles.length);
-
-            if (tiles[random] != null) {
-                Tile returnTile = tiles[random];
-                tiles[random] = null;
-                return returnTile;
-            }
-        }
-    }
-
-    /**
-     * Takes a random floor tile out of the silk bag.
-     *
-     * @return a random floor tile from the silk bag.
-     * @throws IllegalStateException when no floor tiles are in the silk bag.
-     */
-    public FloorTile takeFloor() throws IllegalStateException {
-        if (isFloorTileLess()) {
-            throw new IllegalStateException("No floor tiles in silk bag!");
-        }
-
-        while (true) {
-            int random = ThreadLocalRandom.current().nextInt(0, tiles.length);
-
-            if (tiles[random] != null && tiles[random] instanceof FloorTile) {
-                FloorTile returnTile = (FloorTile) tiles[random];
-                tiles[random] = null;
-                return returnTile;
-            }
-        }
-    }
-
-    /**
-     * Checks if there are any tiles in the silk bag.
-     *
-     * @return true if no tiles are found.
-     */
-    private boolean isTileLess() {
-        for (Tile t : tiles) {
-            if (t != null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Checks if there are any floor tiles in the silk bag.
-     *
-     * @return true if no floor tiles are found.
-     */
-    private boolean isFloorTileLess() {
-        for (Tile t : tiles) {
-            if (t instanceof FloorTile) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override
     public String toString() {
-        return "SilkBag{" +
-                "tiles=" + Arrays.toString(tiles) +
-                '}';
+        return tiles.toString();
     }
 
     /**
@@ -123,27 +62,21 @@ public class SilkBag {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-        SilkBag s = new SilkBag(1000);
+        Tile[] ts = {new ActionTile(TileType.FIRE)};
 
-        s.put(new ActionTile("fire"));
-        s.put(new ActionTile("ice"));
-        s.put(new ActionTile("back_track"));
-        s.put(new ActionTile("double_move"));
-        s.put(new FloorTile("cross", false, 1111, false));
-        s.put(new ActionTile("Fire"));
-        s.put(new ActionTile("Fire"));
-        s.put(new ActionTile("Fire"));
-        s.put(new ActionTile("Fire"));
-        s.put(new ActionTile("Fire"));
+        SilkBag s = new SilkBag(ts);
 
-        System.out.println(Arrays.toString(s.tiles));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.ICE));
+        s.put(new ActionTile(TileType.BACKTRACK));
+        s.put(new ActionTile(TileType.DOUBLE_MOVE));
+        s.put(new FloorTile(TileType.STRAIGHT, false, false));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.FIRE));
+        s.put(new ActionTile(TileType.FIRE));
 
-        Tile t1 = s.take();
-
-        System.out.println(Arrays.toString(s.tiles));
-
-
-        System.out.println(s.takeFloor());
+        System.out.println(s);
 
         s.take();
         s.take();
@@ -151,21 +84,15 @@ public class SilkBag {
         s.take();
         s.take();
 
+        System.out.println(s);
 
-        System.out.println(Arrays.toString(s.tiles));
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
 
-
-        /*s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();*/
-
-        System.out.println(Arrays.toString(s.tiles));
+        System.out.println(s);
+        //s.take();
     }
 }

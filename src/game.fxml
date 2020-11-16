@@ -13,7 +13,7 @@
             <left>
                 <ScrollPane prefHeight="295.0" prefWidth="183.0" BorderPane.alignment="CENTER">
                     <content>
-                        <VBox prefHeight="587.0" prefWidth="165.0" />
+                        <VBox prefHeight="606.0" prefWidth="166.0" />
                     </content>
                 </ScrollPane>
             </left>
