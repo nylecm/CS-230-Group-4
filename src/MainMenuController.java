@@ -38,7 +38,7 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(newGame));
     }
 
-    /*@FXML
+    /*@FXML todo load game...
     private void onLoadGameButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         Pane loadGame = (Pane) FXMLLoader.load(getClass().getResource("newGame.fxml"));
