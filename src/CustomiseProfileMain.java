@@ -1,18 +1,14 @@
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.scene.layout.Pane;
 
-public class MainMenuMain extends Application {
-    /**
-     * The type java.Main.
-     */
+public class CustomiseProfileMain extends Application {
     public void start(Stage primaryStage) {
         try {
-            Pane root = (Pane) FXMLLoader.load(getClass().getResource("view/layout/mainMenu.fxml"));
-            Scene scene = new Scene(root, 720, 576);
-
+            Pane root = (Pane) FXMLLoader.load(getClass().getResource("../../CS-230-Group-4/src/res/CustomiseProfile.fxml"));
+            Scene scene = new Scene(root, 600, 400);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
@@ -20,11 +16,6 @@ public class MainMenuMain extends Application {
         }
     }
 
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }

@@ -1,0 +1,4 @@
+#anchor {
+    -fx-background-image: url("../img/dogejet.jpg");
+    -fx-background-repeat: stretch;
+}

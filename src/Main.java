@@ -5,13 +5,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * The type Main.
+ * The type java.Main.
  */
 public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
-            Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenu.fxml"));
-            Scene scene = new Scene(root, 720, 576);
+            Pane root = FXMLLoader.load(Main.class.getResource("view/layout/mainMenu.fxml"));
+            Scene scene = new Scene(root, 780, 576);
 
             primaryStage.setScene(scene);
             primaryStage.show();

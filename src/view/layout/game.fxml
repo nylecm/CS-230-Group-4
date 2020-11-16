@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane id="anchor" prefHeight="576.0" prefWidth="780.0" stylesheets="@../res/style_sheet/game.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.GameController">
+    <children>
+        <BorderPane layoutX="223.0" layoutY="106.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <Pane prefHeight="295.0" prefWidth="480.0" BorderPane.alignment="CENTER" />
+            </center>
+            <left>
+                <ScrollPane prefHeight="295.0" prefWidth="183.0" BorderPane.alignment="CENTER">
+                    <content>
+                        <VBox prefHeight="606.0" prefWidth="166.0" />
+                    </content>
+                </ScrollPane>
+            </left>
+            <top>
+                <GridPane prefHeight="37.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="480.0" minWidth="10.0" prefWidth="302.2" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="396.5999847412109" minWidth="10.0" prefWidth="298.59999999999997" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                            <children>
+                        <Button mnemonicParsing="false" text="Button" />
+                                <Button mnemonicParsing="false" onAction="#onSaveButtonClicked" text="Save" />
+                                <Button mnemonicParsing="false" onAction="#onSaveExitButtonClicked" text="Save &amp; Exit Game" />
+                                <Button mnemonicParsing="false" onAction="#onExitButtonClicked" text="Exit Game" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="447.0">
+                     <children>
+                        <Label text="Level Name" />
+                     </children></HBox>
+                    </children>
+                </GridPane>
+            </top>
+            <bottom>
+                <GridPane prefHeight="81.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="480.0" minWidth="10.0" prefWidth="447.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="153.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                            <children>
+                                <Button mnemonicParsing="false" text="Move Complete" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="BOTTOM_LEFT" prefHeight="33.0" prefWidth="447.0">
+                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="78.0" stroke="BLACK" strokeType="INSIDE" width="79.0" />
+                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0" />
+                        </HBox>
+                    </children>
+                </GridPane>
+            </bottom>
+        </BorderPane>
+    </children>
+</AnchorPane>

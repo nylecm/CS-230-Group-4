@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="576.0" prefWidth="780.0" spacing="20.0"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="java_.controller.NewGameController">
+    <children>
+        <Button mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back"/>
+        <Label text="New Game">
+            <font>
+                <Font size="38.0"/>
+            </font>
+        </Label>
+        <HBox alignment="CENTER" prefHeight="34.0" prefWidth="1631.0" spacing="30.0">
+            <children>
+                <Label minWidth="100.0" text="Select Game Board:"/>
+                <ChoiceBox minWidth="150.0" prefWidth="150.0"/>
+            </children>
+        </HBox>
+        <HBox alignment="BOTTOM_CENTER" prefHeight="303.0" prefWidth="720.0" spacing="60.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="167.0" prefWidth="135.0" spacing="10.0">
+                    <children>
+                        <Label text="java_.game.player.Player 1">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0"
+                                      text="ToggleButton"/>
+                        <Button minWidth="100.0" mnemonicParsing="false" prefHeight="112.0"
+                                prefWidth="129.0" text="java_.game.player.PlayerPiece view"/>
+                        <HBox alignment="TOP_CENTER" minWidth="100.0" prefHeight="100.0"
+                              prefWidth="200.0" spacing="20.0">
+                            <children>
+                                <Button minWidth="40.0" mnemonicParsing="false" text="LogIn"/>
+                                <Label text="Username"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="167.0" prefWidth="135.0" spacing="10.0">
+                    <children>
+                        <Label text="java_.game.player.Player 2">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0"
+                                      text="ToggleButton"/>
+                        <Button minWidth="100.0" mnemonicParsing="false" prefHeight="112.0"
+                                prefWidth="129.0" text="java_.game.player.PlayerPiece view"/>
+                        <HBox alignment="TOP_CENTER" minWidth="100.0" prefHeight="100.0"
+                              prefWidth="200.0" spacing="20.0">
+                            <children>
+                                <Button minWidth="40.0" mnemonicParsing="false" text="LogIn"/>
+                                <Label text="Username"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="167.0" prefWidth="135.0" spacing="10.0">
+                    <children>
+                        <Label text="java_.game.player.Player 3">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0"
+                                      text="ToggleButton"/>
+                        <Button minWidth="100.0" mnemonicParsing="false" prefHeight="112.0"
+                                prefWidth="129.0" text="java_.game.player.PlayerPiece view"/>
+                        <HBox alignment="TOP_CENTER" minWidth="100.0" prefHeight="100.0"
+                              prefWidth="200.0" spacing="20.0">
+                            <children>
+                                <Button minWidth="40.0" mnemonicParsing="false" text="LogIn"/>
+                                <Label text="Username"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="167.0" prefWidth="135.0" spacing="10.0">
+                    <children>
+                        <Label text="java_.game.player.Player 4">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0"
+                                      text="ToggleButton"/>
+                        <Button minWidth="100.0" mnemonicParsing="false" prefHeight="112.0"
+                                prefWidth="129.0" text="java_.game.player.PlayerPiece view"/>
+                        <HBox alignment="TOP_CENTER" minWidth="100.0" prefHeight="100.0"
+                              prefWidth="200.0" spacing="20.0">
+                            <children>
+                                <Button minWidth="40.0" mnemonicParsing="false" text="LogIn"/>
+                                <Label text="Username"/>
+                            </children>
+                        </HBox>
+                    </children>
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </VBox>
+            </children>
+        </HBox>
+        <Button mnemonicParsing="false" onAction="#onStartGameButtonClicked" minWidth="200.0"
+                prefHeight="60.0" prefWidth="160.0" text="Start Game"/>
+        <BorderPane prefHeight="200.0" prefWidth="200.0"/>
+    </children>
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="50.0"/>
+    </padding>
+</VBox>

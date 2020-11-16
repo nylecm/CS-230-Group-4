@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="576.0" prefWidth="780.0" spacing="20.0"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="java_.controller.LeaderboardController">
+    <children>
+        <Button mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back"/>
+        <Label text="Leaderboard">
+            <font>
+                <Font size="43.0"/>
+            </font>
+        </Label>
+        <Label style="-fx-border-color: black;" text="SEARCH PLAYER">
+            <padding>
+                <Insets bottom="10.0" left="50.0" right="50.0" top="10.0"/>
+            </padding>
+        </Label>
+        <HBox alignment="CENTER" prefHeight="272.0" prefWidth="680.0" spacing="20.0">
+            <children>
+                <VBox alignment="CENTER" minWidth="150.0" prefHeight="200.0" prefWidth="250.0"
+                      spacing="20.0">
+                    <children>
+                        <Label text="Most Wins"/>
+                        <Button minWidth="100.0" mnemonicParsing="false" prefHeight="300.0"
+                                prefWidth="250.0" text="Button"/>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" minWidth="150.0" prefHeight="200.0" prefWidth="250.0"
+                      spacing="20.0">
+                    <children>
+                        <Label text="Most Losses"/>
+                        <Button mnemonicParsing="false" prefHeight="300.0" prefWidth="250.0"
+                                text="Button"/>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" minWidth="150.0" prefHeight="200.0" prefWidth="250.0"
+                      spacing="20.0">
+                    <children>
+                        <Label text="Most Coins"/>
+                        <Button mnemonicParsing="false" prefHeight="300.0" prefWidth="250.0"
+                                text="Button"/>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" minWidth="150.0" prefHeight="200.0" prefWidth="250.0"
+                      spacing="20.0">
+                    <children>
+                        <Label text="Best Teams"/>
+                        <Button mnemonicParsing="false" prefHeight="300.0" prefWidth="250.0"
+                                text="Button"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+    </padding>
+</VBox>

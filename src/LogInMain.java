@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * The type Main.
+ * The type java.Main.
  */
 public class LogInMain extends Application {
     private final static int WIDTH = 280;
@@ -13,7 +13,7 @@ public class LogInMain extends Application {
 
     public void start(Stage primaryStage) {
         try {
-            Pane root = (Pane) FXMLLoader.load(getClass().getResource("log_in.fxml"));
+            Pane root = (Pane) FXMLLoader.load(getClass().getResource("view/layout/log_in.fxml"));
             Scene scene = new Scene(root,WIDTH,HEIGHT);
 
             primaryStage.setScene(scene);
