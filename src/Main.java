@@ -1,17 +1,17 @@
 import javafx.application.Application;
-        import javafx.fxml.FXMLLoader;
-        import javafx.scene.Scene;
-        import javafx.scene.layout.Pane;
-        import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * The type Main.
  */
-public class GameMain extends Application {
+public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
-            Pane root = (Pane) FXMLLoader.load(getClass().getResource("game.fxml"));
-            Scene scene = new Scene(root, 720 + 60, 576);
+            Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenu.fxml"));
+            Scene scene = new Scene(root, 720, 576);
 
             primaryStage.setScene(scene);
             primaryStage.show();
