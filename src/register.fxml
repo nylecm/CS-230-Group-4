@@ -9,22 +9,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="720.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="720.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegisterController">
    <children>
       <Label text="Register">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <TextField maxWidth="400.0" minWidth="120.0" promptText="Username" />
-      <TextField maxWidth="400.0" minWidth="120.0" promptText="Email" />
-      <PasswordField maxWidth="400.0" minWidth="120.0" promptText="Password" />
-      <PasswordField maxWidth="400.0" minWidth="120.0" promptText="Repeat Password" />
+      <TextField fx:id="username" maxWidth="400.0" minWidth="120.0" promptText="Username" />
+      <TextField fx:id="email" maxWidth="400.0" minWidth="120.0" promptText="Email" />
+      <PasswordField fx:id="password" maxWidth="400.0" minWidth="120.0" promptText="Password" />
+      <PasswordField fx:id="passwordRepeat" maxWidth="400.0" minWidth="120.0" promptText="Repeat Password" />
       <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="200.0" prefHeight="25.0" prefWidth="403.0" spacing="15.0">
          <children>
-            <Button minWidth="70.0" mnemonicParsing="false" text="Back" />
-            <Button minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Register" />
+            <Button fx:id="backButton" minWidth="70.0" mnemonicParsing="false" text="Back" />
+            <Button fx:id="registerButton" minWidth="70.0" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="25.0" prefWidth="63.0" text="Register" />
          </children>
          <VBox.margin>
             <Insets />
