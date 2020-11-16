@@ -30,9 +30,9 @@
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                             <children>
                         <Button mnemonicParsing="false" text="Button" />
-                                <Button mnemonicParsing="false" text="Help" />
-                                <Button mnemonicParsing="false" text="Save Game" />
-                                <Button mnemonicParsing="false" text="Exit Game" />
+                                <Button mnemonicParsing="false" onAction="#onSaveButtonClicked" text="Save" />
+                                <Button mnemonicParsing="false" onAction="#onSaveExitButtonClicked" text="Save &amp; Exit Game" />
+                                <Button mnemonicParsing="false" onAction="#onExitButtonClicked" text="Exit Game" />
                             </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="447.0">
