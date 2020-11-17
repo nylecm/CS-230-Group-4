@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class GameService {
     private static GameService instance = null;
@@ -19,7 +18,8 @@ public class GameService {
     private int turnCount;
 
     private GameService() {
-        //ps = PlayerService.getInstance();
+        //ps = PlayerService.getInstance().remake();
+        //gb = GameBoard.getInstance().remake();
     }
 
     public static GameService getInstance() {
@@ -36,8 +36,8 @@ public class GameService {
         in.useDelimiter("` ");
 
         String boardName;
-        int w;
-        int h;
+        int nRows;
+        int nCols;
 
         while (in.hasNextLine()) {
             //todo to be completed fully when other classes complete...
@@ -46,8 +46,8 @@ public class GameService {
 
             System.out.println(boardName);
 
-            int nRow = in.nextInt();
-            int nCol = in.nextInt();
+            nRows = in.nextInt();
+            nCols = in.nextInt();
             //create game board...
             int nFixedTiles = in.nextInt(); //todo remove
 
@@ -104,12 +104,12 @@ public class GameService {
 
         // Player Serv create...
         // Silk bag create ...
-        // Gamebaord create ...
+        // Game board create ...
         // UI Data Bundle...
     }
 
     public void loadSavedInstance(File f) throws FileNotFoundException {
-        remake();
+        remake(); //todo future homer's problem
 
         Scanner in = new Scanner(f);
         in.useDelimiter("` ");
@@ -123,6 +123,10 @@ public class GameService {
         /*
          * file reader reads level file and creates a new game...
          */
+    }
+
+    public void gameplayLoop() {
+        System.out.println("Have fun!");
     }
 
     public void save() {
