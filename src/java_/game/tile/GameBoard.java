@@ -8,13 +8,13 @@ import java.util.HashMap;
 
 public class GameBoard {
 
-    private final int width;
-    private final int height;
+    private final int width; //todo rename to nRows (height)
+    private final int height; //todo rename to nCols (width)
     private String name;
     private PlayerPiece[] playerPiece;
     //private HashMap<PlayerPiece, Position> playerPositionMap;
     private HashMap<Position, EnumSet<EffectType>> activeEffects;
-    private int[][] coordinate = new int[2][4];
+    private int[][] coordinate = new int[2][4]; //todo ?????????????
     private SilkBag silkBag;
     private FloorTile[][] board;
 
@@ -25,7 +25,8 @@ public class GameBoard {
         this.silkBag = silkBag;
         this.width = width;
         this.height = height;
-        this.board = new FloorTile[width][height];
+        this.board = new FloorTile[width][height]; //todo fix order it should be [rows][columns] (height) (width)
+                                //[rows] [cols]
     }
 
 
