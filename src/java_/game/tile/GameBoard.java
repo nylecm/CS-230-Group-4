@@ -14,10 +14,9 @@ public class GameBoard {
     private PlayerPiece[] playerPiece;
     //private HashMap<PlayerPiece, Position> playerPositionMap;
     private HashMap<Position, EnumSet<EffectType>> activeEffects;
-    private int[][] coordinate = new int[2][4]; //todo ?????????????
+    private int[][] coordinate = new int[2][4]; //todo      ?????????????
     private SilkBag silkBag;
     private FloorTile[][] board;
-
 
     public GameBoard(Position[] playerStartPos, int width, int height, String name, SilkBag silkBag) {
         //this.playerPiece = playerPiece;
@@ -26,9 +25,8 @@ public class GameBoard {
         this.width = width;
         this.height = height;
         this.board = new FloorTile[width][height]; //todo fix order it should be [rows][columns] (height) (width)
-                                //[rows] [cols]
+        //[nRows] [nCols]
     }
-
 
     private boolean isRowFixed(int posY) {
 
@@ -95,7 +93,6 @@ public class GameBoard {
 
     }
 
-
     public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException {
         if (tile.isFixed() && board[positionX][positionY] == null) {
             board[positionX][positionY] = tile;
@@ -120,7 +117,6 @@ public class GameBoard {
             }
         }
     }
-
 
     public void insertTile(int positionX, int positionY, FloorTile tile) {
 
