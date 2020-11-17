@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * The type java.Main.
+ * The type java.java_.Main.
  */
 public class LogInMain extends Application {
     private final static int WIDTH = 280;
