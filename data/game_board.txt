@@ -1,0 +1,1 @@
+oberon_1` 1` 1` NESW!` 2` 2` NSW` streight` 5 ` corner` 3 ` t-shaped` 5 ` goal ` 0` ice` 3` fire` 1` backtrack` 2` double_move` 1` 0` 0` 1` 0` 2` 0` 3` 0
