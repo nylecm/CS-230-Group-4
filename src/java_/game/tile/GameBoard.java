@@ -52,39 +52,37 @@ public class GameBoard {
 
     private void slideTiles(int posX, int posY) {
 
-        FloorTile temp1;
-        FloorTile temp2;
         FloorTile tileReturn = null;
 
         if (posX == -1) {
             tileReturn = board[width][posY];
 
-            for (int i = width - 1; i == 0; i--) {
+            for (int i = width - 1; i != 0; i--) {
 
-                board[i][posY] = board[i - 1][posY];
-                board[i - 1][posY] = null;
+                board[posY][i] = board[posY][i-1];
+                board[posY][i-1] = null;
 
             }
         } else if (posX == width) {
             tileReturn = board[0][posY];
 
             for (int i = 0; i < width; i++) {
-                board[i][posY] = board[i + 1][posY];
-                board[i + 1][posY] = null;
+                board[posY][i] = board[i + 1][posY];
+                board[posY][i+1] = null;
             }
         } else if (posY == -1) {
             tileReturn = board[posX][height];
 
-            for (int i = height - 1; i == 0; i--) {
-                board[posX][i] = board[posX][i - 1];
-                board[posX][i - 1] = null;
+            for (int i = height - 1; i != 0; i--) {
+                board[i][posX] = board[posX][i - 1];
+                board[i-1][posX] = null;
             }
         } else if (posY == height) {
             tileReturn = board[posX][0];
 
             for (int i = 0; i < height; i++) {
-                board[posX][i] = board[posX][i + 1];
-                board[posX][i + 1] = null;
+                board[i][posX] = board[posX][i + 1];
+                board[i+1][posX] = null;
             }
         }
 
@@ -122,17 +120,17 @@ public class GameBoard {
 
     }
 
-  /*  public static void main(String[] args) {
+  /**public static void main(String[] args) {
 
         PlayerPiece[] playerPiece = new PlayerPiece[0];
         Tile[] newTiles = new Tile[0];
         SilkBag silkBag = new SilkBag(newTiles);
         GameBoard firstgame = new GameBoard(playerPiece, 4, 1, "hello", silkBag);
 
-        firstgame.board[0][0];
+        FloorTile A = new FloorTile(TileType.CORNER, false, false);
+        firstgame.board[0][0]
 
 
-    }
- */
+    }**/
 }
 
