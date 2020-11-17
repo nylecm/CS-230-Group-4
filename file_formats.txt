@@ -9,7 +9,7 @@ email` nickname` password` number of wins` number of losses
 --- Game board File Format ---
 
 --- (fixed action tiles have coords prior to NESW!) | (non-fixed floor tiles & action tiles)
-game board name` width` height` row` col` NESW!` ...` ...` ...` straight` n` corner` n` t_shaped` n` goal` n` ice` n` fire` n` backtrack` n` double_move` n` Player 1 Starting Row` Player 1 Starting Col` ...` ...                                                  ^ ! means goal tile
+game board name` row num` column num` number of fixed tiles` rotation` row` col` type` ...` ...` ...` ...` straight` n` corner` n` t_shaped` n` goal` n` ice` n` fire` n` backtrack` n` double_move` n` Player 1 Starting Row` Player 1 Starting Col` ...` ...                                                  ^ ! means goal tile
 
 --- Game board Supplimentary Data Format ---
 
