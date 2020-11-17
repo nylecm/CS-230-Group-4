@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class GameService {
     private static GameService instance = null;
@@ -18,6 +19,7 @@ public class GameService {
     private int turnCount;
 
     private GameService() {
+        //ps = PlayerService.getInstance();
     }
 
     public static GameService getInstance() {
@@ -28,6 +30,8 @@ public class GameService {
     }
 
     public void loadNewGame(File f) throws FileNotFoundException {
+        remake();
+
         Scanner in = new Scanner(f);
         in.useDelimiter("` ");
 
@@ -39,6 +43,9 @@ public class GameService {
             //todo to be completed fully when other classes complete...
 
             boardName = in.next();
+
+            System.out.println(boardName);
+
             int nRow = in.nextInt();
             int nCol = in.nextInt();
             //create game board...
@@ -71,25 +78,27 @@ public class GameService {
             System.out.println(floorTiles);
 
             //Action tiles:
+            ArrayList<ActionTile> actionTiles = new ArrayList<>();
 
-            ArrayList<FloorTile> actionTiles = new ArrayList<>();
-
-           /* for (int i = 0; i < ActionTile.ACTION_TILE_TYPES.size(); i++) {
+            for (int i = 0; i < ActionTile.ACTION_TILE_TYPES.size(); i++) {
                 TileType tileType = TileType.valueOf(in.next().toUpperCase());
-                ActionTile t = new ActionTile(tileType);
                 int n = in.nextInt();
+                ActionTile t = new ActionTile(tileType);
 
                 for (int j = 0; j < n; j++) {
-                    floorTiles.add(t); //todo replace with gb.insert at...
+                    actionTiles.add(t); //todo replace with gb.insert at...
                 }
             }
-            System.out.println(floorTiles);*/
+            System.out.println(actionTiles);
 
-
-
-
-            //SilkBag sb = new SilkBag(tiles)
-
+            int p1StartRow = in.nextInt();
+            int p1StartCol = in.nextInt();
+            int p2StartRow = in.nextInt();
+            int p2StartCol = in.nextInt();
+            int p3StartRow = in.nextInt();
+            int p3StartCol = in.nextInt();
+            int p4StartRow = in.nextInt();
+            int p4StartCol = in.nextInt();
         }
         in.close();
 
@@ -100,6 +109,8 @@ public class GameService {
     }
 
     public void loadSavedInstance(File f) throws FileNotFoundException {
+        remake();
+
         Scanner in = new Scanner(f);
         in.useDelimiter("` ");
 
@@ -122,6 +133,10 @@ public class GameService {
 
     public void destroy() {
         instance = null;
+    }
+
+    public void remake() {
+        instance = new GameService();
     }
 
     public static void main(String[] args) throws FileNotFoundException {
