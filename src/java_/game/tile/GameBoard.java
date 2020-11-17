@@ -1,8 +1,10 @@
 package java_.game.tile;
 
+import com.sun.scenario.effect.Effect;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 
 public class GameBoard {
@@ -12,13 +14,14 @@ public class GameBoard {
     private String name;
     private PlayerPiece[] playerPiece;
     //private HashMap<PlayerPiece, Position> playerPositionMap;
+    private HashMap<Position, EnumSet<EffectType>> activeEffects;
     private int[][] coordinate = new int[2][4];
     private SilkBag silkBag;
     private FloorTile[][] board;
 
 
-    public GameBoard(PlayerPiece[] playerPiece, int width, int height, String name, SilkBag silkBag) {
-        this.playerPiece = playerPiece;
+    public GameBoard(Position[] playerStartPos, int width, int height, String name, SilkBag silkBag) {
+        //this.playerPiece = playerPiece;
         this.name = name;
         this.silkBag = silkBag;
         this.width = width;
@@ -37,6 +40,7 @@ public class GameBoard {
         }
         return false;
     }
+
     private boolean isColumnFixed(int posX) {
 
         for (int y = 0; y < height; y++) {
@@ -57,32 +61,32 @@ public class GameBoard {
         if (posX == -1) {
             tileReturn = board[width][posY];
 
-            for (int i = width-1; i == 0; i--) {
+            for (int i = width - 1; i == 0; i--) {
 
-                board[i][posY] = board[i-1][posY];
-                board[i-1][posY] = null;
+                board[i][posY] = board[i - 1][posY];
+                board[i - 1][posY] = null;
 
             }
         } else if (posX == width) {
             tileReturn = board[0][posY];
 
-            for (int i = 0; i < width ; i++) {
-                board[i][posY] = board[i+1][posY];
-                board[i+1][posY] = null;
+            for (int i = 0; i < width; i++) {
+                board[i][posY] = board[i + 1][posY];
+                board[i + 1][posY] = null;
             }
         } else if (posY == -1) {
             tileReturn = board[posX][height];
 
-            for(int i = height-1; i == 0; i--) {
-                board[posX][i] = board[posX][i-1];
-                board[posX][i-1] = null;
+            for (int i = height - 1; i == 0; i--) {
+                board[posX][i] = board[posX][i - 1];
+                board[posX][i - 1] = null;
             }
         } else if (posY == height) {
             tileReturn = board[posX][0];
 
             for (int i = 0; i < height; i++) {
-                board[posX][i] = board[posX][i+1];
-                board[posX][i+1] = null;
+                board[posX][i] = board[posX][i + 1];
+                board[posX][i + 1] = null;
             }
         }
 
@@ -92,31 +96,23 @@ public class GameBoard {
     }
 
 
-    public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException{
+    public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException {
         if (tile.isFixed() && board[positionX][positionY] == null) {
             board[positionX][positionY] = tile;
         } else {
 
-            if (positionX == -1 || positionX == width +1 || positionY == -1 || positionY == height + 1) {
+            if (positionX == -1 || positionX == width + 1 || positionY == -1 || positionY == height + 1) {
 
-               if (!isColumnFixed(positionX + 1) && !isRowFixed(positionY + 1)) {
-
-
-                   board[positionX][positionY] = tile;
+                if (!isColumnFixed(positionX + 1) && !isRowFixed(positionY + 1)) {
 
 
+                    board[positionX][positionY] = tile;
 
 
-               }
-
-
+                }
 
 
                 board[positionX][positionY] = tile;
-
-
-
-
 
 
             } else {
