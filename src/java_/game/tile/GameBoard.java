@@ -1,6 +1,5 @@
 package java_.game.tile;
 
-import com.sun.scenario.effect.Effect;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
