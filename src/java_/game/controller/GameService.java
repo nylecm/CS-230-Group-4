@@ -1,7 +1,11 @@
 package java_.game.controller;
 
+import java_.game.player.Player;
+import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
+import java_.util.Position;
+import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,29 +33,28 @@ public class GameService {
         return instance;
     }
 
-    public void loadNewGame(File f) throws FileNotFoundException {
+    public void loadNewGame(File f, String boardName, int nPlayers) throws FileNotFoundException {
         remake();
 
         Scanner in = new Scanner(f);
         in.useDelimiter("` ");
 
-        String boardName;
         int nRows;
         int nCols;
+        PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
 
-        while (in.hasNextLine()) {
+        while (in.hasNextLine() && in.next().equals(boardName)) {
             //todo to be completed fully when other classes complete...
-
-            boardName = in.next();
 
             System.out.println(boardName);
 
             nRows = in.nextInt();
             nCols = in.nextInt();
-            //create game board...
-            int nFixedTiles = in.nextInt(); //todo remove
 
+            int nFixedTiles = in.nextInt();
             FloorTile[] fixedTiles = new FloorTile[nFixedTiles];
+            Position[] fixedTilePositions = new Position[nFixedTiles];
+
             for (int i = 0; i < nFixedTiles; i++) {
                 int rotation = in.nextInt();
                 int row = in.nextInt();
@@ -92,14 +95,14 @@ public class GameService {
             }
             System.out.println(actionTiles);
 
-            int p1StartRow = in.nextInt();
-            int p1StartCol = in.nextInt();
-            int p2StartRow = in.nextInt();
-            int p2StartCol = in.nextInt();
-            int p3StartRow = in.nextInt();
-            int p3StartCol = in.nextInt();
-            int p4StartRow = in.nextInt();
-            int p4StartCol = in.nextInt();
+            // Player Pieces
+            for (int i = 0; i < nPlayers; i++) {
+                int startRow = in.nextInt();
+                int startCol = in.nextInt();
+                playerPieces[i] = new PlayerPiece(new Position(startRow, startCol));
+            }
+
+            gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, );
         }
         in.close();
 
@@ -146,7 +149,7 @@ public class GameService {
 
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = new GameService();
-        gs.loadNewGame(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\game_board.txt"));
+        gs.loadNewGame(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\game_board.txt"), "oberon_1", 3);
         //System.out.println(GameService.getInstance().getS());
     }
 }
