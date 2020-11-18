@@ -13,14 +13,19 @@ public class GameBoard {
     private String name;
     private PlayerPiece[] playerPieces;
     private Position[] playerPiecePositions;
+    private FloorTile[] fixedTiles;
+    private Position[] fixedTilePositions;
+    private FloorTile[] tiles;
     private HashMap<Position, Set<Effect>> activeEffects;
     private SilkBag silkBag;
     private FloorTile[][] board;
 
     // todo         (pp, fixedTiles[], Position[] fixedTilePositions, tiles[], )
-    public GameBoard(PlayerPiece[] playerPieces, int nCols, int nRows, String name, SilkBag silkBag) {
+    public GameBoard(PlayerPiece[] playerPieces, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name, SilkBag silkBag) {
         this.playerPieces = playerPieces;
-        //this.playerPiecePositions = playerPiecePositions;
+        this.fixedTiles = fixedTiles;
+        this.fixedTilePositions = fixedTilePositions;
+        this.tiles = tiles;
         this.name = name;
         this.silkBag = silkBag;
         this.nRows = nRows;
@@ -153,14 +158,22 @@ public class GameBoard {
     }
 
     //to string
+    /**
+    public String toString() {
+        return;
+    }
+    **/
+
 
     public static void main(String[] args) {
 
         PlayerPiece[] playerPieces = new PlayerPiece[0];
         Tile[] newTiles = new Tile[0];
         SilkBag silkBag = new SilkBag(newTiles);
-        Position[] positions = null;
-       // GameBoard firstgame = new GameBoard(playerPieces, positions, 3, 3, "hello", silkBag);
+        FloorTile[] fixedTiles = null;
+        FloorTile[] tiles = null;
+        Position[] fixedTilePositions = null;
+        GameBoard firstgame = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,tiles, 3, 3, "hello", silkBag);
 
         FloorTile A = new FloorTile(TileType.CORNER, false, false);
         FloorTile B = new FloorTile(TileType.STRAIGHT, false, false);
