@@ -3,8 +3,8 @@ package java_.game.tile;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
-import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Set;
 
 public class GameBoard {
 
@@ -13,7 +13,7 @@ public class GameBoard {
     private String name;
     private PlayerPiece[] playerPieces;
     private Position[] playerPiecePositions;
-    private HashMap<Position, EnumSet<EffectType>> activeEffects;
+    private HashMap<Position, Set<Effect>> activeEffects;
     private SilkBag silkBag;
     private FloorTile[][] board;
 
@@ -31,7 +31,7 @@ public class GameBoard {
         if (posY == -1) {
             for (int x = 0; x < nCols; x++) {
 
-                if (board[posY+1][x].isFixed()) {
+                if (board[posY+1][x].isFixed()) { //Check for frozen etc.
                     return true;
                 }
             }
