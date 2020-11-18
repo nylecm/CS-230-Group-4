@@ -33,6 +33,21 @@ public class GameBoard {
     }
 
     private boolean isRowFixed(int rowNum) {
+
+        if (rowNum == -1) {
+            rowNum += 1;
+        } else if (rowNum == nRows) {
+            rowNum -= 1;
+        }
+        for (int x = 0; x < nCols; x++) {
+
+            if (board[rowNum][x].isFixed()) { //Check for frozen etc.
+                return true;
+            }
+        }
+        return false;
+
+        /**
         if (rowNum == -1) {
             for (int x = 0; x < nCols; x++) {
 
@@ -50,7 +65,7 @@ public class GameBoard {
             }
             return false;
         } else {
-            for (int x = 0; x < nRows; x++) {
+            for (int x = 0; x < nCols; x++) {
 
                 if (board[rowNum][x].isFixed()) {
                     return true;
@@ -58,10 +73,27 @@ public class GameBoard {
             }
             return false;
         }
+
+
+    **/
     }
 
     private boolean isColumnFixed(int colNum) {
 
+
+        if (colNum == -1) {
+            colNum += 1;
+        } else if (colNum == nCols) {
+            colNum -= 1;
+        }
+        for (int y = 0; y < nRows; y++) {
+
+            if (board[y][colNum].isFixed()) {
+                return true;
+            }
+        }
+        return false;
+        /**
         if (colNum == -1) {
             for (int y = 0; y < nRows; y++) {
 
@@ -87,7 +119,7 @@ public class GameBoard {
             }
             return false;
         }
-
+        **/
     }
 
                 //insertAt
