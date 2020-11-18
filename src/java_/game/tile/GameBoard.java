@@ -30,8 +30,8 @@ public class GameBoard {
         this.nRows = nRows;
         this.nCols = nCols;
         this.board = new FloorTile[nRows][nCols];
-        insertFixedTiles(fixedTiles, fixedTilePositions);
-        fillGaps(tiles);
+        //insertFixedTiles(fixedTiles, fixedTilePositions);
+        //fillGaps(tiles);
     }
 
     private boolean isRowFixed(int rowNum) {
@@ -231,11 +231,24 @@ public class GameBoard {
     }
     **/
     //to string
-    /**
+
     public String toString() {
-        return;
+        String boardString = "";
+        for (int j = 0; j < nRows; j++) {
+            String row = "";
+            for (int i = 0; i < nCols; i++) {
+                if (board[j][i] == null) {
+                    row = row + "Empty ";
+                } else {
+                    row = row + board[j][i].getType() + " ";
+                }
+
+            }
+            boardString = boardString + row + "\n";
+        }
+        return boardString;
     }
-    **/
+
 
 
     public static void main(String[] args) {
@@ -248,7 +261,14 @@ public class GameBoard {
         Position[] fixedTilePositions = null;
         GameBoard firstgame = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,tiles, 3, 3, "hello", silkBag);
 
-        FloorTile A = new FloorTile(TileType.CORNER, false, false);
+
+
+
+
+
+
+
+        FloorTile A = new FloorTile(TileType.CORNER, true, false);
         FloorTile B = new FloorTile(TileType.STRAIGHT, false, false);
         FloorTile C = new FloorTile(TileType.T_SHAPED, false, false);
         FloorTile D = new FloorTile(TileType.CORNER, false, false);
@@ -268,8 +288,11 @@ public class GameBoard {
         firstgame.board[2][1] = H;
         firstgame.board[2][2] = I;
 
+        System.out.println(firstgame);
 
 
+
+        /**
         for (int j = 0; j < firstgame.nRows; j++) {
             String row = "";
             for (int i = 0; i < firstgame.nCols; i++) {
@@ -283,12 +306,13 @@ public class GameBoard {
             System.out.println(row);
         }
 
+        **/
 
         FloorTile insert = new FloorTile(TileType.STRAIGHT, false, false);
 
-        System.out.println("");
+        //System.out.println("");
         firstgame.insert(1, 3, insert);
-
+        /**
         for (int j = 0; j < firstgame.nRows; j++) {
             String row = "";
             for (int i = 0; i < firstgame.nCols; i++) {
@@ -301,6 +325,7 @@ public class GameBoard {
             }
             System.out.println(row);
         }
+         **/
     }
 }
 
