@@ -28,25 +28,55 @@ public class GameBoard {
     }
 
     private boolean isRowFixed(int posY) {
+        if (posY == -1) {
+            for (int x = 0; x < nCols; x++) {
 
-        for (int x = 0; x < nCols; x++) {
-
-            if (board[x][posY].isFixed()) {
-                return true;
+                if (board[posY+1][x].isFixed()) {
+                    return true;
+                }
             }
+            return false;
+        } else if (posY == nRows) {
+            for (int x = 0; x < nCols; x++) {
+
+                if (board[posY-1][x].isFixed()) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            throw new IndexOutOfBoundsException();
         }
-        return false;
     }
 
     private boolean isColumnFixed(int posX) {
 
-        for (int y = 0; y < nRows; y++) {
+        if (posX == -1) {
+            for (int y = 0; y < nRows; y++) {
 
-            if (board[posX][y].isFixed()) {
-                return true;
+                if (board[y][posX+1].isFixed()) {
+                    return true;
+                }
             }
+            return false;
+        } else if (posX == nCols) {
+            for (int y = 0; y < nRows; y++) {
+
+                if (board[y][posX-1].isFixed()) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            for (int y = 0; y < nRows; y++) {
+
+                if (board[y][posX].isFixed()) {
+                    return true;
+                }
+            }
+            return false;
         }
-        return false;
+
     }
 
     private void slideTiles(int posX, int posY) {
@@ -87,7 +117,6 @@ public class GameBoard {
 
         silkBag.put(tileReturn);
 
-
     }
 
     public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException {
@@ -95,19 +124,23 @@ public class GameBoard {
             board[positionX][positionY] = tile;
         } else {
 
-            if (positionX == -1 || positionX == nRows || positionY == -1 || positionY == nCols) {
+            if (positionX == -1 || positionX == nCols || positionY == -1 || positionY == nRows) {
 
-                if (!isColumnFixed(positionX + 1) && !isRowFixed(positionY + 1)) {
+                if (!isColumnFixed(positionX) && !isRowFixed(positionY)) {
 
+                    slideTiles(positionX, positionY);
 
-                    //board[positionX][positionY] = tile;
-
+                    if (positionX == -1) {
+                        board[positionY][positionX+1] = tile;
+                    } else if (positionX == nCols) {
+                        board[positionY][positionX-1] = tile;
+                    } else if (positionY == -1) {
+                        board[positionY+1][positionX] = tile;
+                    } else if (positionY == nRows) {
+                        board[positionY-1][positionX] = tile;
+                    }
 
                 }
-
-
-                // board[positionX][positionY] = tile;
-
 
             } else {
                 throw new IndexOutOfBoundsException();
@@ -115,11 +148,8 @@ public class GameBoard {
         }
     }
 
-    public void insertTile(int positionX, int positionY, FloorTile tile) {
 
-    }
-
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
         PlayerPiece[] playerPieces = new PlayerPiece[0];
         Tile[] newTiles = new Tile[0];
@@ -162,21 +192,24 @@ public class GameBoard {
             System.out.println(row);
         }
 
+
+        FloorTile insert = new FloorTile(TileType.STRAIGHT, false, false);
+
         System.out.println("");
-        firstgame.slideTiles(1, 3);
+        firstgame.insertAt(1, 3, insert);
 
-      for (int j = 0; j < firstgame.nRows; j++) {
-          String row = "";
-          for (int i = 0; i < firstgame.nCols; i++) {
-              if (firstgame.board[j][i] == null) {
-                  row = row + "Empty ";
-              } else {
-                  row = row + firstgame.board[j][i].getType() + " ";
-              }
+        for (int j = 0; j < firstgame.nRows; j++) {
+            String row = "";
+            for (int i = 0; i < firstgame.nCols; i++) {
+                if (firstgame.board[j][i] == null) {
+                    row = row + "Empty ";
+                } else {
+                    row = row + firstgame.board[j][i].getType() + " ";
+                }
 
-          }
-          System.out.println(row);
-      }
+            }
+            System.out.println(row);
+        }
 
     }
 }
