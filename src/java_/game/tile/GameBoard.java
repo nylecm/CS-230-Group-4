@@ -54,7 +54,7 @@ public class GameBoard {
         FloorTile tileReturn = null;
 
         if (posX == -1) {
-            tileReturn = board[nCols-1][posY];
+            tileReturn = board[posY][nCols-1];
 
             for (int i = nCols - 1; i != 0; i--) {
 
@@ -63,24 +63,24 @@ public class GameBoard {
 
             }
         } else if (posX == nCols) {
-            tileReturn = board[0][posY];
+            tileReturn = board[posY][0];
 
-            for (int i = 0; i < nCols; i++) {
-                board[posY][i] = board[i + 1][posY];
+            for (int i = 0; i < nCols - 1; i++) {
+                board[posY][i] = board[posY][i+1];
                 board[posY][i+1] = null;
             }
         } else if (posY == -1) {
-            tileReturn = board[posX][nRows-1];
+            tileReturn = board[nRows-1][posX];
 
             for (int i = nRows - 1; i != 0; i--) {
-                board[i][posX] = board[posX][i - 1];
+                board[i][posX] = board[i-1][posX];
                 board[i-1][posX] = null;
             }
         } else if (posY == nRows) {
-            tileReturn = board[posX][0];
+            tileReturn = board[0][posX];
 
-            for (int i = 0; i < nRows; i++) {
-                board[i][posX] = board[posX][i + 1];
+            for (int i = 0; i < nRows-1; i++) {
+                board[i][posX] = board[i+1][posX];
                 board[i+1][posX] = null;
             }
         }
@@ -106,7 +106,7 @@ public class GameBoard {
                 }
 
 
-               // board[positionX][positionY] = tile;
+                // board[positionX][positionY] = tile;
 
 
             } else {
@@ -119,17 +119,65 @@ public class GameBoard {
 
     }
 
-  /**public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        PlayerPiece[] playerPiece = new PlayerPiece[0];
+        PlayerPiece[] playerPieces = new PlayerPiece[0];
         Tile[] newTiles = new Tile[0];
         SilkBag silkBag = new SilkBag(newTiles);
-        GameBoard firstgame = new GameBoard(playerPiece, 4, 1, "hello", silkBag);
+        Position[] positions = null;
+        GameBoard firstgame = new GameBoard(playerPieces, positions, 3, 3, "hello", silkBag);
 
         FloorTile A = new FloorTile(TileType.CORNER, false, false);
-        firstgame.board[0][0]
+        FloorTile B = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile C = new FloorTile(TileType.T_SHAPED, false, false);
+        FloorTile D = new FloorTile(TileType.CORNER, false, false);
+        FloorTile E = new FloorTile(TileType.CORNER, false, false);
+        FloorTile F = new FloorTile(TileType.T_SHAPED, false, false);
+        FloorTile G = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile H = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile I = new FloorTile(TileType.CORNER, false, false);
+
+        firstgame.board[0][0] = A;
+        firstgame.board[0][1] = B;
+        firstgame.board[0][2] = C;
+        firstgame.board[1][0] = D;
+        firstgame.board[1][1] = E;
+        firstgame.board[1][2] = F;
+        firstgame.board[2][0] = G;
+        firstgame.board[2][1] = H;
+        firstgame.board[2][2] = I;
 
 
-    }**/
+
+        for (int j = 0; j < firstgame.nRows; j++) {
+            String row = "";
+            for (int i = 0; i < firstgame.nCols; i++) {
+                if (firstgame.board[j][i] == null) {
+                    row = row + "Empty ";
+                } else {
+                    row = row + firstgame.board[j][i].getType() + " ";
+                }
+
+            }
+            System.out.println(row);
+        }
+
+        System.out.println("");
+        firstgame.slideTiles(1, 3);
+
+      for (int j = 0; j < firstgame.nRows; j++) {
+          String row = "";
+          for (int i = 0; i < firstgame.nCols; i++) {
+              if (firstgame.board[j][i] == null) {
+                  row = row + "Empty ";
+              } else {
+                  row = row + firstgame.board[j][i].getType() + " ";
+              }
+
+          }
+          System.out.println(row);
+      }
+
+    }
 }
 
