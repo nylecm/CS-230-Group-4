@@ -81,7 +81,7 @@ public class GameBoard {
 
     private void slideTiles(int posX, int posY) {
 
-        FloorTile tileReturn = null;
+        FloorTile tileReturn = null; //Being pushed off
 
         if (posX == -1) {
             tileReturn = board[posY][nCols-1];
@@ -118,6 +118,7 @@ public class GameBoard {
         silkBag.put(tileReturn);
 
     }
+
 
     public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException {
         if (tile.isFixed() && board[positionX][positionY] == null) {
@@ -210,7 +211,6 @@ public class GameBoard {
             }
             System.out.println(row);
         }
-
     }
 }
 
