@@ -124,6 +124,7 @@ public class GameService {
             }
 
             gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, floorTilesForGameBoard, nCols, nRows, boardName, sb);
+            System.out.println(gb);
         }
         in.close();
 
