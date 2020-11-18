@@ -6,9 +6,11 @@ import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.geometry.Pos;
+import sun.security.util.ArrayUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -59,9 +61,11 @@ public class GameService {
                 int rotation = in.nextInt();
                 int row = in.nextInt();
                 int col = in.nextInt();
+                Position p = new Position(row, col);
                 TileType tileType = TileType.valueOf(in.next().toUpperCase());
                 FloorTile t = new FloorTile(tileType, true, false, rotation);
-                fixedTiles[i] = t; //todo replace with gb.insert at...
+                fixedTiles[i] = t;
+                fixedTilePositions[i] = p;
             }
             System.out.println(Arrays.toString(fixedTiles)); //todo remove
 
@@ -81,6 +85,13 @@ public class GameService {
             Collections.shuffle(floorTiles);
             System.out.println(floorTiles);
 
+            FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles]; // todo check if nFixed Tiles is greater than nCol * nRow
+
+            for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
+                floorTilesForGameBoard[i] = floorTiles.get(0);
+                floorTiles.remove(0);
+            }
+
             //Action tiles:
             ArrayList<ActionTile> actionTiles = new ArrayList<>();
 
@@ -90,10 +101,20 @@ public class GameService {
                 ActionTile t = new ActionTile(tileType);
 
                 for (int j = 0; j < n; j++) {
-                    actionTiles.add(t); //todo replace with gb.insert at...
+                    actionTiles.add(t);
                 }
             }
             System.out.println(actionTiles);
+
+            Collections.shuffle(actionTiles);
+
+            ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
+            tilesForSilkBag.addAll(floorTiles);
+            tilesForSilkBag.addAll(actionTiles);
+
+            //silk bag...
+            SilkBag sb = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
+            System.out.println(sb);
 
             // Player Pieces
             for (int i = 0; i < nPlayers; i++) {
@@ -102,7 +123,7 @@ public class GameService {
                 playerPieces[i] = new PlayerPiece(new Position(startRow, startCol));
             }
 
-            gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, );
+            gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, floorTilesForGameBoard, nCols, nRows, boardName, sb);
         }
         in.close();
 
