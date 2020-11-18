@@ -30,6 +30,8 @@ public class GameBoard {
         this.nRows = nRows;
         this.nCols = nCols;
         this.board = new FloorTile[nRows][nCols];
+        insertFixedTiles(fixedTiles, fixedTilePositions);
+        fillGaps(tiles);
     }
 
     private boolean isRowFixed(int rowNum) {
@@ -121,6 +123,34 @@ public class GameBoard {
         }
         **/
     }
+
+    private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
+
+        for (int i = 0; i < fixedTiles.length; i++ ) {
+            int rowNum = fixedTilePositions[i].getY();
+            int colNum = fixedTilePositions[i].getX();
+
+            if (board[rowNum][colNum] == null) {
+                board[rowNum][colNum] = fixedTiles[i];
+            }
+
+        }
+    }
+    private void fillGaps(FloorTile[] tiles) {
+
+        int nextFloorTile = 0;
+
+        for (int i = 0; i < nRows; i++) {
+            for (int j = 0; j < nCols; j++) {
+
+                if (board[i][j] == null) {
+                    board[i][j] = tiles[nextFloorTile];
+                    nextFloorTile +=1;
+                }
+            }
+        }
+    }
+
 
                 //insertAt
     private void insert(int colNum /**x**/, int rowNum /**y**/, FloorTile tile) {
