@@ -8,29 +8,28 @@ import java.util.HashMap;
 
 public class GameBoard {
 
-    private final int width; //todo rename to nRows (height)
-    private final int height; //todo rename to nCols (width)
+    private final int nRows; //(height)
+    private final int nCols; //(width)
     private String name;
-    private PlayerPiece[] playerPiece;
-    //private HashMap<PlayerPiece, Position> playerPositionMap;
+    private PlayerPiece[] playerPieces;
+    private Position[] playerPiecePositions;
     private HashMap<Position, EnumSet<EffectType>> activeEffects;
-    private int[][] coordinate = new int[2][4]; //todo      ?????????????
     private SilkBag silkBag;
     private FloorTile[][] board;
 
-    public GameBoard(Position[] playerStartPos, int width, int height, String name, SilkBag silkBag) {
-        //this.playerPiece = playerPiece;
+    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions, int nCols, int nRows, String name, SilkBag silkBag) {
+        this.playerPieces = playerPieces;
+        this.playerPiecePositions = playerPiecePositions;
         this.name = name;
         this.silkBag = silkBag;
-        this.width = width;
-        this.height = height;
-        this.board = new FloorTile[width][height]; //todo fix order it should be [rows][columns] (height) (width)
-        //[nRows] [nCols]
+        this.nRows = nRows;
+        this.nCols = nCols;
+        this.board = new FloorTile[nRows][nCols];
     }
 
     private boolean isRowFixed(int posY) {
 
-        for (int x = 0; x < width; x++) {
+        for (int x = 0; x < nCols; x++) {
 
             if (board[x][posY].isFixed()) {
                 return true;
@@ -41,7 +40,7 @@ public class GameBoard {
 
     private boolean isColumnFixed(int posX) {
 
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y < nRows; y++) {
 
             if (board[posX][y].isFixed()) {
                 return true;
@@ -55,32 +54,32 @@ public class GameBoard {
         FloorTile tileReturn = null;
 
         if (posX == -1) {
-            tileReturn = board[width][posY];
+            tileReturn = board[nCols-1][posY];
 
-            for (int i = width - 1; i != 0; i--) {
+            for (int i = nCols - 1; i != 0; i--) {
 
                 board[posY][i] = board[posY][i-1];
                 board[posY][i-1] = null;
 
             }
-        } else if (posX == width) {
+        } else if (posX == nCols) {
             tileReturn = board[0][posY];
 
-            for (int i = 0; i < width; i++) {
+            for (int i = 0; i < nCols; i++) {
                 board[posY][i] = board[i + 1][posY];
                 board[posY][i+1] = null;
             }
         } else if (posY == -1) {
-            tileReturn = board[posX][height];
+            tileReturn = board[posX][nRows-1];
 
-            for (int i = height - 1; i != 0; i--) {
+            for (int i = nRows - 1; i != 0; i--) {
                 board[i][posX] = board[posX][i - 1];
                 board[i-1][posX] = null;
             }
-        } else if (posY == height) {
+        } else if (posY == nRows) {
             tileReturn = board[posX][0];
 
-            for (int i = 0; i < height; i++) {
+            for (int i = 0; i < nRows; i++) {
                 board[i][posX] = board[posX][i + 1];
                 board[i+1][posX] = null;
             }
@@ -96,18 +95,18 @@ public class GameBoard {
             board[positionX][positionY] = tile;
         } else {
 
-            if (positionX == -1 || positionX == width + 1 || positionY == -1 || positionY == height + 1) {
+            if (positionX == -1 || positionX == nRows || positionY == -1 || positionY == nCols) {
 
                 if (!isColumnFixed(positionX + 1) && !isRowFixed(positionY + 1)) {
 
 
-                    board[positionX][positionY] = tile;
+                    //board[positionX][positionY] = tile;
 
 
                 }
 
 
-                board[positionX][positionY] = tile;
+               // board[positionX][positionY] = tile;
 
 
             } else {
