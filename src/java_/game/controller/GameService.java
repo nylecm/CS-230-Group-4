@@ -73,6 +73,7 @@ public class GameService {
                     floorTiles.add(t); //todo replace with gb.insert at...
                 }
             }
+
             System.out.println(floorTiles);
             Collections.shuffle(floorTiles);
             System.out.println(floorTiles);
