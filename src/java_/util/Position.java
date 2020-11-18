@@ -2,28 +2,31 @@ package java_.util;
 
 public class Position {
 
-    private int x;
-    private int y;
+    private int rowNum;
+    private int colNum;
 
 
-    public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Position(int rowNum, int colNum) {
+        this.rowNum = rowNum;
+        this.colNum = colNum;
     }
 
-    public int getX() {
-        return x;
+    public int getrowNum() {
+
+        return rowNum;
     }
 
-    public int getY() {
-        return y;
+    public int getcolNum() {
+
+        return colNum;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setrowNum(int rowNum) {
+        this.rowNum = rowNum;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setcolNum(int colNum) {
+
+        this.colNum = colNum;
     }
 }
