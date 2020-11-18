@@ -17,9 +17,10 @@ public class GameBoard {
     private SilkBag silkBag;
     private FloorTile[][] board;
 
-    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions, int nCols, int nRows, String name, SilkBag silkBag) {
+    // todo         (pp, fixedTiles[], Position[] fixedTilePositions, tiles[], )
+    public GameBoard(PlayerPiece[] playerPieces, int nCols, int nRows, String name, SilkBag silkBag) {
         this.playerPieces = playerPieces;
-        this.playerPiecePositions = playerPiecePositions;
+        //this.playerPiecePositions = playerPiecePositions;
         this.name = name;
         this.silkBag = silkBag;
         this.nRows = nRows;
@@ -79,6 +80,7 @@ public class GameBoard {
 
     }
 
+                //insertAt
     private void slideTiles(int posX, int posY) {
 
         FloorTile tileReturn = null; //Being pushed off
@@ -120,6 +122,7 @@ public class GameBoard {
     }
 
 
+    // private  insertAt()
     public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException {
         if (tile.isFixed() && board[positionX][positionY] == null) {
             board[positionX][positionY] = tile;
@@ -149,6 +152,7 @@ public class GameBoard {
         }
     }
 
+    //to string
 
     public static void main(String[] args) {
 
@@ -156,7 +160,7 @@ public class GameBoard {
         Tile[] newTiles = new Tile[0];
         SilkBag silkBag = new SilkBag(newTiles);
         Position[] positions = null;
-        GameBoard firstgame = new GameBoard(playerPieces, positions, 3, 3, "hello", silkBag);
+       // GameBoard firstgame = new GameBoard(playerPieces, positions, 3, 3, "hello", silkBag);
 
         FloorTile A = new FloorTile(TileType.CORNER, false, false);
         FloorTile B = new FloorTile(TileType.STRAIGHT, false, false);
