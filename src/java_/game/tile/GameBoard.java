@@ -30,8 +30,8 @@ public class GameBoard {
         this.nRows = nRows;
         this.nCols = nCols;
         this.board = new FloorTile[nRows][nCols];
-        //insertFixedTiles(fixedTiles, fixedTilePositions);
-        //fillGaps(tiles);
+        insertFixedTiles(fixedTiles, fixedTilePositions);
+        fillGaps(tiles);
     }
 
     private boolean isRowFixed(int rowNum) {
@@ -256,21 +256,21 @@ public class GameBoard {
         PlayerPiece[] playerPieces = new PlayerPiece[0];
         Tile[] newTiles = new Tile[0];
         SilkBag silkBag = new SilkBag(newTiles);
-        FloorTile[] fixedTiles = null;
-        FloorTile[] tiles = null;
-        Position[] fixedTilePositions = null;
-        GameBoard firstgame = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,tiles, 3, 3, "hello", silkBag);
-
-
-
-
-
-
-
 
         FloorTile A = new FloorTile(TileType.CORNER, true, false);
-        FloorTile B = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile C = new FloorTile(TileType.T_SHAPED, false, false);
+        FloorTile B = new FloorTile(TileType.STRAIGHT, true, false);
+        FloorTile C = new FloorTile(TileType.T_SHAPED, true, false);
+
+        FloorTile[] fixedTiles = new FloorTile[3];
+        fixedTiles[0] = A;
+        fixedTiles[1] = B;
+        fixedTiles[2] = C;
+
+        Position[] fixedTilePositions = new Position[3];
+        fixedTilePositions[0] = new Position(0, 0);
+        fixedTilePositions[1] = new Position(1, 1);
+        fixedTilePositions[2] = new Position(2, 2);
+
         FloorTile D = new FloorTile(TileType.CORNER, false, false);
         FloorTile E = new FloorTile(TileType.CORNER, false, false);
         FloorTile F = new FloorTile(TileType.T_SHAPED, false, false);
@@ -278,9 +278,40 @@ public class GameBoard {
         FloorTile H = new FloorTile(TileType.STRAIGHT, false, false);
         FloorTile I = new FloorTile(TileType.CORNER, false, false);
 
-        firstgame.board[0][0] = A;
-        firstgame.board[0][1] = B;
-        firstgame.board[0][2] = C;
+        FloorTile[] tiles = new FloorTile[6];
+        tiles[0] = D;
+        tiles[1] = E;
+        tiles[2] = F;
+        tiles[3] = G;
+        tiles[4] = H;
+        tiles[5] = I;
+
+
+
+        GameBoard firstgame = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,tiles, 3, 3, "hello", silkBag);
+
+        System.out.println(firstgame);
+
+        FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile insert2 = new FloorTile(TileType.CORNER, false, false);
+        FloorTile insert3 = new FloorTile(TileType.T_SHAPED, false, false);
+        FloorTile insert4 = new FloorTile(TileType.CORNER, false, false);
+
+
+
+        firstgame.insert(-1, 0, insert1);
+        System.out.println(firstgame);
+        firstgame.insert(3, 1, insert2);
+        System.out.println(firstgame);
+        firstgame.insert(1, -1, insert3);
+        System.out.println(firstgame);
+        firstgame.insert(0, 3, insert4);
+        System.out.println(firstgame);
+
+
+
+
+        /**
         firstgame.board[1][0] = D;
         firstgame.board[1][1] = E;
         firstgame.board[1][2] = F;
@@ -289,7 +320,7 @@ public class GameBoard {
         firstgame.board[2][2] = I;
 
         System.out.println(firstgame);
-
+        **/
 
 
         /**
@@ -311,7 +342,7 @@ public class GameBoard {
         FloorTile insert = new FloorTile(TileType.STRAIGHT, false, false);
 
         //System.out.println("");
-        firstgame.insert(1, 3, insert);
+        //firstgame.insert(1, 3, insert);
         /**
         for (int j = 0; j < firstgame.nRows; j++) {
             String row = "";
