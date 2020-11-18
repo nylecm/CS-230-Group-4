@@ -30,10 +30,17 @@ public class Player {
         this.numberOfWins=numberOfWins;
         this.numberOfLoses=numberOfLoses;
         this.isBot=isBot;
+        this.previousAppliedEffect = new ArrayList<>();
     }
+
+    public void addPreviouslyAppliedEffect(Effect e) {
+        previousAppliedEffect.add(e);
+    }
+
     public int getUsername(){
         return getUsername();
     }
+
     public String getName(){
         return getName();
     }
@@ -45,6 +52,10 @@ public class Player {
     }
     public boolean isBot() {
         return isBot;
+    }
+
+    public ArrayList<Effect> getPreviousAppliedEffect() {
+        return previousAppliedEffect;
     }
 
     public static void main(String[] args) {
