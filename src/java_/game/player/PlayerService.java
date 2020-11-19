@@ -3,7 +3,8 @@ package java_.game.player;
 import java_.game.tile.Effect;
 
 public class PlayerService {
-    //TODO: Attributes (players) - check design document
+
+    private Player[] players;
 
     public void playerTurn(Player p) {
         //Get random tile from SilkBag
@@ -21,5 +22,11 @@ public class PlayerService {
         return p.getPreviousAppliedEffect().contains(e);
     }
 
-    //TODO: Getters (and setters) - check design document
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public Player getPlayer(int i) {
+        return players[i]; // Potentially i - 1
+    }
 }

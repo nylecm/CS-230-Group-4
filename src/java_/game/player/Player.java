@@ -1,5 +1,6 @@
 package java_.game.player;
 
+import java_.game.tile.ActionTile;
 import java_.game.tile.Effect;
 
 import java.util.ArrayList;
@@ -10,12 +11,16 @@ import java.util.List;
  */
 
 public class Player {
+
     private String username;
     private String name;
     private int numberOfWins;
     private int numberOfLoses;
     private boolean isBot;
-    private List<Effect> previousAppliedEffect ;
+    private List<Effect> previousAppliedEffect = new ArrayList<>();
+    private List<ActionTile> drawnActionTiles = new ArrayList<>();;
+    private PlayerPiece playerPiece;
+
 
     /**
      * @param username            Unique game.player.Player ID
@@ -25,13 +30,13 @@ public class Player {
      * @param isBot               Type of game.player.Player: Human or AI
      */
 
-    public Player(String username, String name, int numberOfWins, int numberOfLoses, boolean isBot ) {
+    public Player(String username, String name, int numberOfWins, int numberOfLoses, boolean isBot, PlayerPiece playerPiece) {
         this.username = username;
         this.name = name;
         this.numberOfWins = numberOfWins;
         this.numberOfLoses = numberOfLoses;
         this.isBot = isBot;
-        this.previousAppliedEffect = new ArrayList<>();
+        this.playerPiece = new PlayerPiece();
     }
 
     public void addPreviouslyAppliedEffect(Effect e) {
