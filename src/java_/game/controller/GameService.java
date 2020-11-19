@@ -20,6 +20,7 @@ public class GameService {
     private int turnCount;
 
     private static final String DELIMITER = "` ";
+    private static final String GAME_BOARD_FILE_PATH = "C:\\\\Users\\\\micha\\\\IdeaProjects\\\\CS-230-Group-4\\\\data\\\\game_board.txt";
 
     private GameService() {
         //ps = PlayerService.getInstance().remake();
@@ -33,14 +34,16 @@ public class GameService {
         return instance;
     }
 
-    public void loadNewGame(File f, String boardName, int nPlayers) throws FileNotFoundException {
+    public void loadNewGame(File f, String boardName, int nPlayers)
+            throws FileNotFoundException {
         remake();
 
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
-
         readSelectGameBoard(boardName, nPlayers, in);
         in.close();
+
+        gameplayLoop();
     }
 
     private void readSelectGameBoard(String boardName, int nPlayers, Scanner in) {
@@ -59,9 +62,9 @@ public class GameService {
                 int rotation = in.nextInt();
                 int row = in.nextInt();
                 int col = in.nextInt();
-                Position p = new Position(row, col);
                 TileType tileType = TileType.valueOf(in.next().toUpperCase());
 
+                Position p = new Position(row, col);
                 FloorTile t = new FloorTile(tileType, true, false, rotation);
                 fixedTiles[i] = t;
                 fixedTilePositions[i] = p;
@@ -75,7 +78,8 @@ public class GameService {
             System.out.println(floorTiles);
 
             // Taking first floor tiles for the initial set to populate game board.
-            FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard(nRows, nCols, nFixedTiles, floorTiles);
+            FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
+                    (nRows, nCols, nFixedTiles, floorTiles);
 
             //Action tiles:
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
@@ -94,7 +98,8 @@ public class GameService {
             // Player Pieces:
             PlayerPiece[] playerPieces = readPlayerPieces(nPlayers, in);
 
-            gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, floorTilesForGameBoard, nCols, nRows, boardName, sb);
+            gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,
+                    floorTilesForGameBoard, nCols, nRows, boardName, sb);
             System.out.println(gb); // todo consider keeping silk bag in game service...
         }
     }
@@ -114,7 +119,8 @@ public class GameService {
         return floorTiles;
     }
 
-    private FloorTile[] getFloorTilesForGameBoard(int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
+    private FloorTile[] getFloorTilesForGameBoard
+            (int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
         FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles]; // todo check if nFixed Tiles is greater than nCol * nRow
 
         for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
@@ -150,16 +156,11 @@ public class GameService {
     }
 
 
-
-
-
-
-
     public void loadSavedInstance(File f) throws FileNotFoundException {
         remake(); //todo future homer's problem
 
         Scanner in = new Scanner(f);
-        in.useDelimiter("` ");
+        in.useDelimiter(DELIMITER);
 
         while (in.hasNextLine()) {
 
@@ -172,7 +173,11 @@ public class GameService {
          */
     }
 
-    public void gameplayLoop() {
+    public void gameplayLoop() { // todo gameplay loop...
+        /*while (!gb.isWin()) {
+            // ps mk mv
+            // ...
+        }*/
         System.out.println("Have fun!");
     }
 
@@ -192,7 +197,8 @@ public class GameService {
 
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = new GameService();
-        gs.loadNewGame(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\game_board.txt"), "oberon_1", 3);
+        gs.loadNewGame(
+                new File(GAME_BOARD_FILE_PATH), "oberon_1", 3); // fixme get rid of absolute path
         //System.out.println(GameService.getInstance().getS());
     }
 
