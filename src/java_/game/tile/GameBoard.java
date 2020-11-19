@@ -232,6 +232,11 @@ public class GameBoard {
     **/
     //to string
 
+    public Boolean isWin() {
+        return true;
+    }
+
+
     public String toString() {
         String boardString = "";
         for (int j = 0; j < nRows; j++) {
