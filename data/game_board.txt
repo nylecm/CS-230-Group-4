@@ -1,0 +1,6 @@
+oberon_1` 5` 4` 2` 0` 1` 1` goal` 0` 1` 2` t_shaped` straight` 5` corner` 3` t_shaped` 15` goal` 0` ice` 3` fire` 1` backtrack` 2` double_move` 1` 0` 0` 1` 0` 2` 0` 3` 0` ;
+The first level on oberon! It may be easy, but trust me it's going to get hard soon!!!` // Nice image paths go here
+oberon_2` 9` 7` 8` 0` 4` 3` goal` 2` 2` 1` corner` 0` 5` 0` t_shaped` 1` 1` 4` straight` 0` 2` 3` t_shaped` 2` 5` 4` corner` 0` 6` 2` corner` 0` 6` 4` straight` 9` corner` 8` t_shaped` 2` goal` 0` ice` 4` fire` 4` backtrack` 3` double_move` 1` 0` 0` 0` 8` 6` 0` 6` 6`
+This is where it gets hard! `
+oberon_3` 7` 7` 5` 0` 3` 3` goal` 2` 1` 4` corner` 1` 2` 1` corner` 3` 4` 5` corner`
+Brace yourself...`

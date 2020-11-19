@@ -5,7 +5,7 @@ import javafx.application.Application;
         import javafx.stage.Stage;
 
 /**
- * The type java.Main.
+ * The type java.java_.Main.
  */
 public class GameMain extends Application {
     public void start(Stage primaryStage) {

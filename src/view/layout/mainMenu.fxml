@@ -10,7 +10,7 @@
     <children>
         <VBox alignment="CENTER" prefHeight="549.0" prefWidth="720.0" spacing="20.0">
             <children>
-                <Label alignment="TOP_CENTER" layoutX="356.0" layoutY="57.0" text="Main Menu"
+                <Label alignment="TOP_CENTER" layoutX="356.0" layoutY="57.0" text="java_.Main Menu"
                        wrapText="true">
                     <font>
                         <Font name="System Bold" size="24.0"/>

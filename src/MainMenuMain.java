@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 public class MainMenuMain extends Application {
     /**
-     * The type java.Main.
+     * The type java.java_.Main.
      */
     public void start(Stage primaryStage) {
         try {

@@ -1,3 +1,5 @@
+package java_;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -5,7 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * The type java.Main.
+ * The type java.java_.Main.
  */
 public class Main extends Application {
     public void start(Stage primaryStage) {
