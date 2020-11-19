@@ -1,14 +1,21 @@
 package java_.game.player;
 
+import java_.game.tile.ActionTile;
 import java_.game.tile.Effect;
+import java_.game.tile.SilkBag;
+import java_.game.tile.Tile;
 
 public class PlayerService {
 
     private Player[] players;
 
-    public void playerTurn(Player p) {
-        //Get random tile from SilkBag
-        //Use tile
+    public void playerTurn(Player p, SilkBag silkBag) {
+        Tile drawnTile = silkBag.take();
+        if (drawnTile instanceof ActionTile) {
+            p.addDrawnActionTile((ActionTile) drawnTile);
+        } else {
+            System.out.println("Use FloorTile");
+        }
         //(Apply effects)
         //Move PlayerPiece
         //After turn, game checks effects

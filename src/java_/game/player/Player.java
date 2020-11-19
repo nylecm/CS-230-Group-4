@@ -29,7 +29,6 @@ public class Player {
      * @param numberOfLoses       Number of Loss
      * @param isBot               Type of game.player.Player: Human or AI
      */
-
     public Player(String username, String name, int numberOfWins, int numberOfLoses, boolean isBot, PlayerPiece playerPiece) {
         this.username = username;
         this.name = name;
@@ -41,6 +40,10 @@ public class Player {
 
     public void addPreviouslyAppliedEffect(Effect e) {
         previousAppliedEffect.add(e);
+    }
+
+    public void addDrawnActionTile(ActionTile actionTile) {
+        drawnActionTiles.add(actionTile);
     }
 
     public int getUsername() {
@@ -67,7 +70,5 @@ public class Player {
     }
 
     public static void main(String[] args) {
-        Player testPlayer = new Player("H4jn", "M", 8, 10, false);
-        System.out.println(testPlayer.username + testPlayer.name + testPlayer.numberOfWins + testPlayer.numberOfLoses + testPlayer.isBot);
     }
 }
