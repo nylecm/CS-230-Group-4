@@ -9,7 +9,22 @@ public class PlayerService {
 
     private Player[] players;
 
-    public void playerTurn(Player p, SilkBag silkBag) {
+    private SilkBag silkBag;
+
+    private static PlayerService playerService = null;
+
+    public PlayerService() {
+
+    }
+
+    public static PlayerService getInstance() {
+        if (playerService == null) {
+            playerService = new PlayerService();
+        }
+        return playerService;
+    }
+
+    public void playerTurn(Player p) {
         Tile drawnTile = silkBag.take();
         if (drawnTile instanceof ActionTile) {
             p.addDrawnActionTile((ActionTile) drawnTile);
