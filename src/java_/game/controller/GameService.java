@@ -20,7 +20,7 @@ public class GameService {
     private int turnCount;
 
     private static final String DELIMITER = "` ";
-    private static final String GAME_BOARD_FILE_PATH = "C:\\\\Users\\\\micha\\\\IdeaProjects\\\\CS-230-Group-4\\\\data\\\\game_board.txt";
+    private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
 
     private GameService() {
         //ps = PlayerService.getInstance().remake();
