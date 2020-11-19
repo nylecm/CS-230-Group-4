@@ -3,6 +3,7 @@ package java_.game.player;
 import java_.game.tile.Effect;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bishwo
@@ -14,7 +15,7 @@ public class Player {
     private int numberOfWins;
     private int numberOfLoses;
     private boolean isBot;
-    private ArrayList<Effect> previousAppliedEffect ;
+    private List<Effect> previousAppliedEffect ;
 
     /**
      * @param username            Unique game.player.Player ID
@@ -24,12 +25,12 @@ public class Player {
      * @param isBot               Type of game.player.Player: Human or AI
      */
 
-    public Player(String username, String name, int numberOfWins, int numberOfLoses, boolean isBot ){
-        this.username=username;
-        this.name=name;
-        this.numberOfWins=numberOfWins;
-        this.numberOfLoses=numberOfLoses;
-        this.isBot=isBot;
+    public Player(String username, String name, int numberOfWins, int numberOfLoses, boolean isBot ) {
+        this.username = username;
+        this.name = name;
+        this.numberOfWins = numberOfWins;
+        this.numberOfLoses = numberOfLoses;
+        this.isBot = isBot;
         this.previousAppliedEffect = new ArrayList<>();
     }
 
@@ -37,24 +38,26 @@ public class Player {
         previousAppliedEffect.add(e);
     }
 
-    public int getUsername(){
+    public int getUsername() {
         return getUsername();
     }
 
-    public String getName(){
+    public String getName() {
         return getName();
     }
-    public int getNumberOfWins(){
+
+    public int getNumberOfWins() {
         return getNumberOfWins();
     }
-    public int getNumberOfLoses(){
+
+    public int getNumberOfLoses() {
         return getNumberOfLoses();
     }
     public boolean isBot() {
         return isBot;
     }
 
-    public ArrayList<Effect> getPreviousAppliedEffect() {
+    public List<Effect> getPreviousAppliedEffect() {
         return previousAppliedEffect;
     }
 
