@@ -51,7 +51,6 @@ public class GameService {
             int nCols = in.nextInt();
 
             // Dealing with fixed tiles:
-
             int nFixedTiles = in.nextInt();
             FloorTile[] fixedTiles = new FloorTile[nFixedTiles];
             Position[] fixedTilePositions = new Position[nFixedTiles];
@@ -62,6 +61,7 @@ public class GameService {
                 int col = in.nextInt();
                 Position p = new Position(row, col);
                 TileType tileType = TileType.valueOf(in.next().toUpperCase());
+
                 FloorTile t = new FloorTile(tileType, true, false, rotation);
                 fixedTiles[i] = t;
                 fixedTilePositions[i] = p;
@@ -69,35 +69,17 @@ public class GameService {
             System.out.println(Arrays.toString(fixedTiles)); //todo remove
 
             // Dealing with non-fixed floor tiles:
-
-            ArrayList<FloorTile> floorTiles = new ArrayList<>();
-
-            for (int i = 0; i < FloorTile.FLOOR_TILE_TYPES.size(); i++) {
-                TileType tileType = TileType.valueOf(in.next().toUpperCase());
-                int n = in.nextInt();
-                FloorTile t = new FloorTile(tileType, false, false);
-
-                for (int j = 0; j < n; j++) {
-                    floorTiles.add(t); //todo replace with gb.insert at...
-                }
-            }
+            ArrayList<FloorTile> floorTiles = readFloorTiles(in);
             System.out.println(floorTiles);
-
             Collections.shuffle(floorTiles);
-
             System.out.println(floorTiles);
 
             // Taking first floor tiles for the initial set to populate game board.
-            FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles]; // todo check if nFixed Tiles is greater than nCol * nRow
-
-            for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
-                floorTilesForGameBoard[i] = floorTiles.get(0);
-                floorTiles.remove(0);
-            }
+            FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard(nRows, nCols, nFixedTiles, floorTiles);
 
             //Action tiles:
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
-            System.out.println(actionTiles);
+            System.out.println(actionTiles); //
 
             Collections.shuffle(actionTiles);
 
@@ -110,16 +92,36 @@ public class GameService {
             System.out.println(sb);
 
             // Player Pieces:
-            PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
-            for (int i = 0; i < nPlayers; i++) {
-                int startRow = in.nextInt();
-                int startCol = in.nextInt();
-                playerPieces[i] = new PlayerPiece(new Position(startRow, startCol));
-            }
+            PlayerPiece[] playerPieces = readPlayerPieces(nPlayers, in);
 
             gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, floorTilesForGameBoard, nCols, nRows, boardName, sb);
             System.out.println(gb); // todo consider keeping silk bag in game service...
         }
+    }
+
+    private ArrayList<FloorTile> readFloorTiles(Scanner in) {
+        ArrayList<FloorTile> floorTiles = new ArrayList<>();
+
+        for (int i = 0; i < FloorTile.FLOOR_TILE_TYPES.size(); i++) {
+            TileType tileType = TileType.valueOf(in.next().toUpperCase());
+            int nOfThisType = in.nextInt();
+            FloorTile t = new FloorTile(tileType, false, false);
+
+            for (int j = 0; j < nOfThisType; j++) {
+                floorTiles.add(t);
+            }
+        }
+        return floorTiles;
+    }
+
+    private FloorTile[] getFloorTilesForGameBoard(int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
+        FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles]; // todo check if nFixed Tiles is greater than nCol * nRow
+
+        for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
+            floorTilesForGameBoard[i] = floorTiles.get(0);
+            floorTiles.remove(0);
+        }
+        return floorTilesForGameBoard;
     }
 
     private ArrayList<ActionTile> readActionTiles(Scanner in) {
@@ -136,6 +138,21 @@ public class GameService {
         }
         return actionTiles;
     }
+
+    private PlayerPiece[] readPlayerPieces(int nPlayers, Scanner in) {
+        PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
+        for (int i = 0; i < nPlayers; i++) {
+            int startRow = in.nextInt();
+            int startCol = in.nextInt();
+            playerPieces[i] = new PlayerPiece(new Position(startRow, startCol));
+        }
+        return playerPieces;
+    }
+
+
+
+
+
 
 
     public void loadSavedInstance(File f) throws FileNotFoundException {
@@ -178,4 +195,30 @@ public class GameService {
         gs.loadNewGame(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\game_board.txt"), "oberon_1", 3);
         //System.out.println(GameService.getInstance().getS());
     }
+
+    /*private class FloorTilePositionBundle {
+        private FloorTile floorTile;
+        private Position position;
+
+        public FloorTilePositionBundle(FloorTile floorTile, Position position) {
+            this.floorTile = floorTile;
+            this.position = position;
+        }
+
+        public FloorTile getFloorTile() {
+            return floorTile;
+        }
+
+        public void setFloorTile(FloorTile floorTile) {
+            this.floorTile = floorTile;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
+
+        public void setPosition(Position position) {
+            this.position = position;
+        }
+    }*/
 }
