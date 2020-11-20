@@ -7,6 +7,7 @@ import java_.util.Position;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -39,13 +40,13 @@ public class GameService {
 
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
-        readSelectGameBoard(boardName, nPlayers, in);
+        gb = readSelectGameBoard(boardName, nPlayers, in);
         in.close();
 
         gameplayLoop();
     }
 
-    private void readSelectGameBoard(String boardName, int nPlayers, Scanner in) {
+    private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in) throws IllegalArgumentException {
         while (in.hasNextLine() && in.next().equals(boardName)) {//todo to be completed fully when other classes complete...
             int nRows = in.nextInt();
             int nCols = in.nextInt();
@@ -90,9 +91,10 @@ public class GameService {
             PlayerPiece[] playerPieces = readPlayerPieces(nPlayers, in);
             // todo player service...
 
-            gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,
+            return new GameBoard(playerPieces, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName, sb); // todo consider keeping silk bag in game service...
         }
+        throw new IllegalArgumentException("No level with such name found!");
     }
 
     private ArrayList<FloorTile> readFloorTiles(Scanner in) {
