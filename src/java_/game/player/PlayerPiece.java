@@ -6,8 +6,7 @@ public class PlayerPiece {
 
     private Position position;
 
-    public PlayerPiece(Position position) {
-        this.position = position;
+    public PlayerPiece() {
     }
 
     public Position getPosition() {
