@@ -50,7 +50,11 @@ public class PlayerService {
         return players[i]; // Potentially i - 1
     }
 
-    public void remake() {
-        playerService = new PlayerService();
+    public PlayerService remake() {
+        return new PlayerService();
+    }
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
     }
 }

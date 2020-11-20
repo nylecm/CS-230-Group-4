@@ -1,14 +1,13 @@
 package java_.game.controller;
 
+import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
-import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -19,12 +18,13 @@ public class GameService {
     private GameBoard gb;
     private PlayerService ps;
     private int turnCount;
+    private boolean isWin;
 
     private static final String DELIMITER = "` ";
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
 
     private GameService() {
-        PlayerService.getInstance().remake();
+        ps = PlayerService.getInstance().remake();
         //gb = GameBoard.getInstance().remake();
     }
 
@@ -35,14 +35,18 @@ public class GameService {
         return instance;
     }
 
-    public void loadNewGame(File f, String boardName, int nPlayers)
+    //                                      (from game set-up class GUI)
+    public void loadNewGame(File gameBoardFile, Player[] players, String boardName, int nPlayers)
             throws FileNotFoundException {
         remake();
 
-        Scanner in = new Scanner(f);
+        Scanner in = new Scanner(gameBoardFile);
         in.useDelimiter(DELIMITER);
         gb = readSelectGameBoard(boardName, nPlayers, in);
         in.close();
+
+        //read player file for
+        ps.setPlayers(players);
 
         gameplayLoop();
     }
@@ -168,7 +172,11 @@ public class GameService {
     }
 
     public void gameplayLoop() { // todo gameplay loop...
-        while (!gb.isWin()) {
+        while (! isWin) {
+            //
+
+
+
             // ps mk mv
             // ...
             System.out.println("Have fun!");
@@ -185,14 +193,14 @@ public class GameService {
         instance = null;
     }
 
-    public void remake() {
-        instance = new GameService();
+    public GameService remake() {
+        return new GameService();
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        GameService gs = new GameService();
+        GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new File(GAME_BOARD_FILE_PATH), "oberon_1", 3);
+                new File(GAME_BOARD_FILE_PATH), new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1", 3);
         System.out.println(gs.gb);
         gs.gb.insert(0,-1, new FloorTile(TileType.STRAIGHT, false,false));
         System.out.println(gs.gb);
