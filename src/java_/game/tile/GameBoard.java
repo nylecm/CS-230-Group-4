@@ -8,17 +8,17 @@ import java.util.Set;
 
 public class GameBoard {
 
-    private final int nRows; //(height)
-    private final int nCols; //(width)
-    private String name;
-    private PlayerPiece[] playerPieces;
-    private Position[] playerPiecePositions;
-    private FloorTile[] fixedTiles;
-    private Position[] fixedTilePositions;
-    private FloorTile[] tiles;
+    private final int nRows; // height
+    private final int nCols; // width
+    private final String name; // todo may not be needed.
+    private final PlayerPiece[] playerPieces;
+    private Position[] playerPiecePositions; // ex-position tracking...
+    private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
+    private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
+    private final FloorTile[] tiles;
     private HashMap<Position, Set<Effect>> activeEffects;
-    private SilkBag silkBag;
-    private FloorTile[][] board;
+    private final SilkBag silkBag;
+    private final FloorTile[][] board;
 
     public GameBoard(PlayerPiece[] playerPieces, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name, SilkBag silkBag) {
         this.playerPieces = playerPieces;
@@ -60,7 +60,7 @@ public class GameBoard {
             }
         }
         return false;
-        /**
+        /*
          if (colNum == -1) {
          for (int y = 0; y < nRows; y++) {
 
@@ -86,7 +86,7 @@ public class GameBoard {
          }
          return false;
          }
-         **/
+         */
     }
 
     private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
@@ -161,7 +161,7 @@ public class GameBoard {
 
     // private  insertAt()
 
-    /**
+    /*
      * public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException {
      * if (tile.isFixed() && board[positionX][positionY] == null) {
      * board[positionX][positionY] = tile;
@@ -190,7 +190,7 @@ public class GameBoard {
      * }
      * }
      * }
-     **/
+     */
     //to string
     public Boolean isWin() {
         return true;
@@ -270,7 +270,7 @@ public class GameBoard {
         System.out.println(firstgame);
 
 
-        /**
+        /*
          firstgame.board[1][0] = D;
          firstgame.board[1][1] = E;
          firstgame.board[1][2] = F;
@@ -282,7 +282,7 @@ public class GameBoard {
          **/
 
 
-        /**
+        /*
          for (int j = 0; j < firstgame.nRows; j++) {
          String row = "";
          for (int i = 0; i < firstgame.nCols; i++) {
@@ -295,13 +295,13 @@ public class GameBoard {
          }
          System.out.println(row);
          }
-         **/
+         */
 
         FloorTile insert = new FloorTile(TileType.STRAIGHT, false, false);
 
         //System.out.println("");
         //firstgame.insert(1, 3, insert);
-        /**
+        /*
          for (int j = 0; j < firstgame.nRows; j++) {
          String row = "";
          for (int i = 0; i < firstgame.nCols; i++) {
@@ -314,12 +314,12 @@ public class GameBoard {
          }
          System.out.println(row);
          }
-         **/
+         */
     }
 }
 
 
-/**
+/*
  * // from isRowFixed
  * if (rowNum == -1) {
  * for (int x = 0; x < nCols; x++) {
