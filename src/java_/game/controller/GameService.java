@@ -48,8 +48,6 @@ public class GameService {
 
     private void readSelectGameBoard(String boardName, int nPlayers, Scanner in) {
         while (in.hasNextLine() && in.next().equals(boardName)) {//todo to be completed fully when other classes complete...
-            System.out.println(boardName); //todo remove
-
             int nRows = in.nextInt();
             int nCols = in.nextInt();
 
@@ -69,13 +67,10 @@ public class GameService {
                 fixedTiles[i] = t;
                 fixedTilePositions[i] = p;
             }
-            System.out.println(Arrays.toString(fixedTiles)); //todo remove
 
             // Dealing with non-fixed floor tiles:
             ArrayList<FloorTile> floorTiles = readFloorTiles(in);
-            System.out.println(floorTiles);
             Collections.shuffle(floorTiles);
-            System.out.println(floorTiles);
 
             // Taking first floor tiles for the initial set to populate game board.
             FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
@@ -83,8 +78,6 @@ public class GameService {
 
             //Action tiles:
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
-            System.out.println(actionTiles); //
-
             Collections.shuffle(actionTiles);
 
             // Silk Bag:
@@ -93,14 +86,12 @@ public class GameService {
             tilesForSilkBag.addAll(actionTiles);
 
             SilkBag sb = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
-            System.out.println(sb);
 
             // Player Pieces:
             PlayerPiece[] playerPieces = readPlayerPieces(nPlayers, in);
 
             gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,
-                    floorTilesForGameBoard, nCols, nRows, boardName, sb);
-            System.out.println(gb); // todo consider keeping silk bag in game service...
+                    floorTilesForGameBoard, nCols, nRows, boardName, sb); // todo consider keeping silk bag in game service...
         }
     }
 
