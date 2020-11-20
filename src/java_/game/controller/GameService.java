@@ -191,6 +191,9 @@ public class GameService {
         GameService gs = new GameService();
         gs.loadNewGame(
                 new File(GAME_BOARD_FILE_PATH), "oberon_1", 3);
+        System.out.println(gs.gb);
+        gs.gb.insert(0,-1, new FloorTile(TileType.STRAIGHT, false,false));
+        System.out.println(gs.gb);
         //System.out.println(GameService.getInstance().getS());
     }
 
