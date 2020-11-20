@@ -7,14 +7,12 @@ import java_.game.tile.Tile;
 
 public class PlayerService {
 
-    private Player[] players;
-
-    private SilkBag silkBag;
-
     private static PlayerService playerService = null;
 
-    public PlayerService() {
+    private Player[] players;
+    private SilkBag silkBag;
 
+    public PlayerService() {
     }
 
     public static PlayerService getInstance() {
@@ -50,5 +48,9 @@ public class PlayerService {
 
     public Player getPlayer(int i) {
         return players[i]; // Potentially i - 1
+    }
+
+    public void remake() {
+        playerService = new PlayerService();
     }
 }

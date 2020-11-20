@@ -22,7 +22,7 @@ public class GameService {
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
 
     private GameService() {
-        //ps = PlayerService.getInstance().remake();
+        PlayerService.getInstance().remake();
         //gb = GameBoard.getInstance().remake();
     }
 
