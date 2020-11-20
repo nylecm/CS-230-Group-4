@@ -20,7 +20,7 @@ public class GameBoard {
     private final SilkBag silkBag;
     private final FloorTile[][] board;
 
-    public GameBoard(PlayerPiece[] playerPieces, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name, SilkBag silkBag) {
+    public GameBoard(Position[] playerPieces, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name, SilkBag silkBag) {
         this.playerPieces = playerPieces;
         this.fixedTiles = fixedTiles;
         this.fixedTilePositions = fixedTilePositions;

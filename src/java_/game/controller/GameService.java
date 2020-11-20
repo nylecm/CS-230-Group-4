@@ -4,6 +4,7 @@ import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
+import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -88,10 +89,10 @@ public class GameService {
             SilkBag sb = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
 
             // Player Pieces:
-            PlayerPiece[] playerPieces = readPlayerPieces(nPlayers, in);
+            Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
             // todo player service...
 
-            return new GameBoard(playerPieces, fixedTiles, fixedTilePositions,
+            return new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName, sb); // todo consider keeping silk bag in game service...
         }
         throw new IllegalArgumentException("No level with such name found!");
@@ -138,14 +139,14 @@ public class GameService {
         return actionTiles;
     }
 
-    private PlayerPiece[] readPlayerPieces(int nPlayers, Scanner in) {
-        PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
+    private Position[] readPlayerPiecePositions(int nPlayers, Scanner in) {
+        Position[] positions = new Position[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
             int startRow = in.nextInt(); //todo load player piece positions...
             int startCol = in.nextInt();
-            playerPieces[i] = new PlayerPiece();
+            positions[i] = new Position(startRow, startCol);
         }
-        return playerPieces;
+        return positions;
     }
 
 
