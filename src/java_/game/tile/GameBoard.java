@@ -154,8 +154,8 @@ public class GameBoard {
             board[rowNum - 1][colNum] = tile;
         }
 
+        assert pushedOffTile != null;
         silkBag.put(pushedOffTile);
-
     }
 
 
