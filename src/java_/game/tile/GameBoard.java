@@ -11,7 +11,7 @@ public class GameBoard {
     private final int nRows; // height
     private final int nCols; // width
     private final String name; // todo may not be needed.
-    private final PlayerPiece[] playerPieces;
+    private PlayerPiece[] playerPieces;
     private Position[] playerPiecePositions; // ex-position tracking...
     private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
     private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
@@ -20,8 +20,8 @@ public class GameBoard {
     private final SilkBag silkBag;
     private final FloorTile[][] board;
 
-    public GameBoard(Position[] playerPieces, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name, SilkBag silkBag) {
-        this.playerPieces = playerPieces;
+    public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name, SilkBag silkBag) {
+        this.playerPiecePositions = playerPiecePositions;
         this.fixedTiles = fixedTiles;
         this.fixedTilePositions = fixedTilePositions;
         this.tiles = tiles;
@@ -250,7 +250,7 @@ public class GameBoard {
         tiles[5] = I;
 
 
-        GameBoard firstgame = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, tiles, 3, 3, "hello", silkBag);
+       /* GameBoard firstgame = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, tiles, 3, 3, "hello", silkBag);
 
         System.out.println(firstgame);
 
@@ -268,7 +268,7 @@ public class GameBoard {
         System.out.println(firstgame);
         firstgame.insert(0, 3, insert4);
         System.out.println(firstgame);
-
+*/
 
         /*
          firstgame.board[1][0] = D;

@@ -168,11 +168,11 @@ public class GameService {
     }
 
     public void gameplayLoop() { // todo gameplay loop...
-        /*while (!gb.isWin()) {
+        while (!gb.isWin()) {
             // ps mk mv
             // ...
-        }*/
-        System.out.println("Have fun!");
+            System.out.println("Have fun!");
+        }
     }
 
     public void save() {
