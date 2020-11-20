@@ -140,9 +140,9 @@ public class GameService {
     private PlayerPiece[] readPlayerPieces(int nPlayers, Scanner in) {
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-            int startRow = in.nextInt();
+            int startRow = in.nextInt(); //todo load player piece positions...
             int startCol = in.nextInt();
-            playerPieces[i] = new PlayerPiece(new Position(startRow, startCol));
+            playerPieces[i] = new PlayerPiece();
         }
         return playerPieces;
     }
