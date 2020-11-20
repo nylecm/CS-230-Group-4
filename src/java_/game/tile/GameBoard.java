@@ -114,9 +114,7 @@ public class GameBoard {
         }
     }
 
-
-    //insertAt
-    private void insert(int colNum, int rowNum, FloorTile tile) {
+    public void insert(int colNum, int rowNum, FloorTile tile) {
         FloorTile pushedOffTile = null; //Being pushed off
 
         if (colNum == -1) {
