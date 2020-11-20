@@ -89,6 +89,7 @@ public class GameService {
 
             // Player Pieces:
             PlayerPiece[] playerPieces = readPlayerPieces(nPlayers, in);
+            // todo player service...
 
             gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName, sb); // todo consider keeping silk bag in game service...
@@ -189,7 +190,7 @@ public class GameService {
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = new GameService();
         gs.loadNewGame(
-                new File(GAME_BOARD_FILE_PATH), "oberon_1", 3); // fixme get rid of absolute path
+                new File(GAME_BOARD_FILE_PATH), "oberon_1", 3);
         //System.out.println(GameService.getInstance().getS());
     }
 
