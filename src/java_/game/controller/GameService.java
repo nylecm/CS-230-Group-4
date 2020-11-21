@@ -48,8 +48,6 @@ public class GameService {
 
         //read player file for
         ps.setPlayers(players);
-
-        gameplayLoop();
     }
 
     private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in) throws IllegalArgumentException {
