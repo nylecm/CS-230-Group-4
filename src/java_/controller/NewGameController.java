@@ -1,5 +1,6 @@
 package java_.controller;
 
+import java_.game.controller.GameService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,6 +49,8 @@ public class NewGameController implements Initializable {
 
     @FXML
     private void onStartGameButtonClicked(ActionEvent e) throws IOException {
+        GameService.getInstance().loadNewGame(null, (String) gameBoardSelect.getValue());
+
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/game.fxml"));
         currentStage.setScene(new Scene(game));

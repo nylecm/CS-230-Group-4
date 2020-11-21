@@ -37,13 +37,13 @@ public class GameService {
     }
 
     //                                      (from game set-up class GUI)
-    public void loadNewGame(File gameBoardFile, Player[] players, String boardName, int nPlayers)
+    public void loadNewGame(Player[] players, String boardName)
             throws FileNotFoundException {
         remake();
 
-        Scanner in = new Scanner(gameBoardFile);
+        Scanner in = new Scanner(GAME_BOARD_FILE_PATH);
         in.useDelimiter(DELIMITER);
-        gb = readSelectGameBoard(boardName, nPlayers, in);
+        gb = readSelectGameBoard(boardName, players.length, in);
         in.close();
 
         //read player file for
@@ -198,7 +198,7 @@ public class GameService {
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new File(GAME_BOARD_FILE_PATH), new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1", 3);
+                new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gb);
         gs.gb.insert(0, -1, new FloorTile(TileType.STRAIGHT, false, false));
         System.out.println(gs.gb);
