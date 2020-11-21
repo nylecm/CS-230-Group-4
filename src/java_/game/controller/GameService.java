@@ -1,5 +1,6 @@
 package java_.game.controller;
 
+import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
@@ -8,7 +9,6 @@ import java_.util.Position;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -17,13 +17,15 @@ public class GameService {
 
     private GameBoard gb;
     private PlayerService ps;
+    private SilkBag silkBag;
     private int turnCount;
+    private boolean isWin;
 
     private static final String DELIMITER = "` ";
-    private static final String GAME_BOARD_FILE_PATH = "C:\\\\Users\\\\micha\\\\IdeaProjects\\\\CS-230-Group-4\\\\data\\\\game_board.txt";
+    private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
 
     private GameService() {
-        //ps = PlayerService.getInstance().remake();
+        ps = PlayerService.getInstance().remake();
         //gb = GameBoard.getInstance().remake();
     }
 
@@ -34,22 +36,22 @@ public class GameService {
         return instance;
     }
 
-    public void loadNewGame(File f, String boardName, int nPlayers)
+    //                                      (from game set-up class GUI)
+    public void loadNewGame(Player[] players, String boardName)
             throws FileNotFoundException {
         remake();
 
-        Scanner in = new Scanner(f);
+        Scanner in = new Scanner(new File(GAME_BOARD_FILE_PATH));
         in.useDelimiter(DELIMITER);
-        readSelectGameBoard(boardName, nPlayers, in);
+        gb = readSelectGameBoard(boardName, players.length, in);
         in.close();
 
-        gameplayLoop();
+        //read player file for
+        ps.setPlayers(players);
     }
 
-    private void readSelectGameBoard(String boardName, int nPlayers, Scanner in) {
+    private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in) throws IllegalArgumentException {
         while (in.hasNextLine() && in.next().equals(boardName)) {//todo to be completed fully when other classes complete...
-            System.out.println(boardName); //todo remove
-
             int nRows = in.nextInt();
             int nCols = in.nextInt();
 
@@ -69,13 +71,10 @@ public class GameService {
                 fixedTiles[i] = t;
                 fixedTilePositions[i] = p;
             }
-            System.out.println(Arrays.toString(fixedTiles)); //todo remove
 
             // Dealing with non-fixed floor tiles:
             ArrayList<FloorTile> floorTiles = readFloorTiles(in);
-            System.out.println(floorTiles);
             Collections.shuffle(floorTiles);
-            System.out.println(floorTiles);
 
             // Taking first floor tiles for the initial set to populate game board.
             FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
@@ -83,25 +82,22 @@ public class GameService {
 
             //Action tiles:
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
-            System.out.println(actionTiles); //
-
             Collections.shuffle(actionTiles);
 
-            // Silk Bag:
+            // Silk B
+            // Player Pieces:
+            Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
+            // todo player service...
             ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
             tilesForSilkBag.addAll(floorTiles);
             tilesForSilkBag.addAll(actionTiles);
 
-            SilkBag sb = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
-            System.out.println(sb);
+            silkBag = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
 
-            // Player Pieces:
-            PlayerPiece[] playerPieces = readPlayerPieces(nPlayers, in);
-
-            gb = new GameBoard(playerPieces, fixedTiles, fixedTilePositions,
-                    floorTilesForGameBoard, nCols, nRows, boardName, sb);
-            System.out.println(gb); // todo consider keeping silk bag in game service...
+            return new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions,
+                    floorTilesForGameBoard, nCols, nRows, boardName); // todo consider keeping silk bag in game service...
         }
+        throw new IllegalArgumentException("No level with such name found!");
     }
 
     private ArrayList<FloorTile> readFloorTiles(Scanner in) {
@@ -145,14 +141,14 @@ public class GameService {
         return actionTiles;
     }
 
-    private PlayerPiece[] readPlayerPieces(int nPlayers, Scanner in) {
-        PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
+    private Position[] readPlayerPiecePositions(int nPlayers, Scanner in) {
+        Position[] positions = new Position[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-            int startRow = in.nextInt();
+            int startRow = in.nextInt(); //todo load player piece positions...
             int startCol = in.nextInt();
-            playerPieces[i] = new PlayerPiece(new Position(startRow, startCol));
+            positions[i] = new Position(startRow, startCol);
         }
-        return playerPieces;
+        return positions;
     }
 
 
@@ -174,11 +170,13 @@ public class GameService {
     }
 
     public void gameplayLoop() { // todo gameplay loop...
-        /*while (!gb.isWin()) {
+        while (!isWin) {
+            //
             // ps mk mv
             // ...
-        }*/
-        System.out.println("Have fun!");
+            System.out.println("Have fun!");
+            turnCount++;
+        }
     }
 
     public void save() {
@@ -191,14 +189,17 @@ public class GameService {
         instance = null;
     }
 
-    public void remake() {
-        instance = new GameService();
+    public GameService remake() {
+        return new GameService();
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        GameService gs = new GameService();
+        GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new File(GAME_BOARD_FILE_PATH), "oberon_1", 3); // fixme get rid of absolute path
+                new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
+        System.out.println(gs.gb);
+        gs.gb.insert(0, -1, new FloorTile(TileType.STRAIGHT, false, false));
+        System.out.println(gs.gb);
         //System.out.println(GameService.getInstance().getS());
     }
 
@@ -227,4 +228,8 @@ public class GameService {
             this.position = position;
         }
     }*/
+
+    public SilkBag getSilkBag() {
+        return silkBag;
+    }
 }
