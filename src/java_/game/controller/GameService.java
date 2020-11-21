@@ -16,7 +16,7 @@ public class GameService {
     private static GameService instance = null;
 
     private GameBoard gb;
-    private PlayerService ps;
+    private final PlayerService ps;
     private SilkBag silkBag;
     private int turnCount;
     private boolean isWin;
@@ -26,7 +26,6 @@ public class GameService {
 
     private GameService() {
         ps = PlayerService.getInstance().remake();
-        //gb = GameBoard.getInstance().remake();
     }
 
     public static GameService getInstance() {
@@ -171,6 +170,9 @@ public class GameService {
 
     public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
+
+
+
             //
             // ps mk mv
             // ...
