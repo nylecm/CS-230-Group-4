@@ -3,12 +3,9 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
-import javafx.geometry.Pos;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class GameBoard {
 
@@ -20,7 +17,7 @@ public class GameBoard {
     private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
     private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
     private final FloorTile[] tiles;
-    private TreeSet<Position> positionsWithActiveEffects;
+    private Set<Position> positionsWithActiveEffects;
     private HashMap<Position, Set<Effect>> activeEffects;
     private final FloorTile[][] board;
 
@@ -45,13 +42,11 @@ public class GameBoard {
         Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
         for (int i = effectStartPos.getRowNum(); i < diameter; i++) {
             for (int j = effectStartPos.getColNum(); j < diameter; j++) {
-
                 Position affectedPos = new Position(i, j);
                 Set effectSet = activeEffects.get(affectedPos);
                 effectSet.add(effect);
                 activeEffects.put(affectedPos, effectSet);
                 positionsWithActiveEffects.add(affectedPos);
-
             }
         }
 
