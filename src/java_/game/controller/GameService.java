@@ -170,7 +170,7 @@ public class GameService {
 
     public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
-
+            ps.playerTurn(ps.getPlayer(turnCount % ps.getPlayers().length)); // todo improve player service
 
 
             //
