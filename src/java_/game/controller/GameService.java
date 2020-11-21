@@ -85,16 +85,15 @@ public class GameService {
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
             Collections.shuffle(actionTiles);
 
-            // Silk Bag:
+            // Silk B
+            // Player Pieces:
+            Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
+            // todo player service...
             ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
             tilesForSilkBag.addAll(floorTiles);
             tilesForSilkBag.addAll(actionTiles);
 
             SilkBag sb = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
-
-            // Player Pieces:
-            Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
-            // todo player service...
 
             return new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName, sb); // todo consider keeping silk bag in game service...
@@ -174,12 +173,10 @@ public class GameService {
     public void gameplayLoop() { // todo gameplay loop...
         while (! isWin) {
             //
-
-
-
             // ps mk mv
             // ...
             System.out.println("Have fun!");
+            turnCount++;
         }
     }
 
