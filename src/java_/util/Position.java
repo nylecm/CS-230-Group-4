@@ -11,21 +11,21 @@ public class Position {
         this.colNum = colNum;
     }
 
-    public int getrowNum() {
+    public int getRowNum() {
 
         return rowNum;
     }
 
-    public int getcolNum() {
+    public int getColNum() {
 
         return colNum;
     }
 
-    public void setrowNum(int rowNum) {
+    public void setRowNum(int rowNum) {
         this.rowNum = rowNum;
     }
 
-    public void setcolNum(int colNum) {
+    public void setColNum(int colNum) {
 
         this.colNum = colNum;
     }

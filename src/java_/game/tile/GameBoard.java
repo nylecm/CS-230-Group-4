@@ -63,8 +63,8 @@ public class GameBoard {
 
     private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
         for (int i = 0; i < fixedTiles.length; i++) {
-            int rowNum = fixedTilePositions[i].getrowNum();
-            int colNum = fixedTilePositions[i].getcolNum();
+            int rowNum = fixedTilePositions[i].getRowNum();
+            int colNum = fixedTilePositions[i].getColNum();
 
             if (board[rowNum][colNum] == null) {
                 board[rowNum][colNum] = fixedTiles[i];
