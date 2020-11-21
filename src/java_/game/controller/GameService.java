@@ -172,7 +172,7 @@ public class GameService {
     }
 
     public void gameplayLoop() { // todo gameplay loop...
-        while (! isWin) {
+        while (!isWin) {
             //
             // ps mk mv
             // ...
@@ -200,7 +200,7 @@ public class GameService {
         gs.loadNewGame(
                 new File(GAME_BOARD_FILE_PATH), new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1", 3);
         System.out.println(gs.gb);
-        gs.gb.insert(0,-1, new FloorTile(TileType.STRAIGHT, false,false));
+        gs.gb.insert(0, -1, new FloorTile(TileType.STRAIGHT, false, false));
         System.out.println(gs.gb);
         //System.out.println(GameService.getInstance().getS());
     }

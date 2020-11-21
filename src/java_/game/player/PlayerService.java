@@ -1,5 +1,6 @@
 package java_.game.player;
 
+import java_.game.controller.GameService;
 import java_.game.tile.ActionTile;
 import java_.game.tile.Effect;
 import java_.game.tile.SilkBag;
@@ -10,7 +11,6 @@ public class PlayerService {
     private static PlayerService playerService = null;
 
     private Player[] players;
-    private SilkBag silkBag;
 
     public PlayerService() {
     }
@@ -23,7 +23,7 @@ public class PlayerService {
     }
 
     public void playerTurn(Player p) {
-        Tile drawnTile = silkBag.take();
+        Tile drawnTile = GameService.getInstance().getSilkBag().take();
         if (drawnTile instanceof ActionTile) {
             p.addDrawnActionTile((ActionTile) drawnTile);
         } else {
