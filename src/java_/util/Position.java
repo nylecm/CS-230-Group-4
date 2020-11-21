@@ -43,6 +43,6 @@ public class Position {
 
     @Override
     public int hashCode() {
-        return rowNum % 20 + colNum % 20;
+        return rowNum % 19 + colNum % 19;
     }
 }

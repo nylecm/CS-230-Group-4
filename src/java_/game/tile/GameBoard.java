@@ -3,9 +3,12 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
+import javafx.geometry.Pos;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class GameBoard {
 
@@ -17,6 +20,7 @@ public class GameBoard {
     private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
     private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
     private final FloorTile[] tiles;
+    private TreeSet<Position> positionsWithActiveEffects;
     private HashMap<Position, Set<Effect>> activeEffects;
     private final FloorTile[][] board;
 
@@ -33,6 +37,49 @@ public class GameBoard {
         fillGaps(tiles);
     }
 
+    public void applyEffect(AreaEffect effect, Position p) {
+        int effectRadius = effect.getRadius();
+        int diameter = effectRadius * 2;
+
+
+        Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
+        for (int i = effectStartPos.getRowNum(); i < diameter; i++) {
+            for (int j = effectStartPos.getColNum(); j < diameter; j++) {
+
+                Position affectedPos = new Position(i, j);
+                Set effectSet = activeEffects.get(affectedPos);
+                effectSet.add(effect);
+                activeEffects.put(affectedPos, effectSet);
+                positionsWithActiveEffects.add(affectedPos);
+
+            }
+        }
+
+
+
+
+        Set effectSet = activeEffects.get(p); //For positions that are r+radius c+radius or both:
+        effectSet.add(effect);
+        activeEffects.put(p, effectSet);
+        positionsWithActiveEffects.add(p);
+    }
+
+    public Set<Effect> getEffects(int row, int col) {
+        return activeEffects.get(new Position(row, col));
+    }
+
+    private boolean isTileFixed(int row, int col) {
+        if (board[row][col].isFixed()) {
+            return true;
+        }
+        for (Effect effect : getEffects(row, col)) {
+            if (effect.getEffectType() == EffectType.ICE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isRowFixed(int rowNum) {
         if (rowNum == -1) {
             rowNum += 1;
@@ -40,7 +87,7 @@ public class GameBoard {
             rowNum -= 1;
         }
         for (int x = 0; x < nCols; x++) {
-            if (board[rowNum][x].isFixed()) { //Check for frozen etc.
+            if (isTileFixed(rowNum, x)) { //Check for frozen etc.
                 return true;
             }
         }
@@ -54,7 +101,7 @@ public class GameBoard {
             colNum -= 1;
         }
         for (int y = 0; y < nRows; y++) {
-            if (board[y][colNum].isFixed()) {
+            if (isTileFixed(y,colNum)) {
                 return true;
             }
         }
@@ -86,21 +133,19 @@ public class GameBoard {
         }
     }
 
-    public void insert(int colNum, int rowNum, FloorTile tile) {
+    public void insert(int colNum, int rowNum, FloorTile tile) { //fixme check if row is fixed...
         FloorTile pushedOffTile = null; //Being pushed off
 
-        if (colNum == -1) {
+        if (colNum == -1 && !isRowFixed(rowNum)) {
             pushedOffTile = board[rowNum][nCols - 1];
 
             for (int i = nCols - 1; i != 0; i--) {
 
                 board[rowNum][i] = board[rowNum][i - 1];
                 board[rowNum][i - 1] = null;
-
             }
-
             board[rowNum][colNum + 1] = tile;
-        } else if (colNum == nCols) {
+        } else if (colNum == nCols && !isRowFixed(rowNum)) {
             pushedOffTile = board[rowNum][0];
 
             for (int i = 0; i < nCols - 1; i++) {
@@ -108,7 +153,7 @@ public class GameBoard {
                 board[rowNum][i + 1] = null;
             }
             board[rowNum][colNum - 1] = tile;
-        } else if (rowNum == -1) {
+        } else if (rowNum == -1 && !isColumnFixed(rowNum)) {
             pushedOffTile = board[nRows - 1][colNum];
 
             for (int i = nRows - 1; i != 0; i--) {
@@ -116,7 +161,7 @@ public class GameBoard {
                 board[i - 1][colNum] = null;
             }
             board[rowNum + 1][colNum] = tile;
-        } else if (rowNum == nRows) {
+        } else if (rowNum == nRows && !isColumnFixed(rowNum)) {
             pushedOffTile = board[0][colNum];
 
             for (int i = 0; i < nRows - 1; i++) {
