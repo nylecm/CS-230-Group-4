@@ -1,5 +1,6 @@
 package java_.game.tile;
 
+import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
@@ -17,16 +18,14 @@ public class GameBoard {
     private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
     private final FloorTile[] tiles;
     private HashMap<Position, Set<Effect>> activeEffects;
-    private final SilkBag silkBag;
     private final FloorTile[][] board;
 
-    public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name, SilkBag silkBag) {
+    public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPiecePositions = playerPiecePositions;
         this.fixedTiles = fixedTiles;
         this.fixedTilePositions = fixedTilePositions;
         this.tiles = tiles;
         this.name = name;
-        this.silkBag = silkBag;
         this.nRows = nRows;
         this.nCols = nCols;
         this.board = new FloorTile[nRows][nCols];
@@ -60,33 +59,6 @@ public class GameBoard {
             }
         }
         return false;
-        /*
-         if (colNum == -1) {
-         for (int y = 0; y < nRows; y++) {
-
-         if (board[y][colNum+1].isFixed()) {
-         return true;
-         }
-         }
-         return false;
-         } else if (colNum == nCols) {
-         for (int y = 0; y < nRows; y++) {
-
-         if (board[y][colNum-1].isFixed()) {
-         return true;
-         }
-         }
-         return false;
-         } else {
-         for (int y = 0; y < nRows; y++) {
-
-         if (board[y][colNum].isFixed()) {
-         return true;
-         }
-         }
-         return false;
-         }
-         */
     }
 
     private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
@@ -155,47 +127,12 @@ public class GameBoard {
         }
 
         assert pushedOffTile != null;
-        silkBag.put(pushedOffTile);
+        GameService.getInstance().getSilkBag().put(pushedOffTile);
     }
 
-
-    // private  insertAt()
-
-    /*
-     * public void insertAt(int positionX, int positionY, FloorTile tile) throws IndexOutOfBoundsException {
-     * if (tile.isFixed() && board[positionX][positionY] == null) {
-     * board[positionX][positionY] = tile;
-     * } else {
-     * <p>
-     * if (positionX == -1 || positionX == nCols || positionY == -1 || positionY == nRows) {
-     * <p>
-     * if (!isColumnFixed(positionX) && !isRowFixed(positionY)) {
-     * <p>
-     * slideTiles(positionX, positionY);
-     * <p>
-     * if (positionX == -1) {
-     * board[positionY][positionX+1] = tile;
-     * } else if (positionX == nCols) {
-     * board[positionY][positionX-1] = tile;
-     * } else if (positionY == -1) {
-     * board[positionY+1][positionX] = tile;
-     * } else if (positionY == nRows) {
-     * board[positionY-1][positionX] = tile;
-     * }
-     * <p>
-     * }
-     * <p>
-     * } else {
-     * throw new IndexOutOfBoundsException();
-     * }
-     * }
-     * }
-     */
-    //to string
     public Boolean isWin() {
         return true;
     }
-
 
     public String toString() {
         String boardString = "";

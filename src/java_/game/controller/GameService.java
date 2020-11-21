@@ -17,6 +17,7 @@ public class GameService {
 
     private GameBoard gb;
     private PlayerService ps;
+    private SilkBag silkBag;
     private int turnCount;
     private boolean isWin;
 
@@ -93,10 +94,10 @@ public class GameService {
             tilesForSilkBag.addAll(floorTiles);
             tilesForSilkBag.addAll(actionTiles);
 
-            SilkBag sb = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
+            silkBag = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
 
             return new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions,
-                    floorTilesForGameBoard, nCols, nRows, boardName, sb); // todo consider keeping silk bag in game service...
+                    floorTilesForGameBoard, nCols, nRows, boardName); // todo consider keeping silk bag in game service...
         }
         throw new IllegalArgumentException("No level with such name found!");
     }
@@ -229,4 +230,8 @@ public class GameService {
             this.position = position;
         }
     }*/
+
+    public SilkBag getSilkBag() {
+        return silkBag;
+    }
 }
