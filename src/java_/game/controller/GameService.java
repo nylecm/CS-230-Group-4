@@ -41,7 +41,7 @@ public class GameService {
             throws FileNotFoundException {
         remake();
 
-        Scanner in = new Scanner(GAME_BOARD_FILE_PATH);
+        Scanner in = new Scanner(new File(GAME_BOARD_FILE_PATH));
         in.useDelimiter(DELIMITER);
         gb = readSelectGameBoard(boardName, players.length, in);
         in.close();
