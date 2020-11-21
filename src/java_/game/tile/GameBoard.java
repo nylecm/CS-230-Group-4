@@ -3,8 +3,10 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
+import javafx.geometry.Pos;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class GameBoard {
@@ -32,21 +34,43 @@ public class GameBoard {
         this.board = new FloorTile[nRows][nCols];
         insertFixedTiles(fixedTiles, fixedTilePositions);
         fillGaps(tiles);
+        activeEffects = new HashMap<Position, Set<Effect>>();
+        positionsWithActiveEffects = new HashSet<Position>();
     }
 
     public void applyEffect(AreaEffect effect, Position p) {
         int effectRadius = effect.getRadius();
         int diameter = effectRadius * 2;
-
+        int effectWidth = 1 + effectRadius * 2;
 
         Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
-        for (int i = effectStartPos.getRowNum(); i < diameter; i++) {
-            for (int j = effectStartPos.getColNum(); j < diameter; j++) {
-                Position affectedPos = new Position(i, j);
-                Set effectSet = activeEffects.get(affectedPos);
-                effectSet.add(effect);
-                activeEffects.put(affectedPos, effectSet);
-                positionsWithActiveEffects.add(affectedPos);
+        for (int i = effectStartPos.getRowNum(); i < effectStartPos.getRowNum() + effectWidth; i++) {
+            for (int j = effectStartPos.getColNum(); j < effectStartPos.getColNum() + effectWidth; j++) {
+
+                if ((i >= 0 && i < nRows) && (j >= 0 && j < nCols)) {
+                    if (board[i][j] != null) {
+                        Position affectedPos = new Position(i, j);
+
+                        Set<Effect> effectSet = null;
+                        //positionsWithActiveEffects.contains(affectedPos)
+                        //if (activeEffects.get(affectedPos) == null
+                            if (!positionsWithActiveEffects.contains(affectedPos)) {
+                                effectSet = new HashSet<Effect>();
+                            } else {
+                                effectSet = activeEffects.get(affectedPos);
+                            }
+                        effectSet.add(effect);
+                        activeEffects.put(affectedPos, effectSet);
+                        positionsWithActiveEffects.add(affectedPos);
+
+                        /**
+                        Set effectSet = activeEffects.get(affectedPos);
+                        effectSet.add(effect);
+                        activeEffects.put(affectedPos, effectSet);
+                        positionsWithActiveEffects.add(affectedPos);
+                         **/
+                    }
+                }
             }
         }
 
@@ -167,7 +191,7 @@ public class GameBoard {
         }
 
         assert pushedOffTile != null;
-        GameService.getInstance().getSilkBag().put(pushedOffTile);
+        GameService.getInstance().getSilkBag().put(pushedOffTile); //todo ?? Null pointer
     }
 
     public Boolean isWin() {
@@ -193,7 +217,8 @@ public class GameBoard {
 
     public static void main(String[] args) {
 
-        PlayerPiece[] playerPieces = new PlayerPiece[0];
+        //PlayerPiece[] playerPieces = new PlayerPiece[0];
+        Position[] playerPiecePositions = new Position[0];
         Tile[] newTiles = new Tile[0];
         SilkBag silkBag = new SilkBag(newTiles);
 
@@ -217,36 +242,49 @@ public class GameBoard {
         FloorTile G = new FloorTile(TileType.STRAIGHT, false, false);
         FloorTile H = new FloorTile(TileType.STRAIGHT, false, false);
         FloorTile I = new FloorTile(TileType.CORNER, false, false);
+        FloorTile J = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile K = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile L = new FloorTile(TileType.STRAIGHT, false, false);
 
-        FloorTile[] tiles = new FloorTile[6];
+
+        FloorTile[] tiles = new FloorTile[9];
         tiles[0] = D;
         tiles[1] = E;
         tiles[2] = F;
         tiles[3] = G;
         tiles[4] = H;
         tiles[5] = I;
+        tiles[6] = J;
+        tiles[7] = K;
+        tiles[8] = L;
 
-
-       /* GameBoard firstgame = new GameBoard(playerPieces, fixedTiles, fixedTilePositions, tiles, 3, 3, "hello", silkBag);
+       GameBoard firstgame = new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions, tiles, 4, 3, "hello");
 
         System.out.println(firstgame);
 
+        AreaEffect effect = new AreaEffect(EffectType.ICE, 1, 3);
+
+        firstgame.applyEffect(effect, new Position(1, 1));
+
+
+
+        /**
         FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
         FloorTile insert2 = new FloorTile(TileType.CORNER, false, false);
         FloorTile insert3 = new FloorTile(TileType.T_SHAPED, false, false);
         FloorTile insert4 = new FloorTile(TileType.CORNER, false, false);
+         **/
 
-
+        /**
         firstgame.insert(-1, 0, insert1);
         System.out.println(firstgame);
-        firstgame.insert(3, 1, insert2);
+        firstgame.insert(4, 1, insert2);
         System.out.println(firstgame);
         firstgame.insert(1, -1, insert3);
         System.out.println(firstgame);
-        firstgame.insert(0, 3, insert4);
+        firstgame.insert(0, 4, insert4);
         System.out.println(firstgame);
-*/
-
+        **/
         /*
          firstgame.board[1][0] = D;
          firstgame.board[1][1] = E;
@@ -274,7 +312,7 @@ public class GameBoard {
          }
          */
 
-        FloorTile insert = new FloorTile(TileType.STRAIGHT, false, false);
+        //FloorTile insert = new FloorTile(TileType.STRAIGHT, false, false);
 
         //System.out.println("");
         //firstgame.insert(1, 3, insert);
