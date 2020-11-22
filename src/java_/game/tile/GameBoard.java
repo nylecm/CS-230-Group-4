@@ -34,6 +34,10 @@ public class GameBoard {
         return activeEffects;
     }
 
+    public FloorTile getTileAt(int row, int col) {
+        return board[row][col];
+    }
+
     public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPiecePositions = playerPiecePositions;
         this.fixedTiles = fixedTiles;
