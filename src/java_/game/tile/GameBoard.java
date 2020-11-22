@@ -14,15 +14,13 @@ public class GameBoard {
     private final int nCols; // width
     private final String name; // todo may not be needed.
     private PlayerPiece[] playerPieces;
-    private Position[] playerPiecePositions; // ex-position tracking...
-    private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
-    private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
+    private final Position[] playerPiecePositions;
+    //private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
+    //private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
     private final FloorTile[] tiles;
-    private Set<Position> positionsWithActiveEffects;
-    private HashMap<Position, AreaEffect> activeEffects;
+    private Set<Position> positionsWithActiveEffects = new HashSet<>(); //todo consider tree set.
+    private HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
     private final FloorTile[][] board;
-
-    //temp todo remove
 
     @Deprecated
     public Set<Position> getPositionsWithActiveEffects() {
@@ -34,23 +32,23 @@ public class GameBoard {
     public HashMap<Position, AreaEffect> getActiveEffects() {
         return activeEffects;
     }
+
     public FloorTile getTileAt(int row, int col) {
         return board[row][col];
     }
 
     public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPiecePositions = playerPiecePositions;
-        this.fixedTiles = fixedTiles;
-        this.fixedTilePositions = fixedTilePositions;
+        //this.fixedTiles = fixedTiles;
+        //this.fixedTilePositions = fixedTilePositions;
         this.tiles = tiles;
         this.name = name;
         this.nRows = nRows;
         this.nCols = nCols;
         this.board = new FloorTile[nRows][nCols];
+
         insertFixedTiles(fixedTiles, fixedTilePositions);
         fillGaps(tiles);
-        activeEffects = new HashMap<>();
-        positionsWithActiveEffects = new HashSet<Position>();
     }
 
     private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
@@ -79,7 +77,7 @@ public class GameBoard {
     }
 
     public void insert(int colNum, int rowNum, FloorTile tile, int rotation) { //fixme check if row is fixed...
-        FloorTile pushedOffTile = null; //Being pushed off
+        FloorTile pushedOffTile = null; // Tile being pushed off
 
         if (colNum == -1 && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Left to right horizontal shift.
             pushedOffTile = board[rowNum][nCols - 1];
@@ -87,7 +85,6 @@ public class GameBoard {
             for (int i = nCols - 1; i != 0; i--) { //
                 board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
                 if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
-                    //if (activeEffects.get(new Position(rowNum, i)).getEffectType() != EffectType.ICE) { //todo consider a better way of dividing effects into movable and unmovable.
                     activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
 
                     positionsWithActiveEffects.remove(new Position(rowNum, i - 1));
@@ -139,7 +136,6 @@ public class GameBoard {
             tile.rotateClockwise(rotation);
             board[rowNum - 1][colNum] = tile;
         }
-
         assert pushedOffTile != null;
         GameService.getInstance().getSilkBag().put(pushedOffTile); //todo ?? Null pointer
     }
@@ -175,7 +171,8 @@ public class GameBoard {
     private boolean isTileFixed(int row, int col) {
         if (board[row][col].isFixed()) {
             return true;
-        } else if (activeEffects.get(new Position(row, col)) != null && activeEffects.get(new Position(row, col)).getEffectType() == EffectType.ICE) {
+        } else if (activeEffects.get(new Position(row, col)) != null &&
+                activeEffects.get(new Position(row, col)).getEffectType() == EffectType.ICE) {
             return true;
         }
         return false;
@@ -214,10 +211,6 @@ public class GameBoard {
                 activeEffects.get(positionWithActiveEffect).decrementRemainingDuration();
             }
         }
-    }
-
-    public Boolean isWin() {
-        return true;
     }
 
     public String toString() {
