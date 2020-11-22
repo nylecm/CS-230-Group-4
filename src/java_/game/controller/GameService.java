@@ -8,6 +8,7 @@ import java_.util.Position;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -177,7 +178,13 @@ public class GameService {
         }
     }
 
-    public void save() { //todo
+    public void save(String saveName) throws IOException { //todo
+        File gameSaveFile = new File("data/" + saveName + ".txt");
+
+        if(gameSaveFile.createNewFile()){
+            System.out.println("file.txt File Created in Project root directory");
+        }else System.out.println("File file.txt already exists in the project root directory");
+
         // Needs to write to file:
         /*
          * file writer...
@@ -217,6 +224,12 @@ public class GameService {
         }
 
         System.out.println(test);
+
+        try {
+            gs.save("Name");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*private class FloorTilePositionBundle {
