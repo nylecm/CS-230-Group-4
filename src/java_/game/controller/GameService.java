@@ -198,6 +198,29 @@ public class GameService {
         System.out.println(gs.gb);
         gs.gb.insert(0, -1, new FloorTile(TileType.STRAIGHT, false, false));
         System.out.println(gs.gb);
+
+        AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
+
+        gs.gb.applyEffect(effect, new Position(1, 0));
+        for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
+            System.out.println(pos.getRowNum() + " " + pos.getColNum());
+        }
+
+        AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
+        System.out.println(test);
+
+        gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false, false));
+
+        for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
+            System.out.println(pos.getRowNum() + " " + pos.getColNum());
+        }
+
+        System.out.println(test);
+
+
+
+
+
         //System.out.println(GameService.getInstance().getS());
     }
 

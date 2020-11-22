@@ -24,6 +24,16 @@ public class GameBoard {
     private HashMap<Position, AreaEffect> activeEffects;
     private final FloorTile[][] board;
 
+    //temp
+    public Set<Position> getPositionsWithActiveEffects() {
+        return positionsWithActiveEffects;
+    }
+
+    //temp
+    public HashMap<Position, AreaEffect> getActiveEffects() {
+        return activeEffects;
+    }
+
     public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPiecePositions = playerPiecePositions;
         this.fixedTiles = fixedTiles;
@@ -132,6 +142,13 @@ public class GameBoard {
             pushedOffTile = board[rowNum][nCols - 1];
             for (int i = nCols - 1; i != 0; i--) { //
                 board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
+                if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
+                    //if (activeEffects.get(new Position(rowNum, i)).getEffectType() != EffectType.ICE) { //todo consider a better way of dividing effects into movable and unmovable.
+                    activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
+
+                    positionsWithActiveEffects.remove(new Position(rowNum, i - 1));
+                    positionsWithActiveEffects.add(new Position(rowNum, i));
+                }
             }
             board[rowNum][colNum + 1] = tile;
         } else if (colNum == nCols && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Right to left horizontal shift.
@@ -183,7 +200,6 @@ public class GameBoard {
 
 
     public static void main(String[] args) {
-
         //PlayerPiece[] playerPieces = new PlayerPiece[0];
         Position[] playerPiecePositions = new Position[0];
         Tile[] newTiles = new Tile[0];
@@ -238,6 +254,11 @@ public class GameBoard {
 
         AreaEffect test = firstgame.activeEffects.get(new Position(0, 0));
         System.out.println(test);
+        firstgame.insert(0, -1, new FloorTile(TileType.STRAIGHT, false, false));
+
+
+        System.out.println(test);
+
 
         /*
          FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
