@@ -22,6 +22,18 @@ public class GameBoard {
     private HashMap<Position, AreaEffect> activeEffects;
     private final FloorTile[][] board;
 
+    public int getnRows() {
+        return nRows;
+    }
+
+    public int getnCols() {
+        return nCols;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     //temp todo remove
     @Deprecated
     public Set<Position> getPositionsWithActiveEffects() {
@@ -73,7 +85,7 @@ public class GameBoard {
         }
     }
 
-    public AreaEffect getEffects(int row, int col) {
+    public AreaEffect getEffectAt(int row, int col) {
         return activeEffects.get(new Position(row, col));
     }
 

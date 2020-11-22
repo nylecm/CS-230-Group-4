@@ -9,6 +9,7 @@ import java_.util.Position;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -183,15 +184,15 @@ public class GameService {
 
         boolean isFileCreated = false;
         final int limitOfFilesWithSameName = 256;
-        int i = 0;
+        int filesWithSameName = 0;
 
-        while (!isFileCreated && i < limitOfFilesWithSameName) {
-            if (gameSaveFile.createNewFile()){
+        while (!isFileCreated && filesWithSameName < limitOfFilesWithSameName) {
+            if (gameSaveFile.createNewFile()) {
                 isFileCreated = true;
                 System.out.println("File Created!");
-            }else {
-                i++;
-                gameSaveFile = new File("data/" + saveName + "_" + i + ".txt");
+            } else {
+                filesWithSameName++;
+                gameSaveFile = new File("data/" + saveName + "_" + filesWithSameName + ".txt");
                 System.out.println("File not created yet!");
             }
         }
@@ -200,13 +201,54 @@ public class GameService {
             throw new IllegalArgumentException("Too many files with same name!");
         }
 
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(gameSaveFile);
+        } catch (FileNotFoundException e) {
+            //todo..................
+        }
 
+        out.print(ps.getPlayers().length);
+        out.print(DELIMITER);
+        out.print(gb.getName());
+        out.print(DELIMITER);
+        out.print(gb.getnRows());
+        out.print(DELIMITER);
+        out.print(gb.getnCols());
+        out.print(DELIMITER);
+        out.print(turnCount);
+        out.print(DELIMITER);
+        out.print('\n');
 
+        //game board...
+        for (int i = 0; i < gb.getnRows(); i++) {
+            for (int j = 0; j < gb.getnCols(); j++) {
+                out.print(gb.getTileAt(i, j).getPaths());
+                out.print(DELIMITER);
+                out.print(gb.getTileAt(i, j).isFixed());
+                out.print(DELIMITER);
 
-        // Needs to write to file:
-        /*
-         * file writer...
-         */
+                if (gb.getEffectAt(i, j) != null) {
+                    out.print(gb.getEffectAt(i, j).getEffectType());
+                    out.print(DELIMITER);
+                    out.print(gb.getEffectAt(i, j).getRemainingDuration());
+                    out.print(DELIMITER);
+                    out.print(gb.getEffectAt(i, j).getRadius());
+                    out.print(DELIMITER);
+                }
+            }
+        }
+        out.print('\n');
+
+        /*//each player...
+        for (Player player : ps.getPlayers()) {
+
+        }
+
+        out.println();*/
+
+        out.flush();
+        out.close();
     }
 
     public void destroy() {
@@ -222,7 +264,7 @@ public class GameService {
         gs.loadNewGame(
                 new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gb);
-        gs.gb.insert(4, 0, new FloorTile(TileType.STRAIGHT, false, false),0);
+        gs.gb.insert(4, 0, new FloorTile(TileType.STRAIGHT, false, false), 0);
         System.out.println(gs.gb);
 
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
@@ -235,7 +277,7 @@ public class GameService {
         AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false, false),0);
+        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false, false), 0);
 
         for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
@@ -244,7 +286,7 @@ public class GameService {
         System.out.println(test);
 
         try {
-            gs.save("Name");
+            gs.save("emma");
         } catch (IOException e) {
             e.printStackTrace();
         }
