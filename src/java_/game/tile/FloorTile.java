@@ -99,6 +99,12 @@ public class FloorTile extends Tile {
         }
     }
 
+    public void rotateClockwise(int rotationAmount) {
+        for (int i = 0; i < rotationAmount; i++) {
+            rotateClockwise();
+        }
+    }
+
     public void rotateAntiClockwise() {
         int currentPathIndex = -1;
 

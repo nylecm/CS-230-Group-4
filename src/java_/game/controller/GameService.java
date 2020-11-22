@@ -196,7 +196,7 @@ public class GameService {
         gs.loadNewGame(
                 new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gb);
-        gs.gb.insert(4, 0, new FloorTile(TileType.STRAIGHT, false, false));
+        gs.gb.insert(4, 0, new FloorTile(TileType.STRAIGHT, false, false),0);
         System.out.println(gs.gb);
 
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
@@ -209,7 +209,7 @@ public class GameService {
         AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false, false));
+        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false, false),0);
 
         for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
