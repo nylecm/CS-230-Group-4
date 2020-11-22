@@ -5,6 +5,7 @@ import java_.game.player.PlayerPiece;
 import java_.util.Position;
 import javafx.geometry.Pos;
 
+import java.awt.geom.Area;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class GameBoard {
     private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
     private final FloorTile[] tiles;
     private Set<Position> positionsWithActiveEffects;
-    private HashMap<Position, Set<Effect>> activeEffects;
+    private HashMap<Position, AreaEffect> activeEffects;
     private final FloorTile[][] board;
 
     public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
@@ -34,65 +35,39 @@ public class GameBoard {
         this.board = new FloorTile[nRows][nCols];
         insertFixedTiles(fixedTiles, fixedTilePositions);
         fillGaps(tiles);
-        activeEffects = new HashMap<Position, Set<Effect>>();
+        activeEffects = new HashMap<>();
         positionsWithActiveEffects = new HashSet<Position>();
     }
 
     public void applyEffect(AreaEffect effect, Position p) {
         int effectRadius = effect.getRadius();
         int diameter = effectRadius * 2;
-        int effectWidth = 1 + effectRadius * 2;
+        int effectWidth = 1 + diameter; // Includes centre.
 
         Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
+
         for (int i = effectStartPos.getRowNum(); i < effectStartPos.getRowNum() + effectWidth; i++) {
             for (int j = effectStartPos.getColNum(); j < effectStartPos.getColNum() + effectWidth; j++) {
 
                 if ((i >= 0 && i < nRows) && (j >= 0 && j < nCols)) {
-                    if (board[i][j] != null) {
-                        Position affectedPos = new Position(i, j);
-
-                        Set<Effect> effectSet = null;
-                        if (!positionsWithActiveEffects.contains(affectedPos)) {
-                            effectSet = new HashSet<Effect>();
-                        } else {
-                            effectSet = activeEffects.get(affectedPos);
-                        }
-                        effectSet.add(effect);
-                        activeEffects.put(affectedPos, effectSet);
-                        positionsWithActiveEffects.add(affectedPos);
-
-                        /**
-                        Set effectSet = activeEffects.get(affectedPos);
-                        effectSet.add(effect);
-                        activeEffects.put(affectedPos, effectSet);
-                        positionsWithActiveEffects.add(affectedPos);
-                         **/
-                    }
+                    assert board[i][j] != null;
+                    Position affectedPos = new Position(i, j);
+                    activeEffects.put(affectedPos, effect);
+                    positionsWithActiveEffects.add(affectedPos);
                 }
             }
         }
-
-
-
-
-        Set effectSet = activeEffects.get(p); //For positions that are r+radius c+radius or both:
-        effectSet.add(effect);
-        activeEffects.put(p, effectSet);
-        positionsWithActiveEffects.add(p);
     }
 
-    public Set<Effect> getEffects(int row, int col) {
+    public AreaEffect getEffects(int row, int col) {
         return activeEffects.get(new Position(row, col));
     }
 
     private boolean isTileFixed(int row, int col) {
         if (board[row][col].isFixed()) {
             return true;
-        }
-        for (Effect effect : getEffects(row, col)) {
-            if (effect.getEffectType() == EffectType.ICE) {
-                return true;
-            }
+        } else if (activeEffects.get(new Position(row, col)) != null && activeEffects.get(new Position(row, col)).getEffectType() == EffectType.ICE) {
+            return true;
         }
         return false;
     }
@@ -118,7 +93,7 @@ public class GameBoard {
             colNum -= 1;
         }
         for (int y = 0; y < nRows; y++) {
-            if (isTileFixed(y,colNum)) {
+            if (isTileFixed(y, colNum)) {
                 return true;
             }
         }
@@ -153,37 +128,31 @@ public class GameBoard {
     public void insert(int colNum, int rowNum, FloorTile tile) { //fixme check if row is fixed...
         FloorTile pushedOffTile = null; //Being pushed off
 
-        if (colNum == -1 && !isRowFixed(rowNum) && !isColumnFixed(colNum)) {
+        if (colNum == -1 && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Left to right horizontal shift.
             pushedOffTile = board[rowNum][nCols - 1];
-
-            for (int i = nCols - 1; i != 0; i--) {
-
-                board[rowNum][i] = board[rowNum][i - 1];
-                board[rowNum][i - 1] = null;
+            for (int i = nCols - 1; i != 0; i--) { //
+                board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
             }
             board[rowNum][colNum + 1] = tile;
-        } else if (colNum == nCols && !isRowFixed(rowNum) && !isColumnFixed(colNum)) {
+        } else if (colNum == nCols && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Right to left horizontal shift.
             pushedOffTile = board[rowNum][0];
 
             for (int i = 0; i < nCols - 1; i++) {
                 board[rowNum][i] = board[rowNum][i + 1];
-                board[rowNum][i + 1] = null;
             }
             board[rowNum][colNum - 1] = tile;
-        } else if (rowNum == -1 && !isColumnFixed(colNum) && !isRowFixed(rowNum)) {
+        } else if (rowNum == -1 && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Top to bottom vertical shift.
             pushedOffTile = board[nRows - 1][colNum];
 
             for (int i = nRows - 1; i != 0; i--) {
                 board[i][colNum] = board[i - 1][colNum];
-                board[i - 1][colNum] = null;
             }
             board[rowNum + 1][colNum] = tile;
-        } else if (rowNum == nRows && !isColumnFixed(colNum) && !isRowFixed(rowNum)) {
+        } else if (rowNum == nRows && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Bottom to top vertical shift.
             pushedOffTile = board[0][colNum];
 
             for (int i = 0; i < nRows - 1; i++) {
                 board[i][colNum] = board[i + 1][colNum];
-                board[i + 1][colNum] = null;
             }
             board[rowNum - 1][colNum] = tile;
         }
@@ -256,117 +225,36 @@ public class GameBoard {
         tiles[7] = K;
         tiles[8] = L;
 
-       GameBoard firstgame = new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions, tiles, 4, 3, "hello");
+        GameBoard firstgame = new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions, tiles, 4, 3, "hello");
 
         System.out.println(firstgame);
 
-        AreaEffect effect = new AreaEffect(EffectType.ICE, 1, 3);
-        //AreaEffect effect2 = new AreaEffect(EffectType.FIRE, 2, 3);
-        AreaEffect effect3 = new AreaEffect(EffectType.FIRE, 0, 3);
+        AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
 
         firstgame.applyEffect(effect, new Position(1, 0));
-        firstgame.applyEffect(effect3, new Position(0, 0));
-        for (Position pos: firstgame.positionsWithActiveEffects) {
+        for (Position pos : firstgame.positionsWithActiveEffects) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
         }
 
-        Set<Effect> testSet = firstgame.activeEffects.get(new Position(0, 0));
-
-        for (Effect e: firstgame.activeEffects.get(new Position(0, 0))) {
-            System.out.println(e.effectType);
-        }
-
-        /**
-        FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile insert2 = new FloorTile(TileType.CORNER, false, false);
-        FloorTile insert3 = new FloorTile(TileType.T_SHAPED, false, false);
-        FloorTile insert4 = new FloorTile(TileType.CORNER, false, false);
-         **/
-
-        /**
-        firstgame.insert(-1, 0, insert1);
-        System.out.println(firstgame);
-        firstgame.insert(4, 1, insert2);
-        System.out.println(firstgame);
-        firstgame.insert(1, -1, insert3);
-        System.out.println(firstgame);
-        firstgame.insert(0, 4, insert4);
-        System.out.println(firstgame);
-        **/
-        /*
-         firstgame.board[1][0] = D;
-         firstgame.board[1][1] = E;
-         firstgame.board[1][2] = F;
-         firstgame.board[2][0] = G;
-         firstgame.board[2][1] = H;
-         firstgame.board[2][2] = I;
-
-         System.out.println(firstgame);
-         **/
-
+        AreaEffect test = firstgame.activeEffects.get(new Position(0, 0));
+        System.out.println(test);
 
         /*
-         for (int j = 0; j < firstgame.nRows; j++) {
-         String row = "";
-         for (int i = 0; i < firstgame.nCols; i++) {
-         if (firstgame.board[j][i] == null) {
-         row = row + "Empty ";
-         } else {
-         row = row + firstgame.board[j][i].getType() + " ";
-         }
-
-         }
-         System.out.println(row);
-         }
+         FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
+         FloorTile insert2 = new FloorTile(TileType.CORNER, false, false);
+         FloorTile insert3 = new FloorTile(TileType.T_SHAPED, false, false);
+         FloorTile insert4 = new FloorTile(TileType.CORNER, false, false);
          */
 
-        //FloorTile insert = new FloorTile(TileType.STRAIGHT, false, false);
-
-        //System.out.println("");
-        //firstgame.insert(1, 3, insert);
         /*
-         for (int j = 0; j < firstgame.nRows; j++) {
-         String row = "";
-         for (int i = 0; i < firstgame.nCols; i++) {
-         if (firstgame.board[j][i] == null) {
-         row = row + "Empty ";
-         } else {
-         row = row + firstgame.board[j][i].getType() + " ";
-         }
-
-         }
-         System.out.println(row);
-         }
+         firstgame.insert(-1, 0, insert1);
+         System.out.println(firstgame);
+         firstgame.insert(4, 1, insert2);
+         System.out.println(firstgame);
+         firstgame.insert(1, -1, insert3);
+         System.out.println(firstgame);
+         firstgame.insert(0, 4, insert4);
+         System.out.println(firstgame);
          */
     }
 }
-
-
-/*
- * // from isRowFixed
- * if (rowNum == -1) {
- * for (int x = 0; x < nCols; x++) {
- * <p>
- * if (board[rowNum+1][x].isFixed()) { //Check for frozen etc.
- * return true;
- * }
- * }
- * return false;
- * } else if (rowNum == nRows) {
- * for (int x = 0; x < nCols; x++) {
- * <p>
- * if (board[rowNum-1][x].isFixed()) {
- * return true;
- * }
- * }
- * return false;
- * } else {
- * for (int x = 0; x < nCols; x++) {
- * <p>
- * if (board[rowNum][x].isFixed()) {
- * return true;
- * }
- * }
- * return false;
- * }
- **/

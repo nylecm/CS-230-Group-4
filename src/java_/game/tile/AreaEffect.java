@@ -32,9 +32,10 @@ public class AreaEffect extends Effect {
 
     @Override
     public String toString() {
-        return "game.tile.AreaEffect{" +
+        return "AreaEffect{" +
                 "radius=" + radius +
                 ", remainingDuration=" + remainingDuration +
+                ", effectType=" + effectType +
                 '}';
     }
 }

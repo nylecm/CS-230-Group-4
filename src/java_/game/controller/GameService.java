@@ -171,17 +171,13 @@ public class GameService {
     public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
             ps.playerTurn(ps.getPlayer(turnCount % ps.getPlayers().length)); // todo improve player service
-
-
-            //
-            // ps mk mv
-            // ...
             System.out.println("Have fun!");
             turnCount++;
         }
     }
 
-    public void save() {
+    public void save() { //todo
+        // Needs to write to file:
         /*
          * file writer...
          */
