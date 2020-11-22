@@ -52,13 +52,11 @@ public class GameBoard {
                         Position affectedPos = new Position(i, j);
 
                         Set<Effect> effectSet = null;
-                        //positionsWithActiveEffects.contains(affectedPos)
-                        //if (activeEffects.get(affectedPos) == null
-                            if (!positionsWithActiveEffects.contains(affectedPos)) {
-                                effectSet = new HashSet<Effect>();
-                            } else {
-                                effectSet = activeEffects.get(affectedPos);
-                            }
+                        if (!positionsWithActiveEffects.contains(affectedPos)) {
+                            effectSet = new HashSet<Effect>();
+                        } else {
+                            effectSet = activeEffects.get(affectedPos);
+                        }
                         effectSet.add(effect);
                         activeEffects.put(affectedPos, effectSet);
                         positionsWithActiveEffects.add(affectedPos);
@@ -155,7 +153,7 @@ public class GameBoard {
     public void insert(int colNum, int rowNum, FloorTile tile) { //fixme check if row is fixed...
         FloorTile pushedOffTile = null; //Being pushed off
 
-        if (colNum == -1 && !isRowFixed(rowNum)) {
+        if (colNum == -1 && !isRowFixed(rowNum) && !isColumnFixed(colNum)) {
             pushedOffTile = board[rowNum][nCols - 1];
 
             for (int i = nCols - 1; i != 0; i--) {
@@ -164,7 +162,7 @@ public class GameBoard {
                 board[rowNum][i - 1] = null;
             }
             board[rowNum][colNum + 1] = tile;
-        } else if (colNum == nCols && !isRowFixed(rowNum)) {
+        } else if (colNum == nCols && !isRowFixed(rowNum) && !isColumnFixed(colNum)) {
             pushedOffTile = board[rowNum][0];
 
             for (int i = 0; i < nCols - 1; i++) {
@@ -172,7 +170,7 @@ public class GameBoard {
                 board[rowNum][i + 1] = null;
             }
             board[rowNum][colNum - 1] = tile;
-        } else if (rowNum == -1 && !isColumnFixed(rowNum)) {
+        } else if (rowNum == -1 && !isColumnFixed(colNum) && !isRowFixed(rowNum)) {
             pushedOffTile = board[nRows - 1][colNum];
 
             for (int i = nRows - 1; i != 0; i--) {
@@ -180,7 +178,7 @@ public class GameBoard {
                 board[i - 1][colNum] = null;
             }
             board[rowNum + 1][colNum] = tile;
-        } else if (rowNum == nRows && !isColumnFixed(rowNum)) {
+        } else if (rowNum == nRows && !isColumnFixed(colNum) && !isRowFixed(rowNum)) {
             pushedOffTile = board[0][colNum];
 
             for (int i = 0; i < nRows - 1; i++) {
