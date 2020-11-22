@@ -248,6 +248,9 @@ public class GameBoard {
         return boardString;
     }
 
+    public Position getPlayerPiecePosition(int playerNum) {
+        return playerPiecePositions[playerNum];
+    }
 
     public static void main(String[] args) {
         //PlayerPiece[] playerPieces = new PlayerPiece[0];

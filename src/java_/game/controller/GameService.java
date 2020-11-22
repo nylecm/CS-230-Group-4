@@ -240,12 +240,24 @@ public class GameService {
         }
         out.print('\n');
 
-        /*//each player...
-        for (Player player : ps.getPlayers()) {
+        for (int i = 0; i < ps.getPlayers().length; i++) {
+            out.print(ps.getPlayer(i).getUsername());
+            out.print(gb.getPlayerPiecePosition(i).getRowNum());
+            out.print(gb.getPlayerPiecePosition(i).getColNum());
 
+            for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
+                out.print(actionTile.getType().toString());
+            }
+
+            for (Effect effect : ps.getPlayer(i).getPreviousAppliedEffect()) {
+                out.print(effect.getEffectType().toString());
+            }
+            out.print('\n');
         }
 
-        out.println();*/
+        // todo saving silk bag contents vs calculating it on load.
+
+        out.println();
 
         out.flush();
         out.close();

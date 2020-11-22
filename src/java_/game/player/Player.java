@@ -2,6 +2,7 @@ package java_.game.player;
 
 import java_.game.tile.ActionTile;
 import java_.game.tile.Effect;
+import java_.game.tile.PlayerEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,9 @@ public class Player {
         return previousAppliedEffect;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { }
+
+    public List<ActionTile> getDrawnActionTiles() {
+        return drawnActionTiles;
     }
 }
