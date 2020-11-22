@@ -263,10 +263,20 @@ public class GameBoard {
         System.out.println(firstgame);
 
         AreaEffect effect = new AreaEffect(EffectType.ICE, 1, 3);
+        //AreaEffect effect2 = new AreaEffect(EffectType.FIRE, 2, 3);
+        AreaEffect effect3 = new AreaEffect(EffectType.FIRE, 0, 3);
 
-        firstgame.applyEffect(effect, new Position(1, 1));
+        firstgame.applyEffect(effect, new Position(1, 0));
+        firstgame.applyEffect(effect3, new Position(0, 0));
+        for (Position pos: firstgame.positionsWithActiveEffects) {
+            System.out.println(pos.getRowNum() + " " + pos.getColNum());
+        }
 
+        Set<Effect> testSet = firstgame.activeEffects.get(new Position(0, 0));
 
+        for (Effect e: firstgame.activeEffects.get(new Position(0, 0))) {
+            System.out.println(e.effectType);
+        }
 
         /**
         FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
