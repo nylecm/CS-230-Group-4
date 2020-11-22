@@ -22,30 +22,18 @@ public class GameBoard {
     private HashMap<Position, AreaEffect> activeEffects;
     private final FloorTile[][] board;
 
-    public int getnRows() {
-        return nRows;
-    }
-
-    public int getnCols() {
-        return nCols;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     //temp todo remove
+
     @Deprecated
     public Set<Position> getPositionsWithActiveEffects() {
         return positionsWithActiveEffects;
     }
-
     //temp todo remove
+
     @Deprecated
     public HashMap<Position, AreaEffect> getActiveEffects() {
         return activeEffects;
     }
-
     public FloorTile getTileAt(int row, int col) {
         return board[row][col];
     }
@@ -63,67 +51,6 @@ public class GameBoard {
         fillGaps(tiles);
         activeEffects = new HashMap<>();
         positionsWithActiveEffects = new HashSet<Position>();
-    }
-
-    public void applyEffect(AreaEffect effect, Position p) {
-        int effectRadius = effect.getRadius();
-        int diameter = effectRadius * 2;
-        int effectWidth = 1 + diameter; // Includes centre.
-
-        Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
-
-        for (int i = effectStartPos.getRowNum(); i < effectStartPos.getRowNum() + effectWidth; i++) {
-            for (int j = effectStartPos.getColNum(); j < effectStartPos.getColNum() + effectWidth; j++) {
-
-                if ((i >= 0 && i < nRows) && (j >= 0 && j < nCols)) {
-                    assert board[i][j] != null;
-                    Position affectedPos = new Position(i, j);
-                    activeEffects.put(affectedPos, effect);
-                    positionsWithActiveEffects.add(affectedPos);
-                }
-            }
-        }
-    }
-
-    public AreaEffect getEffectAt(int row, int col) {
-        return activeEffects.get(new Position(row, col));
-    }
-
-    private boolean isTileFixed(int row, int col) {
-        if (board[row][col].isFixed()) {
-            return true;
-        } else if (activeEffects.get(new Position(row, col)) != null && activeEffects.get(new Position(row, col)).getEffectType() == EffectType.ICE) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isRowFixed(int rowNum) {
-        if (rowNum == -1) {
-            rowNum += 1;
-        } else if (rowNum == nRows) {
-            rowNum -= 1;
-        }
-        for (int x = 0; x < nCols; x++) {
-            if (isTileFixed(rowNum, x)) { //Check for frozen etc.
-                return true;
-            }
-        }
-        return false; // See bottom for commented out code...
-    }
-
-    private boolean isColumnFixed(int colNum) {
-        if (colNum == -1) {
-            colNum += 1;
-        } else if (colNum == nCols) {
-            colNum -= 1;
-        }
-        for (int y = 0; y < nRows; y++) {
-            if (isTileFixed(y, colNum)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
@@ -147,17 +74,6 @@ public class GameBoard {
                     board[i][j] = tiles[nextFloorTile];
                     nextFloorTile += 1;
                 }
-            }
-        }
-    }
-
-    public void refreshEffects() { //todo test...
-        for (Position positionWithActiveEffect : positionsWithActiveEffects) {
-            if (activeEffects.get(positionWithActiveEffect).getRemainingDuration() == 1) {
-                activeEffects.put(positionWithActiveEffect, null);
-                positionsWithActiveEffects.remove(positionWithActiveEffect);
-            } else {
-                activeEffects.get(positionWithActiveEffect).decrementRemainingDuration();
             }
         }
     }
@@ -228,6 +144,78 @@ public class GameBoard {
         GameService.getInstance().getSilkBag().put(pushedOffTile); //todo ?? Null pointer
     }
 
+    private boolean isRowFixed(int rowNum) {
+        if (rowNum == -1) {
+            rowNum += 1;
+        } else if (rowNum == nRows) {
+            rowNum -= 1;
+        }
+        for (int x = 0; x < nCols; x++) {
+            if (isTileFixed(rowNum, x)) { //Check for frozen etc.
+                return true;
+            }
+        }
+        return false; // See bottom for commented out code...
+    }
+
+    private boolean isColumnFixed(int colNum) {
+        if (colNum == -1) {
+            colNum += 1;
+        } else if (colNum == nCols) {
+            colNum -= 1;
+        }
+        for (int y = 0; y < nRows; y++) {
+            if (isTileFixed(y, colNum)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isTileFixed(int row, int col) {
+        if (board[row][col].isFixed()) {
+            return true;
+        } else if (activeEffects.get(new Position(row, col)) != null && activeEffects.get(new Position(row, col)).getEffectType() == EffectType.ICE) {
+            return true;
+        }
+        return false;
+    }
+
+    public void applyEffect(AreaEffect effect, Position p) {
+        int effectRadius = effect.getRadius();
+        int diameter = effectRadius * 2;
+        int effectWidth = 1 + diameter; // Includes centre.
+
+        Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
+
+        for (int i = effectStartPos.getRowNum(); i < effectStartPos.getRowNum() + effectWidth; i++) {
+            for (int j = effectStartPos.getColNum(); j < effectStartPos.getColNum() + effectWidth; j++) {
+
+                if ((i >= 0 && i < nRows) && (j >= 0 && j < nCols)) {
+                    assert board[i][j] != null;
+                    Position affectedPos = new Position(i, j);
+                    activeEffects.put(affectedPos, effect);
+                    positionsWithActiveEffects.add(affectedPos);
+                }
+            }
+        }
+    }
+
+    public AreaEffect getEffectAt(int row, int col) {
+        return activeEffects.get(new Position(row, col));
+    }
+
+    public void refreshEffects() { //todo test...
+        for (Position positionWithActiveEffect : positionsWithActiveEffects) {
+            if (activeEffects.get(positionWithActiveEffect).getRemainingDuration() == 1) {
+                activeEffects.put(positionWithActiveEffect, null);
+                positionsWithActiveEffects.remove(positionWithActiveEffect);
+            } else {
+                activeEffects.get(positionWithActiveEffect).decrementRemainingDuration();
+            }
+        }
+    }
+
     public Boolean isWin() {
         return true;
     }
@@ -250,6 +238,18 @@ public class GameBoard {
 
     public Position getPlayerPiecePosition(int playerNum) {
         return playerPiecePositions[playerNum];
+    }
+
+    public int getnRows() {
+        return nRows;
+    }
+
+    public int getnCols() {
+        return nCols;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static void main(String[] args) {
