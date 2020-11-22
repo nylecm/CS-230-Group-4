@@ -156,6 +156,12 @@ public class GameBoard {
 
             for (int i = 0; i < nCols - 1; i++) {
                 board[rowNum][i] = board[rowNum][i + 1];
+                if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
+                    activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i + 1)));
+
+                    positionsWithActiveEffects.remove(new Position(rowNum, i + 1));
+                    positionsWithActiveEffects.add(new Position(rowNum, i));
+                }
             }
             board[rowNum][colNum - 1] = tile;
         } else if (rowNum == -1 && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Top to bottom vertical shift.
@@ -163,6 +169,12 @@ public class GameBoard {
 
             for (int i = nRows - 1; i != 0; i--) {
                 board[i][colNum] = board[i - 1][colNum];
+                if (activeEffects.get(new Position(i - 1, colNum)) != null) {
+                    activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i - 1, colNum)));
+
+                    positionsWithActiveEffects.remove(new Position(i - 1, colNum));
+                    positionsWithActiveEffects.add(new Position(i, colNum));
+                }
             }
             board[rowNum + 1][colNum] = tile;
         } else if (rowNum == nRows && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Bottom to top vertical shift.
@@ -170,6 +182,12 @@ public class GameBoard {
 
             for (int i = 0; i < nRows - 1; i++) {
                 board[i][colNum] = board[i + 1][colNum];
+                if (activeEffects.get(new Position(i + 1, colNum)) != null) {
+                    activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i + 1, colNum)));
+
+                    positionsWithActiveEffects.remove(new Position(i + 1, colNum));
+                    positionsWithActiveEffects.add(new Position(i, colNum));
+                }
             }
             board[rowNum - 1][colNum] = tile;
         }
