@@ -172,6 +172,7 @@ public class GameService {
         while (!isWin) {
             ps.playerTurn(ps.getPlayer(turnCount % ps.getPlayers().length)); // todo improve player service
             System.out.println("Have fun!");
+            gb.refreshEffects(); // todo check
             turnCount++;
         }
     }
