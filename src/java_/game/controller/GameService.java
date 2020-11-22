@@ -181,9 +181,27 @@ public class GameService {
     public void save(String saveName) throws IOException { //todo
         File gameSaveFile = new File("data/" + saveName + ".txt");
 
-        if(gameSaveFile.createNewFile()){
-            System.out.println("file.txt File Created in Project root directory");
-        }else System.out.println("File file.txt already exists in the project root directory");
+        boolean isFileCreated = false;
+        final int limitOfFilesWithSameName = 256;
+        int i = 0;
+
+        while (!isFileCreated && i < limitOfFilesWithSameName) {
+            if (gameSaveFile.createNewFile()){
+                isFileCreated = true;
+                System.out.println("File Created!");
+            }else {
+                i++;
+                gameSaveFile = new File("data/" + saveName + "_" + i + ".txt");
+                System.out.println("File not created yet!");
+            }
+        }
+
+        if (!isFileCreated) {
+            throw new IllegalArgumentException("Too many files with same name!");
+        }
+
+
+
 
         // Needs to write to file:
         /*
