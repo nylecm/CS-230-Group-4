@@ -18,7 +18,7 @@ public class GameBoard {
     private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
     private final FloorTile[] tiles;
     private HashMap<Position, Set<Effect>> activeEffects;
-    private final FloorTile[][] board;
+    public final FloorTile[][] board;
 
     public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPiecePositions = playerPiecePositions;
