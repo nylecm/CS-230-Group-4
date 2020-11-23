@@ -160,11 +160,9 @@ public class GameService {
         in.useDelimiter(DELIMITER);
 
         while (in.hasNextLine()) {
-
         }
 
         in.close();
-
         /*
          * file reader reads level file and creates a new game...
          */
@@ -258,7 +256,7 @@ public class GameService {
     }
 
     private void writeSilkBagInstanceDetails(PrintWriter out) {
-        while (! silkBag.isEmpty()) {
+        while (!silkBag.isEmpty()) {
             out.print(silkBag.take().getType());
             out.print(DELIMITER);
         }
