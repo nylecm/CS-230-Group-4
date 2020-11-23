@@ -20,10 +20,11 @@ game board name` description` difficulty` preview image directory
 
 --- Game File Format --- Each saved game shall be saved into a separate file named <game id>.txt ---
 
-number of players` game board id` nRows` nCols` number of turns already made` paths int` isFixed` current effect` ...` ...` ...`
+number of players` game board id` nRows` nCols` number of turns already made`
+paths int` isFixed` current effect` ...` ...` ...`
+tile in silk bag` ...
 
 --- The next 2 to 4 lines shall have details about the player instance. ---
-
 --- Player Instance Format ---
 
 username` player row` player col` number of action tiles in possession` ice` number of action tiles of that type` fire` number of action tiles of that type` backtrack` number of action tiles of that type` double_move` number of action tiles of that type` action tile type previously applied to this player` ...

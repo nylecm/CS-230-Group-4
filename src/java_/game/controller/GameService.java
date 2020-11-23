@@ -160,6 +160,7 @@ public class GameService {
         in.useDelimiter(DELIMITER);
 
         while (in.hasNextLine()) {
+
         }
 
         in.close();
