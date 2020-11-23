@@ -208,19 +208,40 @@ public class GameService {
             //todo..................
         }
 
-        out.print(ps.getPlayers().length);
-        out.print(DELIMITER);
-        out.print(gb.getName());
-        out.print(DELIMITER);
-        out.print(gb.getnRows());
-        out.print(DELIMITER);
-        out.print(gb.getnCols());
-        out.print(DELIMITER);
-        out.print(turnCount);
-        out.print(DELIMITER);
-        out.print('\n');
+        writeGameInstanceDetails(out);
+        writeGameBoardInstanceDetails(out);
+        writePlayerInstanceDetailsForAllPlayers(out);
 
-        //game board...
+        // todo saving silk bag contents vs calculating it on load.
+
+        out.println();
+
+        out.flush();
+        out.close();
+    }
+
+    private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
+        for (int i = 0; i < ps.getPlayers().length; i++) {
+            writePlayerInstanceDetails(out, i);
+        }
+    }
+
+    private void writePlayerInstanceDetails(PrintWriter out, int i) {
+        out.print(ps.getPlayer(i).getUsername());
+        out.print(gb.getPlayerPiecePosition(i).getRowNum());
+        out.print(gb.getPlayerPiecePosition(i).getColNum());
+
+        for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
+            out.print(actionTile.getType().toString());
+        }
+
+        for (Effect effect : ps.getPlayer(i).getPreviousAppliedEffect()) {
+            out.print(effect.getEffectType().toString());
+        }
+        out.print('\n');
+    }
+
+    private void writeGameBoardInstanceDetails(PrintWriter out) {
         for (int i = 0; i < gb.getnRows(); i++) {
             for (int j = 0; j < gb.getnCols(); j++) {
                 out.print(gb.getTileAt(i, j).getPaths());
@@ -239,28 +260,20 @@ public class GameService {
             }
         }
         out.print('\n');
+    }
 
-        for (int i = 0; i < ps.getPlayers().length; i++) {
-            out.print(ps.getPlayer(i).getUsername());
-            out.print(gb.getPlayerPiecePosition(i).getRowNum());
-            out.print(gb.getPlayerPiecePosition(i).getColNum());
-
-            for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
-                out.print(actionTile.getType().toString());
-            }
-
-            for (Effect effect : ps.getPlayer(i).getPreviousAppliedEffect()) {
-                out.print(effect.getEffectType().toString());
-            }
-            out.print('\n');
-        }
-
-        // todo saving silk bag contents vs calculating it on load.
-
-        out.println();
-
-        out.flush();
-        out.close();
+    private void writeGameInstanceDetails(PrintWriter out) {
+        out.print(ps.getPlayers().length);
+        out.print(DELIMITER);
+        out.print(gb.getName());
+        out.print(DELIMITER);
+        out.print(gb.getnRows());
+        out.print(DELIMITER);
+        out.print(gb.getnCols());
+        out.print(DELIMITER);
+        out.print(turnCount);
+        out.print(DELIMITER);
+        out.print('\n');
     }
 
     public void destroy() {
