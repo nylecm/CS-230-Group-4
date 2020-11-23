@@ -278,6 +278,9 @@ public class GameService {
         out.print(gb.getPlayerPiecePosition(i).getColNum());
         out.print(DELIMITER);
 
+        out.print(ps.getPlayer(i).getDrawnActionTiles().size());
+        out.print(DELIMITER);
+
         for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
             out.print(actionTile.getType().toString());
             out.print(DELIMITER);
