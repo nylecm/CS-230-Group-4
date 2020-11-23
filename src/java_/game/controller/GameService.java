@@ -38,8 +38,7 @@ public class GameService {
     }
 
     //                                      (from game set-up class GUI)
-    public void loadNewGame(Player[] players, String boardName)
-            throws FileNotFoundException {
+    public void loadNewGame(Player[] players, String boardName) throws FileNotFoundException {
         remake();
 
         Scanner in = new Scanner(new File(GAME_BOARD_FILE_PATH));
@@ -107,7 +106,7 @@ public class GameService {
         for (int i = 0; i < FloorTile.FLOOR_TILE_TYPES.size(); i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
             int nOfThisType = in.nextInt();
-            FloorTile t = new FloorTile(tileType, false, false);
+            FloorTile t = new FloorTile(tileType, false);
 
             for (int j = 0; j < nOfThisType; j++) {
                 floorTiles.add(t);
@@ -159,11 +158,28 @@ public class GameService {
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
 
-        while (in.hasNextLine()) {
+        //int nPlayers = in.nextInt();
+        String name = in.next();
+        int nRows = in.nextInt();
+        int nCols = in.nextInt();
+        int turnCount = in.nextInt();
+        in.nextLine();
+
+        FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
+        //effect map...
+
+        for (int i = 0; i < nRows * nCols; i++) {
+            int paths = in.nextInt();
+            boolean isFixed = in.nextBoolean();
+            boolean hasEffect = in.nextBoolean();
+            EffectType effectType = EffectType.valueOf(in.next());
+            int remainingDur = in.nextInt();
+            String radiusStr = in.next();
+            int radius = Integer.parseInt(radiusStr);
 
         }
 
-        in.close();
+
         /*
          * file reader reads level file and creates a new game...
          */
@@ -186,12 +202,9 @@ public class GameService {
         out = new PrintWriter(gameSaveFile);
 
         writeGameInstanceDetails(out);
-        writeGameBoardInstanceDetails(out);
+        writeGameBoardInstanceTileDetails(out);
         writeSilkBagInstanceDetails(out);
         writePlayerInstanceDetailsForAllPlayers(out);
-
-
-        // todo saving silk bag contents vs calculating it on load.
 
         out.flush();
         out.close();
@@ -222,7 +235,7 @@ public class GameService {
     }
 
     private void writeGameInstanceDetails(PrintWriter out) {
-        out.print(ps.getPlayers().length);
+        out.print(ps.getPlayers().length); // Number of players
         out.print(DELIMITER);
         out.print(gb.getName());
         out.print(DELIMITER);
@@ -235,7 +248,7 @@ public class GameService {
         out.print('\n');
     }
 
-    private void writeGameBoardInstanceDetails(PrintWriter out) {
+    private void writeGameBoardInstanceTileDetails(PrintWriter out) {
         for (int i = 0; i < gb.getnRows(); i++) {
             for (int j = 0; j < gb.getnCols(); j++) {
                 out.print(gb.getTileAt(i, j).getPaths());
@@ -244,11 +257,16 @@ public class GameService {
                 out.print(DELIMITER);
 
                 if (gb.getEffectAt(i, j) != null) {
+                    out.print(true);
+                    out.print(DELIMITER);
                     out.print(gb.getEffectAt(i, j).getEffectType());
                     out.print(DELIMITER);
                     out.print(gb.getEffectAt(i, j).getRemainingDuration());
                     out.print(DELIMITER);
                     out.print(gb.getEffectAt(i, j).getRadius());
+                    out.print(DELIMITER);
+                } else {
+                    out.print(false);
                     out.print(DELIMITER);
                 }
             }
@@ -306,7 +324,7 @@ public class GameService {
         gs.loadNewGame(
                 new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gb);
-        gs.gb.insert(4, 0, new FloorTile(TileType.STRAIGHT, false, false), 0);
+        gs.gb.insert(4, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         System.out.println(gs.gb);
 
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
@@ -319,7 +337,7 @@ public class GameService {
         AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false, false), 0);
+        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false), 0);
 
         for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());

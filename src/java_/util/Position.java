@@ -1,7 +1,5 @@
 package java_.util;
 
-import java.util.Objects;
-
 public class Position {
 
     private int rowNum;

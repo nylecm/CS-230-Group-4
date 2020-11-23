@@ -45,7 +45,7 @@ public class SilkBag {
 
         if (FloorTile.FLOOR_TILE_TYPES.contains(tileType)) {
             tiles.dequeue();
-            return new FloorTile(tileType, false, false);
+            return new FloorTile(tileType, false);
         } else {
             tiles.dequeue();
             return new ActionTile(tileType);
@@ -75,7 +75,7 @@ public class SilkBag {
         s.put(new ActionTile(TileType.ICE));
         s.put(new ActionTile(TileType.BACKTRACK));
         s.put(new ActionTile(TileType.DOUBLE_MOVE));
-        s.put(new FloorTile(TileType.STRAIGHT, false, false));
+        s.put(new FloorTile(TileType.STRAIGHT, false));
         s.put(new ActionTile(TileType.FIRE));
         s.put(new ActionTile(TileType.FIRE));
         s.put(new ActionTile(TileType.FIRE));

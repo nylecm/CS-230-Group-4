@@ -251,9 +251,9 @@ public class GameBoard {
         Tile[] newTiles = new Tile[0];
         SilkBag silkBag = new SilkBag(newTiles);
 
-        FloorTile A = new FloorTile(TileType.CORNER, true, false);
-        FloorTile B = new FloorTile(TileType.STRAIGHT, true, false);
-        FloorTile C = new FloorTile(TileType.T_SHAPED, true, false);
+        FloorTile A = new FloorTile(TileType.CORNER, true);
+        FloorTile B = new FloorTile(TileType.STRAIGHT, true);
+        FloorTile C = new FloorTile(TileType.T_SHAPED, true);
 
         FloorTile[] fixedTiles = new FloorTile[3];
         fixedTiles[0] = A;
@@ -265,15 +265,15 @@ public class GameBoard {
         fixedTilePositions[1] = new Position(1, 1);
         fixedTilePositions[2] = new Position(2, 2);
 
-        FloorTile D = new FloorTile(TileType.CORNER, false, false);
-        FloorTile E = new FloorTile(TileType.CORNER, false, false);
-        FloorTile F = new FloorTile(TileType.T_SHAPED, false, false);
-        FloorTile G = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile H = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile I = new FloorTile(TileType.CORNER, false, false);
-        FloorTile J = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile K = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile L = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile D = new FloorTile(TileType.CORNER, false);
+        FloorTile E = new FloorTile(TileType.CORNER, false);
+        FloorTile F = new FloorTile(TileType.T_SHAPED, false);
+        FloorTile G = new FloorTile(TileType.STRAIGHT, false);
+        FloorTile H = new FloorTile(TileType.STRAIGHT, false);
+        FloorTile I = new FloorTile(TileType.CORNER, false);
+        FloorTile J = new FloorTile(TileType.STRAIGHT, false);
+        FloorTile K = new FloorTile(TileType.STRAIGHT, false);
+        FloorTile L = new FloorTile(TileType.STRAIGHT, false);
 
 
         FloorTile[] tiles = new FloorTile[9];
@@ -300,7 +300,7 @@ public class GameBoard {
 
         AreaEffect test = firstgame.activeEffects.get(new Position(0, 0));
         System.out.println(test);
-        firstgame.insert(0, -1, new FloorTile(TileType.STRAIGHT, false, false), 0);
+        firstgame.insert(0, -1, new FloorTile(TileType.STRAIGHT, false), 0);
 
 
         System.out.println(test);
