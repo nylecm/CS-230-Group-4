@@ -179,8 +179,27 @@ public class GameService {
         }
     }
 
-    public void save(String saveName) throws IOException { //todo
-        File gameSaveFile = new File("data/" + saveName + ".txt");
+    public void save(String saveFileName) throws IOException { //todo
+        File gameSaveFile = createFile(saveFileName);
+
+        PrintWriter out = null;
+        // exception handling...
+        out = new PrintWriter(gameSaveFile);
+
+        writeGameInstanceDetails(out);
+        writeGameBoardInstanceDetails(out);
+        writeSilkBagInstanceDetails(out);
+        writePlayerInstanceDetailsForAllPlayers(out);
+
+
+        // todo saving silk bag contents vs calculating it on load.
+
+        out.flush();
+        out.close();
+    }
+
+    private File createFile(String fileName) throws IOException {
+        File gameSaveFile = new File("data/" + fileName + ".txt");
 
         boolean isFileCreated = false;
         final int limitOfFilesWithSameName = 256;
@@ -192,7 +211,7 @@ public class GameService {
                 System.out.println("File Created!");
             } else {
                 filesWithSameName++;
-                gameSaveFile = new File("data/" + saveName + "_" + filesWithSameName + ".txt");
+                gameSaveFile = new File("data/" + fileName + "_" + filesWithSameName + ".txt");
                 System.out.println("File not created yet!");
             }
         }
@@ -200,44 +219,20 @@ public class GameService {
         if (!isFileCreated) {
             throw new IllegalArgumentException("Too many files with same name!");
         }
-
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(gameSaveFile);
-        } catch (FileNotFoundException e) {
-            //todo..................
-        }
-
-        writeGameInstanceDetails(out);
-        writeGameBoardInstanceDetails(out);
-        writePlayerInstanceDetailsForAllPlayers(out);
-
-        // todo saving silk bag contents vs calculating it on load.
-
-        out.println();
-
-        out.flush();
-        out.close();
+        return gameSaveFile;
     }
 
-    private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
-        for (int i = 0; i < ps.getPlayers().length; i++) {
-            writePlayerInstanceDetails(out, i);
-        }
-    }
-
-    private void writePlayerInstanceDetails(PrintWriter out, int i) {
-        out.print(ps.getPlayer(i).getUsername());
-        out.print(gb.getPlayerPiecePosition(i).getRowNum());
-        out.print(gb.getPlayerPiecePosition(i).getColNum());
-
-        for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
-            out.print(actionTile.getType().toString());
-        }
-
-        for (Effect effect : ps.getPlayer(i).getPreviousAppliedEffect()) {
-            out.print(effect.getEffectType().toString());
-        }
+    private void writeGameInstanceDetails(PrintWriter out) {
+        out.print(ps.getPlayers().length);
+        out.print(DELIMITER);
+        out.print(gb.getName());
+        out.print(DELIMITER);
+        out.print(gb.getnRows());
+        out.print(DELIMITER);
+        out.print(gb.getnCols());
+        out.print(DELIMITER);
+        out.print(turnCount);
+        out.print(DELIMITER);
         out.print('\n');
     }
 
@@ -262,17 +257,37 @@ public class GameService {
         out.print('\n');
     }
 
-    private void writeGameInstanceDetails(PrintWriter out) {
-        out.print(ps.getPlayers().length);
+    private void writeSilkBagInstanceDetails(PrintWriter out) {
+        while (! silkBag.isEmpty()) {
+            out.print(silkBag.take().getType());
+            out.print(DELIMITER);
+        }
+        out.print('\n');
+    }
+
+    private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
+        for (int i = 0; i < ps.getPlayers().length; i++) {
+            writePlayerInstanceDetails(out, i);
+        }
+    }
+
+    private void writePlayerInstanceDetails(PrintWriter out, int i) {
+        out.print(ps.getPlayer(i).getUsername());
         out.print(DELIMITER);
-        out.print(gb.getName());
+        out.print(gb.getPlayerPiecePosition(i).getRowNum());
         out.print(DELIMITER);
-        out.print(gb.getnRows());
+        out.print(gb.getPlayerPiecePosition(i).getColNum());
         out.print(DELIMITER);
-        out.print(gb.getnCols());
-        out.print(DELIMITER);
-        out.print(turnCount);
-        out.print(DELIMITER);
+
+        for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
+            out.print(actionTile.getType().toString());
+            out.print(DELIMITER);
+        }
+
+        for (Effect effect : ps.getPlayer(i).getPreviousAppliedEffect()) {
+            out.print(effect.getEffectType().toString());
+            out.print(DELIMITER);
+        }
         out.print('\n');
     }
 

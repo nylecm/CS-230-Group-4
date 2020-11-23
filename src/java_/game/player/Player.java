@@ -47,21 +47,22 @@ public class Player {
         drawnActionTiles.add(actionTile);
     }
 
-    public int getUsername() {
-        return getUsername();
+    public String getUsername() {
+        return username;
     }
 
     public String getName() {
-        return getName();
+        return name;
     }
 
     public int getNumberOfWins() {
-        return getNumberOfWins();
+        return numberOfWins;
     }
 
     public int getNumberOfLoses() {
-        return getNumberOfLoses();
+        return numberOfLoses;
     }
+
     public boolean isBot() {
         return isBot;
     }

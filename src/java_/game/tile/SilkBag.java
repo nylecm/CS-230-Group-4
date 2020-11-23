@@ -52,6 +52,10 @@ public class SilkBag {
         }
     }
 
+    public boolean isEmpty() {
+        return tiles.isEmpty();
+    }
+
     @Override
     public String toString() {
         return tiles.toString();
