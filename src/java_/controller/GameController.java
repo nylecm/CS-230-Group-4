@@ -47,7 +47,7 @@ public class GameController implements Initializable {
     Label positionLabel;
 
     @FXML
-    Button floorTile;
+    ImageView floorTile;
 
     @FXML
     Label validMoveLabel;
@@ -116,6 +116,7 @@ public class GameController implements Initializable {
     private void displayGameBoard(FloorTile[][] gameBoard) {
         Group gameBoardView = new Group();
         Dimension2D dimension = new Dimension2D(gameBoard.length, gameBoard.length); //Needs to be changed if a gameboard can be a rectangle
+        setBoarders(gameBoardView, dimension);
         for (int row = 0; row < dimension.getWidth(); row++) {
             for (int col = 0; col < dimension.getHeight(); col++) {
                 String tileType = getFloorTileType(gameBoard[row][col]);
@@ -129,7 +130,7 @@ public class GameController implements Initializable {
 
                 gameBoardView.getChildren().add(tileDisplay);
 
-                String tilePosition = "Tile position: X = " + col + ", Y = " + row;
+                String tilePosition = "Tile position: Col = " + col + ", Row = " + row;
 
                 tileDisplay.setOnMouseEntered(event -> {
                     positionLabel.setText(tilePosition);
@@ -139,6 +140,16 @@ public class GameController implements Initializable {
         scrollPane.setContent(gameBoardView);
     }
 
+    private void setBoarders(Group gameBoardView, Dimension2D dimension) {
+        for (int row = 0; row < dimension.getWidth(); row++) {
+            for (int col = 0; col < dimension.getHeight(); col++) {
+                Image tileImage = new Image("empty.png");
+                ImageView tileDisplay = new ImageView(tileImage);
+
+            }
+        }
+    }
+
     //For image
     private String getFloorTileType(FloorTile floorTile) {
         TileType type = floorTile.getType();
@@ -146,7 +157,7 @@ public class GameController implements Initializable {
             case STRAIGHT:
                 return "straight.png";
             case CORNER:
-                return "corner2.png";
+                return "corner.png";
             case T_SHAPED:
                 return "t_shaped.png";
         }
