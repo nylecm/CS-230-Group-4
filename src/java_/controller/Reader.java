@@ -33,6 +33,11 @@ public class Reader {
         return output;
     }
 
+    public File[] readFileNames(String path) {
+        File folder = new File(path);
+        return folder.listFiles();
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         Reader reader = new Reader();
         reader.readGameBoardNames();

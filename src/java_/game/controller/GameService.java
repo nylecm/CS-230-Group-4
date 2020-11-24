@@ -10,9 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class GameService {
     private static GameService instance = null;
@@ -37,7 +35,6 @@ public class GameService {
         return instance;
     }
 
-    //                                      (from game set-up class GUI)
     public void loadNewGame(Player[] players, String boardName) throws FileNotFoundException {
         remake();
 
@@ -178,13 +175,28 @@ public class GameService {
             int radius = Integer.parseInt(radiusStr);
         }
         in.nextLine();
-        for (int i = 0; i < nRows * nCols; i++) {
 
+        silkBag = new SilkBag();
+
+        while (in.hasNext()) {
+            silkBag.put(TileType.valueOf(in.next()));
         }
 
-        /*
-         * file reader reads level file and creates a new game...
-         */
+        int nPlayers = 0;
+        List<Player> players = new ArrayList<>();
+
+        while (in.hasNextLine()) {
+
+            nPlayers++;
+            String username = in.next();
+            int rowNum = in.nextInt();
+            int colNum = in.nextInt();
+            int numOfDrawnActionTiles = in.nextInt();
+          //  Player player = new Player(username, );
+        }
+
+        //GameBoard = new GameBoard();
+        //PlayerService = new PlayerService();
     }
 
     public void gameplayLoop() { // todo gameplay loop...
@@ -200,7 +212,6 @@ public class GameService {
         File gameSaveFile = createFile(saveFileName);
 
         PrintWriter out = null;
-        // exception handling...
         out = new PrintWriter(gameSaveFile);
 
         writeGameInstanceDetails(out);
@@ -213,7 +224,7 @@ public class GameService {
     }
 
     private File createFile(String fileName) throws IOException {
-        File gameSaveFile = new File("data/" + fileName + ".txt");
+        File gameSaveFile = new File("data/saves/" + fileName + ".txt");
 
         boolean isFileCreated = false;
         final int limitOfFilesWithSameName = 256;
@@ -298,7 +309,7 @@ public class GameService {
         out.print(gb.getPlayerPiecePosition(i).getColNum());
         out.print(DELIMITER);
 
-        out.print(ps.getPlayer(i).getDrawnActionTiles().size());
+        out.print(ps.getPlayer(i).getDrawnActionTiles().size()); // N of drawn action tiles.
         out.print(DELIMITER);
 
         for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
@@ -348,7 +359,7 @@ public class GameService {
         System.out.println(test);
 
         try {
-            gs.save("emma");
+            gs.save("faron");
         } catch (IOException e) {
             e.printStackTrace();
         }

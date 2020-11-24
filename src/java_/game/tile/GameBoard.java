@@ -137,7 +137,7 @@ public class GameBoard {
             board[rowNum - 1][colNum] = tile;
         }
         assert pushedOffTile != null;
-        GameService.getInstance().getSilkBag().put(pushedOffTile); //todo ?? Null pointer
+        GameService.getInstance().getSilkBag().put(pushedOffTile.getType()); //todo ?? Null pointer
     }
 
     private boolean isRowFixed(int rowNum) {
