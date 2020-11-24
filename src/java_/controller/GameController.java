@@ -29,7 +29,7 @@ public class GameController implements Initializable {
 
     private static final int TILE_WIDTH = 64;
 
-    private static final int TILE_HEIGHT = 32;
+    private static final int TILE_HEIGHT = 64;
 
     @FXML
     ScrollPane scrollPane;
@@ -107,17 +107,22 @@ public class GameController implements Initializable {
     private void displayGameBoard(FloorTile[][] gameBoard) {
         Group gameBoardView = new Group();
         Dimension2D dimension = new Dimension2D(gameBoard.length, gameBoard.length); //Needs to be changed if a gameboard can be a rectangle
-        setBoarders(gameBoardView, dimension);
         for (int row = 0; row < dimension.getWidth(); row++) {
             for (int col = 0; col < dimension.getHeight(); col++) {
-                String tileType = getFloorTileType(gameBoard[row][col]);
-                Image tileImage = new Image(tileType);
+//                String tileType = getFloorTileType(gameBoard[row][col]);
+                Image tileImage = new Image("fullFlat.png");
 
                 ImageView tileDisplay = new ImageView(tileImage);
+                // V For flat view
                 tileDisplay.setFitWidth(TILE_WIDTH);
                 tileDisplay.setFitHeight(TILE_HEIGHT);
-                tileDisplay.setX((col - row) * (TILE_WIDTH / 2));
-                tileDisplay.setY((col + row) * (TILE_HEIGHT / 2));
+                tileDisplay.setX((col) * TILE_WIDTH);
+                tileDisplay.setY((row) * TILE_HEIGHT);
+                // V For isometric view
+//                tileDisplay.setFitWidth(TILE_WIDTH);
+//                tileDisplay.setFitHeight(TILE_HEIGHT);
+//                tileDisplay.setX((col - row) * (TILE_WIDTH / 2));
+//                tileDisplay.setY((col + row) * (TILE_HEIGHT / 2));
 
                 gameBoardView.getChildren().add(tileDisplay);
 
@@ -129,19 +134,6 @@ public class GameController implements Initializable {
             }
         }
         scrollPane.setContent(gameBoardView);
-    }
-
-    private void setBoarders(Group gameBoardView, Dimension2D dimension) {
-        for (int row = 0; row < dimension.getWidth(); row++) {
-            for (int col = 0; col < dimension.getHeight(); col++) {
-                Image tileImage = new Image("empty.png");
-                ImageView tileDisplay = new ImageView(tileImage);
-                tileDisplay.setFitWidth(TILE_WIDTH);
-                tileDisplay.setFitHeight(TILE_HEIGHT);
-                tileDisplay.setX((col - row) * (TILE_WIDTH / 2));
-                tileDisplay.setY((col + row) * (TILE_HEIGHT / 2));
-            }
-        }
     }
 
     //For image
