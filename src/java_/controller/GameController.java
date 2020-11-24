@@ -1,16 +1,12 @@
 package java_.controller;
 
-import java_.game.player.PlayerPiece;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
-import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -21,15 +17,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import javax.persistence.Column;
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -145,7 +136,10 @@ public class GameController implements Initializable {
             for (int col = 0; col < dimension.getHeight(); col++) {
                 Image tileImage = new Image("empty.png");
                 ImageView tileDisplay = new ImageView(tileImage);
-
+                tileDisplay.setFitWidth(TILE_WIDTH);
+                tileDisplay.setFitHeight(TILE_HEIGHT);
+                tileDisplay.setX((col - row -) * (TILE_WIDTH / 2));
+                tileDisplay.setY((col + row) * (TILE_HEIGHT / 2));
             }
         }
     }
