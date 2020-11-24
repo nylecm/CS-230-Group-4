@@ -138,7 +138,7 @@ public class GameController implements Initializable {
                 ImageView tileDisplay = new ImageView(tileImage);
                 tileDisplay.setFitWidth(TILE_WIDTH);
                 tileDisplay.setFitHeight(TILE_HEIGHT);
-                tileDisplay.setX((col - row -) * (TILE_WIDTH / 2));
+                tileDisplay.setX((col - row) * (TILE_WIDTH / 2));
                 tileDisplay.setY((col + row) * (TILE_HEIGHT / 2));
             }
         }
