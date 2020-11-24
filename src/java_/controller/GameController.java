@@ -14,6 +14,7 @@ import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -28,11 +29,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javax.persistence.Column;
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable {
+
+    private static final int TILE_WIDTH = 64;
+
+    private static final int TILE_HEIGHT = 32;
 
     @FXML
     ScrollPane scrollPane;
@@ -41,62 +47,114 @@ public class GameController implements Initializable {
     Label positionLabel;
 
     @FXML
-    Rectangle tileToBeInserted;
+    Button floorTile;
 
     @FXML
     Label validMoveLabel;
 
+    @FXML
+    Button slideButton;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupGameboard();
+        FloorTile[][] gameBoard = loadGameboard().board;
+        displayGameBoard(gameBoard);
     }
 
     @FXML
     public void dragDetected() {
         System.out.println("TRUE");
-        Dragboard dragboard = tileToBeInserted.startDragAndDrop(TransferMode.ANY);
+        Dragboard dragboard = floorTile.startDragAndDrop(TransferMode.ANY);
         ClipboardContent content = new ClipboardContent();
         content.putString("TEST");
         dragboard.setContent(content);
     }
 
-    private void setupGameboard() {
-        Group gameBoardView = new Group();
-        int tileWidth = 64;
-        int tileHeight = 32;
-        Dimension2D dimension = new Dimension2D(8, 8);
-        Image tileImage = new Image("tileCalculated.png");
+    @FXML
+    private GameBoard loadGameboard() {
+        Position[] playerPiecesPosition = {
+                                        new Position(1, 5),
+                                        new Position(6, 2)
+                                        };
 
+        Tile[] newTiles = new Tile[0];
+
+        FloorTile A = new FloorTile(TileType.CORNER, true, false);
+        FloorTile B = new FloorTile(TileType.STRAIGHT, true, false);
+        FloorTile C = new FloorTile(TileType.T_SHAPED, true, false);
+
+        FloorTile[] fixedTiles = new FloorTile[3];
+        fixedTiles[0] = A;
+        fixedTiles[1] = B;
+        fixedTiles[2] = C;
+
+        Position[] fixedTilePositions = new Position[3];
+        fixedTilePositions[0] = new Position(0, 0);
+        fixedTilePositions[1] = new Position(1, 1);
+        fixedTilePositions[2] = new Position(2, 2);
+
+        FloorTile D = new FloorTile(TileType.CORNER, false, false);
+        FloorTile E = new FloorTile(TileType.CORNER, false, false);
+        FloorTile F = new FloorTile(TileType.T_SHAPED, false, false);
+        FloorTile G = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile H = new FloorTile(TileType.STRAIGHT, false, false);
+        FloorTile I = new FloorTile(TileType.CORNER, false, false);
+
+        FloorTile[] tiles = new FloorTile[6];
+        tiles[0] = D;
+        tiles[1] = E;
+        tiles[2] = F;
+        tiles[3] = G;
+        tiles[4] = H;
+        tiles[5] = I;
+
+
+       return new GameBoard(playerPiecesPosition, fixedTiles, fixedTilePositions, tiles, 3, 3, "GameBoard1");
+    }
+
+    private void displayGameBoard(FloorTile[][] gameBoard) {
+        Group gameBoardView = new Group();
+        Dimension2D dimension = new Dimension2D(gameBoard.length, gameBoard.length); //Needs to be changed if a gameboard can be a rectangle
         for (int row = 0; row < dimension.getWidth(); row++) {
             for (int col = 0; col < dimension.getHeight(); col++) {
-                ImageView tile = new ImageView(tileImage);
-                tile.setFitWidth(tileWidth);
-                tile.setFitHeight(tileHeight);
-                tile.setX((col - row) * (tileWidth / 2));
-                tile.setY((col + row) * (tileHeight / 2));
+                String tileType = getFloorTileType(gameBoard[row][col]);
+                Image tileImage = new Image(tileType);
+
+                ImageView tileDisplay = new ImageView(tileImage);
+                tileDisplay.setFitWidth(TILE_WIDTH);
+                tileDisplay.setFitHeight(TILE_HEIGHT);
+                tileDisplay.setX((col - row) * (TILE_WIDTH / 2));
+                tileDisplay.setY((col + row) * (TILE_HEIGHT / 2));
+
+                gameBoardView.getChildren().add(tileDisplay);
 
                 String tilePosition = "Tile position: X = " + col + ", Y = " + row;
 
-                tile.setOnMouseEntered(event -> {
+                tileDisplay.setOnMouseEntered(event -> {
                     positionLabel.setText(tilePosition);
                 });
-
-                tile.setOnDragDropped(event -> {
-                    if (tile.getX() == 0 || tile.getY() == 0) {
-                        validMoveLabel.setText("Valid move: true");
-                    } else {
-                        validMoveLabel.setText("Valid move: false");
-                    }
-                });
-                gameBoardView.getChildren().add(tile);
             }
         }
         scrollPane.setContent(gameBoardView);
-
     }
 
-    private void gameBoardTest() {
+    //For image
+    private String getFloorTileType(FloorTile floorTile) {
+        TileType type = floorTile.getType();
+        switch (type) {
+            case STRAIGHT:
+                return "straight.png";
+            case CORNER:
+                return "corner2.png";
+            case T_SHAPED:
+                return "t_shaped.png";
+        }
+        return null;
+    }
+
+    @FXML
+    private void onSlideButtonClicked(ActionEvent e) {
 
     }
 
