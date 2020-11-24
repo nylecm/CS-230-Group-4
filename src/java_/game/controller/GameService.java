@@ -176,9 +176,11 @@ public class GameService {
             int remainingDur = in.nextInt();
             String radiusStr = in.next();
             int radius = Integer.parseInt(radiusStr);
+        }
+        in.nextLine();
+        for (int i = 0; i < nRows * nCols; i++) {
 
         }
-
 
         /*
          * file reader reads level file and creates a new game...
