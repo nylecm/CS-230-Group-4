@@ -15,7 +15,7 @@ public class LoginHandler {
         try (Scanner sc = new Scanner(users)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                String[] credentials = line.split(",");
+                String[] credentials = line.split("` ");
                 String savedUsername = credentials[0];
                 String encodedPassword = credentials[2];
                 if (username.equals(savedUsername) && PasswordEncoder.validatePassword(password, encodedPassword)) {
