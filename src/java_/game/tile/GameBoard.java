@@ -82,88 +82,100 @@ public class GameBoard {
 
         if (colNum == -1 && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Left to right horizontal shift.
             pushedOffTile = board[rowNum][nCols - 1];
-
-            //Shift Player Piece:
-            for (int j = 0; j < playerPiecePositions.length; j++) {
-                if (playerPiecePositions[j].getRowNum() == rowNum) {
-                    playerPiecePositions[j] = (playerPiecePositions[j].getColNum() == nCols - 1 ? new Position(rowNum, 0) : new Position(rowNum, playerPiecePositions[j].getColNum() + 1));
-                } //todo handle fire
-            }
-            for (int i = nCols - 1; i != 0; i--) { //
-                board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
-
-                if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
-                    activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
-
-                    positionsWithActiveEffects.remove(new Position(rowNum, i - 1));
-                    positionsWithActiveEffects.add(new Position(rowNum, i));
-                }
-            }
-            tile.rotateClockwise(rotation);
-            board[rowNum][colNum + 1] = tile;
+            shiftLeftToRight(colNum, rowNum, tile, rotation);
         } else if (colNum == nCols && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Right to left horizontal shift.
             pushedOffTile = board[rowNum][0];
-
-            //Shift Player Piece:
-            for (int j = 0; j < playerPiecePositions.length; j++) {
-                if (playerPiecePositions[j].getRowNum() == rowNum) {
-                    playerPiecePositions[j] = (playerPiecePositions[j].getColNum() == 0 ? new Position(rowNum, nCols - 1) : new Position(rowNum, playerPiecePositions[j].getColNum() - 1));
-                } //todo handle fire
-            }
-            for (int i = 0; i < nCols - 1; i++) {
-                board[rowNum][i] = board[rowNum][i + 1];
-                if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
-                    activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i + 1)));
-
-                    positionsWithActiveEffects.remove(new Position(rowNum, i + 1));
-                    positionsWithActiveEffects.add(new Position(rowNum, i));
-                }
-            }
-            tile.rotateClockwise(rotation);
-            board[rowNum][colNum - 1] = tile;
+            shiftRightToLeft(colNum, rowNum, tile, rotation);
         } else if (rowNum == -1 && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Top to bottom vertical shift.
             pushedOffTile = board[nRows - 1][colNum];
-
-            //Shift Player Piece:
-            for (int j = 0; j < playerPiecePositions.length; j++) {
-                if (playerPiecePositions[j].getColNum() == colNum) {
-                    playerPiecePositions[j] = (playerPiecePositions[j].getRowNum() == nRows - 1 ? new Position(0, colNum) : new Position(playerPiecePositions[j].getRowNum() + 1, colNum));
-                } //todo handle fire
-            }
-            for (int i = nRows - 1; i != 0; i--) {
-                board[i][colNum] = board[i - 1][colNum];
-                if (activeEffects.get(new Position(i - 1, colNum)) != null) {
-                    activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i - 1, colNum)));
-
-                    positionsWithActiveEffects.remove(new Position(i - 1, colNum));
-                    positionsWithActiveEffects.add(new Position(i, colNum));
-                }
-            }
-            tile.rotateClockwise(rotation);
-            board[rowNum + 1][colNum] = tile;
+            shiftTopToBottom(colNum, rowNum, tile, rotation);
         } else if (rowNum == nRows && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Bottom to top vertical shift.
             pushedOffTile = board[0][colNum];
-
-            //Shift Player Piece:
-            for (int j = 0; j < playerPiecePositions.length; j++) {
-                if (playerPiecePositions[j].getColNum() == colNum) {
-                    playerPiecePositions[j] = (playerPiecePositions[j].getRowNum() == 0 ? new Position(nRows - 1, colNum) : new Position(playerPiecePositions[j].getRowNum() - 1, colNum));
-                } //todo handle fire
-            }
-            for (int i = 0; i < nRows - 1; i++) {
-                board[i][colNum] = board[i + 1][colNum];
-                if (activeEffects.get(new Position(i + 1, colNum)) != null) {
-                    activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i + 1, colNum)));
-
-                    positionsWithActiveEffects.remove(new Position(i + 1, colNum));
-                    positionsWithActiveEffects.add(new Position(i, colNum));
-                }
-            }
-            tile.rotateClockwise(rotation);
-            board[rowNum - 1][colNum] = tile;
+            shiftBottomToTop(colNum, rowNum, tile, rotation);
         }
         assert pushedOffTile != null;
         GameService.getInstance().getSilkBag().put(pushedOffTile.getType()); //todo ?? Null pointer
+    }
+
+    private void shiftLeftToRight(int colNum, int rowNum, FloorTile tile, int rotation) {
+        //Shift Player Piece:
+        for (int j = 0; j < playerPiecePositions.length; j++) {
+            if (playerPiecePositions[j].getRowNum() == rowNum) {
+                playerPiecePositions[j] = (playerPiecePositions[j].getColNum() == nCols - 1 ? new Position(rowNum, 0) : new Position(rowNum, playerPiecePositions[j].getColNum() + 1));
+            } //todo handle fire
+        }
+        for (int i = nCols - 1; i != 0; i--) { //
+            board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
+
+            if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
+                activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
+
+                positionsWithActiveEffects.remove(new Position(rowNum, i - 1));
+                positionsWithActiveEffects.add(new Position(rowNum, i));
+            }
+        }
+        tile.rotateClockwise(rotation);
+        board[rowNum][colNum + 1] = tile;
+    }
+
+    private void shiftRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
+        //Shift Player Piece:
+        for (int j = 0; j < playerPiecePositions.length; j++) {
+            if (playerPiecePositions[j].getRowNum() == rowNum) {
+                playerPiecePositions[j] = (playerPiecePositions[j].getColNum() == 0 ? new Position(rowNum, nCols - 1) : new Position(rowNum, playerPiecePositions[j].getColNum() - 1));
+            } //todo handle fire
+        }
+        for (int i = 0; i < nCols - 1; i++) {
+            board[rowNum][i] = board[rowNum][i + 1];
+            if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
+                activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i + 1)));
+
+                positionsWithActiveEffects.remove(new Position(rowNum, i + 1));
+                positionsWithActiveEffects.add(new Position(rowNum, i));
+            }
+        }
+        tile.rotateClockwise(rotation);
+        board[rowNum][colNum - 1] = tile;
+    }
+
+    private void shiftTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
+        //Shift Player Piece:
+        for (int j = 0; j < playerPiecePositions.length; j++) {
+            if (playerPiecePositions[j].getColNum() == colNum) {
+                playerPiecePositions[j] = (playerPiecePositions[j].getRowNum() == nRows - 1 ? new Position(0, colNum) : new Position(playerPiecePositions[j].getRowNum() + 1, colNum));
+            } //todo handle fire
+        }
+        for (int i = nRows - 1; i != 0; i--) {
+            board[i][colNum] = board[i - 1][colNum];
+            if (activeEffects.get(new Position(i - 1, colNum)) != null) {
+                activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i - 1, colNum)));
+
+                positionsWithActiveEffects.remove(new Position(i - 1, colNum));
+                positionsWithActiveEffects.add(new Position(i, colNum));
+            }
+        }
+        tile.rotateClockwise(rotation);
+        board[rowNum + 1][colNum] = tile;
+    }
+
+    private void shiftBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
+        //Shift Player Piece:
+        for (int j = 0; j < playerPiecePositions.length; j++) {
+            if (playerPiecePositions[j].getColNum() == colNum) {
+                playerPiecePositions[j] = (playerPiecePositions[j].getRowNum() == 0 ? new Position(nRows - 1, colNum) : new Position(playerPiecePositions[j].getRowNum() - 1, colNum));
+            } //todo handle fire
+        }
+        for (int i = 0; i < nRows - 1; i++) {
+            board[i][colNum] = board[i + 1][colNum];
+            if (activeEffects.get(new Position(i + 1, colNum)) != null) {
+                activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i + 1, colNum)));
+
+                positionsWithActiveEffects.remove(new Position(i + 1, colNum));
+                positionsWithActiveEffects.add(new Position(i, colNum));
+            }
+        }
+        tile.rotateClockwise(rotation);
+        board[rowNum - 1][colNum] = tile;
     }
 
     private boolean isRowFixed(int rowNum) {
