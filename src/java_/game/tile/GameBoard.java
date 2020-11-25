@@ -94,7 +94,7 @@ public class GameBoard {
             shiftBottomToTop(colNum, rowNum, tile, rotation);
         }
         assert pushedOffTile != null;
-        GameService.getInstance().getSilkBag().put(pushedOffTile.getType()); //todo ?? Null pointer
+        GameService.getInstance().getSilkBag().put(pushedOffTile.getType());
     }
 
     private void shiftLeftToRight(int colNum, int rowNum, FloorTile tile, int rotation) {
