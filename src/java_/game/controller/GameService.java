@@ -8,15 +8,15 @@ import java_.util.Position;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
 public class GameService {
     private static GameService instance = null;
 
     private GameBoard gb;
-    private PlayerService ps;
+    private final PlayerService ps;
     private SilkBag silkBag;
     private int turnCount;
     private boolean isWin;
@@ -26,7 +26,6 @@ public class GameService {
 
     private GameService() {
         ps = PlayerService.getInstance().remake();
-        //gb = GameBoard.getInstance().remake();
     }
 
     public static GameService getInstance() {
@@ -36,9 +35,7 @@ public class GameService {
         return instance;
     }
 
-    //                                      (from game set-up class GUI)
-    public void loadNewGame(Player[] players, String boardName)
-            throws FileNotFoundException {
+    public void loadNewGame(Player[] players, String boardName) throws FileNotFoundException {
         remake();
 
         Scanner in = new Scanner(new File(GAME_BOARD_FILE_PATH));
@@ -106,7 +103,7 @@ public class GameService {
         for (int i = 0; i < FloorTile.FLOOR_TILE_TYPES.size(); i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
             int nOfThisType = in.nextInt();
-            FloorTile t = new FloorTile(tileType, false, false);
+            FloorTile t = new FloorTile(tileType, false);
 
             for (int j = 0; j < nOfThisType; j++) {
                 floorTiles.add(t);
@@ -158,31 +155,173 @@ public class GameService {
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
 
-        while (in.hasNextLine()) {
+        //int nPlayers = in.nextInt();
+        String name = in.next();
+        int nRows = in.nextInt();
+        int nCols = in.nextInt();
+        int turnCount = in.nextInt();
+        in.nextLine();
 
+        FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
+        //effect map...
+
+        for (int i = 0; i < nRows * nCols; i++) {
+            int paths = in.nextInt();
+            boolean isFixed = in.nextBoolean();
+            boolean hasEffect = in.nextBoolean();
+            EffectType effectType = EffectType.valueOf(in.next());
+            int remainingDur = in.nextInt();
+            String radiusStr = in.next();
+            int radius = Integer.parseInt(radiusStr);
+        }
+        in.nextLine();
+
+        silkBag = new SilkBag();
+
+        while (in.hasNext()) {
+            silkBag.put(TileType.valueOf(in.next()));
         }
 
-        in.close();
+        int nPlayers = 0;
+        List<Player> players = new ArrayList<>();
 
-        /*
-         * file reader reads level file and creates a new game...
-         */
+        while (in.hasNextLine()) {
+
+            nPlayers++;
+            String username = in.next();
+            int rowNum = in.nextInt();
+            int colNum = in.nextInt();
+            int numOfDrawnActionTiles = in.nextInt();
+          //  Player player = new Player(username, );
+        }
+
+        //GameBoard = new GameBoard();
+        //PlayerService = new PlayerService();
     }
 
     public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
-            //
-            // ps mk mv
-            // ...
+            ps.playerTurn(ps.getPlayer(turnCount % ps.getPlayers().length)); // todo improve player service
             System.out.println("Have fun!");
+            gb.refreshEffects(); // todo check
             turnCount++;
         }
     }
 
-    public void save() {
-        /*
-         * file writer...
-         */
+    public void save(String saveFileName) throws IOException { //todo
+        File gameSaveFile = createFile(saveFileName);
+
+        PrintWriter out = null;
+        out = new PrintWriter(gameSaveFile);
+
+        writeGameInstanceDetails(out);
+        writeGameBoardInstanceTileDetails(out);
+        writeSilkBagInstanceDetails(out);
+        writePlayerInstanceDetailsForAllPlayers(out);
+
+        out.flush();
+        out.close();
+    }
+
+    private File createFile(String fileName) throws IOException {
+        File gameSaveFile = new File("data/saves/" + fileName + ".txt");
+
+        boolean isFileCreated = false;
+        final int limitOfFilesWithSameName = 256;
+        int filesWithSameName = 0;
+
+        while (!isFileCreated && filesWithSameName < limitOfFilesWithSameName) {
+            if (gameSaveFile.createNewFile()) {
+                isFileCreated = true;
+                System.out.println("File Created!");
+            } else {
+                filesWithSameName++;
+                gameSaveFile = new File("data/" + fileName + "_" + filesWithSameName + ".txt");
+                System.out.println("File not created yet!");
+            }
+        }
+
+        if (!isFileCreated) {
+            throw new IllegalArgumentException("Too many files with same name!");
+        }
+        return gameSaveFile;
+    }
+
+    private void writeGameInstanceDetails(PrintWriter out) {
+        out.print(ps.getPlayers().length); // Number of players
+        out.print(DELIMITER);
+        out.print(gb.getName());
+        out.print(DELIMITER);
+        out.print(gb.getnRows());
+        out.print(DELIMITER);
+        out.print(gb.getnCols());
+        out.print(DELIMITER);
+        out.print(turnCount);
+        out.print(DELIMITER);
+        out.print('\n');
+    }
+
+    private void writeGameBoardInstanceTileDetails(PrintWriter out) {
+        for (int i = 0; i < gb.getnRows(); i++) {
+            for (int j = 0; j < gb.getnCols(); j++) {
+                out.print(gb.getTileAt(i, j).getPaths());
+                out.print(DELIMITER);
+                out.print(gb.getTileAt(i, j).isFixed());
+                out.print(DELIMITER);
+
+                if (gb.getEffectAt(new Position(i, j)) != null) {
+                    out.print(true);
+                    out.print(DELIMITER);
+                    out.print(gb.getEffectAt(new Position(i, j)).getEffectType());
+                    out.print(DELIMITER);
+                    out.print(gb.getEffectAt(new Position(i, j)).getRemainingDuration());
+                    out.print(DELIMITER);
+                    out.print(gb.getEffectAt(new Position(i, j)).getRadius());
+                    out.print(DELIMITER);
+                } else {
+                    out.print(false);
+                    out.print(DELIMITER);
+                }
+            }
+        }
+        out.print('\n');
+    }
+
+    private void writeSilkBagInstanceDetails(PrintWriter out) {
+        while (!silkBag.isEmpty()) {
+            out.print(silkBag.take().getType());
+            out.print(DELIMITER);
+        }
+        out.print('\n');
+    }
+
+    private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
+        for (int i = 0; i < ps.getPlayers().length; i++) {
+            writePlayerInstanceDetails(out, i);
+        }
+    }
+
+    private void writePlayerInstanceDetails(PrintWriter out, int i) {
+        out.print(ps.getPlayer(i).getUsername());
+        out.print(DELIMITER);
+        out.print(gb.getPlayerPiecePosition(i).getRowNum());
+        out.print(DELIMITER);
+        out.print(gb.getPlayerPiecePosition(i).getColNum());
+        out.print(DELIMITER);
+
+        out.print(ps.getPlayer(i).getDrawnActionTiles().size()); // N of drawn action tiles.
+        out.print(DELIMITER);
+
+        for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
+            out.print(actionTile.getType().toString());
+            out.print(DELIMITER);
+        }
+
+        for (Effect effect : ps.getPlayer(i).getPreviousAppliedEffect()) {
+            out.print(effect.getEffectType().toString());
+            out.print(DELIMITER);
+        }
+        out.print('\n');
     }
 
     public void destroy() {
@@ -198,9 +337,34 @@ public class GameService {
         gs.loadNewGame(
                 new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gb);
-        gs.gb.insert(0, -1, new FloorTile(TileType.STRAIGHT, false, false));
+        //gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         System.out.println(gs.gb);
-        //System.out.println(GameService.getInstance().getS());
+
+        AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
+
+        gs.gb.applyEffect(effect, new Position(1, 0));
+        for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
+            System.out.println(pos.getRowNum() + " " + pos.getColNum());
+        }
+
+        AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
+        System.out.println(test);
+
+        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false), 0);
+        System.out.println();
+
+        for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
+            System.out.println(pos.getRowNum() + " " + pos.getColNum());
+        }
+
+        System.out.println(test);
+        System.out.println(gs.gb.getPlayerPiecePosition(0));
+
+        try {
+            gs.save("faron");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*private class FloorTilePositionBundle {

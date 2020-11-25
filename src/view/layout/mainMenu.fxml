@@ -19,8 +19,8 @@
                 <Label fx:id="messageOfTheDay" wrapText="true"/>
                 <Button mnemonicParsing="false" onAction="#onNewGameButtonClicked" prefHeight="40.0"
                         prefWidth="250.0" text="New Game"/>
-                <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0"
-                        text="Load Game"/>
+                <Button mnemonicParsing="false" onAction="#onLoadGameButtonClicked" prefHeight="40.0"
+                        prefWidth="250.0" text="Load Game"/>
                 <Button mnemonicParsing="false" onAction="#onCustomiseProfileButtonClicked"
                         prefHeight="40.0" prefWidth="250.0" text="Customise Profile"/>
                 <Button mnemonicParsing="false" onAction="#onLeaderboardButtonClicked"

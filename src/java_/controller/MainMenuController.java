@@ -40,12 +40,12 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(newGame));
     }
 
-    /*@FXML todo load game...
+    @FXML
     private void onLoadGameButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane loadGame = (Pane) FXMLLoader.load(getClass().getResource("newGame.fxml"));
-        currentStage.setScene(new Scene(newGame));
-    }*/
+        Pane loadGame = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/loadGame.fxml"));
+        currentStage.setScene(new Scene(loadGame));
+    }
 
     @FXML
     private void onCustomiseProfileButtonClicked(ActionEvent e) throws IOException {

@@ -11,7 +11,7 @@ public class RegisterHandler {
         String encodePassword = PasswordEncoder.encodePassword(password);
         try {
             FileWriter writer = new FileWriter(USERS_FILE_PATH);
-            writer.write(username +"," + email + "," + encodePassword);
+            writer.write(username +"` " + email + "` " + encodePassword);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

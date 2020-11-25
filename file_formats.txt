@@ -9,7 +9,8 @@ email` nickname` password` number of wins` number of losses
 --- Game board File Format ---
 
 --- (fixed action tiles have coords prior to NESW!) | (non-fixed floor tiles & action tiles)
-game board name` row num` column num` number of fixed tiles` rotation` row` col` type` ...` ...` ...` ...` straight` n` corner` n` t_shaped` n` goal` n` ice` n` fire` n` backtrack` n` double_move` n` Player 1 Starting Row` Player 1 Starting Col` ...` ...                                                  ^ ! means goal tile
+game board name` row num` column num` number of fixed tiles` rotation` row` col` type` ...` ...` ...` ...` straight` n` corner` n` t_shaped` n` goal` n` ice` n` fire` n` backtrack` n` double_move` n` Player 1 Starting Row` Player 1 Starting Col` ...` ...
+      // ^ ! means goal tile
 
 --- Game board Supplementary Data Format ---
 
@@ -19,13 +20,14 @@ game board name` description` difficulty` preview image directory
 
 --- Game File Format --- Each saved game shall be saved into a separate file named <game id>.txt ---
 
-number of players` game board id` number of turns already made` NESW!*` ...` number of area effects currently applied` area effect type
+number of players` game board id` nRows` nCols` number of turns already made`
+paths int` isFixed` current effect` ...` ...` ...`
+tile in silk bag` ...
 
 --- The next 2 to 4 lines shall have details about the player instance. ---
-
 --- Player Instance Format ---
 
-player id` player row` player col` type of action tile**` number of action tiles of that type` ...` ...` action tile type previously applied to this player` ...
+username` player row` player col` number of action tiles in possession` ice` number of action tiles of that type` fire` number of action tiles of that type` backtrack` number of action tiles of that type` double_move` number of action tiles of that type` action tile type previously applied to this player` ...
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

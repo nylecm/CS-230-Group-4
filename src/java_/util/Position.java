@@ -1,7 +1,5 @@
 package java_.util;
 
-import java.util.Objects;
-
 public class Position {
 
     private int rowNum;
@@ -33,9 +31,21 @@ public class Position {
     }
 
     @Override
+    public String toString() {
+        return "Position{" +
+                "rowNum=" + rowNum +
+                ", colNum=" + colNum +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Position position = (Position) o;
         return rowNum == position.rowNum &&
                 colNum == position.colNum;
@@ -43,6 +53,6 @@ public class Position {
 
     @Override
     public int hashCode() {
-        return rowNum % 20 + colNum % 20;
+        return rowNum % 19 + colNum % 19;
     }
 }

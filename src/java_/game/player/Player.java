@@ -2,6 +2,7 @@ package java_.game.player;
 
 import java_.game.tile.ActionTile;
 import java_.game.tile.Effect;
+import java_.game.tile.PlayerEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,21 +47,22 @@ public class Player {
         drawnActionTiles.add(actionTile);
     }
 
-    public int getUsername() {
-        return getUsername();
+    public String getUsername() {
+        return username;
     }
 
     public String getName() {
-        return getName();
+        return name;
     }
 
     public int getNumberOfWins() {
-        return getNumberOfWins();
+        return numberOfWins;
     }
 
     public int getNumberOfLoses() {
-        return getNumberOfLoses();
+        return numberOfLoses;
     }
+
     public boolean isBot() {
         return isBot;
     }
@@ -69,6 +71,9 @@ public class Player {
         return previousAppliedEffect;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { }
+
+    public List<ActionTile> getDrawnActionTiles() {
+        return drawnActionTiles;
     }
 }

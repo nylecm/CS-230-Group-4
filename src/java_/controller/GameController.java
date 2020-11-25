@@ -1,5 +1,6 @@
 package java_.controller;
 
+import java_.game.controller.GameService;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
@@ -57,9 +58,8 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        FloorTile[][] gameBoard = loadGameboard().board;
+        GameService gameService = GameService.getInstance();
         gameBoardView = new Dimension2D(8, 8); //TODO: Change for rectangle
-        displayGameBoardFlat(gameBoard);
 
         floorTile.setOnDragDetected(event -> {
             Dragboard dragboard = floorTile.startDragAndDrop(TransferMode.MOVE);
@@ -71,7 +71,7 @@ public class GameController implements Initializable {
     }
 
     //TEST ONLY
-    private void displayGameBoardFlat(FloorTile[][] gameBoard) {
+    private void displayGameBoardFlat() {
         for (int row = 0; row < gameBoardView.getWidth(); row++) {
             for (int col = 0; col < gameBoardView.getHeight(); col++) {
 
