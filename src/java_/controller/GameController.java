@@ -18,15 +18,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable {
@@ -36,51 +34,32 @@ public class GameController implements Initializable {
     private static final int TILE_HEIGHT = 40;
 
     @FXML
-    ScrollPane scrollPane;
+    private ScrollPane scrollPane;
 
     @FXML
-    Label positionLabel;
+    private Label positionLabel;
 
     @FXML
-    ImageView floorTile;
+    private ImageView floorTile;
 
     @FXML
-    Button slideButton;
+    private Button slideButton;
+
+    private FloorTile[][] gameBoardView;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         FloorTile[][] gameBoard = loadGameboard().board;
-        FloorTile[][] gameBoardView = new FloorTile[gameBoard.length + 1][gameBoard.length + 1];
+        gameBoardView = new FloorTile[gameBoard.length + 1][gameBoard.length + 1];
         displayGameBoardFlat(gameBoard);
 
-        scrollPane.getContent().setOnMouseClicked(event -> {
-
+        floorTile.setOnDragDetected(event -> {
+            Dragboard dragboard = floorTile.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(floorTile.getImage());
+            dragboard.setContent(content);
         });
-    }
-
-    private void setBorders(FloorTile[][] gameBoard) {
-        Group gameBoardView = new Group();
-        Dimension2D dimension = new Dimension2D(8, 8);
-        for (int row = 0; row < dimension.getWidth(); row++) {
-            for (int col = 0; col < dimension.getHeight(); col++) {
-                Image tileImage = new Image("emptyFlat.png");
-                ImageView tileDisplay = new ImageView(tileImage);
-
-                if (col == 0) {
-                    tileDisplay.setX((col - 1) * TILE_WIDTH);
-                    gameBoardView.getChildren().add(tileDisplay);
-                }
-                if (row == 0) {
-                    tileDisplay.setX((row - 1) * TILE_HEIGHT);
-                    gameBoardView.getChildren().add(tileDisplay);
-                }
-            }
-        }
-        StackPane gameBoardViewHolder = new StackPane(gameBoardView);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setContent(gameBoardViewHolder);
     }
 
     //TEST ONLY
@@ -119,12 +98,52 @@ public class GameController implements Initializable {
                     highlight.setBrightness(0);
                     tileDisplay.setEffect(highlight);
                 });
+
+                tileDisplay.setOnDragEntered(event -> {
+                    highlight.setBrightness(-0.3);
+                    tileDisplay.setEffect(highlight);
+                });
+
+                tileDisplay.setOnDragExited(event -> {
+                    highlight.setBrightness(0);
+                    tileDisplay.setEffect(highlight);
+                });
+
+//                tileDisplay.setOnDragDropped(event -> {
+//                    System.out.println(tileDisplay.getX() + ", " + tileDisplay.getY());
+//                    tileDisplay.setImage(event.getDragboard().getImage());
+//                });
+
+                //Instead of Drag and Drop for now
+                tileDisplay.setOnMouseClicked(event -> {
+                    int tileCol = (int) (tileDisplay.getX() / TILE_WIDTH);
+                    int tileRow = (int) (tileDisplay.getY() / TILE_HEIGHT);
+                    if (tileRow == 0 || tileRow == dimension.getHeight() - 1) {
+                        slideCol(tileCol, tileRow);
+                    }
+                });
             }
         }
         StackPane gameBoardViewHolder = new StackPane(gameBoardView);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setContent(gameBoardViewHolder);
+    }
+
+    private void slide(int col, int row) {
+
+    }
+
+    private void slideRow(int row) {
+
+    }
+
+    private void slideCol(int col, int row) {
+        if (row < col) {
+
+        } else {
+
+        }
     }
 
     private void displayGameBoardIsometric(FloorTile[][] gameBoard) {
