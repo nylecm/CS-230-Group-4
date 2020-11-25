@@ -350,7 +350,8 @@ public class GameService {
         AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false), 0);
+        System.out.println();
 
         for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
