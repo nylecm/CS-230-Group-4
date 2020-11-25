@@ -112,34 +112,54 @@ public class GameController implements Initializable {
                     highlight.setBrightness(0.7);
                     tileDisplay.setEffect(highlight);
                     event.consume();
+                    double x = tileDisplay.getX();
+                    double y = tileDisplay.getY();
+                    double tileCol = x / TILE_WIDTH;
+                    double tileRow = y / TILE_HEIGHT;
+                    if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1 || tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
+                        tileDisplay.setImage(new Image("activeFlat.png"));
+                    }
                 });
 
                 tileDisplay.setOnDragExited(event -> {
                     highlight.setBrightness(0);
                     tileDisplay.setEffect(highlight);
                     event.consume();
+                    double x = tileDisplay.getX();
+                    double y = tileDisplay.getY();
+                    double tileCol = x / TILE_WIDTH;
+                    double tileRow = y / TILE_HEIGHT;
+                    if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1 || tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
+                        tileDisplay.setImage(new Image("emptyFlat.png"));
+                    }
                 });
 
                 tileDisplay.setOnDragOver(event -> {
                     event.acceptTransferModes(TransferMode.ANY);
                 });
 
+                //TODO: Duplicity
                 tileDisplay.setOnDragDropped(event -> {
-                    System.out.println(tileDisplay.getX() + ", " + tileDisplay.getY());
                     tileDisplay.setImage(event.getDragboard().getImage());
                     int tileCol = (int) (tileDisplay.getX() / TILE_WIDTH);
                     int tileRow = (int) (tileDisplay.getY() / TILE_HEIGHT);
                     if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
+                        ImageView emptyTile = new ImageView(new Image("fullFlat.png"));
+                        emptyTile.setFitWidth(TILE_WIDTH);
+                        emptyTile.setFitHeight(TILE_HEIGHT);
+                        emptyTile.setX((tileCol) * TILE_WIDTH);
+                        emptyTile.setY((tileRow) * TILE_HEIGHT);
+                        tiles.getChildren().add(emptyTile);
                         slideCol(tileCol, tileRow);
                     } else if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1) {
+                        ImageView emptyTile = new ImageView(new Image("fullFlat.png"));
+                        emptyTile.setFitWidth(TILE_WIDTH);
+                        emptyTile.setFitHeight(TILE_HEIGHT);
+                        emptyTile.setX((tileCol) * TILE_WIDTH);
+                        emptyTile.setY((tileRow) * TILE_HEIGHT);
+                        tiles.getChildren().add(emptyTile);
                         slideRow(tileRow, tileCol);
                     }
-                    ImageView emptyTile = new ImageView(new Image("emptyFlat.png"));
-                    emptyTile.setFitWidth(TILE_WIDTH);
-                    emptyTile.setFitHeight(TILE_HEIGHT);
-                    emptyTile.setX((tileCol) * TILE_WIDTH);
-                    emptyTile.setY((tileRow) * TILE_HEIGHT);
-                    tiles.getChildren().add(emptyTile);
                 });
             }
         }
@@ -149,35 +169,73 @@ public class GameController implements Initializable {
         scrollPane.setContent(gameBoardViewHolder);
     }
 
-    private void slideCol(int col, int row) {
+    //TODO: Sliding using just one function
+    private void slide(int col, int row) {
         List<Node> tiles = new ArrayList<>();
-        double startValue;
-        double endValue;
+        double startValue = 0;
+        double endValue = 0;
+        DoubleProperty property = null;
         for (Node tile : this.tiles.getChildren()) {
             double x = ((ImageView) tile).getX();
             double y = ((ImageView) tile).getY();
             double tileCol = x / TILE_WIDTH;
             double tileRow = y / TILE_HEIGHT;
-            if (tileCol == col) {
-                tiles.add(tile);
+            if (col == 0) { //Left to right
+                if (tileRow == row) {
+                    tiles.add(tile);
+                }
+            } else if (col == gameBoardView.getWidth() - 1) { //Right to left
+                if (tileRow == row) {
+                    tiles.add(tile);
+                }
+            } else if (row == 0) { //Down
+                if (tileCol == col) {
+                    tiles.add(tile);
+                }
+            } else if (row == gameBoardView.getHeight() -1) { //Up
+                if (tileCol == col) {
+                    tiles.add(tile);
+                }
             }
-
-        }
-        if (row < col) {
-            tiles.remove(tiles.size() - 1);
-        } else {
-            tiles.remove(0);
         }
         Timeline t = new Timeline();
         t.setCycleCount(1);
+        for (Node tile : tiles) {
+            t.getKeyFrames().addAll(
+                    new KeyFrame(new Duration(0), new KeyValue(property, startValue)),
+                    new KeyFrame(new Duration(1000), new KeyValue(property, endValue))
+            );
+        }
+        t.play();
+    }
+
+    private void slideCol(int col, int row) {
+        List<Node> tiles = new ArrayList<>();
+        double startValue;
+        double endValue;
+        boolean down = false;
+        for (Node tile : this.tiles.getChildren()) {
+            double x = ((ImageView) tile).getX();
+            double y = ((ImageView) tile).getY();
+            double tileCol = x / TILE_WIDTH;
+            double tileRow = y / TILE_HEIGHT;
+            if (tileCol == col && tileRow != 0 && tileRow != gameBoardView.getHeight() - 1) {
+                tiles.add(tile);
+            }
+        }
+        Timeline t = new Timeline();
+        t.setCycleCount(1);
+        Node lastTile = null;
         for (Node tile : tiles) {
             DoubleProperty property = tile.layoutYProperty();
             if (row < col) {
                 startValue = row * TILE_HEIGHT;
                 endValue = startValue + TILE_HEIGHT;
+                lastTile = tiles.get(tiles.size() - 1);
             } else {
                 startValue = row / TILE_HEIGHT;
                 endValue = startValue - TILE_HEIGHT;
+                lastTile = tiles.get(0);
             }
             t.getKeyFrames().addAll(
                     new KeyFrame(new Duration(0), new KeyValue(property, startValue)),
@@ -185,6 +243,10 @@ public class GameController implements Initializable {
             );
         }
         t.play();
+        Node yeetedOutTile = lastTile;
+        t.setOnFinished(event -> {
+            this.tiles.getChildren().remove(yeetedOutTile);
+        });
     }
 
     private void slideRow(int row, int col) {
@@ -203,14 +265,17 @@ public class GameController implements Initializable {
         }
         Timeline t = new Timeline();
         t.setCycleCount(1);
+        Node lastTile = null;
         for (Node tile : tiles) {
             DoubleProperty property = tile.layoutXProperty();
             if (col < row) {
                 startValue = col * TILE_WIDTH;
                 endValue = startValue + TILE_WIDTH;
+                lastTile = tiles.get(tiles.size() - 1);
             } else {
                 startValue = col / TILE_WIDTH;
                 endValue = startValue - TILE_WIDTH;
+                lastTile = tiles.get(0);
             }
             t.getKeyFrames().addAll(
                     new KeyFrame(new Duration(0), new KeyValue(property, startValue)),
@@ -218,6 +283,10 @@ public class GameController implements Initializable {
             );
         }
         t.play();
+        Node yeetedOutTile = lastTile;
+        t.setOnFinished(event -> {
+            this.tiles.getChildren().remove(yeetedOutTile);
+        });
     }
 
     private void displayGameBoardIsometric(FloorTile[][] gameBoard) {
