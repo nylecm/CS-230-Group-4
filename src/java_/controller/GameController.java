@@ -42,16 +42,13 @@ public class GameController implements Initializable {
     @FXML
     private ImageView floorTile;
 
-    @FXML
-    private Button slideButton;
-
-    private FloorTile[][] gameBoardView;
+    private Dimension2D gameBoardView;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         FloorTile[][] gameBoard = loadGameboard().board;
-        gameBoardView = new FloorTile[gameBoard.length + 1][gameBoard.length + 1];
+        gameBoardView = new Dimension2D(gameBoard.length + 2, gameBoard.length + 2); //TODO: Change for rectangle
         displayGameBoardFlat(gameBoard);
 
         floorTile.setOnDragDetected(event -> {
@@ -64,14 +61,13 @@ public class GameController implements Initializable {
 
     //TEST ONLY
     private void displayGameBoardFlat(FloorTile[][] gameBoard) {
-        Group gameBoardView = new Group();
-        Dimension2D dimension = new Dimension2D(8, 8); //Needs to be changed if a gameboard can be a rectangle
-        for (int row = 0; row < dimension.getWidth(); row++) {
-            for (int col = 0; col < dimension.getHeight(); col++) {
+        Group tiles = new Group();
+        for (int row = 0; row < gameBoardView.getWidth(); row++) {
+            for (int col = 0; col < gameBoardView.getHeight(); col++) {
 
                 Image tileImage = new Image("fullFlat.png");
-                if (row == 0 || col == 0 || row == dimension.getWidth() - 1 || col == dimension.getHeight() - 1) {
-                    if ((row == 0 && col == 0) || (row == 0 && col == dimension.getHeight() - 1) || (row == dimension.getWidth() - 1 && col == 0) || (row == dimension.getWidth() - 1 && col == dimension.getHeight() - 1) ) {
+                if (row == 0 || col == 0 || row == gameBoardView.getWidth() - 1 || col == gameBoardView.getHeight() - 1) {
+                    if ((row == 0 && col == 0) || (row == 0 && col == gameBoardView.getHeight() - 1) || (row == gameBoardView.getWidth() - 1 && col == 0) || (row == gameBoardView.getWidth() - 1 && col == gameBoardView.getHeight() - 1) ) {
                         tileImage = null;
                     } else {
                         tileImage = new Image("emptyFlat.png");
@@ -83,7 +79,7 @@ public class GameController implements Initializable {
                 tileDisplay.setFitHeight(TILE_HEIGHT);
                 tileDisplay.setX((col) * TILE_WIDTH);
                 tileDisplay.setY((row) * TILE_HEIGHT);
-                gameBoardView.getChildren().add(tileDisplay);
+                tiles.getChildren().add(tileDisplay);
 
                 String tilePosition = "Tile position: Col = " + col + ", Row = " + row;
                 ColorAdjust highlight = new ColorAdjust();
@@ -118,13 +114,13 @@ public class GameController implements Initializable {
                 tileDisplay.setOnMouseClicked(event -> {
                     int tileCol = (int) (tileDisplay.getX() / TILE_WIDTH);
                     int tileRow = (int) (tileDisplay.getY() / TILE_HEIGHT);
-                    if (tileRow == 0 || tileRow == dimension.getHeight() - 1) {
+                    if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
                         slideCol(tileCol, tileRow);
                     }
                 });
             }
         }
-        StackPane gameBoardViewHolder = new StackPane(gameBoardView);
+        StackPane gameBoardViewHolder = new StackPane(tiles);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setContent(gameBoardViewHolder);
