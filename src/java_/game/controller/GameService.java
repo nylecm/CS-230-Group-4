@@ -201,8 +201,8 @@ public class GameService {
 
     public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
-            ps.playerTurn(ps.getPlayer(turnCount % ps.getPlayers().length)); // todo improve player service
-            System.out.println("Have fun!");
+            Player currentPlayer = ps.getPlayer(turnCount % ps.getPlayers().length);
+            ps.playerTurn(currentPlayer); // todo improve player service
             gb.refreshEffects(); // todo check
             turnCount++;
         }
