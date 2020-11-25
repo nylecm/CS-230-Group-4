@@ -20,18 +20,13 @@
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="validMoveLabel" layoutX="353.0" layoutY="21.0" text="Valid move:" textFill="WHITE">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
          </children>
          <padding>
             <Insets right="15.0" />
          </padding></AnchorPane>
    </top>
    <center>
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" pannable="true" vbarPolicy="NEVER" BorderPane.alignment="CENTER" />
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" pannable="true" prefHeight="417.0" prefWidth="75.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
@@ -39,7 +34,7 @@
             <Button fx:id="slideButton" mnemonicParsing="false" onAction="#onSlideButtonClicked" text="Slide" />
             <ImageView fx:id="floorTile" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../t_shaped.png" />
+                  <Image url="@../../fullFlat.png" />
                </image>
             </ImageView>
          </children>
