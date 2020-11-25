@@ -128,7 +128,9 @@ public class GameController implements Initializable {
                     int tileCol = (int) (tileDisplay.getX() / TILE_WIDTH);
                     int tileRow = (int) (tileDisplay.getY() / TILE_HEIGHT);
                     if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
-                        slideCol(tileCol, tileRow);
+                        slideCol(tileRow, tileRow);
+                    } else if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1) {
+                        slideRow(tileRow, tileRow);
                     }
                 });
             }
@@ -146,34 +148,33 @@ public class GameController implements Initializable {
         for (Node tile : this.tiles.getChildren()) {
             double x = ((ImageView) tile).getX();
             double y = ((ImageView) tile).getY();
-            if (y / TILE_HEIGHT == 0 || y / TILE_HEIGHT == gameBoardView.getHeight() - 1) {
-                continue;
-            }
-            if (x / TILE_HEIGHT == col) {
+            double tileCol = x / TILE_WIDTH;
+            double tileRow = y / TILE_HEIGHT;
+            if (tileCol == col && tileRow != 0 && tileRow != gameBoardView.getHeight() - 1) {
                 tiles.add(tile);
             }
 
         }
+        Timeline t = new Timeline();
+        t.setCycleCount(1);
         for (Node tile : tiles) {
-            Timeline t = new Timeline();
-            t.setCycleCount(1);
             DoubleProperty property = tile.layoutYProperty();
             if (row < col) {
-                startValue = (((ImageView) tile).getY()) / TILE_HEIGHT;
+                startValue = row * TILE_HEIGHT;
                 endValue = startValue + TILE_HEIGHT;
             } else {
-                startValue = (((ImageView) tile).getY()) / TILE_HEIGHT;
+                startValue = row / TILE_HEIGHT;
                 endValue = startValue - TILE_HEIGHT;
             }
             t.getKeyFrames().addAll(
                     new KeyFrame(new Duration(0), new KeyValue(property, startValue)),
                     new KeyFrame(new Duration(1000), new KeyValue(property, endValue))
             );
-            t.play();
         }
+        t.play();
     }
 
-    private void slideRow(int row) {
+    private void slideRow(int row, int col) {
 
     }
 
