@@ -2,7 +2,12 @@ package java_.controller;
 
 import java_.game.tile.*;
 import java_.util.Position;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,10 +26,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable {
@@ -33,6 +40,8 @@ public class GameController implements Initializable {
 
     private static final int TILE_HEIGHT = 40;
 
+    private static final int BORDER_OFFSET = 2;
+
     @FXML
     private ScrollPane scrollPane;
 
@@ -40,15 +49,19 @@ public class GameController implements Initializable {
     private Label positionLabel;
 
     @FXML
+    private Button slideButton;
+
+    @FXML
     private ImageView floorTile;
 
     private Dimension2D gameBoardView;
 
+    private Group tiles = new Group();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         FloorTile[][] gameBoard = loadGameboard().board;
-        gameBoardView = new Dimension2D(gameBoard.length + 2, gameBoard.length + 2); //TODO: Change for rectangle
+        gameBoardView = new Dimension2D(8, 8); //TODO: Change for rectangle
         displayGameBoardFlat(gameBoard);
 
         floorTile.setOnDragDetected(event -> {
@@ -61,7 +74,6 @@ public class GameController implements Initializable {
 
     //TEST ONLY
     private void displayGameBoardFlat(FloorTile[][] gameBoard) {
-        Group tiles = new Group();
         for (int row = 0; row < gameBoardView.getWidth(); row++) {
             for (int col = 0; col < gameBoardView.getHeight(); col++) {
 
@@ -79,6 +91,7 @@ public class GameController implements Initializable {
                 tileDisplay.setFitHeight(TILE_HEIGHT);
                 tileDisplay.setX((col) * TILE_WIDTH);
                 tileDisplay.setY((row) * TILE_HEIGHT);
+
                 tiles.getChildren().add(tileDisplay);
 
                 String tilePosition = "Tile position: Col = " + col + ", Row = " + row;
@@ -96,7 +109,7 @@ public class GameController implements Initializable {
                 });
 
                 tileDisplay.setOnDragEntered(event -> {
-                    highlight.setBrightness(-0.3);
+                    highlight.setBrightness(0.7);
                     tileDisplay.setEffect(highlight);
                 });
 
@@ -126,20 +139,42 @@ public class GameController implements Initializable {
         scrollPane.setContent(gameBoardViewHolder);
     }
 
-    private void slide(int col, int row) {
+    private void slideCol(int col, int row) {
+        List<Node> tiles = new ArrayList<>();
+        double startValue;
+        double endValue;
+        for (Node tile : this.tiles.getChildren()) {
+            double x = ((ImageView) tile).getX();
+            double y = ((ImageView) tile).getY();
+            if (y / TILE_HEIGHT == 0 || y / TILE_HEIGHT == gameBoardView.getHeight() - 1) {
+                continue;
+            }
+            if (x / TILE_HEIGHT == col) {
+                tiles.add(tile);
+            }
 
+        }
+        for (Node tile : tiles) {
+            Timeline t = new Timeline();
+            t.setCycleCount(1);
+            DoubleProperty property = tile.layoutYProperty();
+            if (row < col) {
+                startValue = (((ImageView) tile).getY()) / TILE_HEIGHT;
+                endValue = startValue + TILE_HEIGHT;
+            } else {
+                startValue = (((ImageView) tile).getY()) / TILE_HEIGHT;
+                endValue = startValue - TILE_HEIGHT;
+            }
+            t.getKeyFrames().addAll(
+                    new KeyFrame(new Duration(0), new KeyValue(property, startValue)),
+                    new KeyFrame(new Duration(1000), new KeyValue(property, endValue))
+            );
+            t.play();
+        }
     }
 
     private void slideRow(int row) {
 
-    }
-
-    private void slideCol(int col, int row) {
-        if (row < col) {
-
-        } else {
-
-        }
     }
 
     private void displayGameBoardIsometric(FloorTile[][] gameBoard) {
@@ -192,7 +227,26 @@ public class GameController implements Initializable {
     }
 
     @FXML
-    private void onSlideButtonClicked(ActionEvent e) {
+    private void onSlideButtonClicked() {
+        for (Node tile : tiles.getChildren()) {
+            double x = ((ImageView) tile).getX() / TILE_HEIGHT;
+            double y = ((ImageView) tile).getY() / TILE_WIDTH;
+            if (y == 2) {
+                Timeline t = new Timeline();
+                t.setCycleCount(1);
+
+                DoubleProperty start = tile.layoutXProperty();
+                int end = (int) (y + TILE_WIDTH);
+
+                t.getKeyFrames().addAll(
+                        new KeyFrame(new Duration(0), new KeyValue(start, y)),
+                        new KeyFrame(new Duration(1000), new KeyValue(start,  end))
+                );
+
+                t.play();
+
+            }
+        }
 
     }
 
