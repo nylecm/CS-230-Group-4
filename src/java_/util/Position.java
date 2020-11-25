@@ -31,6 +31,14 @@ public class Position {
     }
 
     @Override
+    public String toString() {
+        return "Position{" +
+                "rowNum=" + rowNum +
+                ", colNum=" + colNum +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

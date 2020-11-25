@@ -3,6 +3,7 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
+import javafx.geometry.Pos;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,14 +77,21 @@ public class GameBoard {
         }
     }
 
-    public void insert(int colNum, int rowNum, FloorTile tile, int rotation) { //fixme check if row is fixed...
+    public void insert(int colNum, int rowNum, FloorTile tile, int rotation) {
         FloorTile pushedOffTile = null; // Tile being pushed off
 
         if (colNum == -1 && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Left to right horizontal shift.
             pushedOffTile = board[rowNum][nCols - 1];
 
+            //Shift Player Piece:
+            for (int j = 0; j < playerPiecePositions.length; j++) {
+                if (playerPiecePositions[j].getRowNum() == rowNum) {
+                    playerPiecePositions[j] = (playerPiecePositions[j].getColNum() == nCols - 1 ? new Position(rowNum, 0) : new Position(rowNum, playerPiecePositions[j].getColNum() + 1));
+                } //todo handle fire
+            }
             for (int i = nCols - 1; i != 0; i--) { //
                 board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
+
                 if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
                     activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
 
@@ -96,6 +104,12 @@ public class GameBoard {
         } else if (colNum == nCols && !isRowFixed(rowNum) && !isColumnFixed(colNum)) { // Right to left horizontal shift.
             pushedOffTile = board[rowNum][0];
 
+            //Shift Player Piece:
+            for (int j = 0; j < playerPiecePositions.length; j++) {
+                if (playerPiecePositions[j].getRowNum() == rowNum) {
+                    playerPiecePositions[j] = (playerPiecePositions[j].getColNum() == 0 ? new Position(rowNum, nCols - 1) : new Position(rowNum, playerPiecePositions[j].getColNum() - 1));
+                } //todo handle fire
+            }
             for (int i = 0; i < nCols - 1; i++) {
                 board[rowNum][i] = board[rowNum][i + 1];
                 if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
@@ -110,6 +124,12 @@ public class GameBoard {
         } else if (rowNum == -1 && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Top to bottom vertical shift.
             pushedOffTile = board[nRows - 1][colNum];
 
+            //Shift Player Piece:
+            for (int j = 0; j < playerPiecePositions.length; j++) {
+                if (playerPiecePositions[j].getColNum() == colNum) {
+                    playerPiecePositions[j] = (playerPiecePositions[j].getRowNum() == nRows - 1 ? new Position(0, colNum) : new Position(playerPiecePositions[j].getRowNum() + 1, colNum));
+                } //todo handle fire
+            }
             for (int i = nRows - 1; i != 0; i--) {
                 board[i][colNum] = board[i - 1][colNum];
                 if (activeEffects.get(new Position(i - 1, colNum)) != null) {
@@ -124,6 +144,12 @@ public class GameBoard {
         } else if (rowNum == nRows && !isColumnFixed(colNum) && !isRowFixed(rowNum)) { // Bottom to top vertical shift.
             pushedOffTile = board[0][colNum];
 
+            //Shift Player Piece:
+            for (int j = 0; j < playerPiecePositions.length; j++) {
+                if (playerPiecePositions[j].getColNum() == colNum) {
+                    playerPiecePositions[j] = (playerPiecePositions[j].getRowNum() == 0 ? new Position(nRows - 1, colNum) : new Position(playerPiecePositions[j].getRowNum() - 1, colNum));
+                } //todo handle fire
+            }
             for (int i = 0; i < nRows - 1; i++) {
                 board[i][colNum] = board[i + 1][colNum];
                 if (activeEffects.get(new Position(i + 1, colNum)) != null) {
@@ -245,7 +271,7 @@ public class GameBoard {
         return name;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //PlayerPiece[] playerPieces = new PlayerPiece[0];
         Position[] playerPiecePositions = new Position[0];
         Tile[] newTiles = new Tile[0];
@@ -306,14 +332,14 @@ public class GameBoard {
         System.out.println(test);
 
 
-        /*
+        *//*
          FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
          FloorTile insert2 = new FloorTile(TileType.CORNER, false, false);
          FloorTile insert3 = new FloorTile(TileType.T_SHAPED, false, false);
          FloorTile insert4 = new FloorTile(TileType.CORNER, false, false);
-         */
+         *//*
 
-        /*
+     *//*
          firstgame.insert(-1, 0, insert1);
          System.out.println(firstgame);
          firstgame.insert(4, 1, insert2);
@@ -322,6 +348,6 @@ public class GameBoard {
          System.out.println(firstgame);
          firstgame.insert(0, 4, insert4);
          System.out.println(firstgame);
-         */
-    }
+         *//*
+    }*/
 }
