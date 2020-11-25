@@ -105,10 +105,26 @@ public class GameBoard {
     }
 
     private void shiftPlayerPiecesLeftToRight(int rowNum) {
-        for (int j = 0; j < playerPiecePositions.length; j++) {
-            if (playerPiecePositions[j].getRowNum() == rowNum) {
-                playerPiecePositions[j] = (playerPiecePositions[j].getColNum() == nCols - 1 ? new Position(rowNum, 0) : new Position(rowNum, playerPiecePositions[j].getColNum() + 1));
+        for (int j = 0; j < playerPiecePositions.length; j++) { //todo rename to i
+            Position pos = playerPiecePositions[j];
+            if (pos.getRowNum() == rowNum) {
+                playerPiecePositions[j] = nextPositionLeftToRight(new Position(rowNum, pos.getColNum()));
             } //todo handle fire
+        }
+    }
+
+    private Position nextPositionLeftToRight(Position pos) {
+        return (pos.getColNum() == nCols - 1
+                ? switchPosition(new Position(pos.getRowNum(), 0))
+                : switchPosition(new Position(pos.getRowNum(), pos.getColNum() + 1)));
+    }
+
+    private Position switchPosition(Position pos) {
+        System.out.println(getEffectAt(pos));
+        if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
+            return switchPosition(nextPositionLeftToRight(pos));
+        } else {
+            return pos;
         }
     }
 
@@ -267,11 +283,11 @@ public class GameBoard {
         }
     }
 
-    public AreaEffect getEffectAt(int row, int col) {
-        return activeEffects.get(new Position(row, col));
+    public AreaEffect getEffectAt(Position pos) {
+        return activeEffects.get(pos);
     }
 
-    public void refreshEffects() { //todo test...
+    public void refreshEffects() { //todo test... .ConcurrentModificationException
         for (Position positionWithActiveEffect : positionsWithActiveEffects) {
             if (activeEffects.get(positionWithActiveEffect).getRemainingDuration() == 1) {
                 activeEffects.put(positionWithActiveEffect, null);

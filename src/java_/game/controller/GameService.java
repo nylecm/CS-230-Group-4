@@ -269,14 +269,14 @@ public class GameService {
                 out.print(gb.getTileAt(i, j).isFixed());
                 out.print(DELIMITER);
 
-                if (gb.getEffectAt(i, j) != null) {
+                if (gb.getEffectAt(new Position(i, j)) != null) {
                     out.print(true);
                     out.print(DELIMITER);
-                    out.print(gb.getEffectAt(i, j).getEffectType());
+                    out.print(gb.getEffectAt(new Position(i, j)).getEffectType());
                     out.print(DELIMITER);
-                    out.print(gb.getEffectAt(i, j).getRemainingDuration());
+                    out.print(gb.getEffectAt(new Position(i, j)).getRemainingDuration());
                     out.print(DELIMITER);
-                    out.print(gb.getEffectAt(i, j).getRadius());
+                    out.print(gb.getEffectAt(new Position(i, j)).getRadius());
                     out.print(DELIMITER);
                 } else {
                     out.print(false);
@@ -337,7 +337,7 @@ public class GameService {
         gs.loadNewGame(
                 new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gb);
-        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false), 0);
+        //gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         System.out.println(gs.gb);
 
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
@@ -350,7 +350,7 @@ public class GameService {
         AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        //gs.gb.insert(0, -1, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
 
         for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
