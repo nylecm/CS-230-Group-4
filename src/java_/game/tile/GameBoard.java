@@ -30,6 +30,49 @@ public class GameBoard {
         return activeEffects;
     }
 
+    public FloorTile getTileAt(int row, int col) {
+        return board[row][col];
+    }
+
+    public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
+        this.playerPiecePositions = playerPiecePositions;
+        //this.fixedTiles = fixedTiles;
+        //this.fixedTilePositions = fixedTilePositions;
+        //this.tiles = tiles;
+        this.name = name;
+        this.nRows = nRows;
+        this.nCols = nCols;
+        this.board = new FloorTile[nRows][nCols];
+
+        insertFixedTiles(fixedTiles, fixedTilePositions);
+        fillGaps(tiles);
+    }
+
+    private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
+        for (int i = 0; i < fixedTiles.length; i++) {
+            int rowNum = fixedTilePositions[i].getRowNum();
+            int colNum = fixedTilePositions[i].getColNum();
+
+            if (board[rowNum][colNum] == null) {
+                board[rowNum][colNum] = fixedTiles[i];
+            }
+        }
+    }
+
+    private void fillGaps(FloorTile[] tiles) {
+        int nextFloorTile = 0;
+
+        for (int i = 0; i < nRows; i++) {
+            for (int j = 0; j < nCols; j++) {
+
+                if (board[i][j] == null) {
+                    board[i][j] = tiles[nextFloorTile];
+                    nextFloorTile += 1;
+                }
+            }
+        }
+    }
+
     public void movePlayerPieceUp(int playerNumber) throws IllegalArgumentException {
         Position curPos = playerPiecePositions[playerNumber];
         assert (board[curPos.getRowNum()][curPos.getColNum()].getPaths() & 8) == 8;
@@ -127,49 +170,6 @@ public class GameBoard {
             playerPiecePositions[playerNumber] = newPos;
         } else {
             throw new IllegalStateException("Player cannot move left, as their is no path to the tile on the left.");
-        }
-    }
-
-    public FloorTile getTileAt(int row, int col) {
-        return board[row][col];
-    }
-
-    public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
-        this.playerPiecePositions = playerPiecePositions;
-        //this.fixedTiles = fixedTiles;
-        //this.fixedTilePositions = fixedTilePositions;
-        //this.tiles = tiles;
-        this.name = name;
-        this.nRows = nRows;
-        this.nCols = nCols;
-        this.board = new FloorTile[nRows][nCols];
-
-        insertFixedTiles(fixedTiles, fixedTilePositions);
-        fillGaps(tiles);
-    }
-
-    private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
-        for (int i = 0; i < fixedTiles.length; i++) {
-            int rowNum = fixedTilePositions[i].getRowNum();
-            int colNum = fixedTilePositions[i].getColNum();
-
-            if (board[rowNum][colNum] == null) {
-                board[rowNum][colNum] = fixedTiles[i];
-            }
-        }
-    }
-
-    private void fillGaps(FloorTile[] tiles) {
-        int nextFloorTile = 0;
-
-        for (int i = 0; i < nRows; i++) {
-            for (int j = 0; j < nCols; j++) {
-
-                if (board[i][j] == null) {
-                    board[i][j] = tiles[nextFloorTile];
-                    nextFloorTile += 1;
-                }
-            }
         }
     }
 
