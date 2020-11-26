@@ -13,7 +13,7 @@ public class FloorTile extends Tile {
             EnumSet.of(TileType.STRAIGHT, TileType.CORNER, TileType.T_SHAPED, TileType.GOAL);
 
     private final static int[] GOAL_TILE_ROTATIONS = {15}; // NESW
-    private final static int[] STRAIGHT_TILE_PATHS = {9, 5}; // NS, WE
+    private final static int[] STRAIGHT_TILE_PATHS = {10, 5}; // NS, WE
     // rotation = 0  1  2  3
     private final static int[] CORNER_TILE_PATHS = {12, 6, 3, 9}; // NE, SE, SW, NW
     private final static int[] T_SHAPED_TILE_PATHS = {14, 7, 11, 13}; // NES, ESW, SWN, WNE

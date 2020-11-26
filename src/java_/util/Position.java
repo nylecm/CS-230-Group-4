@@ -30,6 +30,22 @@ public class Position {
         this.colNum = colNum;
     }
 
+    public void incrementRowNum() {
+        rowNum++;
+    }
+
+    public void incrementColNum() {
+        colNum++;
+    }
+
+    public void decrementRowNum() {
+        rowNum--;
+    }
+
+    public void decrementColNum() {
+        colNum--;
+    }
+
     @Override
     public String toString() {
         return "Position{" +
