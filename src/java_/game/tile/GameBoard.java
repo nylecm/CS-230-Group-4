@@ -35,6 +35,7 @@ public class GameBoard {
 
     public void movePlayerPieceUp(int playerNumber) throws IllegalArgumentException {
         Position curPos = playerPiecePositions[playerNumber];
+        assert (board[curPos.getRowNum()][curPos.getColNum()].getPaths() & 8) == 8;
         Position newPos = new Position(curPos.getRowNum() - 1, curPos.getColNum());
 
         if (curPos.getRowNum() == 0) { // Check if pos above exists:
@@ -43,39 +44,10 @@ public class GameBoard {
             throw new IllegalStateException("Player cannot move up, as tile above is on fire.");
         }
         // Check if pos above has common path:
-
         FloorTile tileAbove = board[newPos.getRowNum()][newPos.getColNum()];
         assert tileAbove != null;
 
         int tileAbovePath = tileAbove.getPaths();
-        int bitmask = 8;
-
-        if ((tileAbovePath & bitmask) == 8) {
-            playerPiecePositions[playerNumber] = newPos;
-        } else {
-            throw new IllegalStateException("Player cannot move up, as their is no path to the tile above");
-        }
-    }
-
-    public void movePlayerPieceRight(int playerNumber) {
-
-    }
-
-    public void movePlayerPieceDown(int playerNumber) {
-        Position curPos = playerPiecePositions[playerNumber];
-        Position newPos = new Position(curPos.getRowNum() + 1, curPos.getColNum());
-
-        if (curPos.getRowNum() == nRows - 1) { // Check if pos above exists:
-            throw new IllegalStateException("Player cannot move down, from the bottom row!");
-        } else if (positionsWithActiveEffects.contains(newPos)) { // Check if pos above is on fire:
-            throw new IllegalStateException("Player cannot move down, as tile below is on fire.");
-        }
-        // Check if pos above has common path:
-
-        FloorTile tileBelow = board[newPos.getRowNum()][newPos.getColNum()];
-        assert tileBelow != null;
-
-        int tileAbovePath = tileBelow.getPaths();
         int bitmask = 2;
 
         if ((tileAbovePath & bitmask) == 2) {
@@ -85,8 +57,76 @@ public class GameBoard {
         }
     }
 
-    public void movePlayerPieceLeft(int playerNumber) {
+    public void movePlayerPieceRight(int playerNumber) {
+        Position curPos = playerPiecePositions[playerNumber];
+        assert (board[curPos.getRowNum()][curPos.getColNum()].getPaths() & 4) == 4;
+        Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() + 1);
 
+        if (curPos.getRowNum() == nCols - 1) { // Check if pos to the right exists:
+            throw new IllegalStateException("Player cannot move right, from the right-most row!");
+        } else if (positionsWithActiveEffects.contains(newPos)) { // Check if pos to the right is on fire:
+            throw new IllegalStateException("Player cannot move right, as the tile to the right is on fire.");
+        }
+        // Check if pos to the right has common path:
+        FloorTile tileToTheRight = board[newPos.getRowNum()][newPos.getColNum()];
+        assert tileToTheRight != null;
+
+        int tileToTheRightPath = tileToTheRight.getPaths();
+        int bitmask = 1;
+
+        if ((tileToTheRightPath & bitmask) == 1) {
+            playerPiecePositions[playerNumber] = newPos;
+        } else {
+            throw new IllegalStateException("Player cannot move right, as their is no path to the tile on the right.");
+        }
+    }
+
+    public void movePlayerPieceDown(int playerNumber) {
+        Position curPos = playerPiecePositions[playerNumber];
+        assert (board[curPos.getRowNum()][curPos.getColNum()].getPaths() & 2) == 2;
+        Position newPos = new Position(curPos.getRowNum() + 1, curPos.getColNum());
+
+        if (curPos.getRowNum() == nRows - 1) { // Check if pos below exists:
+            throw new IllegalStateException("Player cannot move down, from the bottom row!");
+        } else if (positionsWithActiveEffects.contains(newPos)) { // Check if pos below is on fire:
+            throw new IllegalStateException("Player cannot move down, as tile below is on fire.");
+        }
+        // Check if pos below has common path:
+        FloorTile tileBelow = board[newPos.getRowNum()][newPos.getColNum()];
+        assert tileBelow != null;
+
+        int tileBelowPath = tileBelow.getPaths();
+        int bitmask = 8;
+
+        if ((tileBelowPath & bitmask) == 8) {
+            playerPiecePositions[playerNumber] = newPos;
+        } else {
+            throw new IllegalStateException("Player cannot move down, as their is no path to the tile below");
+        }
+    }
+
+    public void movePlayerPieceLeft(int playerNumber) {
+        Position curPos = playerPiecePositions[playerNumber];
+        assert (board[curPos.getRowNum()][curPos.getColNum()].getPaths() & 1) == 1;
+        Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() - 1);
+
+        if (curPos.getRowNum() == 0) { // Check if pos to the left exists:
+            throw new IllegalStateException("Player cannot move left, from the left-most row!");
+        } else if (positionsWithActiveEffects.contains(newPos)) { // Check if pos to the left is on fire:
+            throw new IllegalStateException("Player cannot move left, as the tile to the left is on fire.");
+        }
+        // Check if pos tot the left has common path:
+        FloorTile tileToTheLeft = board[newPos.getRowNum()][newPos.getColNum()];
+        assert tileToTheLeft != null;
+
+        int tileToTheLeftPath = tileToTheLeft.getPaths();
+        int bitmask = 4;
+
+        if ((tileToTheLeftPath & bitmask) == 4) {
+            playerPiecePositions[playerNumber] = newPos;
+        } else {
+            throw new IllegalStateException("Player cannot move left, as their is no path to the tile on the left.");
+        }
     }
 
     public FloorTile getTileAt(int row, int col) {
