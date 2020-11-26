@@ -4,10 +4,7 @@ import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class GameBoard {
     private final int nRows; // height
@@ -40,7 +37,8 @@ public class GameBoard {
 
         if (curPos.getRowNum() == 0) { // Check if pos above exists:
             throw new IllegalStateException("Player cannot move up, from the top row!");
-        } else if (activeEffects.get(newPos) != null && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos above is on fire:
+        } else if (activeEffects.get(newPos) != null
+                && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos above is on fire:
             throw new IllegalStateException("Player cannot move up, as tile above is on fire.");
         }
         // Check if pos above has common path:
@@ -64,7 +62,8 @@ public class GameBoard {
 
         if (curPos.getRowNum() == nCols - 1) { // Check if pos to the right exists:
             throw new IllegalStateException("Player cannot move right, from the right-most row!");
-        } else if (activeEffects.get(newPos) != null && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos to the right is on fire:
+        } else if (activeEffects.get(newPos) != null
+                && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos to the right is on fire:
             throw new IllegalStateException("Player cannot move right, as the tile to the right is on fire.");
         }
         // Check if pos to the right has common path:
@@ -88,7 +87,8 @@ public class GameBoard {
 
         if (curPos.getRowNum() == nRows - 1) { // Check if pos below exists:
             throw new IllegalStateException("Player cannot move down, from the bottom row!");
-        } else if (activeEffects.get(newPos) != null && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos below is on fire:
+        } else if (activeEffects.get(newPos) != null
+                && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos below is on fire:
             throw new IllegalStateException("Player cannot move down, as tile below is on fire.");
         }
         // Check if pos below has common path:
@@ -112,7 +112,8 @@ public class GameBoard {
 
         if (curPos.getRowNum() == 0) { // Check if pos to the left exists:
             throw new IllegalStateException("Player cannot move left, from the left-most row!");
-        } else if (activeEffects.get(newPos) != null && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos to the left is on fire:
+        } else if (activeEffects.get(newPos) != null
+                && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos to the left is on fire:
             throw new IllegalStateException("Player cannot move left, as the tile to the left is on fire.");
         }
         // Check if pos tot the left has common path:
@@ -400,10 +401,7 @@ public class GameBoard {
         int diameter = effectRadius * 2;
         int effectWidth = 1 + diameter; // Includes centre.
 
-        Set<Position> playerPiecePos = new HashSet<>();
-        for (Position position : playerPiecePositions) {
-            playerPiecePos.add(position);
-        }
+        Set<Position> playerPiecePos = new HashSet<>(Arrays.asList(playerPiecePositions));
 
         Position effectStartPos = new Position
                 (p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
@@ -415,7 +413,7 @@ public class GameBoard {
                     assert board[i][j] != null;
                     Position affectedPos = new Position(i, j);
                     if (effect.effectType == EffectType.FIRE && playerPiecePos.contains(affectedPos)) {
-                        throw new IllegalStateException();
+                        throw new IllegalStateException("Cannot apply fire effect where there is a player.");
                     }
                     activeEffects.put(affectedPos, effect);
                 }
@@ -427,7 +425,7 @@ public class GameBoard {
         return activeEffects.get(pos);
     }
 
-    public void refreshEffects() { //todo test... .ConcurrentModificationException
+    public void refreshEffects() {
         if (activeEffects.keySet().size() != 0) {
             Iterator<Position> iterator = activeEffects.keySet().iterator();
 
