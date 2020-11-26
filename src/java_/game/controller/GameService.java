@@ -366,6 +366,12 @@ public class GameService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        gs.gb.refreshEffects();
+        gs.gb.refreshEffects();
+        gs.gb.refreshEffects();
+        gs.gb.refreshEffects();
+
     }
 
     /*private class FloorTilePositionBundle {
