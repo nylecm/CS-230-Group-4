@@ -1,6 +1,7 @@
 package java_.controller;
 
 import java_.game.controller.GameService;
+import java_.game.player.PlayerPiece;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
@@ -18,6 +19,8 @@ import javafx.geometry.Dimension2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -26,6 +29,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -52,6 +57,9 @@ public class GameController implements Initializable {
     @FXML
     private ImageView floorTile;
 
+    @FXML
+    private Button drawPlayerPieceButton;
+
     private Dimension2D gameBoardView;
 
     private Group tiles = new Group();
@@ -61,6 +69,7 @@ public class GameController implements Initializable {
         GameService gameService = GameService.getInstance();
         gameBoardView = new Dimension2D(8, 8); //TODO: Change for rectangle
 
+        displayGameBoardFlat();
         floorTile.setOnDragDetected(event -> {
             Dragboard dragboard = floorTile.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
@@ -138,27 +147,29 @@ public class GameController implements Initializable {
                     event.acceptTransferModes(TransferMode.ANY);
                 });
 
-                //TODO: Duplicity
+                //TODO: Duplicity, methods etc
                 tileDisplay.setOnDragDropped(event -> {
-                    tileDisplay.setImage(event.getDragboard().getImage());
-                    int tileCol = (int) (tileDisplay.getX() / TILE_WIDTH);
-                    int tileRow = (int) (tileDisplay.getY() / TILE_HEIGHT);
-                    if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
+                    ImageView source = (ImageView) event.getGestureSource();
+                    if (source.getId().equals(floorTile.getId())) {
+                        tileDisplay.setImage(event.getDragboard().getImage());
+                        int tileCol = (int) (tileDisplay.getX() / TILE_WIDTH);
+                        int tileRow = (int) (tileDisplay.getY() / TILE_HEIGHT);
                         ImageView emptyTile = new ImageView(new Image("fullFlat.png"));
                         emptyTile.setFitWidth(TILE_WIDTH);
                         emptyTile.setFitHeight(TILE_HEIGHT);
                         emptyTile.setX((tileCol) * TILE_WIDTH);
                         emptyTile.setY((tileRow) * TILE_HEIGHT);
                         tiles.getChildren().add(emptyTile);
-                        slideCol(tileCol, tileRow);
-                    } else if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1) {
-                        ImageView emptyTile = new ImageView(new Image("fullFlat.png"));
-                        emptyTile.setFitWidth(TILE_WIDTH);
-                        emptyTile.setFitHeight(TILE_HEIGHT);
-                        emptyTile.setX((tileCol) * TILE_WIDTH);
-                        emptyTile.setY((tileRow) * TILE_HEIGHT);
-                        tiles.getChildren().add(emptyTile);
-                        slideRow(tileRow, tileCol);
+                        if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
+                            slideCol(tileCol, tileRow);
+                        } else if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1) {
+                            slideRow(tileRow, tileCol);
+                        }
+                    } else { //PlayerPiece
+                        int offsetX = (int) ((TILE_WIDTH - source.getFitWidth()) / 2);
+                        int offsetY = (int) ((TILE_HEIGHT - source.getFitHeight()) / 2);
+                        source.setX(tileDisplay.getX() + offsetX);
+                        source.setY(tileDisplay.getY() + offsetY);
                     }
                 });
             }
@@ -339,27 +350,23 @@ public class GameController implements Initializable {
     }
 
     @FXML
-    private void onSlideButtonClicked() {
-        for (Node tile : tiles.getChildren()) {
-            double x = ((ImageView) tile).getX() / TILE_HEIGHT;
-            double y = ((ImageView) tile).getY() / TILE_WIDTH;
-            if (y == 2) {
-                Timeline t = new Timeline();
-                t.setCycleCount(1);
+    private void onDrawPlayerPieceButtonClicked() {
+        Image playerPieceImage = new Image("playerPiece.png");
+        ImageView playerPiece = new ImageView(playerPieceImage);
+        playerPiece.setFitWidth(28);
+        playerPiece.setFitHeight(28);
+        playerPiece.setX(1 + 6);
+        playerPiece.setY(1 + 6);
+        tiles.getChildren().add(playerPiece);
+        playerPiece.setId("playerPiece");
 
-                DoubleProperty start = tile.layoutXProperty();
-                int end = (int) (y + TILE_WIDTH);
-
-                t.getKeyFrames().addAll(
-                        new KeyFrame(new Duration(0), new KeyValue(start, y)),
-                        new KeyFrame(new Duration(1000), new KeyValue(start,  end))
-                );
-
-                t.play();
-
-            }
-        }
-
+        playerPiece.setOnDragDetected(event -> {
+            Dragboard dragboard = playerPiece.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(playerPiece.getImage());
+            dragboard.setContent(content);
+            event.consume();
+        });
     }
 
     @FXML
@@ -384,16 +391,18 @@ public class GameController implements Initializable {
 
     @FXML
     private GameBoard loadGameboard() {
+        PlayerPiece playerPiece1 = new PlayerPiece();
+        PlayerPiece playerPiece2 = new PlayerPiece();
         Position[] playerPiecesPosition = {
                 new Position(1, 5),
-                new Position(6, 2)
+                new Position(3, 3)
         };
 
         Tile[] newTiles = new Tile[0];
 
-        FloorTile A = new FloorTile(TileType.CORNER, true, false);
-        FloorTile B = new FloorTile(TileType.STRAIGHT, true, false);
-        FloorTile C = new FloorTile(TileType.T_SHAPED, true, false);
+        FloorTile A = new FloorTile(TileType.CORNER, true);
+        FloorTile B = new FloorTile(TileType.STRAIGHT, true);
+        FloorTile C = new FloorTile(TileType.T_SHAPED, true);
 
         FloorTile[] fixedTiles = new FloorTile[3];
         fixedTiles[0] = A;
@@ -405,12 +414,12 @@ public class GameController implements Initializable {
         fixedTilePositions[1] = new Position(1, 1);
         fixedTilePositions[2] = new Position(2, 2);
 
-        FloorTile D = new FloorTile(TileType.CORNER, false, false);
-        FloorTile E = new FloorTile(TileType.CORNER, false, false);
-        FloorTile F = new FloorTile(TileType.T_SHAPED, false, false);
-        FloorTile G = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile H = new FloorTile(TileType.STRAIGHT, false, false);
-        FloorTile I = new FloorTile(TileType.CORNER, false, false);
+        FloorTile D = new FloorTile(TileType.CORNER, false);
+        FloorTile E = new FloorTile(TileType.CORNER, false);
+        FloorTile F = new FloorTile(TileType.T_SHAPED, false);
+        FloorTile G = new FloorTile(TileType.STRAIGHT, false);
+        FloorTile H = new FloorTile(TileType.STRAIGHT, false);
+        FloorTile I = new FloorTile(TileType.CORNER, false);
 
         FloorTile[] tiles = new FloorTile[6];
         tiles[0] = D;
