@@ -316,16 +316,13 @@ public class GameBoard {
         int diameter = effectRadius * 2;
         int effectWidth = 1 + diameter; // Includes centre.
 
-        Set<Position> playerPiecePos = new HashSet<Position>();
-        for (Position position: playerPiecePositions) {
+        Set<Position> playerPiecePos = new HashSet<>();
+        for (Position position : playerPiecePositions) {
             playerPiecePos.add(position);
         }
 
-
-
-
-
-        Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
+        Position effectStartPos = new Position
+                (p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
 
         for (int i = effectStartPos.getRowNum(); i < effectStartPos.getRowNum() + effectWidth; i++) {
             for (int j = effectStartPos.getColNum(); j < effectStartPos.getColNum() + effectWidth; j++) {
