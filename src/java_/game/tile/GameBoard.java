@@ -311,10 +311,19 @@ public class GameBoard {
         return false;
     }
 
-    public void applyEffect(AreaEffect effect, Position p) {
+    public void applyEffect(AreaEffect effect, Position p) throws IllegalStateException {
         int effectRadius = effect.getRadius();
         int diameter = effectRadius * 2;
         int effectWidth = 1 + diameter; // Includes centre.
+
+        Set<Position> playerPiecePos = new HashSet<Position>();
+        for (Position position: playerPiecePositions) {
+            playerPiecePos.add(position);
+        }
+
+
+
+
 
         Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
 
@@ -324,6 +333,9 @@ public class GameBoard {
                 if ((i >= 0 && i < nRows) && (j >= 0 && j < nCols)) {
                     assert board[i][j] != null;
                     Position affectedPos = new Position(i, j);
+                    if (effect.effectType == EffectType.FIRE && playerPiecePos.contains(affectedPos)) {
+                        throw new IllegalStateException();
+                    }
                     activeEffects.put(affectedPos, effect);
                     positionsWithActiveEffects.add(affectedPos);
                 }
