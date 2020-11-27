@@ -13,6 +13,10 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class GameService {
+    public GameBoard getGb() {
+        return gb;
+    }
+
     private static GameService instance = null;
 
     private GameBoard gb;
