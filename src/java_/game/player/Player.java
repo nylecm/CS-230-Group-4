@@ -67,6 +67,10 @@ public class Player {
         return isBot;
     }
 
+    public PlayerPiece getPlayerPiece() {
+        return playerPiece;
+    }
+
     public List<Effect> getPreviousAppliedEffect() {
         return previousAppliedEffect;
     }
