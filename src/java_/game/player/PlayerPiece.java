@@ -2,9 +2,16 @@ package java_.game.player;
 
 import java_.util.Position;
 
-public class PlayerPiece {
+import java.util.Stack;
 
+public class PlayerPiece {
+    private final Stack<Position> previousPlayerPiecePositions;
 
     public PlayerPiece() {
+        previousPlayerPiecePositions = new Stack<>();
+    }
+
+    public Stack<Position> getPreviousPlayerPiecePositions() {
+        return previousPlayerPiecePositions;
     }
 }
