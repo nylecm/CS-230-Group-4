@@ -36,7 +36,7 @@ public class Player {
         this.numberOfWins = numberOfWins;
         this.numberOfLoses = numberOfLoses;
         this.isBot = isBot;
-        this.playerPiece = new PlayerPiece();
+        this.playerPiece = playerPiece;
     }
 
     public void addPreviouslyAppliedEffect(Effect e) {
