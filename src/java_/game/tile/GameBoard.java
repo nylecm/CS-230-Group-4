@@ -4,12 +4,9 @@ import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GameBoard {
-
     private final int nRows; // height
     private final int nCols; // width
     private final String name; // todo may not be needed.
@@ -18,13 +15,13 @@ public class GameBoard {
     //private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
     //private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
     //private final FloorTile[] tiles;
-    private Set<Position> positionsWithActiveEffects = new HashSet<>(); //todo consider tree set.
+    //private Set<Position> positionsWithActiveEffects = new HashSet<>(); //todo consider tree set.
     private HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
     private final FloorTile[][] board;
 
     @Deprecated
     public Set<Position> getPositionsWithActiveEffects() {
-        return positionsWithActiveEffects;
+        return activeEffects.keySet();
     }
     //temp todo remove
 
@@ -76,9 +73,54 @@ public class GameBoard {
         }
     }
 
+    public void movePlayerPieceUp(int playerNumber) {
+        Position curPos = playerPiecePositions[playerNumber];
+        Position newPos = new Position(curPos.getRowNum() - 1, curPos.getColNum());
+        playerPiecePositions[playerNumber] = newPos;
+    }
+
+    public void movePlayerPieceRight(int playerNumber) {
+        Position curPos = playerPiecePositions[playerNumber];
+        Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() + 1);
+        playerPiecePositions[playerNumber] = newPos;
+    }
+
+    public void movePlayerPieceDown(int playerNumber) {
+        Position curPos = playerPiecePositions[playerNumber];
+        Position newPos = new Position(curPos.getRowNum() + 1, curPos.getColNum());
+        playerPiecePositions[playerNumber] = newPos;
+
+        /*if (curPos.getRowNum() == nRows - 1) { // Check if pos below exists:
+            throw new IllegalStateException("Player cannot move down, from the bottom row!");
+        } else if (activeEffects.get(newPos) != null
+                && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos below is on fire:
+            throw new IllegalStateException("Player cannot move down, as tile below is on fire.");
+        }*/
+        // Check if pos below has common path:
+        /*FloorTile tileBelow = board[newPos.getRowNum()][newPos.getColNum()];
+        assert tileBelow != null;
+
+        int tileBelowPath = tileBelow.getPaths();
+        int bitmask = 8;
+
+        if ((tileBelowPath & bitmask) == 8) {
+            playerPiecePositions[playerNumber] = newPos;
+        } else {
+            throw new IllegalStateException("Player cannot move down, as their is no path to the tile below");
+        }*/
+    }
+
+    // todo GUI Check if pos to the left exists: Check if pos to the left is on fire:
+    // todo GUI Check if pos to the left has common path:
+    public void movePlayerPieceLeft(int playerNumber) {
+        Position curPos = playerPiecePositions[playerNumber];
+        Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() - 1);
+        playerPiecePositions[playerNumber] = newPos;
+    }
+
     public void insert(int colNum, int rowNum, FloorTile tile, int rotation)
             throws IllegalArgumentException {
-        FloorTile pushedOffTile = null; // Tile being pushed off
+        FloorTile pushedOffTile; // Tile being pushed off
 
         if (colNum == -1 && !isRowFixed(rowNum)) { // Left to right horizontal shift.
             pushedOffTile = board[rowNum][nCols - 1];
@@ -134,9 +176,6 @@ public class GameBoard {
 
             if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
                 activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
-
-                positionsWithActiveEffects.remove(new Position(rowNum, i - 1));
-                positionsWithActiveEffects.add(new Position(rowNum, i));
             }
         }
         tile.rotateClockwise(rotation);
@@ -177,9 +216,6 @@ public class GameBoard {
             board[rowNum][i] = board[rowNum][i + 1];
             if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
                 activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i + 1)));
-
-                positionsWithActiveEffects.remove(new Position(rowNum, i + 1));
-                positionsWithActiveEffects.add(new Position(rowNum, i));
             }
         }
         tile.rotateClockwise(rotation);
@@ -220,9 +256,6 @@ public class GameBoard {
             board[i][colNum] = board[i - 1][colNum];
             if (activeEffects.get(new Position(i - 1, colNum)) != null) {
                 activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i - 1, colNum)));
-
-                positionsWithActiveEffects.remove(new Position(i - 1, colNum));
-                positionsWithActiveEffects.add(new Position(i, colNum));
             }
         }
         tile.rotateClockwise(rotation);
@@ -264,9 +297,6 @@ public class GameBoard {
             board[i][colNum] = board[i + 1][colNum];
             if (activeEffects.get(new Position(i + 1, colNum)) != null) {
                 activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i + 1, colNum)));
-
-                positionsWithActiveEffects.remove(new Position(i + 1, colNum));
-                positionsWithActiveEffects.add(new Position(i, colNum));
             }
         }
         tile.rotateClockwise(rotation);
@@ -311,12 +341,15 @@ public class GameBoard {
         return false;
     }
 
-    public void applyEffect(AreaEffect effect, Position p) {
+    public void applyEffect(AreaEffect effect, Position p) throws IllegalStateException {
         int effectRadius = effect.getRadius();
         int diameter = effectRadius * 2;
         int effectWidth = 1 + diameter; // Includes centre.
 
-        Position effectStartPos = new Position(p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
+        Set<Position> playerPiecePos = new HashSet<>(Arrays.asList(playerPiecePositions));
+
+        Position effectStartPos = new Position
+                (p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
 
         for (int i = effectStartPos.getRowNum(); i < effectStartPos.getRowNum() + effectWidth; i++) {
             for (int j = effectStartPos.getColNum(); j < effectStartPos.getColNum() + effectWidth; j++) {
@@ -324,8 +357,10 @@ public class GameBoard {
                 if ((i >= 0 && i < nRows) && (j >= 0 && j < nCols)) {
                     assert board[i][j] != null;
                     Position affectedPos = new Position(i, j);
+                    if (effect.effectType == EffectType.FIRE && playerPiecePos.contains(affectedPos)) {
+                        throw new IllegalStateException("Cannot apply fire effect where there is a player.");
+                    }
                     activeEffects.put(affectedPos, effect);
-                    positionsWithActiveEffects.add(affectedPos);
                 }
             }
         }
@@ -335,13 +370,19 @@ public class GameBoard {
         return activeEffects.get(pos);
     }
 
-    public void refreshEffects() { //todo test... .ConcurrentModificationException
-        for (Position positionWithActiveEffect : positionsWithActiveEffects) {
-            if (activeEffects.get(positionWithActiveEffect).getRemainingDuration() == 1) {
-                activeEffects.put(positionWithActiveEffect, null);
-                positionsWithActiveEffects.remove(positionWithActiveEffect);
-            } else {
-                activeEffects.get(positionWithActiveEffect).decrementRemainingDuration();
+    public void refreshEffects() {
+        if (activeEffects.keySet().size() != 0) {
+            Iterator<Position> iterator = activeEffects.keySet().iterator();
+
+            while (iterator.hasNext()) {
+                Position position = iterator.next();
+                if (activeEffects.get(position).getRemainingDuration() == 1) {
+                    iterator.remove();
+                    System.out.println("removed"); //todo remove
+                } else {
+                    activeEffects.get(position).decrementRemainingDuration();
+                    System.out.println("dec"); //todo remove
+                }
             }
         }
     }
@@ -376,6 +417,12 @@ public class GameBoard {
 
     public String getName() {
         return name;
+    }
+
+    public static void main(String[] args) {
+        int p = 13;
+        int mask = 2;
+        System.out.println(p & mask);
     }
 
     /*public static void main(String[] args) {

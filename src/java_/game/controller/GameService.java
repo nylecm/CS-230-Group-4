@@ -23,6 +23,7 @@ public class GameService {
 
     private static final String DELIMITER = "` ";
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
+    private static final String SAVE_GAME_FILE_PATH = "data/saves/";
 
     private GameService() {
         ps = PlayerService.getInstance().remake();
@@ -43,7 +44,7 @@ public class GameService {
         gb = readSelectGameBoard(boardName, players.length, in);
         in.close();
 
-        //read player file for
+        //todo read player file for
         ps.setPlayers(players);
     }
 
@@ -192,7 +193,7 @@ public class GameService {
             int rowNum = in.nextInt();
             int colNum = in.nextInt();
             int numOfDrawnActionTiles = in.nextInt();
-          //  Player player = new Player(username, );
+            //  Player player = new Player(username, );
         }
 
         //GameBoard = new GameBoard();
@@ -224,7 +225,7 @@ public class GameService {
     }
 
     private File createFile(String fileName) throws IOException {
-        File gameSaveFile = new File("data/saves/" + fileName + ".txt");
+        File gameSaveFile = new File(SAVE_GAME_FILE_PATH + fileName + ".txt");
 
         boolean isFileCreated = false;
         final int limitOfFilesWithSameName = 256;
@@ -236,7 +237,7 @@ public class GameService {
                 System.out.println("File Created!");
             } else {
                 filesWithSameName++;
-                gameSaveFile = new File("data/" + fileName + "_" + filesWithSameName + ".txt");
+                gameSaveFile = new File(SAVE_GAME_FILE_PATH + fileName + "_" + filesWithSameName + ".txt");
                 System.out.println("File not created yet!");
             }
         }
@@ -365,6 +366,12 @@ public class GameService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        gs.gb.refreshEffects();
+        gs.gb.refreshEffects();
+        gs.gb.refreshEffects();
+        gs.gb.refreshEffects();
+
     }
 
     /*private class FloorTilePositionBundle {
