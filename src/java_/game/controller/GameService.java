@@ -351,6 +351,10 @@ public class GameService {
         return new GameService();
     }
 
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
@@ -390,6 +394,8 @@ public class GameService {
         gs.gameBoard.refreshEffects();
         gs.gameBoard.refreshEffects();
     }
+
+
 
     /*private class FloorTilePositionBundle {
         private FloorTile floorTile;

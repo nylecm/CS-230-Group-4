@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
-            Pane root = FXMLLoader.load(Main.class.getResource("view/layout/mainMenu.fxml"));
+            Pane root = FXMLLoader.load(Main.class.getResource("view/layout/passwordRecovery.fxml"));
             Scene scene = new Scene(root, 780, 576);
 
             primaryStage.setScene(scene);
