@@ -13,10 +13,6 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class GameService {
-    public GameBoard getGb() {
-        return gb;
-    }
-
     private static GameService instance = null;
 
     private GameBoard gameBoard;
@@ -349,6 +345,10 @@ public class GameService {
         return new GameService();
     }
 
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
@@ -389,6 +389,8 @@ public class GameService {
         gs.gameBoard.refreshEffects();
 
     }
+
+
 
     /*private class FloorTilePositionBundle {
         private FloorTile floorTile;

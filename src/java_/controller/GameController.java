@@ -75,7 +75,7 @@ public class GameController implements Initializable {
             e.printStackTrace();
         }
 
-        gameBoardView = new Dimension2D(gameService.getGb().getnCols() + 3, gameService.getGb().getnRows() + 1); //TODO: Change for rectangle
+        gameBoardView = new Dimension2D(gameService.getGameBoard().getnCols()+3, gameService.getGameBoard().getnRows()+1); //TODO: Change for rectangle
 
         displayGameBoardFlat();
         floorTile.setOnDragDetected(event -> {
