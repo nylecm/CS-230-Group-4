@@ -2,6 +2,7 @@ package java_.controller;
 
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
+import java_.game.player.PlayerService;
 import java_.game.tile.FloorTile;
 import java_.game.tile.GameBoard;
 import java_.game.tile.Tile;
@@ -76,10 +77,16 @@ public class GameControllerDummy implements Initializable {
         effectGroup = new Group();
 
         //TODO: Remove, only for testing
-        GameBoard gameBoard = loadGameboard();
+        GameBoard gameBoard = gameService.getGameBoard();
+
+
+        PlayerService playerService = gameService.getPlayerService();
+
+        int nPlayers = playerService.getPlayers().length;
 
         //TODO: Replace width and height with values from GameBoard
         gameBoardView = new Dimension2D(gameService.getGameBoard().getnCols() + 3, gameService.getGameBoard().getnRows() + 1);
+
 
 
 
