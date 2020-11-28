@@ -42,7 +42,7 @@ public class PlayerService {
         if (players[playerNum].getPreviousAppliedEffect().contains(EffectType.BACKTRACK)) {
             throw new IllegalStateException("Backtrack effect has been previously applied to that player.");
         } else {
-            gameService.
+            //gameService.
         }
         // Check if that player has been backtracked...
 
