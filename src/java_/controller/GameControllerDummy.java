@@ -2,6 +2,7 @@ package java_.controller;
 
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
+import java_.game.player.PlayerService;
 import java_.game.tile.FloorTile;
 import java_.game.tile.GameBoard;
 import java_.game.tile.Tile;
@@ -39,6 +40,10 @@ public class GameControllerDummy implements Initializable {
 
     private static final int TILE_HEIGHT = 40;
 
+    private static final int BORDER_OFFSET_HORIZONTAL = 3;
+
+    private static final int BORDER_OFFSET_VERTICAL = 1;
+
     @FXML
     private ScrollPane scrollPane;
 
@@ -72,10 +77,22 @@ public class GameControllerDummy implements Initializable {
         effectGroup = new Group();
 
         //TODO: Remove, only for testing
-        GameBoard gameBoard = loadGameboard();
+        GameBoard gameBoard = gameService.getGameBoard();
+
+
+        PlayerService playerService = gameService.getPlayerService();
+
+        int nPlayers = playerService.getPlayers().length;
 
         //TODO: Replace width and height with values from GameBoard
-        gameBoardView = new Dimension2D(8, 8);
+        gameBoardView = new Dimension2D(gameService.getGameBoard().getnCols() + 3, gameService.getGameBoard().getnRows() + 1);
+
+
+
+
+        // Place player pieces:
+
+        drawPlayerPiece();
 
         //TODO: Replace with isometric view
         displayGameBoardFlat(gameBoard);
@@ -84,6 +101,25 @@ public class GameControllerDummy implements Initializable {
             Dragboard dragboard = floorTileToBeInserted.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.putImage(floorTileToBeInserted.getImage());
+            dragboard.setContent(content);
+            event.consume();
+        });
+    }
+
+    private void drawPlayerPiece() {
+        Image playerPieceImage = new Image("playerPiece.png");
+        ImageView playerPiece = new ImageView(playerPieceImage);
+        playerPiece.setFitWidth(28);
+        playerPiece.setFitHeight(28);
+        playerPiece.setX(1 + 6);
+        playerPiece.setY(1 + 6);
+        playerPieceGroup.getChildren().add(playerPiece);
+        playerPiece.setId("playerPiece");
+
+        playerPiece.setOnDragDetected(event -> {
+            Dragboard dragboard = playerPiece.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(playerPiece.getImage());
             dragboard.setContent(content);
             event.consume();
         });
@@ -99,7 +135,7 @@ public class GameControllerDummy implements Initializable {
             for (int col = 0; col < gameBoardView.getHeight(); col++) {
                 Image tileImage = floorTileImage;
                 if (row == 0 || col == 0 || row == gameBoardView.getWidth() - 1 || col == gameBoardView.getHeight() - 1) {
-                    if ((row == 0 && col == 0) || (row == 0 && col == gameBoardView.getHeight() - 1) || (row == gameBoardView.getWidth() - 1 && col == 0) || (row == gameBoardView.getWidth() - 1 && col == gameBoardView.getHeight() - 1) ) {
+                    if ((row == 0 && col == 0) || (row == 0 && col == gameBoardView.getHeight() - 1) || (row == gameBoardView.getWidth() - 1 && col == 0) || (row == gameBoardView.getWidth() - 1 && col == gameBoardView.getHeight() - 1)) {
                         tileImage = null;
                     } else {
                         tileImage = edgeTileImage;
@@ -115,9 +151,11 @@ public class GameControllerDummy implements Initializable {
                 tileGroup.getChildren().add(floorTileDisplay);
             }
         }
+        StackPane playerPieceViewHolder = new StackPane(playerPieceGroup);
         StackPane gameBoardViewHolder = new StackPane(tileGroup);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+        scrollPane.setContent(playerPieceViewHolder);
         scrollPane.setContent(gameBoardViewHolder);
     }
 

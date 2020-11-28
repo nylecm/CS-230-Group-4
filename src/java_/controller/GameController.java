@@ -1,6 +1,7 @@
 package java_.controller;
 
 import java_.game.controller.GameService;
+import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.game.tile.*;
 import java_.util.Position;
@@ -34,6 +35,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -67,7 +69,13 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         GameService gameService = GameService.getInstance();
-        gameBoardView = new Dimension2D(8, 8); //TODO: Change for rectangle
+        try {
+            GameService.getInstance().loadNewGame(new Player[]{new Player("bob", "bob", 1,2,false, new PlayerPiece())}, "oberon_1");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        gameBoardView = new Dimension2D(gameService.getGameBoard().getnCols()+3, gameService.getGameBoard().getnRows()+1); //TODO: Change for rectangle
 
         displayGameBoardFlat();
         floorTile.setOnDragDetected(event -> {
