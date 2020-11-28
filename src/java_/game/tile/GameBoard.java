@@ -13,10 +13,6 @@ public class GameBoard {
     private final String name; // todo may not be needed.
     private PlayerPiece[] playerPieces;
     private final Position[] playerPiecePositions;
-    //private final FloorTile[] fixedTiles; // todo reconsider may only need to be local.
-    //private final Position[] fixedTilePositions; // todo reconsider may only need to be local.
-    //private final FloorTile[] tiles;
-    //private Set<Position> positionsWithActiveEffects = new HashSet<>(); //todo consider tree set.
     private HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
     private final FloorTile[][] board;
 
@@ -388,7 +384,7 @@ public class GameBoard {
     }
 
     public boolean isBacktrackPossible(int playerNum) {
-        return  true;
+        return true;
         //fixme return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null) && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE));
     }
 
