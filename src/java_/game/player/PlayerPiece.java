@@ -18,8 +18,9 @@ public class PlayerPiece {
     public void addPreviousPlayerPosition(Position newPreviousPosition) {
         previousPlayerPiecePositions.push(newPreviousPosition);
     }
+
     public Position getPreviousPlayerPosition() {
-        return previousPlayerPiecePositions.pop();
+        return previousPlayerPiecePositions.peek();
     }
 
 }

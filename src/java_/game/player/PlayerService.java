@@ -1,10 +1,7 @@
 package java_.game.player;
 
 import java_.game.controller.GameService;
-import java_.game.tile.ActionTile;
-import java_.game.tile.Effect;
-import java_.game.tile.Tile;
-import java_.game.tile.EffectType;
+import java_.game.tile.*;
 
 public class PlayerService {
     private static PlayerService playerService = null;
@@ -42,10 +39,12 @@ public class PlayerService {
         if (players[playerNum].getPreviousAppliedEffect().contains(EffectType.BACKTRACK)) {
             throw new IllegalStateException("Backtrack effect has been previously applied to that player.");
         } else {
-            //gameService.
-        }
-        // Check if that player has been backtracked...
-
+            if (gameService.getGameBoard().isBacktrackPossible(playerNum)) {
+                gameService.getGameBoard().backtrack(playerNum, 2); //todo magic number
+            } else {
+                System.out.println("fail");
+            }
+        } //todo finish off
     }
 
     public void addPreviouslyAppliedEffect(Player p, EffectType e) {

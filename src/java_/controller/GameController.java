@@ -70,7 +70,7 @@ public class GameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         GameService gameService = GameService.getInstance();
         try {
-            GameService.getInstance().loadNewGame(new Player[]{new Player("bob", "bob", 1,2,false, new PlayerPiece())}, "oberon_1");
+            GameService.getInstance().loadNewGame(new Player[]{new Player("bob", 1,2, new PlayerPiece())}, "oberon_1");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -399,7 +399,7 @@ public class GameController implements Initializable {
 
     @FXML
     private GameBoard loadGameboard() {
-        PlayerPiece playerPiece1 = new PlayerPiece();
+        /*PlayerPiece playerPiece1 = new PlayerPiece();
         PlayerPiece playerPiece2 = new PlayerPiece();
         Position[] playerPiecesPosition = {
                 new Position(1, 5),
@@ -438,6 +438,8 @@ public class GameController implements Initializable {
         tiles[5] = I;
 
 
-        return new GameBoard(playerPiecesPosition, fixedTiles, fixedTilePositions, tiles, 3, 3, "GameBoard1");
+        return new GameBoard(playerPiecesPosition, fixedTiles, fixedTilePositions, tiles, 3, 3, "GameBoard1");*/
+        //}
+        return null;
     }
 }

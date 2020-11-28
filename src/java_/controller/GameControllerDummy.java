@@ -261,7 +261,7 @@ public class GameControllerDummy implements Initializable {
     }
 
     private GameBoard loadGameboard() {
-        PlayerPiece playerPiece1 = new PlayerPiece();
+        /*PlayerPiece playerPiece1 = new PlayerPiece();
         PlayerPiece playerPiece2 = new PlayerPiece();
         Position[] playerPiecesPosition = {
                 new Position(1, 5),
@@ -300,6 +300,7 @@ public class GameControllerDummy implements Initializable {
         tiles[5] = I;
 
 
-        return new GameBoard(playerPiecesPosition, fixedTiles, fixedTilePositions, tiles, 3, 3, "GameBoard1");
+        return new GameBoard(playerPiecesPosition, fixedTiles, fixedTilePositions, tiles, 3, 3, "GameBoard1");*/
+        return  null;
     }
 }

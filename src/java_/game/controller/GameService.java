@@ -393,6 +393,13 @@ public class GameService {
         gs.gameBoard.refreshEffects();
         gs.gameBoard.refreshEffects();
         gs.gameBoard.refreshEffects();
+        gs.gameBoard.movePlayerPieceDown(0);
+        gs.gameBoard.movePlayerPieceDown(0);
+        gs.gameBoard.movePlayerPieceDown(0);
+        gs.gameBoard.movePlayerPieceDown(0);
+
+        gs.playerService.applyBackTrackEffect(0);
+        System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
     }
 
 

@@ -376,21 +376,27 @@ public class GameBoard {
         }
     }
 
-    public void backtrack(int playerNum, int targetNumberOfBackTracks) {
-        int numberOfTimesMovedBack = 0;
-        playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
-
+    public void backtrack(int playerNum, int targetNumberOfBacktracks) throws IllegalStateException {
+        if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks == 1) {
+            playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
+            playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
+        } else if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks > 1) {
+            playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
+            playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
+            backtrack(playerNum, targetNumberOfBacktracks - 1);
+        }
     }
 
-    private boolean isBackTrackPossible(int playerNum) {
-        return getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE);
+    public boolean isBacktrackPossible(int playerNum) {
+        return  true;
+        //fixme return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null) && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE));
     }
 
     public AreaEffect getEffectAt(Position pos) {
         return activeEffects.get(pos);
     }
 
-    public void refreshEffects() {
+    public void refreshEffects() {//todo check if broken
         if (activeEffects.keySet().size() != 0) {
             Iterator<Position> iterator = activeEffects.keySet().iterator();
 
