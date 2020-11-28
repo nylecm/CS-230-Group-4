@@ -14,4 +14,12 @@ public class PlayerPiece {
     public Stack<Position> getPreviousPlayerPiecePositions() {
         return previousPlayerPiecePositions;
     }
+
+    public void addPreviousPlayerPosition(Position newPreviousPosition) {
+        previousPlayerPiecePositions.push(newPreviousPosition);
+    }
+    public Position getPreviousPlayerPosition() {
+        return previousPlayerPiecePositions.pop();
+    }
+
 }
