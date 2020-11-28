@@ -15,8 +15,8 @@ import java.util.*;
 public class GameService {
     private static GameService instance = null;
 
-    private GameBoard gb;
-    private final PlayerService ps;
+    private GameBoard gameBoard;
+    private final PlayerService playerService;
     private SilkBag silkBag;
     private int turnCount;
     private boolean isWin;
@@ -26,7 +26,7 @@ public class GameService {
     private static final String SAVE_GAME_FILE_PATH = "data/saves/";
 
     private GameService() {
-        ps = PlayerService.getInstance().remake();
+        playerService = PlayerService.getInstance().remake();
     }
 
     public static GameService getInstance() {
@@ -41,11 +41,11 @@ public class GameService {
 
         Scanner in = new Scanner(new File(GAME_BOARD_FILE_PATH));
         in.useDelimiter(DELIMITER);
-        gb = readSelectGameBoard(boardName, players.length, in);
+        gameBoard = readSelectGameBoard(boardName, players.length, in);
         in.close();
 
         //todo read player file for
-        ps.setPlayers(players);
+        playerService.setPlayers(players);
     }
 
     private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in) throws IllegalArgumentException {
@@ -202,9 +202,9 @@ public class GameService {
 
     public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
-            Player currentPlayer = ps.getPlayer(turnCount % ps.getPlayers().length);
-            ps.playerTurn(currentPlayer); // todo improve player service
-            gb.refreshEffects(); // todo check
+            playerService.playerTurn(playerService.getPlayer(turnCount % playerService.getPlayers().length)); // todo improve player service
+            System.out.println("Have fun!");
+            gameBoard.refreshEffects(); // todo check
             turnCount++;
         }
     }
@@ -249,13 +249,13 @@ public class GameService {
     }
 
     private void writeGameInstanceDetails(PrintWriter out) {
-        out.print(ps.getPlayers().length); // Number of players
+        out.print(playerService.getPlayers().length); // Number of players
         out.print(DELIMITER);
-        out.print(gb.getName());
+        out.print(gameBoard.getName());
         out.print(DELIMITER);
-        out.print(gb.getnRows());
+        out.print(gameBoard.getnRows());
         out.print(DELIMITER);
-        out.print(gb.getnCols());
+        out.print(gameBoard.getnCols());
         out.print(DELIMITER);
         out.print(turnCount);
         out.print(DELIMITER);
@@ -263,21 +263,21 @@ public class GameService {
     }
 
     private void writeGameBoardInstanceTileDetails(PrintWriter out) {
-        for (int i = 0; i < gb.getnRows(); i++) {
-            for (int j = 0; j < gb.getnCols(); j++) {
-                out.print(gb.getTileAt(i, j).getPaths());
+        for (int i = 0; i < gameBoard.getnRows(); i++) {
+            for (int j = 0; j < gameBoard.getnCols(); j++) {
+                out.print(gameBoard.getTileAt(i, j).getPaths());
                 out.print(DELIMITER);
-                out.print(gb.getTileAt(i, j).isFixed());
+                out.print(gameBoard.getTileAt(i, j).isFixed());
                 out.print(DELIMITER);
 
-                if (gb.getEffectAt(new Position(i, j)) != null) {
+                if (gameBoard.getEffectAt(new Position(i, j)) != null) {
                     out.print(true);
                     out.print(DELIMITER);
-                    out.print(gb.getEffectAt(new Position(i, j)).getEffectType());
+                    out.print(gameBoard.getEffectAt(new Position(i, j)).getEffectType());
                     out.print(DELIMITER);
-                    out.print(gb.getEffectAt(new Position(i, j)).getRemainingDuration());
+                    out.print(gameBoard.getEffectAt(new Position(i, j)).getRemainingDuration());
                     out.print(DELIMITER);
-                    out.print(gb.getEffectAt(new Position(i, j)).getRadius());
+                    out.print(gameBoard.getEffectAt(new Position(i, j)).getRadius());
                     out.print(DELIMITER);
                 } else {
                     out.print(false);
@@ -297,32 +297,44 @@ public class GameService {
     }
 
     private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
-        for (int i = 0; i < ps.getPlayers().length; i++) {
+        for (int i = 0; i < playerService.getPlayers().length; i++) {
             writePlayerInstanceDetails(out, i);
         }
     }
 
     private void writePlayerInstanceDetails(PrintWriter out, int i) {
-        out.print(ps.getPlayer(i).getUsername());
+        out.print(playerService.getPlayer(i).getUsername());
         out.print(DELIMITER);
-        out.print(gb.getPlayerPiecePosition(i).getRowNum());
+        out.print(gameBoard.getPlayerPiecePosition(i).getRowNum());
         out.print(DELIMITER);
-        out.print(gb.getPlayerPiecePosition(i).getColNum());
-        out.print(DELIMITER);
-
-        out.print(ps.getPlayer(i).getDrawnActionTiles().size()); // N of drawn action tiles.
+        out.print(gameBoard.getPlayerPiecePosition(i).getColNum());
         out.print(DELIMITER);
 
-        for (ActionTile actionTile : ps.getPlayer(i).getDrawnActionTiles()) {
+        out.print(playerService.getPlayer(i).getDrawnActionTiles().size()); // N of drawn action tiles.
+        out.print(DELIMITER);
+
+        for (ActionTile actionTile : playerService.getPlayer(i).getDrawnActionTiles()) {
             out.print(actionTile.getType().toString());
             out.print(DELIMITER);
         }
 
-        for (Effect effect : ps.getPlayer(i).getPreviousAppliedEffect()) {
+        for (Effect effect : playerService.getPlayer(i).getPreviousAppliedEffect()) {
             out.print(effect.getEffectType().toString());
             out.print(DELIMITER);
         }
         out.print('\n');
+    }
+
+    public PlayerService getPlayerService() {
+        return playerService;
+    }
+
+    public int getTurnCount() {
+        return turnCount;
+    }
+
+    public boolean isWin() {
+        return isWin;
     }
 
     public void destroy() {
@@ -337,35 +349,41 @@ public class GameService {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
                 new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
-        System.out.println(gs.gb);
+        System.out.println(gs.gameBoard);
         //gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
-        System.out.println(gs.gb);
+        System.out.println(gs.gameBoard);
 
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
 
-        gs.gb.applyEffect(effect, new Position(1, 0));
-        for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
+        gs.gameBoard.applyEffect(effect, new Position(1, 0));
+        for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
         }
 
-        AreaEffect test = gs.gb.getActiveEffects().get(new Position(0, 0));
+        AreaEffect test = gs.gameBoard.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gb.insert(0, 5, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gameBoard.insert(0, 5, new FloorTile(TileType.STRAIGHT, false), 0);
         System.out.println();
 
-        for (Position pos : gs.gb.getPositionsWithActiveEffects()) {
+        for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
         }
 
         System.out.println(test);
-        System.out.println(gs.gb.getPlayerPiecePosition(0));
+        System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
 
         try {
             gs.save("faron");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        gs.gameBoard.refreshEffects();
+        gs.gameBoard.refreshEffects();
+        gs.gameBoard.refreshEffects();
+        gs.gameBoard.refreshEffects();
+
     }
 
     /*private class FloorTilePositionBundle {

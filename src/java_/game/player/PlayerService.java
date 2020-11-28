@@ -7,7 +7,6 @@ import java_.game.tile.SilkBag;
 import java_.game.tile.Tile;
 
 public class PlayerService {
-
     private static PlayerService playerService = null;
 
     private Player[] players;
