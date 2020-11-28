@@ -5,10 +5,7 @@ import java_.util.Position;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Reader {
 
@@ -36,6 +33,21 @@ public class Reader {
     public File[] readFileNames(String path) {
         File folder = new File(path);
         return folder.listFiles();
+    }
+
+    public List<String> readUserDetails(String userName ) throws FileNotFoundException {
+        File userFile = new File("users.txt");
+        in = new Scanner(userFile);
+        in.useDelimiter(DELIMITER);
+        List<String> userDetails = new LinkedList<>();
+
+        while (in.hasNextLine()) {
+            if (in.next().equals(userName)) {
+                userDetails.add(in.next());
+            }
+        }
+        in.close();
+        return userDetails;
     }
 
     public static void main(String[] args) throws FileNotFoundException {
