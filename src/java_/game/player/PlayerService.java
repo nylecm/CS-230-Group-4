@@ -3,15 +3,20 @@ package java_.game.player;
 import java_.game.controller.GameService;
 import java_.game.tile.ActionTile;
 import java_.game.tile.Effect;
-import java_.game.tile.SilkBag;
 import java_.game.tile.Tile;
+import java_.game.tile.EffectType;
 
 public class PlayerService {
     private static PlayerService playerService = null;
+    private GameService gameService;
 
     private Player[] players;
 
     public PlayerService() {
+    }
+
+    public void setGameService(GameService gameService) {
+        this.gameService = gameService;
     }
 
     public static PlayerService getInstance() {
@@ -33,7 +38,17 @@ public class PlayerService {
         //After turn, game checks effects
     }
 
-    public void addPreviouslyAppliedEffect(Player p, Effect e) {
+    public void applyBackTrackEffect(int playerNum) {
+        if (players[playerNum].getPreviousAppliedEffect().contains(EffectType.BACKTRACK)) {
+            throw new IllegalStateException("Backtrack effect has been previously applied to that player.");
+        } else {
+            gameService.
+        }
+        // Check if that player has been backtracked...
+
+    }
+
+    public void addPreviouslyAppliedEffect(Player p, EffectType e) {
         p.addPreviouslyAppliedEffect(e);
     }
 

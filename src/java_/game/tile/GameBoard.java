@@ -3,6 +3,7 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
+import javafx.scene.effect.Effect;
 
 import java.util.*;
 
@@ -34,7 +35,8 @@ public class GameBoard {
         return board[row][col];
     }
 
-    public GameBoard(Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
+    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
+        this.playerPieces = playerPieces;
         this.playerPiecePositions = playerPiecePositions;
         //this.fixedTiles = fixedTiles;
         //this.fixedTilePositions = fixedTilePositions;
@@ -77,18 +79,21 @@ public class GameBoard {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum() - 1, curPos.getColNum());
         playerPiecePositions[playerNumber] = newPos;
+        playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
 
     public void movePlayerPieceRight(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() + 1);
         playerPiecePositions[playerNumber] = newPos;
+        playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
 
     public void movePlayerPieceDown(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum() + 1, curPos.getColNum());
         playerPiecePositions[playerNumber] = newPos;
+        playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
 
         /*if (curPos.getRowNum() == nRows - 1) { // Check if pos below exists:
             throw new IllegalStateException("Player cannot move down, from the bottom row!");
@@ -116,6 +121,7 @@ public class GameBoard {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() - 1);
         playerPiecePositions[playerNumber] = newPos;
+        playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
 
     public void insert(int colNum, int rowNum, FloorTile tile, int rotation)
@@ -151,6 +157,7 @@ public class GameBoard {
             Position pos = playerPiecePositions[i];
             if (pos.getRowNum() == rowNum) {
                 playerPiecePositions[i] = nextPositionLeftToRight(new Position(rowNum, pos.getColNum())); //todo replace with pos
+                playerPieces[i].addPreviousPlayerPosition(pos);
             }
         }
     }
@@ -190,8 +197,9 @@ public class GameBoard {
     private void shiftPlayerPiecesRightToLeft(int rowNum) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
             Position pos = playerPiecePositions[i];
-            if (playerPiecePositions[i].getRowNum() == rowNum) {
+            if (pos.getRowNum() == rowNum) {
                 playerPiecePositions[i] = nextPositionRightToLeft(pos);
+                playerPieces[i].addPreviousPlayerPosition(pos);
             }
         }
     }
@@ -232,7 +240,8 @@ public class GameBoard {
             Position pos = playerPiecePositions[i];
             if (pos.getColNum() == colNum) {
                 playerPiecePositions[i] = nextPositionTopToBottom(pos);
-            } //todo handle fire
+                playerPieces[i].addPreviousPlayerPosition(pos);
+            }
         }
     }
 
@@ -273,6 +282,7 @@ public class GameBoard {
             Position pos = playerPiecePositions[i];
             if (pos.getColNum() == colNum) {
                 playerPiecePositions[i] = nextPositionBottomToTop(pos);
+                playerPieces[i].addPreviousPlayerPosition(pos);
             }
         }
     }
@@ -364,6 +374,16 @@ public class GameBoard {
                 }
             }
         }
+    }
+
+    public void backtrack(int playerNum, int targetNumberOfBackTracks) {
+        int numberOfTimesMovedBack = 0;
+        playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
+
+    }
+
+    private boolean isBackTrackPossible(int playerNum) {
+        return getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE);
     }
 
     public AreaEffect getEffectAt(Position pos) {

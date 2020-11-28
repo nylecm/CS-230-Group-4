@@ -1,45 +1,39 @@
 package java_.game.player;
 
 import java_.game.tile.ActionTile;
-import java_.game.tile.Effect;
-import java_.game.tile.PlayerEffect;
 
+import java_.game.tile.EffectType;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * @author Bishwo
+ * @author nylecm, coxy7, bishwo
  */
 
 public class Player {
 
     private String username;
-    private String name;
     private int numberOfWins;
     private int numberOfLoses;
-    private boolean isBot;
-    private List<Effect> previousAppliedEffect = new ArrayList<>();
-    private List<ActionTile> drawnActionTiles = new ArrayList<>();;
+    private final Set<EffectType> previousAppliedEffect = new HashSet<>();
+    private final List<ActionTile> drawnActionTiles = new ArrayList<>();
     private PlayerPiece playerPiece;
-
 
     /**
      * @param username            Unique game.player.Player ID
-     * @param name                game.player.Player Name
      * @param numberOfWins        Number of Wins
      * @param numberOfLoses       Number of Loss
-     * @param isBot               Type of game.player.Player: Human or AI
      */
-    public Player(String username, String name, int numberOfWins, int numberOfLoses, boolean isBot, PlayerPiece playerPiece) {
+    public Player(String username, int numberOfWins, int numberOfLoses, PlayerPiece playerPiece) {
         this.username = username;
-        this.name = name;
         this.numberOfWins = numberOfWins;
         this.numberOfLoses = numberOfLoses;
-        this.isBot = isBot;
         this.playerPiece = playerPiece;
     }
 
-    public void addPreviouslyAppliedEffect(Effect e) {
+    public void addPreviouslyAppliedEffect(EffectType e) {
         previousAppliedEffect.add(e);
     }
 
@@ -51,9 +45,6 @@ public class Player {
         return username;
     }
 
-    public String getName() {
-        return name;
-    }
 
     public int getNumberOfWins() {
         return numberOfWins;
@@ -63,15 +54,12 @@ public class Player {
         return numberOfLoses;
     }
 
-    public boolean isBot() {
-        return isBot;
-    }
 
     public PlayerPiece getPlayerPiece() {
         return playerPiece;
     }
 
-    public List<Effect> getPreviousAppliedEffect() {
+    public Set<EffectType> getPreviousAppliedEffect() {
         return previousAppliedEffect;
     }
 

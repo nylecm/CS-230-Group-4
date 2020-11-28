@@ -6,6 +6,7 @@ import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
 
+import javax.swing.text.PlainDocument;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,17 +39,22 @@ public class GameService {
 
     public void loadNewGame(Player[] players, String boardName) throws FileNotFoundException {
         remake();
+        PlayerPiece[] playerPieces = new PlayerPiece[players.length];
 
+        for (int i = 0; i < players.length; i++) {
+            playerPieces[i] = players[i].getPlayerPiece();
+        }
         Scanner in = new Scanner(new File(GAME_BOARD_FILE_PATH));
         in.useDelimiter(DELIMITER);
-        gameBoard = readSelectGameBoard(boardName, players.length, in);
+        gameBoard = readSelectGameBoard(boardName, players.length, in, playerPieces);
         in.close();
 
         //todo read player file for
         playerService.setPlayers(players);
+        playerService.setGameService(this);
     }
 
-    private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in) throws IllegalArgumentException {
+    private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in, PlayerPiece[] playerPieces) throws IllegalArgumentException {
         while (in.hasNextLine() && in.next().equals(boardName)) {//todo to be completed fully when other classes complete...
             int nRows = in.nextInt();
             int nCols = in.nextInt();
@@ -92,7 +98,7 @@ public class GameService {
 
             silkBag = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
 
-            return new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions,
+            return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName); // todo consider keeping silk bag in game service...
         }
         throw new IllegalArgumentException("No level with such name found!");
@@ -318,8 +324,8 @@ public class GameService {
             out.print(DELIMITER);
         }
 
-        for (Effect effect : playerService.getPlayer(i).getPreviousAppliedEffect()) {
-            out.print(effect.getEffectType().toString());
+        for (EffectType effect : playerService.getPlayer(i).getPreviousAppliedEffect()) {
+            out.print(effect);
             out.print(DELIMITER);
         }
         out.print('\n');
@@ -348,7 +354,7 @@ public class GameService {
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new Player[]{new Player("dd", "bob", 0, 1111, false, new PlayerPiece())}, "oberon_1");
+                new Player[]{new Player("bob", 1, 1110, new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         System.out.println(gs.gameBoard);
@@ -383,7 +389,6 @@ public class GameService {
         gs.gameBoard.refreshEffects();
         gs.gameBoard.refreshEffects();
         gs.gameBoard.refreshEffects();
-
     }
 
     /*private class FloorTilePositionBundle {
