@@ -79,9 +79,7 @@ public class GameControllerDummy implements Initializable {
         //TODO: Remove, only for testing
         GameBoard gameBoard = gameService.getGameBoard();
 
-
         PlayerService playerService = gameService.getPlayerService();
-
         int nPlayers = playerService.getPlayers().length;
 
         //TODO: Replace width and height with values from GameBoard
