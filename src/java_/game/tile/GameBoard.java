@@ -448,6 +448,10 @@ public class GameBoard {
         System.out.println(p & mask);
     }
 
+    public int getNumOfPlayerPieces() {
+        return playerPiecePositions.length;
+    }
+
     /*public static void main(String[] args) {
         //PlayerPiece[] playerPieces = new PlayerPiece[0];
         Position[] playerPiecePositions = new Position[0];

@@ -28,7 +28,7 @@ public class PlayerService {
         if (drawnTile instanceof ActionTile) {
             p.addDrawnActionTile((ActionTile) drawnTile);
         } else {
-            System.out.println("Use FloorTile");
+            //TODO: Add FloorTile to the viewport
         }
         //(Apply effects)
         //Move PlayerPiece
@@ -53,6 +53,10 @@ public class PlayerService {
 
     public boolean containsEffect(Player p, Effect e) {
         return p.getPreviousAppliedEffect().contains(e);
+    }
+
+    public void addDrawnActionTile(Player p, ActionTile actionTile) {
+        p.addDrawnActionTile(actionTile);
     }
 
     public Player[] getPlayers() {
