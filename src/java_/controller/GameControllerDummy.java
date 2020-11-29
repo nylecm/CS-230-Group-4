@@ -28,8 +28,6 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -40,6 +38,10 @@ public class GameControllerDummy implements Initializable {
 
     private static final int TILE_HEIGHT = 40;
 
+    private static final int PLAYER_PIECE_WIDTH = 28;
+
+    private static final int PLAYER_PIECE_HEIGHT = 28;
+
     private static final int BORDER_OFFSET_HORIZONTAL = 3;
 
     private static final int BORDER_OFFSET_VERTICAL = 1;
@@ -48,10 +50,16 @@ public class GameControllerDummy implements Initializable {
     private ScrollPane scrollPane;
 
     @FXML
+    private StackPane content = new StackPane();
+
+    @FXML
     private Dimension2D gameBoardView;
 
     @FXML
     private ImageView floorTileToBeInserted;
+
+    @FXML
+    private Group edgeTileGroup;
 
     @FXML
     private Group tileGroup;
@@ -72,27 +80,16 @@ public class GameControllerDummy implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         GameService gameService = GameService.getInstance();
 
+        edgeTileGroup = new Group();
         tileGroup = new Group();
         playerPieceGroup = new Group();
         effectGroup = new Group();
 
-        //TODO: Remove, only for testing
         GameBoard gameBoard = gameService.getGameBoard();
-
-
         PlayerService playerService = gameService.getPlayerService();
 
-        int nPlayers = playerService.getPlayers().length;
-
         //TODO: Replace width and height with values from GameBoard
-        gameBoardView = new Dimension2D(gameService.getGameBoard().getnCols() + 3, gameService.getGameBoard().getnRows() + 1);
-
-
-
-
-        // Place player pieces:
-
-        drawPlayerPiece();
+        gameBoardView = new Dimension2D(gameBoard.getnCols() + 2, gameBoard.getnRows() + 2);
 
         //TODO: Replace with isometric view
         displayGameBoardFlat(gameBoard);
@@ -106,62 +103,84 @@ public class GameControllerDummy implements Initializable {
         });
     }
 
-    private void drawPlayerPiece() {
-        Image playerPieceImage = new Image("playerPiece.png");
-        ImageView playerPiece = new ImageView(playerPieceImage);
-        playerPiece.setFitWidth(28);
-        playerPiece.setFitHeight(28);
-        playerPiece.setX(1 + 6);
-        playerPiece.setY(1 + 6);
-        playerPieceGroup.getChildren().add(playerPiece);
-        playerPiece.setId("playerPiece");
-
-        playerPiece.setOnDragDetected(event -> {
-            Dragboard dragboard = playerPiece.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.putImage(playerPiece.getImage());
-            dragboard.setContent(content);
-            event.consume();
-        });
-    }
-
     private void displayGameBoardFlat(GameBoard gameBoard) {
+        displayEdges();
         displayFloorTiles();
         displayPlayerPieces(gameBoard);
+
+        content.getChildren().addAll(edgeTileGroup, tileGroup);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setContent(content);
+    }
+
+    private void displayEdges() {
+        for (int i = 0; i < gameBoardView.getWidth(); i++) {
+            ImageView edgeTileDisplayTop = getFloorTileImageView(edgeTileImage);
+            ImageView edgeTileDisplayBottom = getFloorTileImageView(edgeTileImage);
+
+            edgeTileDisplayTop.setLayoutY(- TILE_HEIGHT);
+            edgeTileDisplayTop.setLayoutX(i * TILE_WIDTH);
+
+
+            edgeTileDisplayBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+            edgeTileDisplayBottom.setLayoutX(i * TILE_WIDTH);
+
+            edgeTileGroup.getChildren().add(edgeTileDisplayTop);
+            edgeTileGroup.getChildren().add(edgeTileDisplayBottom);
+
+        }
+        for (int i = 0; i < gameBoardView.getHeight(); i++) {
+            ImageView edgeTileDisplayRight = getFloorTileImageView(edgeTileImage);
+            ImageView edgeTileDisplayLeft = getFloorTileImageView(edgeTileImage);
+
+            edgeTileDisplayLeft.setLayoutY(i * TILE_HEIGHT);
+            edgeTileDisplayLeft.setLayoutX(- TILE_WIDTH);
+
+            edgeTileDisplayRight.setLayoutY(i * TILE_HEIGHT);
+            edgeTileDisplayRight.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
+
+            edgeTileGroup.getChildren().add(edgeTileDisplayLeft);
+            edgeTileGroup.getChildren().add(edgeTileDisplayRight);
+        }
     }
 
     private void displayFloorTiles() {
-        for (int row = 0; row < gameBoardView.getWidth(); row++) {
-            for (int col = 0; col < gameBoardView.getHeight(); col++) {
-                Image tileImage = floorTileImage;
-                if (row == 0 || col == 0 || row == gameBoardView.getWidth() - 1 || col == gameBoardView.getHeight() - 1) {
-                    if ((row == 0 && col == 0) || (row == 0 && col == gameBoardView.getHeight() - 1) || (row == gameBoardView.getWidth() - 1 && col == 0) || (row == gameBoardView.getWidth() - 1 && col == gameBoardView.getHeight() - 1)) {
-                        tileImage = null;
-                    } else {
-                        tileImage = edgeTileImage;
-                    }
-                }
+        for (int row = 0; row < gameBoardView.getHeight(); row++) {
+            for (int col = 0; col < gameBoardView.getWidth(); col++) {
 
-                ImageView floorTileDisplay = getFloorTileImageView(tileImage);
-                floorTileDisplay.setX((col) * TILE_WIDTH);
-                floorTileDisplay.setY((row) * TILE_HEIGHT);
+                ColorAdjust highlight = new ColorAdjust();
+                highlight.setBrightness(row * 0.05);
+
+                ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+                floorTileDisplay.setLayoutX(col * TILE_WIDTH);
+                floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
+                floorTileDisplay.setEffect(highlight);
 
                 setEventHandlers(floorTileDisplay);
 
                 tileGroup.getChildren().add(floorTileDisplay);
             }
         }
-        StackPane playerPieceViewHolder = new StackPane(playerPieceGroup);
-        StackPane gameBoardViewHolder = new StackPane(tileGroup);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setContent(playerPieceViewHolder);
-        scrollPane.setContent(gameBoardViewHolder);
     }
 
     //TODO: Implement
     private void displayPlayerPieces(GameBoard gameBoard) {
+        for (int i = 0; i < gameBoard.getNumOfPlayerPieces(); i++) {
+            Position playerPiecePosition = gameBoard.getPlayerPiecePosition(i);
+            int row = playerPiecePosition.getRowNum();
+            int col = playerPiecePosition.getColNum();
 
+            Image playerPieceImage = new Image("playerPiece.png");
+            ImageView playerPieceDisplay = new ImageView(playerPieceImage);
+            playerPieceDisplay.setFitWidth(PLAYER_PIECE_WIDTH);
+            playerPieceDisplay.setFitHeight(PLAYER_PIECE_HEIGHT);
+
+            playerPieceDisplay.setLayoutX((col) * PLAYER_PIECE_WIDTH + 200);
+            playerPieceDisplay.setLayoutY((row) * PLAYER_PIECE_HEIGHT);
+
+            playerPieceGroup.getChildren().add(playerPieceDisplay);
+        }
     }
 
     public void setEventHandlers(ImageView floorTileDisplay) {
@@ -182,25 +201,93 @@ public class GameControllerDummy implements Initializable {
         });
 
         floorTileDisplay.setOnDragDropped(event -> {
-            floorTileDisplay.setImage(event.getDragboard().getImage());
             int tileCol = getFloorTileCol(floorTileDisplay);
             int tileRow = getFloorTileRow(floorTileDisplay);
 
-            ImageView newFloorTile = getFloorTileImageView(floorTileImage);
-            newFloorTile.setX(tileCol * TILE_WIDTH);
-            newFloorTile.setY(tileRow * TILE_HEIGHT);
-            tileGroup.getChildren().add(newFloorTile);
+            ImageView newFloorTileDisplay = getFloorTileImageView(floorTileImage);
+            newFloorTileDisplay.setLayoutX((tileCol) * TILE_WIDTH);
+            newFloorTileDisplay.setLayoutY((tileRow) * TILE_HEIGHT);
+            newFloorTileDisplay.toFront();
+            tileGroup.getChildren().add(newFloorTileDisplay);
 
-            if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) {
+            if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) { //Top or bottom edge
                 slideCol(tileCol, tileRow);
-            } else if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1) {
-                System.out.println("I will slide the row!");
+            } else if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1) { //Left or right edge
+                slideRowTemp(tileRow, tileCol);
             }
+
+            //TODO Fix pushed off tile
+
+            //TODO Fix first tile
+
         });
     }
 
+    //TODO Without animation, testing
+    private void slideColTemp(int col, int row) {
+        List<Node> floorTilesToMove;
+        if (row < col) {
+            floorTilesToMove = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getFloorTileCol((ImageView) t) == col &&
+                            ((ImageView) t).getImage() != edgeTileImage)
+                    .collect(Collectors.toList());
+        } else {
+            floorTilesToMove = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getFloorTileCol((ImageView) t) == col &&
+                            ((ImageView) t).getImage() != edgeTileImage)
+                    .collect(Collectors.toList());
+        }
+        for (Node floorTile : floorTilesToMove) {
+            if (row < col) {
+                floorTile.setLayoutY(floorTile.getLayoutY() + TILE_HEIGHT);
+            } else {
+                floorTile.setLayoutY(floorTile.getLayoutY() - TILE_HEIGHT);
+            }
+        }
+        Node lastTile = null;
+        if (row < col) {
+            lastTile = floorTilesToMove.get(floorTilesToMove.size() - 2);
+        } else {
+            lastTile = floorTilesToMove.get(0);
+        }
+//        tileGroup.getChildren().remove(lastTile);
+    }
+
+    private void slideRowTemp(int row, int col) {
+        List<Node> floorTilesToMove;
+        if (col < row) {
+            floorTilesToMove = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getFloorTileRow((ImageView) t) == row &&
+                            getFloorTileCol((ImageView) t) != gameBoardView.getWidth() - 1)
+                    .collect(Collectors.toList());
+        } else {
+            floorTilesToMove = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getFloorTileRow((ImageView) t) == row &&
+                            getFloorTileCol((ImageView) t) != 0)
+                    .collect(Collectors.toList());
+        }
+        for (Node floorTile : floorTilesToMove) {
+            if (col < row) {
+                floorTile.setLayoutX(floorTile.getLayoutX() + TILE_WIDTH);
+            } else {
+                floorTile.setLayoutX(floorTile.getLayoutX() - TILE_WIDTH);
+            }
+        }
+        Node lastTile = null;
+        if (col < row) {
+            lastTile = floorTilesToMove.get(floorTilesToMove.size() - 2);
+        } else {
+            lastTile = floorTilesToMove.get(0);
+        }
+        tileGroup.getChildren().remove(lastTile);
+    }
+
     private void slideCol(int col, int row) {
-        List<Node> floorTilesToMove = null;
+        List<Node> floorTilesToMove;
         double startPosition;
         double endPosition;
         if (row < col) {
@@ -255,53 +342,10 @@ public class GameControllerDummy implements Initializable {
     }
 
     private int getFloorTileCol(ImageView floorTileDisplay) {
-        return (int) (floorTileDisplay.getX() / TILE_WIDTH);
+        return (int) (floorTileDisplay.getLayoutX() / TILE_WIDTH);
     }
 
     private int getFloorTileRow(ImageView floorTileDisplay) {
-        return (int) (floorTileDisplay.getY() / TILE_HEIGHT);
-    }
-
-    private GameBoard loadGameboard() {
-        PlayerPiece playerPiece1 = new PlayerPiece();
-        PlayerPiece playerPiece2 = new PlayerPiece();
-        Position[] playerPiecesPosition = {
-                new Position(1, 5),
-                new Position(3, 3)
-        };
-
-        Tile[] newTiles = new Tile[0];
-
-        FloorTile A = new FloorTile(TileType.CORNER, true);
-        FloorTile B = new FloorTile(TileType.STRAIGHT, true);
-        FloorTile C = new FloorTile(TileType.T_SHAPED, true);
-
-        FloorTile[] fixedTiles = new FloorTile[3];
-        fixedTiles[0] = A;
-        fixedTiles[1] = B;
-        fixedTiles[2] = C;
-
-        Position[] fixedTilePositions = new Position[3];
-        fixedTilePositions[0] = new Position(0, 0);
-        fixedTilePositions[1] = new Position(1, 1);
-        fixedTilePositions[2] = new Position(2, 2);
-
-        FloorTile D = new FloorTile(TileType.CORNER, false);
-        FloorTile E = new FloorTile(TileType.CORNER, false);
-        FloorTile F = new FloorTile(TileType.T_SHAPED, false);
-        FloorTile G = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile H = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile I = new FloorTile(TileType.CORNER, false);
-
-        FloorTile[] tiles = new FloorTile[6];
-        tiles[0] = D;
-        tiles[1] = E;
-        tiles[2] = F;
-        tiles[3] = G;
-        tiles[4] = H;
-        tiles[5] = I;
-
-
-        return new GameBoard(playerPiecesPosition, fixedTiles, fixedTilePositions, tiles, 3, 3, "GameBoard1");
+        return (int) (floorTileDisplay.getLayoutY() / TILE_HEIGHT);
     }
 }
