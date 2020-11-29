@@ -22,6 +22,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -81,7 +82,6 @@ public class GameControllerDummy implements Initializable {
         effectGroup = new Group();
 
         GameBoard gameBoard = gameService.getGameBoard();
-        PlayerService playerService = gameService.getPlayerService();
 
         //TODO: Replace width and height with values from GameBoard
         gameBoardView = new Dimension2D(8, 8);
@@ -103,16 +103,10 @@ public class GameControllerDummy implements Initializable {
         displayFloorTiles();
         displayPlayerPieces(gameBoard);
 
-//        content.getChildren().addAll(edgeTileGroup, tileGroup, playerPieceGroup);
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
-        hbox.setAlignment(Pos.CENTER);
-        vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(edgeTileGroup, tileGroup);
-        hbox.getChildren().add(vbox);
+        content.getChildren().addAll(edgeTileGroup, tileGroup, playerPieceGroup);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-        scrollPane.setContent(hbox);
+        scrollPane.setContent(content);
     }
 
     private void displayEdges() {
@@ -213,11 +207,6 @@ public class GameControllerDummy implements Initializable {
             System.out.println("Col: " + tileCol);
             System.out.println("Row: " + tileRow );
 
-            ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
-            floorTileDisplay.setLayoutX(tileCol * TILE_WIDTH);
-            floorTileDisplay.setLayoutY(tileRow * TILE_HEIGHT);
-            tileGroup.getChildren().add(floorTileDisplay);
-
             if (tileCol == - 1 || tileCol == gameBoardView.getWidth()) {
                 slideRowTemp(tileRow, tileCol);
             } else if ((tileRow == - 1 || tileRow == gameBoardView.getHeight())) {
@@ -235,6 +224,7 @@ public class GameControllerDummy implements Initializable {
         });
 
         floorTileDisplay.setOnMouseExited(event -> {
+            floorTileDisplay.getEffect();
             highlight.setBrightness(0);
             floorTileDisplay.setEffect(highlight);
         });
@@ -262,6 +252,12 @@ public class GameControllerDummy implements Initializable {
 
     //TODO Without animation, testing
     private void slideColTemp(int col, int row) {
+        ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+        floorTileDisplay.setLayoutX(col * TILE_WIDTH);
+        floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
+        floorTileDisplay.toFront();
+        tileGroup.getChildren().add(floorTileDisplay);
+
         List<Node> floorTilesToMove;
         if (row < col) {
             floorTilesToMove = tileGroup.getChildren()
@@ -281,13 +277,33 @@ public class GameControllerDummy implements Initializable {
                 floorTile.setLayoutY(floorTile.getLayoutY() - TILE_HEIGHT);
             }
         }
-        Node lastTile = null;
-        lastTile = floorTilesToMove.get(floorTilesToMove.size() - 1);
 
-        tileGroup.getChildren().remove(lastTile);
+        //TODO THIS IS A VERY BAD CODE, SCAAARY
+        List<Node> lastTile = null;
+        if (row < col) {
+            lastTile = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getTileCol((ImageView) t) == col &&
+                        getTileRow((ImageView) t) == gameBoardView.getHeight())
+                    .collect(Collectors.toList());
+        } else {
+            lastTile = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getTileCol((ImageView) t) == col &&
+                            getTileRow((ImageView) t) == -1)
+                    .collect(Collectors.toList());
+        }
+
+        tileGroup.getChildren().remove(lastTile.get(0));
     }
 
     private void slideRowTemp(int row, int col) {
+        ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+        floorTileDisplay.setLayoutX(col * TILE_WIDTH);
+        floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
+        floorTileDisplay.toFront();
+        tileGroup.getChildren().add(floorTileDisplay);
+
         List<Node> floorTilesToMove;
         if (col < row) {
             floorTilesToMove = tileGroup.getChildren()
@@ -307,10 +323,24 @@ public class GameControllerDummy implements Initializable {
                 floorTile.setLayoutX(floorTile.getLayoutX() - TILE_WIDTH);
             }
         }
-        Node lastTile = null;
-        lastTile = floorTilesToMove.get(floorTilesToMove.size() - 1);
 
-        tileGroup.getChildren().remove(lastTile);
+        //TODO THIS IS A VERY BAD CODE, SCAAARY
+        List<Node> lastTile = null;
+        if (col < row) {
+            lastTile = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getTileRow((ImageView) t) == row &&
+                            getTileCol((ImageView) t) == gameBoardView.getWidth())
+                    .collect(Collectors.toList());
+        } else {
+            lastTile = tileGroup.getChildren()
+                    .stream()
+                    .filter(t -> getTileRow((ImageView) t) == row &&
+                            getTileCol((ImageView) t) == -1)
+                    .collect(Collectors.toList());
+        }
+
+        tileGroup.getChildren().remove(lastTile.get(0));
     }
 
     private void slideCol(int col, int row) {
