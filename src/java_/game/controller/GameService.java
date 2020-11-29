@@ -22,7 +22,7 @@ public class GameService {
     private int turnCount;
     private boolean isWin;
 
-    private static final String DELIMITER = "` ";
+    private static final String DELIMITER = "";
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
     private static final String SAVE_GAME_FILE_PATH = "data/saves/";
 
