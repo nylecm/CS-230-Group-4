@@ -89,7 +89,7 @@ public class GameControllerDummy implements Initializable {
         PlayerService playerService = gameService.getPlayerService();
 
         //TODO: Replace width and height with values from GameBoard
-        gameBoardView = new Dimension2D(gameBoard.getnCols() + 2, gameBoard.getnRows() + 2);
+        gameBoardView = new Dimension2D(8, 8);
 
         //TODO: Replace with isometric view
         displayGameBoardFlat(gameBoard);
@@ -115,9 +115,14 @@ public class GameControllerDummy implements Initializable {
     }
 
     private void displayEdges() {
+        ImageView edgeTileDisplayTop = null;
+        ImageView edgeTileDisplayBottom = null;
+        ImageView edgeTileDisplayLeft = null;
+        ImageView edgeTileDisplayRight = null;
+
         for (int i = 0; i < gameBoardView.getWidth(); i++) {
-            ImageView edgeTileDisplayTop = getFloorTileImageView(edgeTileImage);
-            ImageView edgeTileDisplayBottom = getFloorTileImageView(edgeTileImage);
+            edgeTileDisplayTop = getFloorTileImageView(edgeTileImage);
+            edgeTileDisplayBottom = getFloorTileImageView(edgeTileImage);
 
             edgeTileDisplayTop.setLayoutY(- TILE_HEIGHT);
             edgeTileDisplayTop.setLayoutX(i * TILE_WIDTH);
@@ -129,10 +134,13 @@ public class GameControllerDummy implements Initializable {
             edgeTileGroup.getChildren().add(edgeTileDisplayTop);
             edgeTileGroup.getChildren().add(edgeTileDisplayBottom);
 
+            setEdgeTileEventHandlers(edgeTileDisplayTop);
+            setEdgeTileEventHandlers(edgeTileDisplayBottom);
+
         }
         for (int i = 0; i < gameBoardView.getHeight(); i++) {
-            ImageView edgeTileDisplayRight = getFloorTileImageView(edgeTileImage);
-            ImageView edgeTileDisplayLeft = getFloorTileImageView(edgeTileImage);
+            edgeTileDisplayLeft = getFloorTileImageView(edgeTileImage);
+            edgeTileDisplayRight = getFloorTileImageView(edgeTileImage);
 
             edgeTileDisplayLeft.setLayoutY(i * TILE_HEIGHT);
             edgeTileDisplayLeft.setLayoutX(- TILE_WIDTH);
@@ -142,6 +150,9 @@ public class GameControllerDummy implements Initializable {
 
             edgeTileGroup.getChildren().add(edgeTileDisplayLeft);
             edgeTileGroup.getChildren().add(edgeTileDisplayRight);
+
+            setEdgeTileEventHandlers(edgeTileDisplayLeft);
+            setEdgeTileEventHandlers(edgeTileDisplayRight);
         }
     }
 
@@ -157,7 +168,7 @@ public class GameControllerDummy implements Initializable {
                 floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
                 floorTileDisplay.setEffect(highlight);
 
-                setEventHandlers(floorTileDisplay);
+                setFloorTileEventHandlers(floorTileDisplay);
 
                 tileGroup.getChildren().add(floorTileDisplay);
             }
@@ -183,7 +194,36 @@ public class GameControllerDummy implements Initializable {
         }
     }
 
-    public void setEventHandlers(ImageView floorTileDisplay) {
+    public void setEdgeTileEventHandlers(ImageView edgeTileDisplay) {
+        edgeTileDisplay.setOnDragOver(event -> {
+            event.acceptTransferModes(TransferMode.ANY);
+        });
+
+        edgeTileDisplay.setOnDragDropped(event -> {
+            int tileCol = getTileCol(edgeTileDisplay);
+            int tileRow = getTileRow(edgeTileDisplay);
+
+            System.out.println("Should be col: " + tileCol + ", row: " + tileRow);
+
+            if (tileCol == - 1 || tileCol == gameBoardView.getWidth()) {
+                System.out.println("Col true");
+            } else if ((tileRow == - 1 || tileRow == gameBoardView.getHeight())) {
+                System.out.println("Row true");
+            }
+
+//            ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+//            floorTileDisplay.setLayoutX((tileCol) * TILE_WIDTH);
+//            floorTileDisplay.setLayoutY((tileRow) * TILE_HEIGHT);
+//            tileGroup.getChildren().add(floorTileDisplay);
+
+            //TODO Fix pushed off tile
+
+            //TODO Fix first tile
+
+        });
+    }
+
+    public void setFloorTileEventHandlers(ImageView floorTileDisplay) {
         ColorAdjust highlight = new ColorAdjust();
 
         floorTileDisplay.setOnMouseEntered(event -> {
@@ -195,32 +235,6 @@ public class GameControllerDummy implements Initializable {
             highlight.setBrightness(0);
             floorTileDisplay.setEffect(highlight);
         });
-
-        floorTileDisplay.setOnDragOver(event -> {
-            event.acceptTransferModes(TransferMode.ANY);
-        });
-
-        floorTileDisplay.setOnDragDropped(event -> {
-            int tileCol = getFloorTileCol(floorTileDisplay);
-            int tileRow = getFloorTileRow(floorTileDisplay);
-
-            ImageView newFloorTileDisplay = getFloorTileImageView(floorTileImage);
-            newFloorTileDisplay.setLayoutX((tileCol) * TILE_WIDTH);
-            newFloorTileDisplay.setLayoutY((tileRow) * TILE_HEIGHT);
-            newFloorTileDisplay.toFront();
-            tileGroup.getChildren().add(newFloorTileDisplay);
-
-            if (tileRow == 0 || tileRow == gameBoardView.getHeight() - 1) { //Top or bottom edge
-                slideCol(tileCol, tileRow);
-            } else if (tileCol == 0 || tileCol == gameBoardView.getWidth() - 1) { //Left or right edge
-                slideRowTemp(tileRow, tileCol);
-            }
-
-            //TODO Fix pushed off tile
-
-            //TODO Fix first tile
-
-        });
     }
 
     //TODO Without animation, testing
@@ -229,13 +243,13 @@ public class GameControllerDummy implements Initializable {
         if (row < col) {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getFloorTileCol((ImageView) t) == col &&
+                    .filter(t -> getTileCol((ImageView) t) == col &&
                             ((ImageView) t).getImage() != edgeTileImage)
                     .collect(Collectors.toList());
         } else {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getFloorTileCol((ImageView) t) == col &&
+                    .filter(t -> getTileCol((ImageView) t) == col &&
                             ((ImageView) t).getImage() != edgeTileImage)
                     .collect(Collectors.toList());
         }
@@ -260,14 +274,14 @@ public class GameControllerDummy implements Initializable {
         if (col < row) {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getFloorTileRow((ImageView) t) == row &&
-                            getFloorTileCol((ImageView) t) != gameBoardView.getWidth() - 1)
+                    .filter(t -> getTileRow((ImageView) t) == row &&
+                            getTileCol((ImageView) t) != gameBoardView.getWidth() - 1)
                     .collect(Collectors.toList());
         } else {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getFloorTileRow((ImageView) t) == row &&
-                            getFloorTileCol((ImageView) t) != 0)
+                    .filter(t -> getTileRow((ImageView) t) == row &&
+                            getTileCol((ImageView) t) != 0)
                     .collect(Collectors.toList());
         }
         for (Node floorTile : floorTilesToMove) {
@@ -293,14 +307,14 @@ public class GameControllerDummy implements Initializable {
         if (row < col) {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getFloorTileCol((ImageView) t) == col &&
-                            getFloorTileRow((ImageView) t) != gameBoardView.getHeight() - 1)
+                    .filter(t -> getTileCol((ImageView) t) == col &&
+                            getTileRow((ImageView) t) != gameBoardView.getHeight() - 1)
                     .collect(Collectors.toList());
         } else {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getFloorTileCol((ImageView) t) == col &&
-                            getFloorTileRow((ImageView) t) != 0)
+                    .filter(t -> getTileCol((ImageView) t) == col &&
+                            getTileRow((ImageView) t) != 0)
                     .collect(Collectors.toList());
         }
 
@@ -341,11 +355,11 @@ public class GameControllerDummy implements Initializable {
         return output;
     }
 
-    private int getFloorTileCol(ImageView floorTileDisplay) {
-        return (int) (floorTileDisplay.getLayoutX() / TILE_WIDTH);
+    private int getTileCol(ImageView tileDisplay) {
+        return (int) (tileDisplay.getLayoutX() / TILE_WIDTH);
     }
 
-    private int getFloorTileRow(ImageView floorTileDisplay) {
-        return (int) (floorTileDisplay.getLayoutY() / TILE_HEIGHT);
+    private int getTileRow(ImageView tileDisplay) {
+        return (int) (tileDisplay.getLayoutY() / TILE_HEIGHT);
     }
 }
