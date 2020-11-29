@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1d3345;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.LeaderboardController">
    <top>
@@ -24,15 +20,21 @@
    <center>
       <VBox prefHeight="176.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets left="100.0" right="100.0" />
+            <Insets />
          </BorderPane.margin>
          <children>
-            <TableView fx:id="tableID" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #447ead;">
+            <TableView fx:id="tableID" style="-fx-background-color: #447ead;" VBox.vgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="name" prefWidth="118.0" text="Name" />
                 <TableColumn fx:id="wins" prefWidth="148.0" text="Wins" />
                   <TableColumn fx:id="losses" prefWidth="132.0" text="Losses" />
               </columns>
+               <padding>
+                  <Insets bottom="15.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets left="15.0" right="15.0" />
+               </VBox.margin>
             </TableView>
          </children>
       </VBox>
