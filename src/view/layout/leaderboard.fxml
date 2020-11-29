@@ -19,7 +19,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                 <children>
-                    <ChoiceBox prefWidth="200.0">
+                    <ChoiceBox fx:id="gameBoardSelect" prefWidth="200.0">
                         <HBox.margin>
                             <Insets left="15.0" />
                         </HBox.margin>

@@ -27,7 +27,6 @@ public class MainMenuController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             setMessageOfTheDay();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

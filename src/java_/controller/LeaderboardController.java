@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -40,6 +41,8 @@ public class LeaderboardController implements Initializable {
     private TableColumn<Table, Integer> wins;
     @FXML
     private TableColumn<Table, Integer> losses;
+    @FXML
+    private ChoiceBox<File> gameBoardSelect;
 
     private Table tableOne;
     private Object Table;
@@ -80,6 +83,10 @@ public class LeaderboardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Reader r = new Reader();
+        File[] fileNames = r.readFileNames("data/user_stats");
+        addGameBoardStatFileNames(fileNames);
+
         //Uncomment for file reader
         //FileReader();
         name.setCellValueFactory(new PropertyValueFactory<Table, String>("rName"));
@@ -87,6 +94,10 @@ public class LeaderboardController implements Initializable {
         losses.setCellValueFactory(new PropertyValueFactory<Table, Integer>("rLosses"));
 
         tableID.setItems(data);
+    }
+
+    private void addGameBoardStatFileNames(File[] fileNames) {
+        gameBoardSelect.setItems(FXCollections.observableArrayList(fileNames));
     }
 
     @FXML
