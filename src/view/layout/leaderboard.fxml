@@ -24,7 +24,7 @@
                             <Insets left="15.0" />
                         </HBox.margin>
                     </ChoiceBox>
-                    <Button mnemonicParsing="false" text="Select this Game Board:">
+                    <Button mnemonicParsing="false" onAction="#onViewStatsForGameBoardButton" text="Select this Game Board:">
                         <opaqueInsets>
                             <Insets />
                         </opaqueInsets>

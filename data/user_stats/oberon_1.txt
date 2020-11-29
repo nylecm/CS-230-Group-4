@@ -1,4 +1,4 @@
-nylecm` 3` 9`
-girion` 3` 8`
-samcox` 1` 4`
-bob101` 14` 0`
+nylecm`9`3`
+girion`8`3`
+samcox`4`1`
+bob101`0`14`

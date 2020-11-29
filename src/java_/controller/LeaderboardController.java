@@ -1,6 +1,7 @@
 package java_.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -42,7 +43,7 @@ public class LeaderboardController implements Initializable {
     @FXML
     private TableColumn<Table, Integer> losses;
     @FXML
-    private ChoiceBox<File> gameBoardSelect;
+    private ChoiceBox gameBoardSelect;
 
     private Table tableOne;
     private Object Table;
@@ -67,19 +68,21 @@ public class LeaderboardController implements Initializable {
 
 
     //Reading data with file reader
-    /* private void FileReader() {
-        try {
-            Scanner x = new Scanner(new File("C:\\Users\\Waleed's PC\\Desktop\\Leaderboard\\src\\users.txt")).useDelimiter("\\s");
-            while(x.hasNext()) {
-                String name = x.next();
-                int wins = x.nextInt();
-                int losses = x.nextInt();
-                data.add(new Table(name, wins, losses));
-            }
-        } catch (Exception e) {
-            System.out.println("");
+    private void readStatFile(File statFile) throws FileNotFoundException {
+        Scanner in = new Scanner(statFile);
+        in.useDelimiter("`");
+
+        while (in.hasNextLine()) {
+            String name = in.next();
+            int wins = in.nextInt();
+            String lossesStr = in.next();
+            int losses = Integer.parseInt(lossesStr);
+            data.add(new Table(name, wins, losses));
+            in.nextLine();
         }
-    } */
+        in.close();
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -105,5 +108,14 @@ public class LeaderboardController implements Initializable {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
         currentStage.setScene(new Scene(mainMenu));
+    }
+
+    @FXML
+    private void onViewStatsForGameBoardButton(ActionEvent e) {
+        try {
+            readStatFile(new File(String.valueOf(gameBoardSelect.getValue())));
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
     }
 }
