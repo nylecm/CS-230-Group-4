@@ -5,9 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.Collection;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.sun.org.apache.bcel.internal.classfile.ConstantNameAndType;
@@ -23,10 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -64,6 +59,8 @@ public class LeaderboardController implements Initializable {
     private void readStatFile(File statFile) throws FileNotFoundException {
         data.clear();
 
+        List<Table> playerStats = new LinkedList<>();
+
         Scanner in = new Scanner(statFile);
         in.useDelimiter("`");
 
@@ -72,10 +69,15 @@ public class LeaderboardController implements Initializable {
             int wins = in.nextInt();
             String lossesStr = in.next();
             int losses = Integer.parseInt(lossesStr);
-            data.add(new Table(name, wins, losses));
+            playerStats.add(new Table(name, wins, losses));
             in.nextLine();
         }
         in.close();
+
+        playerStats.sort(Comparator.comparingInt(java_.game.player.Table::getrWins));
+        Collections.reverse(playerStats);
+
+        data.addAll(playerStats);
     }
 
     @Override
@@ -84,8 +86,6 @@ public class LeaderboardController implements Initializable {
         File[] fileNames = r.readFileNames("data/user_stats");
         addGameBoardStatFileNames(fileNames);
 
-        //Uncomment for file reader
-        //FileReader();
         name.setCellValueFactory(new PropertyValueFactory<>("rName"));
         wins.setCellValueFactory(new PropertyValueFactory<>("rWins"));
         losses.setCellValueFactory(new PropertyValueFactory<>("rLosses"));
