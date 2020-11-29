@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -23,11 +24,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class NewGameController implements Initializable {
 
@@ -57,7 +56,7 @@ public class NewGameController implements Initializable {
     private VBox player1PlayerPieceSelectionVBox;
 
     @FXML
-    private ChoiceBox player1PlayerPieceSelect;
+    private ChoiceBox<File> player1PlayerPieceSelect;
 
     @FXML
     private ImageView player1PlayerPieceImage;
@@ -76,11 +75,13 @@ public class NewGameController implements Initializable {
     @FXML
     private VBox player4SetUpVBox;
 
-    private Set<File> currentlySelectedPlayerPieces;
+    private final Set<File> currentlySelectedPlayerPieces = new HashSet<>();
+
+    private final Set<String> currentUserNames = new HashSet<>();
 
     private final String LOG_IN_SUCCESS_STRING = "Login Successful!";
 
-    private final String LOG_IN_FAILURE_STRING = "Invalid Credentials!";
+    private final String LOG_IN_FAILURE_STRING = "Invalid/Duplicate Credentials!";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -100,6 +101,18 @@ public class NewGameController implements Initializable {
         gameBoardSelect.setOnAction(event -> {
             if (gameBoardSelect.getValue() != null) {
                 player1SetUpVBox.setDisable(false);
+            }
+        });
+
+        // fixme find less hacky way...
+        player1PlayerPieceSelect.setOnAction(event -> {
+            if (player1PlayerPieceSelect.getValue() != null) {
+                try {
+                    player1PlayerPieceImage.setImage(new Image(String.valueOf(player1PlayerPieceSelect.getValue().toURL())));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                //player1PlayerPieceImage.setImage(new Image(player1PlayerPieceSelect.getValue().getPath()));
             }
         });
     }
@@ -124,11 +137,14 @@ public class NewGameController implements Initializable {
         currentStage.setScene(new Scene(game));
     }
 
+    @FXML
     public void onPlayer1LogInButtonPressed(ActionEvent actionEvent) {
-        String username = player1Username.getText();
+        String username = (currentUserNames.contains(player1Username.getText())
+                ? "" : player1Username.getText());
         String password = player1Password.getText();
         if (LoginHandler.login(username, password)) {
             player1LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
+            currentUserNames.add(username);
             player1PlayerPieceSelectionVBox.setDisable(false);
             populateWithPlayerPieces(player1PlayerPieceSelect);
         } else {
@@ -136,15 +152,37 @@ public class NewGameController implements Initializable {
         }
     }
 
-    private void populateWithPlayerPieces(ChoiceBox playerPieceSelect) {
+    private void populateWithPlayerPieces(ChoiceBox<File> playerPieceSelect) {
         Reader reader = new Reader();
-        File[] playerPieces = reader.readFileNames("src/res/img/player_piece");
-        playerPieceSelect.setItems(FXCollections.observableArrayList(playerPieces));
+        File[] playerPieces = reader.readFileNames("src/view/res/img/player_piece");
+        LinkedList<File> playerPiecesList = new LinkedList<>(Arrays.asList(playerPieces));
+        playerPiecesList.removeIf(currentlySelectedPlayerPieces::contains);
+        playerPieceSelect.setItems(FXCollections.observableList(playerPiecesList));
     }
 
     public void onPlayer1PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+        if (player1PlayerPieceSelect != null) {
+            player2SetUpVBox.setDisable(false);
+        } else {
+            //todo tell user they have to select player piece
+        }
+    }
 
-        player1PlayerPieceSelectionVBox.setDisable(false);
+    public void onPlayer2LogInButtonPressed(ActionEvent actionEvent) {
+    }
 
+    public void onPlayer2PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+    }
+
+    public void onPlayer3LogInButtonPressed(ActionEvent actionEvent) {
+    }
+
+    public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+    }
+
+    public void onPlayer4LogInButtonPressed(ActionEvent actionEvent) {
+    }
+
+    public void onPlayer4PlayerPieceConfirmClicked(ActionEvent actionEvent) {
     }
 }
