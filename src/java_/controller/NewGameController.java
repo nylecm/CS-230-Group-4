@@ -15,17 +15,21 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class NewGameController implements Initializable {
 
     @FXML
     private ChoiceBox gameBoardSelect;
+
+    private Set<File> currentlySelectedPlayerPieces;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

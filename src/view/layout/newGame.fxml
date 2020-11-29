@@ -36,16 +36,27 @@
                                 <Font size="20.0" />
                             </font>
                         </Label>
-                        <ToggleButton fx:id="player" mnemonicParsing="false" onAction="#onPlayer1Toggle" prefHeight="25.0" prefWidth="128.0" text="Toggle" />
-                  <ChoiceBox prefWidth="150.0" />
-                        <Button minWidth="100.0" mnemonicParsing="false" prefHeight="112.0" prefWidth="129.0" text="PlayerPiece" />
-                  <ImageView fitHeight="151.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" />
-                        <HBox alignment="TOP_CENTER" minWidth="100.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                            <children>
-                                <Button minWidth="40.0" mnemonicParsing="false" text="LogIn" />
-                                <Label text="Username" />
-                            </children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                              <ToggleButton fx:id="togglePlayer1" mnemonicParsing="false" onAction="#onPlayer1Toggle" prefHeight="25.0" prefWidth="128.0" text="Toggle" />
+                        <TextField fx:id="player1UserName" promptText="Username" />
+                        <PasswordField fx:id="player1Password" promptText="Password" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                      <Button fx:id="player1LogIn" minWidth="40.0" mnemonicParsing="false" text="LogIn" />
+                              <Label fx:id="player1LogInStatusLabel" text="debug text" />
+                           </children>
                         </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Select Player Piece" />
+                        <ChoiceBox fx:id="player1PlayerPieceSelect" prefWidth="150.0" />
+                        <ImageView fx:id="player1PlayerPieceImage" fitHeight="151.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" />
+                              <Button fx:id="player1PlayerPieceConfirm" minWidth="100.0" mnemonicParsing="false" prefHeight="112.0" prefWidth="129.0" text="Confirm Selection" />
+                     </children>
+                  </VBox>
                     </children>
                 </VBox>
                 <VBox alignment="CENTER" prefHeight="167.0" prefWidth="135.0" spacing="10.0">
