@@ -86,7 +86,6 @@ public class LeaderboardController implements Initializable {
         in.close();
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Reader r = new Reader();
