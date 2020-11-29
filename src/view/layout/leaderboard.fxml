@@ -3,41 +3,66 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1d3345;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.LeaderboardController">
-   <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #13293b;" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="back" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="26.0" prefWidth="143.0" text="Back" />
-            <Label alignment="CENTER" prefHeight="100.0" prefWidth="600.0" text="Leaderboard" textFill="WHITE">
-               <font>
-                  <Font size="42.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-   </top>
-   <center>
-      <VBox prefHeight="176.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-         <children>
-            <TableView fx:id="tableID" style="-fx-background-color: #447ead;" VBox.vgrow="ALWAYS">
-              <columns>
-                <TableColumn fx:id="name" prefWidth="118.0" text="Name" />
-                <TableColumn fx:id="wins" prefWidth="148.0" text="Wins" />
-                  <TableColumn fx:id="losses" prefWidth="132.0" text="Losses" />
-              </columns>
-               <padding>
-                  <Insets bottom="15.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets left="15.0" right="15.0" />
-               </VBox.margin>
-            </TableView>
-         </children>
-      </VBox>
-   </center>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1d3345;"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="java_.controller.LeaderboardController">
+    <top>
+        <VBox prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                  style="-fx-background-color: #13293b;" BorderPane.alignment="CENTER">
+                <Button fx:id="back" mnemonicParsing="false" onAction="#onBackButtonClicked"
+                        prefHeight="26.0" prefWidth="143.0" text="Back">
+                    <HBox.margin>
+                        <Insets left="15.0"/>
+                    </HBox.margin>
+                </Button>
+
+                <Label alignment="CENTER" prefHeight="100.0" prefWidth="600.0" text="Leaderboard"
+                       textFill="WHITE">
+                </Label>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+                <children>
+                    <ChoiceBox prefWidth="200.0">
+                        <HBox.margin>
+                            <Insets left="15.0"/>
+                        </HBox.margin>
+                    </ChoiceBox>
+                    <Button mnemonicParsing="false" text="Select this Game Board:">
+                        <opaqueInsets>
+                            <Insets/>
+                        </opaqueInsets>
+                        <HBox.margin>
+                            <Insets left="15.0" right="15.0"/>
+                        </HBox.margin>
+                    </Button>
+                </children>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <VBox prefHeight="176.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets/>
+            </BorderPane.margin>
+            <children>
+                <TableView fx:id="tableID" style="-fx-background-color: #447ead;"
+                           VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="name" prefWidth="118.0" text="Name"/>
+                        <TableColumn fx:id="wins" prefWidth="148.0" text="Wins"/>
+                        <TableColumn fx:id="losses" prefWidth="132.0" text="Losses"/>
+                    </columns>
+                    <padding>
+                        <Insets bottom="15.0"/>
+                    </padding>
+                    <VBox.margin>
+                        <Insets left="15.0" right="15.0"/>
+                    </VBox.margin>
+                </TableView>
+            </children>
+        </VBox>
+    </center>
 </BorderPane>
