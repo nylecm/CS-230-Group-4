@@ -6,8 +6,8 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1d3345;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.LeaderboardController">
     <top>
-        <VBox prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #13293b;" BorderPane.alignment="CENTER">
+        <VBox prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #13293b;" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                 <Button fx:id="back" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="26.0" prefWidth="143.0" text="Back">
                     <HBox.margin>
                         <Insets left="15.0" />
