@@ -56,15 +56,7 @@ public class LeaderboardController implements Initializable {
 
     //Reading data in manually
     @FXML
-    ObservableList<Table> data = FXCollections.observableArrayList(
-            new Table("Waleed", 8, 3),
-            new Table("Ioan", 12, 12),
-            new Table("Michal", 15, 3),
-            new Table("Sam", 13, 3),
-            new Table("Mateo", 23, 9),
-            new Table("Mohammad", 18, 14),
-            new Table("Bishwo", 11, 18)
-    );
+    ObservableList<Table> data = FXCollections.observableArrayList();
 
     //todo add ability to see stats for all game boards.
 
@@ -94,9 +86,9 @@ public class LeaderboardController implements Initializable {
 
         //Uncomment for file reader
         //FileReader();
-        name.setCellValueFactory(new PropertyValueFactory<Table, String>("rName"));
-        wins.setCellValueFactory(new PropertyValueFactory<Table, Integer>("rWins"));
-        losses.setCellValueFactory(new PropertyValueFactory<Table, Integer>("rLosses"));
+        name.setCellValueFactory(new PropertyValueFactory<>("rName"));
+        wins.setCellValueFactory(new PropertyValueFactory<>("rWins"));
+        losses.setCellValueFactory(new PropertyValueFactory<>("rLosses"));
 
         tableID.setItems(data);
     }
