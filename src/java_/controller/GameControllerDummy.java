@@ -203,12 +203,14 @@ public class GameControllerDummy implements Initializable {
             int tileCol = getTileCol(edgeTileDisplay);
             int tileRow = getTileRow(edgeTileDisplay);
 
-            System.out.println("Should be col: " + tileCol + ", row: " + tileRow);
+            System.out.println("Col: " + tileCol);
+            System.out.println("Row: " + tileRow );
+
 
             if (tileCol == - 1 || tileCol == gameBoardView.getWidth()) {
-                System.out.println("Col true");
+                //slideCol(tileCol, tileRow);
             } else if ((tileRow == - 1 || tileRow == gameBoardView.getHeight())) {
-                System.out.println("Row true");
+                slideCol(tileCol, tileRow);
             }
 
 //            ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
@@ -235,6 +237,11 @@ public class GameControllerDummy implements Initializable {
             highlight.setBrightness(0);
             floorTileDisplay.setEffect(highlight);
         });
+
+        floorTileDisplay.setOnMouseClicked(event -> {
+            System.out.println("Col: " + getTileCol(floorTileDisplay));
+            System.out.println("Row: " + getTileRow(floorTileDisplay));
+        });
     }
 
     //TODO Without animation, testing
@@ -243,14 +250,12 @@ public class GameControllerDummy implements Initializable {
         if (row < col) {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getTileCol((ImageView) t) == col &&
-                            ((ImageView) t).getImage() != edgeTileImage)
+                    .filter(t -> getTileCol((ImageView) t) == col)
                     .collect(Collectors.toList());
         } else {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getTileCol((ImageView) t) == col &&
-                            ((ImageView) t).getImage() != edgeTileImage)
+                    .filter(t -> getTileCol((ImageView) t) == col)
                     .collect(Collectors.toList());
         }
         for (Node floorTile : floorTilesToMove) {
@@ -301,22 +306,18 @@ public class GameControllerDummy implements Initializable {
     }
 
     private void slideCol(int col, int row) {
+        ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+        floorTileDisplay.setLayoutX(col * TILE_WIDTH);
+        floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
+        tileGroup.getChildren().add(floorTileDisplay);
+
         List<Node> floorTilesToMove;
         double startPosition;
         double endPosition;
-        if (row < col) {
-            floorTilesToMove = tileGroup.getChildren()
-                    .stream()
-                    .filter(t -> getTileCol((ImageView) t) == col &&
-                            getTileRow((ImageView) t) != gameBoardView.getHeight() - 1)
-                    .collect(Collectors.toList());
-        } else {
-            floorTilesToMove = tileGroup.getChildren()
-                    .stream()
-                    .filter(t -> getTileCol((ImageView) t) == col &&
-                            getTileRow((ImageView) t) != 0)
-                    .collect(Collectors.toList());
-        }
+        floorTilesToMove = tileGroup.getChildren()
+                .stream()
+                .filter(t -> getTileCol((ImageView) t) == col)
+                .collect(Collectors.toList());
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
@@ -325,11 +326,10 @@ public class GameControllerDummy implements Initializable {
 
         for (Node floorTile : floorTilesToMove) {
             DoubleProperty property = floorTile.translateYProperty();
-            System.out.println(property);
             if (row < col) {
                 startPosition = row * TILE_HEIGHT;
                 endPosition = startPosition + TILE_HEIGHT;
-                lastTile = floorTilesToMove.get(floorTilesToMove.size() - 2); //TODO: Replace 2 with border offset
+                lastTile = floorTilesToMove.get(floorTilesToMove.size() - 1);
             } else {
                 startPosition = row / TILE_HEIGHT;
                 endPosition = startPosition - TILE_HEIGHT;
