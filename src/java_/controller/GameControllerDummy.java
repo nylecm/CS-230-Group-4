@@ -1,12 +1,8 @@
 package java_.controller;
 
 import java_.game.controller.GameService;
-import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
-import java_.game.tile.FloorTile;
 import java_.game.tile.GameBoard;
-import java_.game.tile.Tile;
-import java_.game.tile.TileType;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -15,6 +11,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -24,7 +21,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -41,10 +40,6 @@ public class GameControllerDummy implements Initializable {
     private static final int PLAYER_PIECE_WIDTH = 28;
 
     private static final int PLAYER_PIECE_HEIGHT = 28;
-
-    private static final int BORDER_OFFSET_HORIZONTAL = 3;
-
-    private static final int BORDER_OFFSET_VERTICAL = 1;
 
     @FXML
     private ScrollPane scrollPane;
@@ -108,17 +103,23 @@ public class GameControllerDummy implements Initializable {
         displayFloorTiles();
         displayPlayerPieces(gameBoard);
 
-        content.getChildren().addAll(edgeTileGroup, tileGroup);
+//        content.getChildren().addAll(edgeTileGroup, tileGroup, playerPieceGroup);
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        hbox.setAlignment(Pos.CENTER);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(edgeTileGroup, tileGroup);
+        hbox.getChildren().add(vbox);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-        scrollPane.setContent(content);
+        scrollPane.setContent(hbox);
     }
 
     private void displayEdges() {
-        ImageView edgeTileDisplayTop = null;
-        ImageView edgeTileDisplayBottom = null;
-        ImageView edgeTileDisplayLeft = null;
-        ImageView edgeTileDisplayRight = null;
+        ImageView edgeTileDisplayTop;
+        ImageView edgeTileDisplayBottom;
+        ImageView edgeTileDisplayLeft;
+        ImageView edgeTileDisplayRight;
 
         for (int i = 0; i < gameBoardView.getWidth(); i++) {
             edgeTileDisplayTop = getFloorTileImageView(edgeTileImage);
@@ -184,13 +185,19 @@ public class GameControllerDummy implements Initializable {
 
             Image playerPieceImage = new Image("playerPiece.png");
             ImageView playerPieceDisplay = new ImageView(playerPieceImage);
-            playerPieceDisplay.setFitWidth(PLAYER_PIECE_WIDTH);
-            playerPieceDisplay.setFitHeight(PLAYER_PIECE_HEIGHT);
 
-            playerPieceDisplay.setLayoutX((col) * PLAYER_PIECE_WIDTH + 200);
+            playerPieceDisplay.setLayoutX((col) * PLAYER_PIECE_WIDTH);
             playerPieceDisplay.setLayoutY((row) * PLAYER_PIECE_HEIGHT);
 
             playerPieceGroup.getChildren().add(playerPieceDisplay);
+
+            playerPieceDisplay.setOnDragDetected(event -> {
+                Dragboard dragboard = playerPieceDisplay.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                content.putImage(playerPieceDisplay.getImage());
+                dragboard.setContent(content);
+                event.consume();
+            });
         }
     }
 
@@ -206,22 +213,16 @@ public class GameControllerDummy implements Initializable {
             System.out.println("Col: " + tileCol);
             System.out.println("Row: " + tileRow );
 
+            ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+            floorTileDisplay.setLayoutX(tileCol * TILE_WIDTH);
+            floorTileDisplay.setLayoutY(tileRow * TILE_HEIGHT);
+            tileGroup.getChildren().add(floorTileDisplay);
 
             if (tileCol == - 1 || tileCol == gameBoardView.getWidth()) {
-                //slideCol(tileCol, tileRow);
+                slideRowTemp(tileRow, tileCol);
             } else if ((tileRow == - 1 || tileRow == gameBoardView.getHeight())) {
-                slideCol(tileCol, tileRow);
+                slideColTemp(tileCol, tileRow);
             }
-
-//            ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
-//            floorTileDisplay.setLayoutX((tileCol) * TILE_WIDTH);
-//            floorTileDisplay.setLayoutY((tileRow) * TILE_HEIGHT);
-//            tileGroup.getChildren().add(floorTileDisplay);
-
-            //TODO Fix pushed off tile
-
-            //TODO Fix first tile
-
         });
     }
 
@@ -242,6 +243,21 @@ public class GameControllerDummy implements Initializable {
             System.out.println("Col: " + getTileCol(floorTileDisplay));
             System.out.println("Row: " + getTileRow(floorTileDisplay));
         });
+
+        floorTileDisplay.setOnDragOver(event ->  {
+            event.acceptTransferModes(TransferMode.ANY);
+        });
+
+        floorTileDisplay.setOnDragDropped(event -> {
+            ImageView source = (ImageView) event.getGestureSource();
+            if (playerPieceGroup.getChildren().contains(source)) {
+                System.out.println("Hello");
+                int offsetX = (int) ((TILE_WIDTH - source.getFitWidth()) / 2);
+                int offsetY = (int) ((TILE_HEIGHT - source.getFitHeight()) / 2);
+                source.setLayoutX(floorTileDisplay.getX() + offsetX);
+                source.setLayoutY(floorTileDisplay.getY() + offsetY);
+            }
+        });
     }
 
     //TODO Without animation, testing
@@ -252,7 +268,7 @@ public class GameControllerDummy implements Initializable {
                     .stream()
                     .filter(t -> getTileCol((ImageView) t) == col)
                     .collect(Collectors.toList());
-        } else {
+        } else { //Bottom row
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
                     .filter(t -> getTileCol((ImageView) t) == col)
@@ -261,17 +277,14 @@ public class GameControllerDummy implements Initializable {
         for (Node floorTile : floorTilesToMove) {
             if (row < col) {
                 floorTile.setLayoutY(floorTile.getLayoutY() + TILE_HEIGHT);
-            } else {
+            } else { //Bottom row
                 floorTile.setLayoutY(floorTile.getLayoutY() - TILE_HEIGHT);
             }
         }
         Node lastTile = null;
-        if (row < col) {
-            lastTile = floorTilesToMove.get(floorTilesToMove.size() - 2);
-        } else {
-            lastTile = floorTilesToMove.get(0);
-        }
-//        tileGroup.getChildren().remove(lastTile);
+        lastTile = floorTilesToMove.get(floorTilesToMove.size() - 1);
+
+        tileGroup.getChildren().remove(lastTile);
     }
 
     private void slideRowTemp(int row, int col) {
@@ -279,14 +292,12 @@ public class GameControllerDummy implements Initializable {
         if (col < row) {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getTileRow((ImageView) t) == row &&
-                            getTileCol((ImageView) t) != gameBoardView.getWidth() - 1)
+                    .filter(t -> getTileRow((ImageView) t) == row)
                     .collect(Collectors.toList());
         } else {
             floorTilesToMove = tileGroup.getChildren()
                     .stream()
-                    .filter(t -> getTileRow((ImageView) t) == row &&
-                            getTileCol((ImageView) t) != 0)
+                    .filter(t -> getTileRow((ImageView) t) == row)
                     .collect(Collectors.toList());
         }
         for (Node floorTile : floorTilesToMove) {
@@ -297,11 +308,8 @@ public class GameControllerDummy implements Initializable {
             }
         }
         Node lastTile = null;
-        if (col < row) {
-            lastTile = floorTilesToMove.get(floorTilesToMove.size() - 2);
-        } else {
-            lastTile = floorTilesToMove.get(0);
-        }
+        lastTile = floorTilesToMove.get(floorTilesToMove.size() - 1);
+
         tileGroup.getChildren().remove(lastTile);
     }
 
@@ -327,11 +335,11 @@ public class GameControllerDummy implements Initializable {
         for (Node floorTile : floorTilesToMove) {
             DoubleProperty property = floorTile.translateYProperty();
             if (row < col) {
-                startPosition = row * TILE_HEIGHT;
+                startPosition = row;
                 endPosition = startPosition + TILE_HEIGHT;
                 lastTile = floorTilesToMove.get(floorTilesToMove.size() - 1);
             } else {
-                startPosition = row / TILE_HEIGHT;
+                startPosition = row;
                 endPosition = startPosition - TILE_HEIGHT;
                 lastTile = floorTilesToMove.get(0);
             }
