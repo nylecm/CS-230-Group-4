@@ -57,4 +57,7 @@ public class NewGameController implements Initializable {
         Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
         currentStage.setScene(new Scene(game));
     }
+
+    public void onPlayer1Toggle(ActionEvent actionEvent) {
+    }
 }
