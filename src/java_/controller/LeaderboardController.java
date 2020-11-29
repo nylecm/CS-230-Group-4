@@ -66,9 +66,12 @@ public class LeaderboardController implements Initializable {
             new Table("Bishwo", 11, 18)
     );
 
+    //todo add ability to see stats for all game boards.
 
     //Reading data with file reader
     private void readStatFile(File statFile) throws FileNotFoundException {
+        data.clear();
+
         Scanner in = new Scanner(statFile);
         in.useDelimiter("`");
 
