@@ -1,0 +1,3 @@
+waleed 20 2
+ikan 0 200
+Andy 3 16

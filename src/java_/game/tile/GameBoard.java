@@ -384,7 +384,9 @@ public class GameBoard {
     }
 
     public boolean isBacktrackPossible(int playerNum) {
-        return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) == null) || ((getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null) && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)));
+        return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) == null)
+                || ((getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null)
+                && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)));
     }
 
     public AreaEffect getEffectAt(Position pos) {
