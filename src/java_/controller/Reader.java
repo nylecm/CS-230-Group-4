@@ -15,7 +15,7 @@ public class Reader {
     private File file;
     private Scanner in;
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
-    private static final String DELIMITER = "";
+    private static final String DELIMITER = "`";
 
     public List<String> readGameBoardNames() throws FileNotFoundException {
         List<String> output = new ArrayList<>();

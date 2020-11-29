@@ -7,6 +7,7 @@ import java.util.Stack;
 public class PlayerPiece {
     private final Stack<Position> previousPlayerPiecePositions;
 
+
     public PlayerPiece() {
         previousPlayerPiecePositions = new Stack<>();
     }
