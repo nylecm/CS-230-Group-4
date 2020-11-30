@@ -151,7 +151,7 @@ public class GameBoard {
         for (int i = 0; i < playerPiecePositions.length; i++) {
             Position pos = playerPiecePositions[i];
             if (pos.getRowNum() == rowNum) {
-                playerPiecePositions[i] = nextPositionLeftToRight(new Position(rowNum, pos.getColNum())); //todo replace with pos
+                playerPiecePositions[i] = nextPositionLeftToRight(pos);
                 playerPieces[i].addPreviousPlayerPosition(pos);
             }
         }

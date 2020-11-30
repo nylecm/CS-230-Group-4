@@ -10,14 +10,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author nylecm, coxy7, bishwo
- */
-
-
-/**
  * The player which is one of up to four players that participates in the game. A player has a PlayerPiece which represents
  * them on the gameboard. The player can draw action tiles which can be used to apply effects. A player can also have effects applied to them.
  * A player is identified by a username.
+ *
+ * @author nylecm, coxy7, bishwo
  */
 public class Player {
     private final String username;

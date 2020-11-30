@@ -11,6 +11,8 @@ import java.util.Stack;
  * A PlayerPiece represents the player playing the game and their position on the gameboard.
  * A PlayerPiece is represented graphically with an image.
  * It also keeps track of every position of a gameboard it has previously been on.
+ *
+ * @author nylecm, java doc by SamCox7500
  */
 public class PlayerPiece {
     private final Stack<Position> previousPlayerPiecePositions;
