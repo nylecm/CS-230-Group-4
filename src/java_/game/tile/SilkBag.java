@@ -25,13 +25,20 @@ public class SilkBag {
         }
     }
 
-    /**
+    public SilkBag() {
+    }
+
+   /* *//**
      * Puts a tile into the silk bag.
      *
      * @param t the tile to be put into the silk bag.
-     */
+     *//*
     public void put(Tile t) {
         tiles.enqueue(t.getType());
+    }*/
+
+    public void put(TileType t) {
+        tiles.enqueue(t);
     }
 
     /**
@@ -45,11 +52,15 @@ public class SilkBag {
 
         if (FloorTile.FLOOR_TILE_TYPES.contains(tileType)) {
             tiles.dequeue();
-            return new FloorTile(tileType, false, false);
+            return new FloorTile(tileType, false);
         } else {
             tiles.dequeue();
             return new ActionTile(tileType);
         }
+    }
+
+    public boolean isEmpty() {
+        return tiles.isEmpty();
     }
 
     @Override
@@ -67,15 +78,15 @@ public class SilkBag {
 
         SilkBag s = new SilkBag(ts);
 
-        s.put(new ActionTile(TileType.FIRE));
-        s.put(new ActionTile(TileType.ICE));
-        s.put(new ActionTile(TileType.BACKTRACK));
-        s.put(new ActionTile(TileType.DOUBLE_MOVE));
-        s.put(new FloorTile(TileType.STRAIGHT, false, false));
-        s.put(new ActionTile(TileType.FIRE));
-        s.put(new ActionTile(TileType.FIRE));
-        s.put(new ActionTile(TileType.FIRE));
-        s.put(new ActionTile(TileType.FIRE));
+        s.put(TileType.FIRE);
+        s.put(TileType.ICE);
+        s.put(TileType.BACKTRACK);
+        s.put(TileType.DOUBLE_MOVE);
+        s.put(TileType.STRAIGHT);
+        s.put(TileType.FIRE);
+        s.put(TileType.FIRE);
+        s.put(TileType.FIRE);
+        s.put(TileType.FIRE);
 
         System.out.println(s);
 

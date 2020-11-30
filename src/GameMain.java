@@ -5,12 +5,12 @@ import javafx.application.Application;
         import javafx.stage.Stage;
 
 /**
- * The type java.Main.
+ * The type java.java_.Main.
  */
 public class GameMain extends Application {
     public void start(Stage primaryStage) {
         try {
-            Pane root = (Pane) FXMLLoader.load(getClass().getResource("view/layout/game.fxml"));
+            Pane root = (Pane) FXMLLoader.load(getClass().getResource("view/layout/newGame.fxml"));
             Scene scene = new Scene(root, 720 + 60, 576);
 
             primaryStage.setScene(scene);

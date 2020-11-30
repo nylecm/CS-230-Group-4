@@ -9,13 +9,14 @@ import java.util.Scanner;
 public class LoginHandler {
 
     private static final String USERS_FILE_PATH = "users.txt";
+    private static final String DELIMITER = "`";
 
     public static boolean login(String username, String password) {
         File users = new File(USERS_FILE_PATH);
         try (Scanner sc = new Scanner(users)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                String[] credentials = line.split(",");
+                String[] credentials = line.split(DELIMITER);
                 String savedUsername = credentials[0];
                 String encodedPassword = credentials[2];
                 if (username.equals(savedUsername) && PasswordEncoder.validatePassword(password, encodedPassword)) {
@@ -26,9 +27,5 @@ public class LoginHandler {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(login("GirionBorec", "Hello7_Hi"));
     }
 }

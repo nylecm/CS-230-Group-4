@@ -18,12 +18,12 @@
                   <Font size="30.0" />
                </font>
             </Label>
-              <TextField fx:id="username" maxHeight="400.0" maxWidth="400.0" minWidth="70.0" promptText="Username">
+              <TextField fx:id="username" maxHeight="400.0" maxWidth="200.0" minWidth="70.0" prefHeight="25.0" prefWidth="182.0" promptText="Username">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
             </TextField>
-            <PasswordField fx:id="password" />
+            <PasswordField fx:id="password" maxWidth="200.0" minWidth="70.0" prefHeight="25.0" prefWidth="486.0" promptText="Password" />
             <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="200.0" prefHeight="63.0" prefWidth="398.0" spacing="20.0">
                <children>
                   <Label alignment="CENTER" text="Forgot password?" textAlignment="CENTER">

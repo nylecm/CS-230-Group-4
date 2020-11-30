@@ -7,9 +7,9 @@ public class EffectFactory {
         }
         if (ActionTile.ACTION_TILE_TYPES.contains(type)) {
             if (type == TileType.ICE) {
-                return new AreaEffect(EffectType.ICE, 2, 4); //todo update duration, and get rid of magic numbers.
+                return new AreaEffect(EffectType.ICE, 1, 4); //todo update duration, and get rid of magic numbers.
             } else if (type == TileType.FIRE) {
-                return new AreaEffect(EffectType.FIRE, 2, 4); //todo update duration, and get rid of magic numbers.
+                return new AreaEffect(EffectType.FIRE, 1, 4); //todo update duration, and get rid of magic numbers.
             } else if (type == TileType.BACKTRACK) {
                 return new PlayerEffect(EffectType.BACKTRACK, null); //todo get user input for target...
             } else if (type == TileType.DOUBLE_MOVE) {

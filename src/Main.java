@@ -1,30 +1,19 @@
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-/**
- * The type java.Main.
- */
 public class Main extends Application {
-    public void start(Stage primaryStage) {
-        try {
-            Pane root = FXMLLoader.load(Main.class.getResource("view/layout/mainMenu.fxml"));
-            Scene scene = new Scene(root, 780, 576);
 
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("view/layout/leaderboard.fxml"));
+        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.show();
     }
 
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
+
     public static void main(String[] args) {
         launch(args);
     }
