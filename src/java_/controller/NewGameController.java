@@ -186,8 +186,11 @@ public class NewGameController implements Initializable {
         player1SetUpVBox.setDisable(true);
         player1PlayerPieceSelectionVBox.setDisable(true);
         player2SetUpVBox.setDisable(true);
+        player2PlayerPieceSelectionVBox.setDisable(true);
         player3SetUpVBox.setDisable(true);
+        player3PlayerPieceSelectionVBox.setDisable(true);
         player4SetUpVBox.setDisable(true);
+        player4PlayerPieceSelectionVBox.setDisable(true);
 
         gameBoardSelect.setOnAction(event -> {
             if (gameBoardSelect.getValue() != null) {
@@ -229,7 +232,7 @@ public class NewGameController implements Initializable {
 
     @FXML
     public void onPlayer1PlayerPieceConfirmClicked(ActionEvent actionEvent) {
-        if (player1PlayerPieceSelect != null) {
+        if (player1PlayerPieceSelect.getValue() != null) {
             File playerPieceSelected = player1PlayerPieceSelect.getValue();
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player2SetUpVBox.setDisable(false);
@@ -256,7 +259,7 @@ public class NewGameController implements Initializable {
 
     @FXML
     public void onPlayer2PlayerPieceConfirmClicked(ActionEvent actionEvent) {
-        if (player2PlayerPieceSelect != null) {
+        if (player2PlayerPieceSelect.getValue() != null) {
             File playerPieceSelected = player2PlayerPieceSelect.getValue();
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player3SetUpVBox.setDisable(false);
@@ -283,7 +286,7 @@ public class NewGameController implements Initializable {
 
     @FXML
     public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
-        if (player3PlayerPieceSelect != null) {
+        if (player3PlayerPieceSelect.getValue() != null) {
             File playerPieceSelected = player3PlayerPieceSelect.getValue();
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player4SetUpVBox.setDisable(false);
@@ -310,7 +313,7 @@ public class NewGameController implements Initializable {
 
     @FXML
     public void onPlayer4PlayerPieceConfirmClicked(ActionEvent actionEvent) {
-        if (player4PlayerPieceSelect != null) {
+        if (player4PlayerPieceSelect.getValue() != null) {
             File playerPieceSelected = player4PlayerPieceSelect.getValue();
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player4PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
