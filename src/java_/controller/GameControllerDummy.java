@@ -239,7 +239,8 @@ public class GameControllerDummy implements Initializable {
             });
 
             playerPieceDisplay.setOnMouseClicked(event -> {
-                System.out.println(playerPieceDisplay.getId());
+                System.out.println("Col: " + getTileCol(playerPieceDisplay));
+                System.out.println("Row: " + getTileRow(playerPieceDisplay));
             });
         }
     }
@@ -310,6 +311,11 @@ public class GameControllerDummy implements Initializable {
     public void setEdgeTileEventHandlers(ImageView edgeTileDisplay) {
         edgeTileDisplay.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.ANY);
+        });
+
+        edgeTileDisplay.setOnMouseClicked(event -> {
+            System.out.println("Col: " + getTileCol(edgeTileDisplay));
+            System.out.println("Row: " + getTileRow(edgeTileDisplay));
         });
 
         edgeTileDisplay.setOnDragDropped(event -> {
@@ -401,14 +407,11 @@ public class GameControllerDummy implements Initializable {
             }
 
             //Return back if yeeted out
-            System.out.println("Player Piece layout: " + getTileCol((ImageView) playerPiece));
-            System.out.println("GBVH: " + gameBoardView.getHeight());
-            if (getTileRow((ImageView) playerPiece) >= gameBoardView.getHeight()) {
-                playerPiece.setLayoutY(gameBoardView.getHeight() - 3);
+            if (playerPiece.getLayoutY() < 0) {
+                playerPiece.setLayoutY((gameBoardView.getHeight() - 1) * TILE_HEIGHT + 6);
             }
-            if (getTileRow((ImageView) playerPiece) < 1) {
-                System.out.println();
-                playerPiece.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT - TILE_HEIGHT + 6);
+            if (playerPiece.getLayoutY() > gameBoardView.getHeight() * TILE_HEIGHT) {
+                playerPiece.setLayoutY(6);
             }
         }
 
@@ -439,23 +442,25 @@ public class GameControllerDummy implements Initializable {
         tileGroup.getChildren().add(floorTileDisplay);
 
         List<Node> floorTilesToMove;
-        if (col < row) {
-            floorTilesToMove = tileGroup.getChildren()
-                    .stream()
-                    .filter(t -> getTileRow((ImageView) t) == row)
-                    .collect(Collectors.toList());
-        } else {
-            floorTilesToMove = tileGroup.getChildren()
-                    .stream()
-                    .filter(t -> getTileRow((ImageView) t) == row)
-                    .collect(Collectors.toList());
-        }
+        List<Node> playerPiecesToMove;
+
+        floorTilesToMove = tileGroup.getChildren()
+                .stream()
+                .filter(t -> getTileRow((ImageView) t) == row)
+                .collect(Collectors.toList());
+
+        playerPiecesToMove = playerPieceGroup.getChildren()
+                .stream()
+                .filter(t -> getTileRow((ImageView) t) == row)
+                .collect(Collectors.toList());
+
         for (Node floorTile : floorTilesToMove) {
             if (col < row) {
                 floorTile.setLayoutX(floorTile.getLayoutX() + TILE_WIDTH);
             } else {
                 floorTile.setLayoutX(floorTile.getLayoutX() - TILE_WIDTH);
             }
+
         }
 
         //TODO THIS IS A VERY BAD CODE, SCAAARY
@@ -475,6 +480,22 @@ public class GameControllerDummy implements Initializable {
         }
 
         tileGroup.getChildren().remove(lastTile.get(0));
+
+        for (Node playerPiece : playerPiecesToMove) {
+            if (col < row) {
+                playerPiece.setLayoutX(playerPiece.getLayoutX() + TILE_WIDTH);
+            } else { //Bottom row
+                playerPiece.setLayoutX(playerPiece.getLayoutX() - TILE_WIDTH);
+            }
+            //Return back if yeeted out
+            if (playerPiece.getLayoutX() < 0) {
+                playerPiece.setLayoutX((gameBoardView.getWidth() - 1) * TILE_WIDTH + 6);
+            }
+            System.out.println(gameBoardView.getWidth() * TILE_WIDTH);
+            if (playerPiece.getLayoutX() > gameBoardView.getWidth() * TILE_WIDTH) {
+                playerPiece.setLayoutX(6);
+            }
+        }
     }
 
     private void slideCol(int col, int row) {
