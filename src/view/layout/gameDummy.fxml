@@ -37,6 +37,11 @@
                         <Image url="@../../fullFlat.png" />
                     </image>
                 </ImageView>
+            <ImageView fx:id="actionTile" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../actionTile.png" />
+               </image>
+            </ImageView>
             </children>
         </HBox>
     </bottom>
