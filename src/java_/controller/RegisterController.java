@@ -61,8 +61,6 @@ public class RegisterController implements Initializable {
     private final String PASSWORD_INVALID_MSG = "Password invalid!";
     private final String PASSWORD_NO_MATCH_MSG = "Passwords don't match!";
 
-
-
     @FXML
     private void onRegisterButtonClicked(ActionEvent event) {
         String username = this.username.getText();
@@ -120,6 +118,7 @@ public class RegisterController implements Initializable {
     private boolean validateRepeatPassword(String password, String repeatPassword) {
         return password.equals(repeatPassword);
     }
+
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
