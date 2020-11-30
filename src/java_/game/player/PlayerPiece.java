@@ -41,5 +41,4 @@ public class PlayerPiece {
     public Position getPreviousPlayerPosition() {
         return previousPlayerPiecePositions.peek();
     }
-
 }
