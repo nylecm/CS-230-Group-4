@@ -166,13 +166,18 @@ public class NewGameController implements Initializable {
     @FXML
     private Button player4PlayerPieceConfirm;
 
-    private final Set<File> currentlySelectedPlayerPieces = new HashSet<>();
+    private final static String LOG_IN_SUCCESS_STRING = "Login Successful!";
+    private final static String LOG_IN_FAILURE_STRING = "Invalid/Duplicate Credentials!";
+    private final static int MAX_NUMBER_OF_PLAYERS = 2;
 
+    private boolean isPlayer1Ready = false;
+    private boolean isPlayer2Ready = false;
+    private boolean isPlayer3Ready = false;
+    private boolean isPlayer4Ready = false;
+
+    private final Set<File> currentlySelectedPlayerPieces = new HashSet<>();
     private final Set<String> currentUserNames = new HashSet<>();
 
-    private final String LOG_IN_SUCCESS_STRING = "Login Successful!";
-
-    private final String LOG_IN_FAILURE_STRING = "Invalid/Duplicate Credentials!";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -259,6 +264,7 @@ public class NewGameController implements Initializable {
             populateWithPlayerPieces(player1PlayerPieceSelect);
         } else {
             player1LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
+            isPlayer1Ready = false;
         }
     }
 
@@ -269,8 +275,10 @@ public class NewGameController implements Initializable {
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player2SetUpVBox.setDisable(false);
             player1PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+            isPlayer1Ready = true;
         } else {
             player1PlayerPieceStatus.setText("Player Piece Not Selected!");
+            isPlayer1Ready = false;
         }
     }
 
@@ -286,6 +294,7 @@ public class NewGameController implements Initializable {
             populateWithPlayerPieces(player2PlayerPieceSelect);
         } else {
             player2LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
+            isPlayer2Ready = false;
         }
     }
 
@@ -296,8 +305,10 @@ public class NewGameController implements Initializable {
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player3SetUpVBox.setDisable(false);
             player2PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+            isPlayer2Ready = true;
         } else {
             player2PlayerPieceStatus.setText("Player Piece Not Selected!");
+            isPlayer2Ready = false;
         }
     }
 
@@ -313,6 +324,7 @@ public class NewGameController implements Initializable {
             populateWithPlayerPieces(player3PlayerPieceSelect);
         } else {
             player3LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
+            isPlayer3Ready = false;
         }
     }
 
@@ -323,8 +335,10 @@ public class NewGameController implements Initializable {
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player4SetUpVBox.setDisable(false);
             player3PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+            isPlayer3Ready = true;
         } else {
             player3PlayerPieceStatus.setText("Player Piece Not Selected!");
+            isPlayer3Ready = false;
         }
     }
 
@@ -340,6 +354,7 @@ public class NewGameController implements Initializable {
             populateWithPlayerPieces(player4PlayerPieceSelect);
         } else {
             player4LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
+            isPlayer4Ready = false;
         }
     }
 
@@ -349,8 +364,10 @@ public class NewGameController implements Initializable {
             File playerPieceSelected = player4PlayerPieceSelect.getValue();
             currentlySelectedPlayerPieces.add(playerPieceSelected);
             player4PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+            isPlayer4Ready = true;
         } else {
             player4PlayerPieceStatus.setText("Player Piece Not Selected!");
+            isPlayer4Ready = false;
         }
     }
 
@@ -365,6 +382,20 @@ public class NewGameController implements Initializable {
 
     @FXML
     private void onStartGameButtonClicked(ActionEvent e) throws IOException {
+        // Make player array...
+        int nPlayers = 0;
+
+        nPlayers = (isPlayer1Ready ? nPlayers + 1 : nPlayers);
+        nPlayers = (isPlayer1Ready ? nPlayers + 1 : nPlayers);
+        nPlayers = (isPlayer1Ready ? nPlayers + 1 : nPlayers);
+        nPlayers = (isPlayer1Ready ? nPlayers + 1 : nPlayers);
+
+        Player[] players = new Player[nPlayers];
+
+        for (int i = 0; i < players.length; i++) {
+
+        }
+
         GameService.getInstance().loadNewGame(new Player[]{new Player("bob", 0, 0, new PlayerPiece()), new Player("bob", 0, 0, new PlayerPiece())}, (String) gameBoardSelect.getValue());
 
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
