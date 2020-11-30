@@ -31,7 +31,7 @@
     <bottom>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="drawPlayerPieceButton" mnemonicParsing="false" onAction="#onDrawPlayerPieceButtonClicked" text="Draw Player Piece" />
+                <Button fx:id="drawPlayerPieceButton" mnemonicParsing="false" text="Draw Player Piece" />
                 <ImageView fx:id="floorTileToBeInserted" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../fullFlat.png" />
