@@ -29,7 +29,6 @@ import java.net.URL;
 import java.util.*;
 
 public class NewGameController implements Initializable {
-
     @FXML
     private ChoiceBox gameBoardSelect;
 
@@ -59,6 +58,9 @@ public class NewGameController implements Initializable {
     private ChoiceBox<File> player1PlayerPieceSelect;
 
     @FXML
+    public Label player1PlayerPieceStatus;
+
+    @FXML
     private ImageView player1PlayerPieceImage;
 
     @FXML
@@ -67,13 +69,102 @@ public class NewGameController implements Initializable {
     @FXML
     private VBox player2SetUpVBox;
 
+    @FXML
+    private ToggleButton togglePlayer2;
+
+    @FXML
+    private TextField player2Username;
+
+    @FXML
+    private PasswordField player2Password;
+
+    @FXML
+    private Button player2LogIn;
+
+    @FXML
+    private Label player2LogInStatusLabel;
+
+    @FXML
+    private VBox player2PlayerPieceSelectionVBox;
+
+    @FXML
+    private ChoiceBox<File> player2PlayerPieceSelect;
+
+    @FXML
+    public Label player2PlayerPieceStatus;
+
+    @FXML
+    private ImageView player2PlayerPieceImage;
+
+    @FXML
+    private Button player2PlayerPieceConfirm;
+
 
     @FXML
     private VBox player3SetUpVBox;
 
+    @FXML
+    private ToggleButton togglePlayer3;
+
+    @FXML
+    private TextField player3Username;
+
+    @FXML
+    private PasswordField player3Password;
+
+    @FXML
+    private Button player3LogIn;
+
+    @FXML
+    private Label player3LogInStatusLabel;
+
+    @FXML
+    private VBox player3PlayerPieceSelectionVBox;
+
+    @FXML
+    private ChoiceBox<File> player3PlayerPieceSelect;
+
+    @FXML
+    public Label player3PlayerPieceStatus;
+
+    @FXML
+    private ImageView player3PlayerPieceImage;
+
+    @FXML
+    private Button player3PlayerPieceConfirm;
 
     @FXML
     private VBox player4SetUpVBox;
+
+    @FXML
+    private ToggleButton togglePlayer4;
+
+    @FXML
+    private TextField player4Username;
+
+    @FXML
+    private PasswordField player4Password;
+
+    @FXML
+    private Button player4LogIn;
+
+    @FXML
+    private Label player4LogInStatusLabel;
+
+    @FXML
+    private VBox player4PlayerPieceSelectionVBox;
+
+    @FXML
+    private ChoiceBox<File> player4PlayerPieceSelect;
+
+    @FXML
+    public Label player4PlayerPieceStatus;
+
+    @FXML
+    private ImageView player4PlayerPieceImage;
+
+    @FXML
+    private Button player4PlayerPieceConfirm;
 
     private final Set<File> currentlySelectedPlayerPieces = new HashSet<>();
 
@@ -122,22 +213,6 @@ public class NewGameController implements Initializable {
     }
 
     @FXML
-    private void onBackButtonClicked(ActionEvent e) throws IOException {
-        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
-        currentStage.setScene(new Scene(mainMenu));
-    }
-
-    @FXML
-    private void onStartGameButtonClicked(ActionEvent e) throws IOException {
-        GameService.getInstance().loadNewGame(new Player[]{new Player("bob", 0, 0, new PlayerPiece()), new Player("bob", 0, 0, new PlayerPiece())}, (String) gameBoardSelect.getValue());
-
-        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
-        currentStage.setScene(new Scene(game));
-    }
-
-    @FXML
     public void onPlayer1LogInButtonPressed(ActionEvent actionEvent) {
         String username = (currentUserNames.contains(player1Username.getText())
                 ? "" : player1Username.getText());
@@ -152,6 +227,99 @@ public class NewGameController implements Initializable {
         }
     }
 
+    @FXML
+    public void onPlayer1PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+        if (player1PlayerPieceSelect != null) {
+            File playerPieceSelected = player1PlayerPieceSelect.getValue();
+            currentlySelectedPlayerPieces.add(playerPieceSelected);
+            player2SetUpVBox.setDisable(false);
+            player1PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+        } else {
+            player1PlayerPieceStatus.setText("Player Piece Not Selected!");
+        }
+    }
+
+    @FXML
+    public void onPlayer2LogInButtonPressed(ActionEvent actionEvent) {
+        String username = (currentUserNames.contains(player2Username.getText())
+                ? "" : player2Username.getText());
+        String password = player2Password.getText();
+        if (LoginHandler.login(username, password)) {
+            player2LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
+            currentUserNames.add(username);
+            player2PlayerPieceSelectionVBox.setDisable(false);
+            populateWithPlayerPieces(player2PlayerPieceSelect);
+        } else {
+            player2LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
+        }
+    }
+
+    @FXML
+    public void onPlayer2PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+        if (player2PlayerPieceSelect != null) {
+            File playerPieceSelected = player2PlayerPieceSelect.getValue();
+            currentlySelectedPlayerPieces.add(playerPieceSelected);
+            player3SetUpVBox.setDisable(false);
+            player2PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+        } else {
+            player2PlayerPieceStatus.setText("Player Piece Not Selected!");
+        }
+    }
+
+    @FXML
+    public void onPlayer3LogInButtonPressed(ActionEvent actionEvent) {
+        String username = (currentUserNames.contains(player3Username.getText())
+                ? "" : player3Username.getText());
+        String password = player3Password.getText();
+        if (LoginHandler.login(username, password)) {
+            player3LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
+            currentUserNames.add(username);
+            player3PlayerPieceSelectionVBox.setDisable(false);
+            populateWithPlayerPieces(player3PlayerPieceSelect);
+        } else {
+            player3LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
+        }
+    }
+
+    @FXML
+    public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+        if (player3PlayerPieceSelect != null) {
+            File playerPieceSelected = player3PlayerPieceSelect.getValue();
+            currentlySelectedPlayerPieces.add(playerPieceSelected);
+            player4SetUpVBox.setDisable(false);
+            player3PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+        } else {
+            player3PlayerPieceStatus.setText("Player Piece Not Selected!");
+        }
+    }
+
+    @FXML
+    public void onPlayer4LogInButtonPressed(ActionEvent actionEvent) {
+        String username = (currentUserNames.contains(player4Username.getText())
+                ? "" : player4Username.getText());
+        String password = player4Password.getText();
+        if (LoginHandler.login(username, password)) {
+            player4LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
+            currentUserNames.add(username);
+            player4PlayerPieceSelectionVBox.setDisable(false);
+            populateWithPlayerPieces(player4PlayerPieceSelect);
+        } else {
+            player4LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
+        }
+    }
+
+    @FXML
+    public void onPlayer4PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+        if (player4PlayerPieceSelect != null) {
+            File playerPieceSelected = player4PlayerPieceSelect.getValue();
+            currentlySelectedPlayerPieces.add(playerPieceSelected);
+            player4PlayerPieceStatus.setText(playerPieceSelected.getName() + " has been selected!");
+        } else {
+            player4PlayerPieceStatus.setText("Player Piece Not Selected!");
+        }
+    }
+
+
     private void populateWithPlayerPieces(ChoiceBox<File> playerPieceSelect) {
         Reader reader = new Reader();
         File[] playerPieces = reader.readFileNames("src/view/res/img/player_piece");
@@ -160,29 +328,19 @@ public class NewGameController implements Initializable {
         playerPieceSelect.setItems(FXCollections.observableList(playerPiecesList));
     }
 
-    public void onPlayer1PlayerPieceConfirmClicked(ActionEvent actionEvent) {
-        if (player1PlayerPieceSelect != null) {
-            player2SetUpVBox.setDisable(false);
-        } else {
-            //todo tell user they have to select player piece
-        }
+    @FXML
+    private void onStartGameButtonClicked(ActionEvent e) throws IOException {
+        GameService.getInstance().loadNewGame(new Player[]{new Player("bob", 0, 0, new PlayerPiece()), new Player("bob", 0, 0, new PlayerPiece())}, (String) gameBoardSelect.getValue());
+
+        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
+        currentStage.setScene(new Scene(game));
     }
 
-    public void onPlayer2LogInButtonPressed(ActionEvent actionEvent) {
-    }
-
-    public void onPlayer2PlayerPieceConfirmClicked(ActionEvent actionEvent) {
-    }
-
-    public void onPlayer3LogInButtonPressed(ActionEvent actionEvent) {
-    }
-
-    public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
-    }
-
-    public void onPlayer4LogInButtonPressed(ActionEvent actionEvent) {
-    }
-
-    public void onPlayer4PlayerPieceConfirmClicked(ActionEvent actionEvent) {
+    @FXML
+    private void onBackButtonClicked(ActionEvent e) throws IOException {
+        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        currentStage.setScene(new Scene(mainMenu));
     }
 }
