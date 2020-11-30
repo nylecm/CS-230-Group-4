@@ -84,7 +84,7 @@ public class SilkBag {
      * The entry point of application, for testing only. todo remove this.
      *
      * @param args the input arguments
-     */
+     *//*
     public static void main(String[] args) {
         Tile[] ts = {new ActionTile(TileType.FIRE)};
 
@@ -118,5 +118,5 @@ public class SilkBag {
 
         System.out.println(s);
         //s.take();
-    }
+    }*/
 }

@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Reader {
-
     private File file;
     private Scanner in;
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
