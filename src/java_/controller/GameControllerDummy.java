@@ -219,7 +219,7 @@ public class GameControllerDummy implements Initializable {
             int row = playerPiecePosition.getRowNum();
             int col = playerPiecePosition.getColNum();
 
-            Image playerPieceImage = new Image("playerPiece.png");
+            Image playerPieceImage = gameBoard.getPlayerPiece(i).getImage();
             ImageView playerPieceDisplay = new ImageView(playerPieceImage);
             //TODO Remove magical calculations
             playerPieceDisplay.setFitWidth(28);

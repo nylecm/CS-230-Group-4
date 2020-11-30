@@ -29,6 +29,7 @@ public class RegisterHandler {
 
         String encodePassword = PasswordEncoder.encodePassword(password);
 
+        //todo empty first line...
         Files.write(Paths.get(USERS_FILE_PATH),
                 ("\n" + username + DELIMITER + email + DELIMITER + encodePassword + DELIMITER).getBytes(),
                 StandardOpenOption.APPEND);

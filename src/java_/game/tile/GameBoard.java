@@ -442,6 +442,10 @@ public class GameBoard {
         return name;
     }
 
+    public PlayerPiece getPlayerPiece(int i) {
+        return playerPieces[i];
+    }
+
     public static void main(String[] args) {
         int p = 13;
         int mask = 2;
