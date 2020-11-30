@@ -89,7 +89,7 @@ public class GameControllerDummy implements Initializable {
         GameBoard gameBoard = gameService.getGameBoard();
 
         //TODO: Replace width and height with values from GameBoard
-        gameBoardView = new Dimension2D(8, 8);
+        gameBoardView = new Dimension2D(gameBoard.getnCols(), gameBoard.getnRows());
 
         //TODO: Replace with isometric view
         displayGameBoardFlat(gameBoard);
