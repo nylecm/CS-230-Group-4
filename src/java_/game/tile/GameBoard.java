@@ -164,6 +164,7 @@ public class GameBoard {
                 : switchPositionLeftToRight(new Position(pos.getRowNum(), pos.getColNum() + 1)));
     }
 
+    @Deprecated
     private Position switchPositionLeftToRight(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
@@ -205,6 +206,7 @@ public class GameBoard {
                 : switchPositionRightToLeft(new Position(pos.getRowNum(), pos.getColNum() - 1)));
     }
 
+    @Deprecated
     private Position switchPositionRightToLeft(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
@@ -245,6 +247,7 @@ public class GameBoard {
                 : switchPositionTopToBottom(new Position(pos.getRowNum() + 1, pos.getColNum())));
     }
 
+    @Deprecated
     private Position switchPositionTopToBottom(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
@@ -286,6 +289,7 @@ public class GameBoard {
                 : switchPositionBottomToTop(new Position(pos.getRowNum() - 1, pos.getColNum())));
     }
 
+    @Deprecated
     private Position switchPositionBottomToTop(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
