@@ -31,12 +31,11 @@ public class GameBoard {
         return board[row][col];
     }
 
-    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
+    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions,
+                     FloorTile[] fixedTiles, Position[] fixedTilePositions,
+                     FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPieces = playerPieces;
         this.playerPiecePositions = playerPiecePositions;
-        //this.fixedTiles = fixedTiles;
-        //this.fixedTilePositions = fixedTilePositions;
-        //this.tiles = tiles;
         this.name = name;
         this.nRows = nRows;
         this.nCols = nCols;
@@ -160,11 +159,11 @@ public class GameBoard {
 
     private Position nextPositionLeftToRight(Position pos) {
         return (pos.getColNum() == nCols - 1
-                ? switchPositionLeftToRight(new Position(pos.getRowNum(), 0))
-                : switchPositionLeftToRight(new Position(pos.getRowNum(), pos.getColNum() + 1)));
+                ? new Position(pos.getRowNum(), 0)
+                : new Position(pos.getRowNum(), pos.getColNum() + 1));
     }
 
-    @Deprecated
+    /*@Deprecated
     private Position switchPositionLeftToRight(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
@@ -172,7 +171,7 @@ public class GameBoard {
         } else {
             return pos;
         }
-    }
+    }*/
 
     private void shiftTilesLeftToRight(int colNum, int rowNum, FloorTile tile) {
         for (int i = nCols - 1; i != 0; i--) {
@@ -180,6 +179,7 @@ public class GameBoard {
 
             if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
                 activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
+                activeEffects.remove(new Position(rowNum, i - 1));
             }
         }
         board[rowNum][colNum + 1] = tile;
@@ -202,25 +202,26 @@ public class GameBoard {
 
     private Position nextPositionRightToLeft(Position pos) {
         return (pos.getColNum() == 0
-                ? switchPositionRightToLeft(new Position(pos.getRowNum(), nCols - 1))
-                : switchPositionRightToLeft(new Position(pos.getRowNum(), pos.getColNum() - 1)));
+                ? new Position(pos.getRowNum(), nCols - 1)
+                : new Position(pos.getRowNum(), pos.getColNum() - 1));
     }
 
-    @Deprecated
+    /*@Deprecated
     private Position switchPositionRightToLeft(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionLeftToRight(nextPositionRightToLeft(pos));
+            return switchPositionRightToLeft(nextPositionRightToLeft(pos));
         } else {
             return pos;
         }
-    }
+    }*/
 
     private void shiftTilesRightToLeft(int colNum, int rowNum, FloorTile tile) {
         for (int i = 0; i < nCols - 1; i++) {
             board[rowNum][i] = board[rowNum][i + 1];
             if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
                 activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i + 1)));
+                activeEffects.remove(new Position(rowNum, i + 1));
             }
         }
         board[rowNum][colNum - 1] = tile;
@@ -243,25 +244,26 @@ public class GameBoard {
 
     private Position nextPositionTopToBottom(Position pos) {
         return (pos.getRowNum() == nRows - 1
-                ? switchPositionTopToBottom(new Position(0, pos.getColNum()))
-                : switchPositionTopToBottom(new Position(pos.getRowNum() + 1, pos.getColNum())));
+                ? new Position(0, pos.getColNum())
+                : new Position(pos.getRowNum() + 1, pos.getColNum()));
     }
 
-    @Deprecated
+    /*@Deprecated
     private Position switchPositionTopToBottom(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionLeftToRight(nextPositionTopToBottom(pos));
+            return switchPositionTopToBottom(nextPositionTopToBottom(pos));
         } else {
             return pos;
         }
-    }
+    }*/
 
     private void shiftTilesTopToBottom(int colNum, int rowNum, FloorTile tile) {
         for (int i = nRows - 1; i != 0; i--) {
             board[i][colNum] = board[i - 1][colNum];
             if (activeEffects.get(new Position(i - 1, colNum)) != null) {
                 activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i - 1, colNum)));
+                activeEffects.remove(new Position(i - 1, colNum));
             }
         }
         board[rowNum + 1][colNum] = tile;
@@ -285,25 +287,26 @@ public class GameBoard {
 
     private Position nextPositionBottomToTop(Position pos) {
         return (pos.getRowNum() == 0
-                ? switchPositionBottomToTop(new Position(nRows - 1, pos.getColNum()))
-                : switchPositionBottomToTop(new Position(pos.getRowNum() - 1, pos.getColNum())));
+                ? new Position(nRows - 1, pos.getColNum())
+                : new Position(pos.getRowNum() - 1, pos.getColNum()));
     }
 
-    @Deprecated
+   /* @Deprecated
     private Position switchPositionBottomToTop(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionLeftToRight(nextPositionBottomToTop(pos));
+            return switchPositionBottomToTop(nextPositionBottomToTop(pos));
         } else {
             return pos;
         }
-    }
+    }*/
 
     private void shiftTilesBottomToTop(int colNum, int rowNum, FloorTile tile) {
         for (int i = 0; i < nRows - 1; i++) {
             board[i][colNum] = board[i + 1][colNum];
             if (activeEffects.get(new Position(i + 1, colNum)) != null) {
                 activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i + 1, colNum)));
+                activeEffects.remove(new Position(i + 1, colNum));
             }
         }
         board[rowNum - 1][colNum] = tile;
