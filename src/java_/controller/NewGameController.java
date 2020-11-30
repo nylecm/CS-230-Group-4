@@ -170,6 +170,7 @@ public class NewGameController implements Initializable {
     private final static String LOG_IN_FAILURE_STRING = "Invalid/Duplicate Credentials!";
     private final static int MIN_NUMBER_OF_PLAYERS = 2;
     private final static int MAX_NUMBER_OF_PLAYERS = 4;
+    private final URL[] imageURLs = new URL[MAX_NUMBER_OF_PLAYERS];
 
     //private boolean isPlayer1Ready = false;
     //private boolean isPlayer2Ready = false;
@@ -211,6 +212,7 @@ public class NewGameController implements Initializable {
             if (player1PlayerPieceSelect.getValue() != null) {
                 try {
                     player1PlayerPieceImage.setImage(new Image(String.valueOf(player1PlayerPieceSelect.getValue().toURL())));
+                    imageURLs[0] = player1PlayerPieceSelect.getValue().toURL();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -222,6 +224,7 @@ public class NewGameController implements Initializable {
             if (player2PlayerPieceSelect.getValue() != null) {
                 try {
                     player2PlayerPieceImage.setImage(new Image(String.valueOf(player2PlayerPieceSelect.getValue().toURL())));
+                    imageURLs[1] = player2PlayerPieceSelect.getValue().toURL();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -233,6 +236,7 @@ public class NewGameController implements Initializable {
             if (player3PlayerPieceSelect.getValue() != null) {
                 try {
                     player3PlayerPieceImage.setImage(new Image(String.valueOf(player3PlayerPieceSelect.getValue().toURL())));
+                    imageURLs[2] = player3PlayerPieceSelect.getValue().toURL();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -244,6 +248,7 @@ public class NewGameController implements Initializable {
             if (player4PlayerPieceSelect.getValue() != null) {
                 try {
                     player4PlayerPieceImage.setImage(new Image(String.valueOf(player4PlayerPieceSelect.getValue().toURL())));
+                    imageURLs[3] = player4PlayerPieceSelect.getValue().toURL();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -378,7 +383,6 @@ public class NewGameController implements Initializable {
         }
     }
 
-
     private void populateWithPlayerPieces(ChoiceBox<File> playerPieceSelect) {
         Reader reader = new Reader();
         File[] playerPieces = reader.readFileNames("src/view/res/img/player_piece");
@@ -405,7 +409,7 @@ public class NewGameController implements Initializable {
 
             while (nPlayersCreated < nPlayers) {
                 if (isPlayerReady[i]) {
-                    players[nPlayersCreated] = new Player(usernames[i], new PlayerPiece(player1PlayerPieceSelect.getValue().toURL())); //todo get right player piece
+                    players[nPlayersCreated] = new Player(usernames[i], new PlayerPiece(imageURLs[i])); //todo test
                     nPlayersCreated++;
                 }
                 i++;
