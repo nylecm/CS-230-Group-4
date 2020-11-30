@@ -101,7 +101,7 @@ public class GameControllerDummy implements Initializable {
     private void displayGameBoardFlat(GameBoard gameBoard) {
         displayEdges();
         displayFloorTiles();
-//        displayPlayerPieces(gameBoard);
+        displayPlayerPieces(gameBoard);
 
         content.getChildren().addAll(edgeTileGroup, tileGroup, playerPieceGroup);
         scrollPane.setFitToWidth(true);
@@ -155,13 +155,9 @@ public class GameControllerDummy implements Initializable {
         for (int row = 0; row < gameBoardView.getHeight(); row++) {
             for (int col = 0; col < gameBoardView.getWidth(); col++) {
 
-                ColorAdjust highlight = new ColorAdjust();
-                highlight.setBrightness(row * 0.05);
-
                 ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
                 floorTileDisplay.setLayoutX(col * TILE_WIDTH);
                 floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
-                floorTileDisplay.setEffect(highlight);
 
                 setFloorTileEventHandlers(floorTileDisplay);
 
@@ -172,19 +168,49 @@ public class GameControllerDummy implements Initializable {
 
     //TODO: Implement
     private void displayPlayerPieces(GameBoard gameBoard) {
+        Image playerPieceImage = new Image("playerPiece.png");
+
+        ImageView leftTop = new ImageView(playerPieceImage);
+        leftTop.setFitWidth(28);
+        leftTop.setFitHeight(28);
+        leftTop.setLayoutX(0);
+        leftTop.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        playerPieceGroup.getChildren().add(leftTop);
+
+        ImageView rightTop = new ImageView(playerPieceImage);
+        rightTop.setFitWidth(28);
+        rightTop.setFitHeight(28);
+        rightTop.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
+        rightTop.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        playerPieceGroup.getChildren().add(rightTop);
+
+        ImageView bottomLeft = new ImageView(playerPieceImage);
+        bottomLeft.setFitWidth(28);
+        bottomLeft.setFitHeight(28);
+        bottomLeft.setLayoutX(0);
+        bottomLeft.setLayoutY(0);
+        playerPieceGroup.getChildren().add(bottomLeft);
+
+        ImageView bottomRight = new ImageView(playerPieceImage);
+        bottomRight.setFitWidth(28);
+        bottomRight.setFitHeight(28);
+        bottomRight.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
+        bottomRight.setLayoutY(0);
+        playerPieceGroup.getChildren().add(bottomRight);
+
         for (int i = 0; i < gameBoard.getNumOfPlayerPieces(); i++) {
             Position playerPiecePosition = gameBoard.getPlayerPiecePosition(i);
             int row = playerPiecePosition.getRowNum();
             int col = playerPiecePosition.getColNum();
 
-            Image playerPieceImage = new Image("playerPiece.png");
             ImageView playerPieceDisplay = new ImageView(playerPieceImage);
-
-            playerPieceDisplay.setLayoutX((col) * PLAYER_PIECE_WIDTH);
-            playerPieceDisplay.setLayoutY((row) * PLAYER_PIECE_HEIGHT);
             playerPieceDisplay.setFitWidth(28);
             playerPieceDisplay.setFitHeight(28);
-
+            //Row 2, Column 5 (Starting on FloorTiles from 1). YES, MAGIC NUMBERS.
+            playerPieceDisplay.setLayoutX((col + 1) * TILE_WIDTH - 20);
+            playerPieceDisplay.setLayoutY((row + 1) * TILE_HEIGHT - 20);
+            playerPieceDisplay.toFront();
+            playerPieceDisplay.setId("Col: " + col + ", Row: " + row);
             playerPieceGroup.getChildren().add(playerPieceDisplay);
 
             playerPieceDisplay.setOnDragDetected(event -> {
@@ -193,6 +219,10 @@ public class GameControllerDummy implements Initializable {
                 content.putImage(playerPieceDisplay.getImage());
                 dragboard.setContent(content);
                 event.consume();
+            });
+
+            playerPieceDisplay.setOnMouseClicked(event -> {
+                System.out.println(playerPieceDisplay.getId());
             });
         }
     }
