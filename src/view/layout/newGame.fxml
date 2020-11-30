@@ -10,7 +10,8 @@
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity" prefHeight="576.0" prefWidth="780.0" spacing="20.0"
       xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="java_.controller.NewGameController" styleClass="main_pane">
+      fx:controller="java_.controller.NewGameController" styleClass="main_pane"
+      fx:id="mainBox">
     <children>
         <HBox alignment="CENTER_LEFT">
             <children>
@@ -225,6 +226,6 @@
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
     </padding>
     <stylesheets>
-        <URL value="@new_game.css" />
+        <URL value="@new_game.css"/>
     </stylesheets>
 </VBox>

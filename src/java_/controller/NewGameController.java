@@ -9,15 +9,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,6 +29,10 @@ import java.net.URL;
 import java.util.*;
 
 public class NewGameController implements Initializable {
+
+    @FXML
+    private VBox mainBox;
+
     @FXML
     private ChoiceBox gameBoardSelect;
 
@@ -168,6 +175,15 @@ public class NewGameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        BackgroundFill backgroundFill = null;
+        try {
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File("src/view/res/img/space_uranus.png").toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        mainBox.setBackground(new Background(backgroundFill));
+
+
         Reader reader = new Reader();
         try {
             List<String> gameBoardNames = reader.readGameBoardNames();
