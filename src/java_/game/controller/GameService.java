@@ -373,7 +373,7 @@ public class GameService {
         AreaEffect test = gs.gameBoard.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gameBoard.insert(0, 5, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gameBoard.insert(0, 5, new FloorTile(TileType.STRAIGHT, false));
         System.out.println();
 
         for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
