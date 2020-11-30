@@ -81,6 +81,13 @@ public class Queue<T> {
         return (head == null) && (tail == null);
     }
 
+    /**
+     * Prints the contents of the queue.
+     *
+     * @return the contents of the queue to string ordered from the first item
+     * in line to the last (newest) item in line.
+     */
+    @Override
     public String toString() {
         String returnString = "{";
 
