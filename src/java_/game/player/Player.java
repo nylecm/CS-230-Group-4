@@ -3,6 +3,7 @@ package java_.game.player;
 import java_.game.tile.ActionTile;
 
 import java_.game.tile.EffectType;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,21 +14,16 @@ import java.util.Set;
  */
 
 public class Player {
-
-    private String username;
-    //private int numberOfWins;
-    //private int numberOfLoses;
+    private final String username;
     private final Set<EffectType> previousAppliedEffect = new HashSet<>();
     private final List<ActionTile> drawnActionTiles = new ArrayList<>();
-    private PlayerPiece playerPiece;
+    private final PlayerPiece playerPiece;
 
     /**
-     * @param username            Unique game.player.Player I
+     * @param username Unique game.player.Player I
      */
     public Player(String username, PlayerPiece playerPiece) {
         this.username = username;
-        //this.numberOfWins = numberOfWins;
-        //this.numberOfLoses = numberOfLoses;
         this.playerPiece = playerPiece;
     }
 
@@ -43,16 +39,6 @@ public class Player {
         return username;
     }
 
-    /*
-    public int getNumberOfWins() {
-        return numberOfWins;
-    }
-
-    public int getNumberOfLoses() {
-        return numberOfLoses;
-    }
-    */
-
     public PlayerPiece getPlayerPiece() {
         return playerPiece;
     }
@@ -61,9 +47,17 @@ public class Player {
         return previousAppliedEffect;
     }
 
-    public static void main(String[] args) { }
-
     public List<ActionTile> getDrawnActionTiles() {
         return drawnActionTiles;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "username='" + username + '\'' +
+                ", previousAppliedEffect=" + previousAppliedEffect +
+                ", drawnActionTiles=" + drawnActionTiles +
+                ", playerPiece=" + playerPiece +
+                '}';
     }
 }
