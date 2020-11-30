@@ -68,6 +68,12 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
+    private void onRegisterButtonClicked(ActionEvent e) throws IOException {
+        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        Pane newGame = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/register.fxml"));
+        currentStage.setScene(new Scene(newGame));
+    }
+    @FXML
     private void onQuitButtonClicked(ActionEvent e) {
         System.exit(0);
     }

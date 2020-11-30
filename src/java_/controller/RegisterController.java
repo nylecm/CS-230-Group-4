@@ -3,10 +3,15 @@ package java_.controller;
 import java_.util.security.RegisterHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -96,5 +101,11 @@ public class RegisterController {
 
     private boolean validateRepeatPassword(String password, String repeatPassword) {
         return password.equals(repeatPassword);
+    }
+    @FXML
+    private void onBackButtonClicked(ActionEvent e) throws IOException {
+        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        currentStage.setScene(new Scene(mainMenu));
     }
 }

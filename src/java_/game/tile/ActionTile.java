@@ -28,7 +28,4 @@ public class ActionTile extends Tile {
     public Effect use() {
         return EffectFactory.getEffect(type);
     }
-
-
-
 }
