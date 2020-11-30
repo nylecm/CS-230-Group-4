@@ -34,9 +34,6 @@ public class GameBoard {
     public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPieces = playerPieces;
         this.playerPiecePositions = playerPiecePositions;
-        //this.fixedTiles = fixedTiles;
-        //this.fixedTilePositions = fixedTilePositions;
-        //this.tiles = tiles;
         this.name = name;
         this.nRows = nRows;
         this.nCols = nCols;
