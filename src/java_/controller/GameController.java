@@ -348,11 +348,13 @@ public class GameController implements Initializable {
         TileType type = floorTile.getType();
         switch (type) {
             case STRAIGHT:
-                return "straight.png";
+                return "straightFlat.png";
             case CORNER:
-                return "corner.png";
+                return "cornerFlat.png";
             case T_SHAPED:
-                return "t_shaped.png";
+                return "t-shapedFlat.png";
+            case GOAL:
+                return "goalFlat.png";
         }
         return null;
     }

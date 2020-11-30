@@ -2,7 +2,9 @@ package java_.controller;
 
 import java_.game.controller.GameService;
 import java_.game.player.PlayerService;
+import java_.game.tile.FloorTile;
 import java_.game.tile.GameBoard;
+import java_.game.tile.TileType;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -34,9 +36,9 @@ import java.util.stream.Collectors;
 
 public class GameControllerDummy implements Initializable {
 
-    private static final int TILE_WIDTH = 40;
+    private static final int TILE_WIDTH = 80;
 
-    private static final int TILE_HEIGHT = 40;
+    private static final int TILE_HEIGHT = 80;
 
     private static final int PLAYER_PIECE_WIDTH = 28;
 
@@ -113,7 +115,7 @@ public class GameControllerDummy implements Initializable {
 
     private void displayGameBoardFlat(GameBoard gameBoard) {
         displayEdges();
-        displayFloorTiles();
+        displayFloorTiles(gameBoard);
         displayPlayerPieces(gameBoard);
         setEffectBorders();
 
@@ -165,10 +167,11 @@ public class GameControllerDummy implements Initializable {
         }
     }
 
-    private void displayFloorTiles() {
+    private void displayFloorTiles(GameBoard gameBoard) {
         for (int row = 0; row < gameBoardView.getHeight(); row++) {
             for (int col = 0; col < gameBoardView.getWidth(); col++) {
 
+                Image floorTileImage = new Image(getFloorTileType(gameBoard.getTileAt(row, col)));
                 ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
                 floorTileDisplay.setLayoutX(col * TILE_WIDTH);
                 floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
@@ -356,6 +359,7 @@ public class GameControllerDummy implements Initializable {
         floorTileDisplay.setLayoutX(col * TILE_WIDTH);
         floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
         floorTileDisplay.toFront();
+        setFloorTileEventHandlers(floorTileDisplay);
         tileGroup.getChildren().add(floorTileDisplay);
 
         List<Node> floorTilesToMove;
@@ -419,6 +423,7 @@ public class GameControllerDummy implements Initializable {
         floorTileDisplay.setLayoutX(col * TILE_WIDTH);
         floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
         floorTileDisplay.toFront();
+        setFloorTileEventHandlers(floorTileDisplay);
         tileGroup.getChildren().add(floorTileDisplay);
 
         List<Node> floorTilesToMove;
@@ -534,5 +539,20 @@ public class GameControllerDummy implements Initializable {
 
     private int getTileRow(ImageView tileDisplay) {
         return (int) (tileDisplay.getLayoutY() / TILE_HEIGHT);
+    }
+
+    private String getFloorTileType(FloorTile floorTile) {
+        TileType type = floorTile.getType();
+        switch (type) {
+            case STRAIGHT:
+                return "straightFlat.png";
+            case CORNER:
+                return "cornerFlat.png";
+            case T_SHAPED:
+                return "t-shapedFlat.png";
+            case GOAL:
+                return "goalFlat.png";
+        }
+        return null;
     }
 }
