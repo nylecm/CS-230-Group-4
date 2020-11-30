@@ -360,7 +360,7 @@ public class GameService {
         gs.loadNewGame(
                 new Player[]{new Player("bob", new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gameBoard);
-        //gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
+        //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
         System.out.println(gs.gameBoard);
 
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
@@ -373,7 +373,7 @@ public class GameService {
         AreaEffect test = gs.gameBoard.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gameBoard.insert(0, 5, new FloorTile(TileType.STRAIGHT, false));
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
         System.out.println();
 
         for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
