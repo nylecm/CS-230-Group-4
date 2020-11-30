@@ -32,12 +32,8 @@ public class NewGameController implements Initializable {
     @FXML
     private ChoiceBox gameBoardSelect;
 
-
     @FXML
     private VBox player1SetUpVBox;
-
-    @FXML
-    private ToggleButton togglePlayer1;
 
     @FXML
     private TextField player1Username;
@@ -70,9 +66,6 @@ public class NewGameController implements Initializable {
     private VBox player2SetUpVBox;
 
     @FXML
-    private ToggleButton togglePlayer2;
-
-    @FXML
     private TextField player2Username;
 
     @FXML
@@ -99,12 +92,8 @@ public class NewGameController implements Initializable {
     @FXML
     private Button player2PlayerPieceConfirm;
 
-
     @FXML
     private VBox player3SetUpVBox;
-
-    @FXML
-    private ToggleButton togglePlayer3;
 
     @FXML
     private TextField player3Username;
@@ -135,9 +124,6 @@ public class NewGameController implements Initializable {
 
     @FXML
     private VBox player4SetUpVBox;
-
-    @FXML
-    private ToggleButton togglePlayer4;
 
     @FXML
     private TextField player4Username;
@@ -421,7 +407,7 @@ public class NewGameController implements Initializable {
             Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
             currentStage.setScene(new Scene(game));
         } else {
-            //todo...
+            //todo... notify user of the problem...
         }
     }
 
