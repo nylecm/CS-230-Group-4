@@ -4,8 +4,12 @@ import java_.util.security.RegisterHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class RegisterController {
 
@@ -14,6 +18,9 @@ public class RegisterController {
     private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple? xxx@xxx.xxxx
 
     private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //Might be broken
+
+    @FXML
+    private Label registerStatusLabel;
 
     @FXML
     private Button registerButton;
@@ -33,6 +40,11 @@ public class RegisterController {
     @FXML
     private PasswordField passwordRepeat;
 
+    private final String USERNAME_INVALID_MSG = "Username invalid!"; //TODO MAKE MESSAGES MORE USEFUL
+    private final String EMAIL_INVALID_MSG = "Email invalid!";
+    private final String PASSWORD_INVALID_MSG = "Password invalid!";
+    private final String PASSWORD_NO_MATCH_MSG = "Passwords don't match!";
+
     @FXML
     private void onRegisterButtonClicked(ActionEvent event) {
         String username = this.username.getText();
@@ -40,26 +52,31 @@ public class RegisterController {
         String password = this.password.getText();
         String passwordRepeat = this.passwordRepeat.getText();
         if (validate(username, email, password, passwordRepeat)) {
-            RegisterHandler.register(username, email, password);
+            try {
+                RegisterHandler.register(username, email, password);
+            } catch (IOException e) {
+                registerStatusLabel.setText("Error, users file not found, or error accessing it!");
+            } catch (IllegalArgumentException e2) { //todo custom exception...
+                registerStatusLabel.setText("Duplicate user name!");
+            }
         }
     }
 
-    //Printlns for testing, to be replaced with status texts
     private boolean validate(String username, String email, String password, String passwordRepeat) {
         if (!validateUsername(username)) {
-            System.out.println("Username invalid!");
+            registerStatusLabel.setText(USERNAME_INVALID_MSG);
             return false;
         }
         if (!validateEmail(email)) {
-            System.out.println("Email invalid!");
+            registerStatusLabel.setText(EMAIL_INVALID_MSG);
             return false;
         }
         if (!validatePassword(password)) {
-            System.out.println("Password invalid!");
+            registerStatusLabel.setText(PASSWORD_INVALID_MSG);
             return false;
         }
         if (!validateRepeatPassword(password, passwordRepeat)) {
-            System.out.println("Passwords don't match!");
+            registerStatusLabel.setText(PASSWORD_NO_MATCH_MSG);
             return false;
         }
         return true;
