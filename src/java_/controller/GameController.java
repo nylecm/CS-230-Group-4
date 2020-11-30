@@ -70,7 +70,7 @@ public class GameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         GameService gameService = GameService.getInstance();
         try {
-            GameService.getInstance().loadNewGame(new Player[]{new Player("bob", 1,2, new PlayerPiece())}, "oberon_1");
+            GameService.getInstance().loadNewGame(new Player[]{new Player("bob", new PlayerPiece())}, "oberon_1");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -358,7 +358,7 @@ public class GameService {
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new Player[]{new Player("bob", 1, 1110, new PlayerPiece())}, "oberon_1");
+                new Player[]{new Player("bob", new PlayerPiece())}, "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gb.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         System.out.println(gs.gameBoard);

@@ -15,21 +15,19 @@ import java.util.Set;
 public class Player {
 
     private String username;
-    private int numberOfWins;
-    private int numberOfLoses;
+    //private int numberOfWins;
+    //private int numberOfLoses;
     private final Set<EffectType> previousAppliedEffect = new HashSet<>();
     private final List<ActionTile> drawnActionTiles = new ArrayList<>();
     private PlayerPiece playerPiece;
 
     /**
-     * @param username            Unique game.player.Player ID
-     * @param numberOfWins        Number of Wins
-     * @param numberOfLoses       Number of Loss
+     * @param username            Unique game.player.Player I
      */
-    public Player(String username, int numberOfWins, int numberOfLoses, PlayerPiece playerPiece) {
+    public Player(String username, PlayerPiece playerPiece) {
         this.username = username;
-        this.numberOfWins = numberOfWins;
-        this.numberOfLoses = numberOfLoses;
+        //this.numberOfWins = numberOfWins;
+        //this.numberOfLoses = numberOfLoses;
         this.playerPiece = playerPiece;
     }
 
@@ -45,7 +43,7 @@ public class Player {
         return username;
     }
 
-
+    /*
     public int getNumberOfWins() {
         return numberOfWins;
     }
@@ -53,7 +51,7 @@ public class Player {
     public int getNumberOfLoses() {
         return numberOfLoses;
     }
-
+    */
 
     public PlayerPiece getPlayerPiece() {
         return playerPiece;
