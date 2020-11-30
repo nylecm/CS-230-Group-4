@@ -54,6 +54,8 @@ public class GameControllerDummy implements Initializable {
     @FXML
     private ImageView floorTileToBeInserted;
 
+    @FXML ImageView actionTile;
+
     @FXML
     private Group edgeTileGroup;
 
@@ -71,6 +73,9 @@ public class GameControllerDummy implements Initializable {
 
     @FXML
     private Image edgeTileImage = new Image("emptyFlat.png");
+
+    @FXML
+    private Image actionTileImage = new Image("actionTile.png");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,7 +97,15 @@ public class GameControllerDummy implements Initializable {
         floorTileToBeInserted.setOnDragDetected(event -> {
             Dragboard dragboard = floorTileToBeInserted.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
-            content.putImage(floorTileToBeInserted.getImage());
+            content.putImage(floorTileImage);
+            dragboard.setContent(content);
+            event.consume();
+        });
+
+        actionTile.setOnDragDetected(event -> {
+            Dragboard dragboard = actionTile.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(actionTileImage);
             dragboard.setContent(content);
             event.consume();
         });
@@ -168,47 +181,51 @@ public class GameControllerDummy implements Initializable {
 
     //TODO: Implement
     private void displayPlayerPieces(GameBoard gameBoard) {
-        Image playerPieceImage = new Image("playerPiece.png");
 
-        ImageView leftTop = new ImageView(playerPieceImage);
-        leftTop.setFitWidth(28);
-        leftTop.setFitHeight(28);
-        leftTop.setLayoutX(0);
-        leftTop.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        Image leftTopImage = new Image("leftTop.png");
+        ImageView leftTop = new ImageView(leftTopImage);
+        leftTop.setFitWidth(TILE_WIDTH);
+        leftTop.setFitHeight(TILE_HEIGHT);
+        leftTop.setLayoutX(- TILE_WIDTH);
+        leftTop.setLayoutY(- TILE_HEIGHT);
         playerPieceGroup.getChildren().add(leftTop);
 
-        ImageView rightTop = new ImageView(playerPieceImage);
-        rightTop.setFitWidth(28);
-        rightTop.setFitHeight(28);
+        Image rightTopImage = new Image("rightTop.png");
+        ImageView rightTop = new ImageView(rightTopImage);
+        rightTop.setFitWidth(TILE_WIDTH);
+        rightTop.setFitHeight(TILE_HEIGHT);
         rightTop.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
-        rightTop.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        rightTop.setLayoutY(- TILE_HEIGHT);
         playerPieceGroup.getChildren().add(rightTop);
 
-        ImageView bottomLeft = new ImageView(playerPieceImage);
-        bottomLeft.setFitWidth(28);
-        bottomLeft.setFitHeight(28);
-        bottomLeft.setLayoutX(0);
-        bottomLeft.setLayoutY(0);
-        playerPieceGroup.getChildren().add(bottomLeft);
+        Image leftBottomImage = new Image("leftBottom.png");
+        ImageView leftBottom = new ImageView(leftBottomImage);
+        leftBottom.setFitWidth(TILE_WIDTH);
+        leftBottom.setFitHeight(TILE_HEIGHT);
+        leftBottom.setLayoutX(- TILE_WIDTH);
+        leftBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        playerPieceGroup.getChildren().add(leftBottom);
 
-        ImageView bottomRight = new ImageView(playerPieceImage);
-        bottomRight.setFitWidth(28);
-        bottomRight.setFitHeight(28);
-        bottomRight.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
-        bottomRight.setLayoutY(0);
-        playerPieceGroup.getChildren().add(bottomRight);
+        Image rightBottomImage = new Image("rightBottom.png");
+        ImageView rightBottom = new ImageView(rightBottomImage);
+        rightBottom.setFitWidth(TILE_WIDTH);
+        rightBottom.setFitHeight(TILE_HEIGHT);
+        rightBottom.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
+        rightBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        playerPieceGroup.getChildren().add(rightBottom);
 
         for (int i = 0; i < gameBoard.getNumOfPlayerPieces(); i++) {
             Position playerPiecePosition = gameBoard.getPlayerPiecePosition(i);
             int row = playerPiecePosition.getRowNum();
             int col = playerPiecePosition.getColNum();
 
+            Image playerPieceImage = new Image("playerPiece.png");
             ImageView playerPieceDisplay = new ImageView(playerPieceImage);
+            //TODO Remove magical calculations
             playerPieceDisplay.setFitWidth(28);
             playerPieceDisplay.setFitHeight(28);
-            //Row 2, Column 5 (Starting on FloorTiles from 1). YES, MAGIC NUMBERS.
-            playerPieceDisplay.setLayoutX((col + 1) * TILE_WIDTH - 20);
-            playerPieceDisplay.setLayoutY((row + 1) * TILE_HEIGHT - 20);
+            playerPieceDisplay.setLayoutX((col - 1) * TILE_WIDTH + TILE_WIDTH + 6);
+            playerPieceDisplay.setLayoutY((row - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
             playerPieceDisplay.toFront();
             playerPieceDisplay.setId("Col: " + col + ", Row: " + row);
             playerPieceGroup.getChildren().add(playerPieceDisplay);
@@ -336,11 +353,13 @@ public class GameControllerDummy implements Initializable {
         floorTileDisplay.setOnDragDropped(event -> {
             ImageView source = (ImageView) event.getGestureSource();
             if (playerPieceGroup.getChildren().contains(source)) {
-                System.out.println("Hello");
 //                int offsetX = (int) ((TILE_WIDTH - source.getFitWidth()) / 2);
 //                int offsetY = (int) ((TILE_HEIGHT - source.getFitHeight()) / 2);
-                source.setLayoutX(floorTileDisplay.getLayoutX() + 20);
-                source.setLayoutY(floorTileDisplay.getLayoutY() + 20);
+                source.setLayoutX(floorTileDisplay.getLayoutX() + 6);
+                source.setLayoutY(floorTileDisplay.getLayoutY() + 6);
+            } else { //Action Tile, TODO better filtering?
+                int area = 3; //Does not allow rectangle areas
+
             }
         });
     }
@@ -354,22 +373,42 @@ public class GameControllerDummy implements Initializable {
         tileGroup.getChildren().add(floorTileDisplay);
 
         List<Node> floorTilesToMove;
-        if (row < col) {
-            floorTilesToMove = tileGroup.getChildren()
-                    .stream()
-                    .filter(t -> getTileCol((ImageView) t) == col)
-                    .collect(Collectors.toList());
-        } else { //Bottom row
-            floorTilesToMove = tileGroup.getChildren()
-                    .stream()
-                    .filter(t -> getTileCol((ImageView) t) == col)
-                    .collect(Collectors.toList());
-        }
+        List<Node> playerPiecesToMove;
+
+        floorTilesToMove = tileGroup.getChildren()
+                .stream()
+                .filter(t -> getTileCol((ImageView) t) == col)
+                .collect(Collectors.toList());
+
+        playerPiecesToMove = playerPieceGroup.getChildren()
+                .stream()
+                .filter(t -> getTileCol((ImageView) t) == col)
+                .collect(Collectors.toList());
+
         for (Node floorTile : floorTilesToMove) {
             if (row < col) {
                 floorTile.setLayoutY(floorTile.getLayoutY() + TILE_HEIGHT);
             } else { //Bottom row
                 floorTile.setLayoutY(floorTile.getLayoutY() - TILE_HEIGHT);
+            }
+        }
+
+        for (Node playerPiece : playerPiecesToMove) {
+            if (row < col) {
+                playerPiece.setLayoutY(playerPiece.getLayoutY() + TILE_HEIGHT);
+            } else { //Bottom row
+                playerPiece.setLayoutY(playerPiece.getLayoutY() - TILE_HEIGHT);
+            }
+
+            //Return back if yeeted out
+            System.out.println("Player Piece layout: " + getTileCol((ImageView) playerPiece));
+            System.out.println("GBVH: " + gameBoardView.getHeight());
+            if (getTileRow((ImageView) playerPiece) >= gameBoardView.getHeight()) {
+                playerPiece.setLayoutY(gameBoardView.getHeight() - 3);
+            }
+            if (getTileRow((ImageView) playerPiece) < 1) {
+                System.out.println();
+                playerPiece.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT - TILE_HEIGHT + 6);
             }
         }
 
