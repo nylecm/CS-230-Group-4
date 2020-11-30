@@ -4,25 +4,36 @@ import java_.util.security.RegisterHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class RegisterController {
+public class RegisterController implements Initializable {
 
     private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
 
     private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple? xxx@xxx.xxxx
 
     private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //Might be broken
+
+    @FXML
+    private VBox mainBox;
 
     @FXML
     private Label registerStatusLabel;
@@ -50,6 +61,8 @@ public class RegisterController {
     private final String PASSWORD_INVALID_MSG = "Password invalid!";
     private final String PASSWORD_NO_MATCH_MSG = "Passwords don't match!";
 
+
+
     @FXML
     private void onRegisterButtonClicked(ActionEvent event) {
         String username = this.username.getText();
@@ -59,6 +72,11 @@ public class RegisterController {
         if (validate(username, email, password, passwordRepeat)) {
             try {
                 RegisterHandler.register(username, email, password);
+                registerStatusLabel.setText("Account Registered!");
+                this.username.setText("");
+                this.email.setText("");
+                this.password.setText("");
+                this.passwordRepeat.setText("");
             } catch (IOException e) {
                 registerStatusLabel.setText("Error, users file not found, or error accessing it!");
             } catch (IllegalArgumentException e2) { //todo custom exception...
@@ -107,5 +125,16 @@ public class RegisterController {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
         currentStage.setScene(new Scene(mainMenu));
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        BackgroundFill backgroundFill = null;
+        try {
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File("src/view/res/img/space_uranus.png").toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        mainBox.setBackground(new Background(backgroundFill));
     }
 }
