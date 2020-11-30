@@ -206,7 +206,39 @@ public class NewGameController implements Initializable {
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-                //player1PlayerPieceImage.setImage(new Image(player1PlayerPieceSelect.getValue().getPath()));
+            }
+        });
+
+        // fixme find less hacky way...
+        player2PlayerPieceSelect.setOnAction(event -> {
+            if (player2PlayerPieceSelect.getValue() != null) {
+                try {
+                    player2PlayerPieceImage.setImage(new Image(String.valueOf(player2PlayerPieceSelect.getValue().toURL())));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // fixme find less hacky way...
+        player3PlayerPieceSelect.setOnAction(event -> {
+            if (player3PlayerPieceSelect.getValue() != null) {
+                try {
+                    player3PlayerPieceImage.setImage(new Image(String.valueOf(player3PlayerPieceSelect.getValue().toURL())));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // fixme find less hacky way...
+        player4PlayerPieceSelect.setOnAction(event -> {
+            if (player4PlayerPieceSelect.getValue() != null) {
+                try {
+                    player4PlayerPieceImage.setImage(new Image(String.valueOf(player4PlayerPieceSelect.getValue().toURL())));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
