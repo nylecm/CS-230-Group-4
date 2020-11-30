@@ -2,23 +2,19 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <?import java.net.URL?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="546.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.MainMenuController" styleClass="main_pane"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.MainMenuController"
+      styleClass="main_pane"
       fx:id="mainBox">
     <children>
         <VBox alignment="CENTER" prefHeight="549.0" prefWidth="720.0" spacing="20.0">
             <children>
-                <Label alignment="TOP_CENTER" layoutX="356.0" layoutY="57.0" text="java_.Main Menu"
-                       wrapText="true">
-                    <font>
-                        <Font name="System Bold" size="24.0"/>
-                    </font>
-                </Label>
-                <Label fx:id="messageOfTheDay" wrapText="true"/>
+                <Label styleClass="heading" alignment="TOP_CENTER" layoutX="356.0" layoutY="57.0"
+                       text="Main Menu" wrapText="true"/>
+                <Label fx:id="messageOfTheDay" styleClass="msg_of_the_day" wrapText="true"/>
                 <Button mnemonicParsing="false" onAction="#onNewGameButtonClicked" prefHeight="40.0"
                         prefWidth="250.0" text="New Game"/>
                 <Button mnemonicParsing="false" onAction="#onLoadGameButtonClicked"
