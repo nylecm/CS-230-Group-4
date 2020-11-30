@@ -89,7 +89,7 @@ public class GameControllerDummy implements Initializable {
         GameBoard gameBoard = gameService.getGameBoard();
 
         //TODO: Replace width and height with values from GameBoard
-        gameBoardView = new Dimension2D(8, 8);
+        gameBoardView = new Dimension2D(gameBoard.getnCols(), gameBoard.getnRows());
 
         //TODO: Replace with isometric view
         displayGameBoardFlat(gameBoard);
@@ -115,8 +115,9 @@ public class GameControllerDummy implements Initializable {
         displayEdges();
         displayFloorTiles();
         displayPlayerPieces(gameBoard);
+        setEffectBorders();
 
-        content.getChildren().addAll(edgeTileGroup, tileGroup, playerPieceGroup);
+        content.getChildren().addAll(edgeTileGroup, tileGroup, effectGroup, playerPieceGroup);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setContent(content);
@@ -181,7 +182,6 @@ public class GameControllerDummy implements Initializable {
 
     //TODO: Implement
     private void displayPlayerPieces(GameBoard gameBoard) {
-
         Image leftTopImage = new Image("leftTop.png");
         ImageView leftTop = new ImageView(leftTopImage);
         leftTop.setFitWidth(TILE_WIDTH);
@@ -245,68 +245,39 @@ public class GameControllerDummy implements Initializable {
         }
     }
 
-    @FXML
-    private void onDrawPlayerPieceButtonClicked() {
-        Image playerPieceImage = new Image("playerPiece.png");
+    public void setEffectBorders() {
+        Image leftTopImage = new Image("leftTop.png");
+        ImageView leftTop = new ImageView(leftTopImage);
+        leftTop.setFitWidth(TILE_WIDTH);
+        leftTop.setFitHeight(TILE_HEIGHT);
+        leftTop.setLayoutX(- TILE_WIDTH);
+        leftTop.setLayoutY(- TILE_HEIGHT);
+        effectGroup.getChildren().add(leftTop);
 
-        ImageView leftTop = new ImageView(playerPieceImage);
-        leftTop.setFitWidth(28);
-        leftTop.setFitHeight(28);
-        leftTop.setLayoutX(0);
-        leftTop.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
-        playerPieceGroup.getChildren().add(leftTop);
-
-        ImageView rightTop = new ImageView(playerPieceImage);
-        rightTop.setFitWidth(28);
-        rightTop.setFitHeight(28);
+        Image rightTopImage = new Image("rightTop.png");
+        ImageView rightTop = new ImageView(rightTopImage);
+        rightTop.setFitWidth(TILE_WIDTH);
+        rightTop.setFitHeight(TILE_HEIGHT);
         rightTop.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
-        rightTop.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
-        playerPieceGroup.getChildren().add(rightTop);
+        rightTop.setLayoutY(- TILE_HEIGHT);
+        effectGroup.getChildren().add(rightTop);
 
-        ImageView bottomLeft = new ImageView(playerPieceImage);
-        bottomLeft.setFitWidth(28);
-        bottomLeft.setFitHeight(28);
-        bottomLeft.setLayoutX(0);
-        bottomLeft.setLayoutY(0);
-        playerPieceGroup.getChildren().add(bottomLeft);
+        Image leftBottomImage = new Image("leftBottom.png");
+        ImageView leftBottom = new ImageView(leftBottomImage);
+        leftBottom.setFitWidth(TILE_WIDTH);
+        leftBottom.setFitHeight(TILE_HEIGHT);
+        leftBottom.setLayoutX(- TILE_WIDTH);
+        leftBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        effectGroup.getChildren().add(leftBottom);
 
-        ImageView bottomRight = new ImageView(playerPieceImage);
-        bottomRight.setFitWidth(28);
-        bottomRight.setFitHeight(28);
-        bottomRight.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
-        bottomRight.setLayoutY(0);
-        playerPieceGroup.getChildren().add(bottomRight);
-
-
-        ImageView playerPiece = new ImageView(playerPieceImage);
-        playerPiece.setFitWidth(28);
-        playerPiece.setFitHeight(28);
-        //Row 2, Column 5 (Starting on FloorTiles from 1). YES, MAGIC NUMBERS.
-        playerPiece.setLayoutX(5 * TILE_WIDTH - 20);
-        playerPiece.setLayoutY(2 * TILE_HEIGHT - 20);
-        playerPiece.toFront();
-        playerPieceGroup.getChildren().add(playerPiece);
-        playerPiece.setId("playerPiece");
-
-        ImageView playerPiece2 = new ImageView(playerPieceImage);
-        playerPiece2.setFitWidth(28);
-        playerPiece2.setFitHeight(28);
-        //Row 2, Column 5 (Starting on FloorTiles from 1). YES, MAGIC NUMBERS.
-        playerPiece2.setLayoutX(7 * TILE_WIDTH - 20);
-        playerPiece2.setLayoutY(3 * TILE_HEIGHT - 20);
-        playerPiece2.toFront();
-        playerPieceGroup.getChildren().add(playerPiece2);
-        playerPiece2.setId("playerPiece");
-
-        playerPiece.setOnDragDetected(event -> {
-            Dragboard dragboard = playerPiece.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.putImage(playerPiece.getImage());
-            dragboard.setContent(content);
-            event.consume();
-        });
+        Image rightBottomImage = new Image("rightBottom.png");
+        ImageView rightBottom = new ImageView(rightBottomImage);
+        rightBottom.setFitWidth(TILE_WIDTH);
+        rightBottom.setFitHeight(TILE_HEIGHT);
+        rightBottom.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
+        rightBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
+        effectGroup.getChildren().add(rightBottom);
     }
-
 
     public void setEdgeTileEventHandlers(ImageView edgeTileDisplay) {
         edgeTileDisplay.setOnDragOver(event -> {
@@ -359,13 +330,22 @@ public class GameControllerDummy implements Initializable {
         floorTileDisplay.setOnDragDropped(event -> {
             ImageView source = (ImageView) event.getGestureSource();
             if (playerPieceGroup.getChildren().contains(source)) {
-//                int offsetX = (int) ((TILE_WIDTH - source.getFitWidth()) / 2);
-//                int offsetY = (int) ((TILE_HEIGHT - source.getFitHeight()) / 2);
                 source.setLayoutX(floorTileDisplay.getLayoutX() + 6);
                 source.setLayoutY(floorTileDisplay.getLayoutY() + 6);
             } else { //Action Tile, TODO better filtering?
                 int area = 3; //Does not allow rectangle areas
 
+                double centerY = floorTileDisplay.getLayoutY();
+                double centerX = floorTileDisplay.getLayoutX();
+
+                for (int row = 0; row < area; row++) {
+                    for (int col = 0; col < area; col++) {
+                        ImageView effectDisplay = getFloorTileImageView(actionTileImage);
+                        effectDisplay.setLayoutY(centerY + TILE_HEIGHT - row * TILE_WIDTH);
+                        effectDisplay.setLayoutX(centerX - TILE_WIDTH + col * TILE_WIDTH);
+                        effectGroup.getChildren().add(effectDisplay);
+                    }
+                }
             }
         });
     }
