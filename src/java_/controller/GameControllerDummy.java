@@ -302,12 +302,15 @@ public class GameControllerDummy implements Initializable {
                 System.out.println("Row: " + tileRow);
 
                 if (tileCol == -1 || tileCol == gameBoardView.getWidth()) {
+                    System.out.println("Yes 1");
                     slideRowTemp(tileRow, tileCol);
+                    GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
                 } else if ((tileRow == -1 || tileRow == gameBoardView.getHeight())) {
                     slideColTemp(tileCol, tileRow);
+                    System.out.println("Yes 2");
+                    GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
                 }
                 //TODO Store?
-                GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
                 displayGameBoardFlat(GameService.getInstance().getGameBoard());
             }
         });
