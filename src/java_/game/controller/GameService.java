@@ -453,6 +453,14 @@ public class GameService {
 
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
+
+        gs.gameBoard.insert(-1,0, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gameBoard.insert(-1,0, new FloorTile(TileType.STRAIGHT, false), 1);
+        System.out.println(gs.gameBoard);
+        System.out.println(gs.gameBoard.getTileAt(0,0));
+        System.out.println(gs.gameBoard.getTileAt(0,1));
+
+
     }
 
     /*private class FloorTilePositionBundle {

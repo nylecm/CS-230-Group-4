@@ -273,8 +273,8 @@ public class GameBoard {
 
     private void shiftBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
         //Shift Player Piece:
-        shiftPlayerPiecesBottomToTop(colNum);
         shiftTilesBottomToTop(colNum, rowNum, tile, rotation);
+        shiftPlayerPiecesBottomToTop(colNum);
     }
 
     private void shiftPlayerPiecesBottomToTop(int colNum) {
