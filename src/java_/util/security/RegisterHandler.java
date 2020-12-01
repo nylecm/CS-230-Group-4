@@ -20,7 +20,7 @@ public class RegisterHandler {
 
     public static void register(String username, String email, String password) throws IOException, IllegalArgumentException {
         Scanner in = new Scanner(new File(USERS_FILE_PATH));
-        in.useDelimiter("`");
+        in.useDelimiter(DELIMITER);
         boolean isUserFileEmpty = true;
 
         while (in.hasNextLine()) {
