@@ -34,6 +34,10 @@ public class GameService {
         playerService = PlayerService.getInstance().remake();
     }
 
+    /**
+     * Returns the current instance of GameService. If there isn't one, a new one is made and returned.
+     * @return The current or new instance of GameService.
+     */
     public static GameService getInstance() {
         if (instance == null) {
             instance = new GameService();
@@ -41,6 +45,12 @@ public class GameService {
         return instance;
     }
 
+    /**
+     * Sets a new instance of GameService to be a game that had been previously been saved to a file.
+     * @param players All players participating in the game.
+     * @param boardName The name of the board the game is being played on.
+     * @throws FileNotFoundException If the gameboard file path cannot be found an exception is thrown.
+     */
     public void loadNewGame(Player[] players, String boardName) throws FileNotFoundException {
         remake();
         PlayerPiece[] playerPieces = new PlayerPiece[players.length];
@@ -218,6 +228,11 @@ public class GameService {
         }
     }
 
+    /**
+     * Saves the current instance of the game to a file.
+     * @param saveFileName The name of the file in which the game data is to be stored.
+     * @throws IOException If a file cannot be created due to an invalid file path.
+     */
     public void save(String saveFileName) throws IOException { //todo
         File gameSaveFile = createFile(saveFileName);
 
@@ -334,34 +349,65 @@ public class GameService {
         out.print('\n');
     }
 
+    /**
+     * Returns the PlayerService belonging to the GameService.
+     * @return The GameService's PlayerService.
+     */
     public PlayerService getPlayerService() {
         return playerService;
     }
 
+    /**
+     * Returns the current turn number for the game.
+     * @return The number of turns made.
+     */
     public int getTurnCount() {
         return turnCount;
     }
 
+    /**
+     * Returns true if a Player has won the game.
+     * @return True if a player has won the game, otherwise false.
+     */
     public boolean isWin() {
         return isWin;
     }
 
+    /**
+     * Clears the current instance of GameService.
+     */
     public void destroy() {
         instance = null;
     }
 
+    /**
+     * Returns a new instance of GameService.
+     * @return The new instance of GameService.
+     */
     public GameService remake() {
         return new GameService();
     }
 
+    /**
+     * Returns the gameboard for the GameService
+     * @return The gameboard used for the game.
+     */
     public GameBoard getGameBoard() {
         return gameBoard;
     }
 
+    /**
+     * Retunrs the SilkBag being used by the GameService.
+     * @return The GameService's SilkBag.
+     */
     public SilkBag getSilkBag() {
         return silkBag;
     }
-
+    /**
+     * The entry point of application, for testing only. todo remove this.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
