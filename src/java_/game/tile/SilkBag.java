@@ -2,6 +2,8 @@ package java_.game.tile;
 
 import java_.util.generic_data_structures.Queue;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -19,12 +21,14 @@ public class SilkBag {
      *
      * @param newTiles the tiles that ought to be added, in random order.
      */
-    public SilkBag(Tile[] newTiles) {
+    public SilkBag(List<Tile> newTiles) {
+        Collections.shuffle(newTiles);
         for (Tile tile : newTiles) {
             tiles.enqueue(tile.getType());
         }
     }
 
+    @Deprecated
     /**
      * Instantiates a new silk bag without filling it with tiles.
      */

@@ -118,7 +118,7 @@ public class GameBoard {
         playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
 
-    public void insert(int colNum, int rowNum, FloorTile tile)
+    public void insert(int colNum, int rowNum, FloorTile tile, int rotation)
             throws IllegalArgumentException {
         FloorTile pushedOffTile; // Tile being pushed off
 

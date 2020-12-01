@@ -109,7 +109,7 @@ public class GameService {
             tilesForSilkBag.addAll(floorTiles);
             tilesForSilkBag.addAll(actionTiles);
 
-            silkBag = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
+            silkBag = new SilkBag(tilesForSilkBag);
 
             return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName);
@@ -426,7 +426,7 @@ public class GameService {
         AreaEffect test = gs.gameBoard.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         System.out.println();
 
         for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
