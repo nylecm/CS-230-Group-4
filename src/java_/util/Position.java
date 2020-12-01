@@ -5,7 +5,6 @@ public class Position {
     private int rowNum;
     private int colNum;
 
-
     public Position(int rowNum, int colNum) {
         this.rowNum = rowNum;
         this.colNum = colNum;
@@ -26,24 +25,7 @@ public class Position {
     }
 
     public void setColNum(int colNum) {
-
         this.colNum = colNum;
-    }
-
-    public void incrementRowNum() {
-        rowNum++;
-    }
-
-    public void incrementColNum() {
-        colNum++;
-    }
-
-    public void decrementRowNum() {
-        rowNum--;
-    }
-
-    public void decrementColNum() {
-        colNum--;
     }
 
     @Override

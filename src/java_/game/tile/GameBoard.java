@@ -403,10 +403,10 @@ public class GameBoard {
                 Position position = iterator.next();
                 if (activeEffects.get(position).getRemainingDuration() == 1) {
                     iterator.remove();
-                    System.out.println("removed"); //todo remove
+                    //System.out.println("removed"); //todo remove
                 } else {
                     activeEffects.get(position).decrementRemainingDuration();
-                    System.out.println("dec"); //todo remove
+                    //System.out.println("dec"); //todo remove
                 }
             }
         }

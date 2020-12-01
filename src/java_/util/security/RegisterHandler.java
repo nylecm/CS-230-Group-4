@@ -1,8 +1,6 @@
 package java_.util.security;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,8 +8,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
 
 /**
- * Handles the process of a user registering a new account in the game.
- * The account details are stored in a file by the handler.
+ *
+ * @author Hladky Matej original version, nylecm major overhaul.
  */
 public class RegisterHandler {
 
@@ -20,22 +18,13 @@ public class RegisterHandler {
             "User with such username exists!";
     private static final String DELIMITER = "`";
 
-    /**
-     * Registers the new account by storing the user account data to a file.
-     * @param username The username for the registered account.
-     * @param email The email for the registered account.
-     * @param password The password for the registered account.
-     * @throws IOException If there is an error writing user details to the file.
-     * @throws IllegalArgumentException If the user has entered a username that already exists for another account.
-     */
     public static void register(String username, String email, String password) throws IOException, IllegalArgumentException {
         Scanner in = new Scanner(new File(USERS_FILE_PATH));
-        in.useDelimiter("`");
+        in.useDelimiter(DELIMITER);
         boolean isUserFileEmpty = true;
 
         while (in.hasNextLine()) {
             if (in.next().equals(username)) {
-                isUserFileEmpty = false;
                 throw new IllegalArgumentException(USER_DUPLICATE_USERNAME_MSG);
             } else {
                 isUserFileEmpty = false;
