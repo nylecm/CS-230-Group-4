@@ -8,13 +8,15 @@ import java.util.EnumSet;
  * @author mnabina, nylecm
  */
 public abstract class Tile {
+    private static final String FLOOR_TILE_NOT_OF_ALLOWED_TYPE_MSG =
+            "Tile must have an appropriate typeName, for it's type.";
     protected final TileType type;
 
     public Tile(TileType type, EnumSet<TileType> typesAllowed) {
         if (typesAllowed.contains(type)) {
             this.type = type ;
         } else {
-            throw new IllegalArgumentException("Floor tile must have a floor tile typeName.");
+            throw new IllegalArgumentException(FLOOR_TILE_NOT_OF_ALLOWED_TYPE_MSG);
         }
     }
 

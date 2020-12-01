@@ -10,6 +10,10 @@ import java.util.Scanner;
  * @author SamCox7500, minor improvements by nylecm
  */
 public class MessageOfTheDayService {
+    private static final String PUZZLE_URL_STR = "http://cswebcat.swansea.ac.uk/puzzle";
+    private static final String COURSE_CODE = "CS-230";
+    private static final String MESSAGE_URL_STR = "http://cswebcat.swansea.ac.uk/message?solution=";
+
     /**
      * Gets the message of the day.
      *
@@ -17,16 +21,16 @@ public class MessageOfTheDayService {
      * @throws IOException when the URL is malformed.
      */
     public static String getMessage() throws IOException {
-        Scanner puzzleIn = readURL("http://cswebcat.swansea.ac.uk/puzzle");
+        Scanner puzzleIn = readURL(PUZZLE_URL_STR);
         String puzzle = puzzleIn.nextLine();
         String shiftedPuzzle = shiftPuzzle(puzzle);
 
-        String courseCode = "CS-230";
+        String courseCode = COURSE_CODE;
         String codeAndShiftedPuzzle = courseCode + shiftedPuzzle;
 
         String puzzleSolution = codeAndShiftedPuzzle + codeAndShiftedPuzzle.length();
 
-        Scanner messageIn = readURL("http://cswebcat.swansea.ac.uk/message?solution=" + puzzleSolution);
+        Scanner messageIn = readURL(MESSAGE_URL_STR + puzzleSolution);
         return messageIn.nextLine();
     }
 

@@ -1,0 +1,27 @@
+.main_pane {
+    /*-fx-background-color: BLACK; /*DEBUG ONLY*/
+}
+
+.heading {
+    -fx-font-family: "Tahoma";
+    -fx-text-alignment: CENTER;
+    -fx-font-size: 100pt;
+}
+
+.msg_of_the_day {
+    -fx-font-size: 18px;
+    -fx-font-family: "Tahoma";
+    -fx-text-alignment: CENTER;
+}
+
+.label {
+    -fx-text-fill: WHITE;
+    -fx-font-size: 14;
+}
+
+.button {
+    -fx-text-fill: WHITE;
+    -fx-border-color: WHITE;
+    -fx-border-width: 2;
+    -fx-background-color: BLACK;
+}

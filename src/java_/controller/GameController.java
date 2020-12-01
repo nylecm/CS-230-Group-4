@@ -70,7 +70,7 @@ public class GameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         GameService gameService = GameService.getInstance();
         try {
-            GameService.getInstance().loadNewGame(new Player[]{new Player("bob", 1,2, new PlayerPiece())}, "oberon_1");
+            GameService.getInstance().loadNewGame(new Player[]{new Player("bob", new PlayerPiece())}, "oberon_1");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -348,11 +348,13 @@ public class GameController implements Initializable {
         TileType type = floorTile.getType();
         switch (type) {
             case STRAIGHT:
-                return "straight.png";
+                return "straightFlat.png";
             case CORNER:
-                return "corner.png";
+                return "cornerFlat.png";
             case T_SHAPED:
-                return "t_shaped.png";
+                return "t-shapedFlat.png";
+            case GOAL:
+                return "goalFlat.png";
         }
         return null;
     }

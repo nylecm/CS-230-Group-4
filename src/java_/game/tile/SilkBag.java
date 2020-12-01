@@ -25,18 +25,17 @@ public class SilkBag {
         }
     }
 
+    /**
+     * Instantiates a new silk bag without filling it with tiles.
+     */
     public SilkBag() {
     }
 
-   /* *//**
+    /**
      * Puts a tile into the silk bag.
      *
      * @param t the tile to be put into the silk bag.
-     *//*
-    public void put(Tile t) {
-        tiles.enqueue(t.getType());
-    }*/
-
+     */
     public void put(TileType t) {
         tiles.enqueue(t);
     }
@@ -59,10 +58,23 @@ public class SilkBag {
         }
     }
 
+    /**
+     * Checks if silk bag is empty.
+     *
+     * @return true if the silk bag is empty.
+     */
     public boolean isEmpty() {
         return tiles.isEmpty();
     }
 
+
+    /**
+     * Prints the contents of the silk bag.
+     *
+     * @return a string that lists the tiles in the silk bag ordered from the
+     * the next item that will be taken out to the last item that will be taken
+     * out.
+     */
     @Override
     public String toString() {
         return tiles.toString();
@@ -72,7 +84,7 @@ public class SilkBag {
      * The entry point of application, for testing only. todo remove this.
      *
      * @param args the input arguments
-     */
+     *//*
     public static void main(String[] args) {
         Tile[] ts = {new ActionTile(TileType.FIRE)};
 
@@ -106,5 +118,5 @@ public class SilkBag {
 
         System.out.println(s);
         //s.take();
-    }
+    }*/
 }

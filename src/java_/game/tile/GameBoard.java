@@ -3,17 +3,16 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
-import javafx.scene.effect.Effect;
 
 import java.util.*;
 
 public class GameBoard {
     private final int nRows; // height
     private final int nCols; // width
-    private final String name; // todo may not be needed.
-    private PlayerPiece[] playerPieces;
+    private final String name;
+    private final PlayerPiece[] playerPieces;
     private final Position[] playerPiecePositions;
-    private HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
+    private final HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
     private final FloorTile[][] board;
 
     @Deprecated
@@ -31,12 +30,11 @@ public class GameBoard {
         return board[row][col];
     }
 
-    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions, FloorTile[] fixedTiles, Position[] fixedTilePositions, FloorTile[] tiles, int nCols, int nRows, String name) {
+    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions,
+                     FloorTile[] fixedTiles, Position[] fixedTilePositions,
+                     FloorTile[] tiles, int nCols, int nRows, String name) {
         this.playerPieces = playerPieces;
         this.playerPiecePositions = playerPiecePositions;
-        //this.fixedTiles = fixedTiles;
-        //this.fixedTilePositions = fixedTilePositions;
-        //this.tiles = tiles;
         this.name = name;
         this.nRows = nRows;
         this.nCols = nCols;
@@ -120,22 +118,22 @@ public class GameBoard {
         playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
 
-    public void insert(int colNum, int rowNum, FloorTile tile, int rotation)
+    public void insert(int colNum, int rowNum, FloorTile tile)
             throws IllegalArgumentException {
         FloorTile pushedOffTile; // Tile being pushed off
 
         if (colNum == -1 && !isRowFixed(rowNum)) { // Left to right horizontal shift.
             pushedOffTile = board[rowNum][nCols - 1];
-            shiftLeftToRight(colNum, rowNum, tile, rotation);
+            shiftLeftToRight(colNum, rowNum, tile);
         } else if (colNum == nCols && !isRowFixed(rowNum)) { // Right to left horizontal shift.
             pushedOffTile = board[rowNum][0];
-            shiftRightToLeft(colNum, rowNum, tile, rotation);
+            shiftRightToLeft(colNum, rowNum, tile);
         } else if (rowNum == -1 && !isColumnFixed(colNum)) { // Top to bottom vertical shift.
             pushedOffTile = board[nRows - 1][colNum];
-            shiftTopToBottom(colNum, rowNum, tile, rotation);
+            shiftTopToBottom(colNum, rowNum, tile);
         } else if (rowNum == nRows && !isColumnFixed(colNum)) { // Bottom to top vertical shift.
             pushedOffTile = board[0][colNum];
-            shiftBottomToTop(colNum, rowNum, tile, rotation);
+            shiftBottomToTop(colNum, rowNum, tile);
         } else {
             throw new IllegalArgumentException("Invalid row/ column combination entered.");
         }
@@ -143,8 +141,8 @@ public class GameBoard {
         GameService.getInstance().getSilkBag().put(pushedOffTile.getType());
     }
 
-    private void shiftLeftToRight(int colNum, int rowNum, FloorTile tile, int rotation) {
-        shiftTilesLeftToRight(colNum, rowNum, tile, rotation);
+    private void shiftLeftToRight(int colNum, int rowNum, FloorTile tile) {
+        shiftTilesLeftToRight(colNum, rowNum, tile);
         shiftPlayerPiecesLeftToRight(rowNum);
     }
 
@@ -152,7 +150,7 @@ public class GameBoard {
         for (int i = 0; i < playerPiecePositions.length; i++) {
             Position pos = playerPiecePositions[i];
             if (pos.getRowNum() == rowNum) {
-                playerPiecePositions[i] = nextPositionLeftToRight(new Position(rowNum, pos.getColNum())); //todo replace with pos
+                playerPiecePositions[i] = nextPositionLeftToRight(pos);
                 playerPieces[i].addPreviousPlayerPosition(pos);
             }
         }
@@ -160,10 +158,11 @@ public class GameBoard {
 
     private Position nextPositionLeftToRight(Position pos) {
         return (pos.getColNum() == nCols - 1
-                ? switchPositionLeftToRight(new Position(pos.getRowNum(), 0))
-                : switchPositionLeftToRight(new Position(pos.getRowNum(), pos.getColNum() + 1)));
+                ? new Position(pos.getRowNum(), 0)
+                : new Position(pos.getRowNum(), pos.getColNum() + 1));
     }
 
+    /*@Deprecated
     private Position switchPositionLeftToRight(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
@@ -171,22 +170,22 @@ public class GameBoard {
         } else {
             return pos;
         }
-    }
+    }*/
 
-    private void shiftTilesLeftToRight(int colNum, int rowNum, FloorTile tile, int rotation) {
+    private void shiftTilesLeftToRight(int colNum, int rowNum, FloorTile tile) {
         for (int i = nCols - 1; i != 0; i--) {
             board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
 
             if (activeEffects.get(new Position(rowNum, i - 1)) != null) {
                 activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i - 1)));
+                activeEffects.remove(new Position(rowNum, i - 1));
             }
         }
-        tile.rotateClockwise(rotation);
         board[rowNum][colNum + 1] = tile;
     }
 
-    private void shiftRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
-        shiftTilesRightToLeft(colNum, rowNum, tile, rotation);
+    private void shiftRightToLeft(int colNum, int rowNum, FloorTile tile) {
+        shiftTilesRightToLeft(colNum, rowNum, tile);
         shiftPlayerPiecesRightToLeft(rowNum);
     }
 
@@ -202,32 +201,33 @@ public class GameBoard {
 
     private Position nextPositionRightToLeft(Position pos) {
         return (pos.getColNum() == 0
-                ? switchPositionRightToLeft(new Position(pos.getRowNum(), nCols - 1))
-                : switchPositionRightToLeft(new Position(pos.getRowNum(), pos.getColNum() - 1)));
+                ? new Position(pos.getRowNum(), nCols - 1)
+                : new Position(pos.getRowNum(), pos.getColNum() - 1));
     }
 
+    /*@Deprecated
     private Position switchPositionRightToLeft(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionLeftToRight(nextPositionRightToLeft(pos));
+            return switchPositionRightToLeft(nextPositionRightToLeft(pos));
         } else {
             return pos;
         }
-    }
+    }*/
 
-    private void shiftTilesRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
+    private void shiftTilesRightToLeft(int colNum, int rowNum, FloorTile tile) {
         for (int i = 0; i < nCols - 1; i++) {
             board[rowNum][i] = board[rowNum][i + 1];
             if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
                 activeEffects.put(new Position(rowNum, i), activeEffects.get(new Position(rowNum, i + 1)));
+                activeEffects.remove(new Position(rowNum, i + 1));
             }
         }
-        tile.rotateClockwise(rotation);
         board[rowNum][colNum - 1] = tile;
     }
 
-    private void shiftTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
-        shiftTilesTopToBottom(colNum, rowNum, tile, rotation);
+    private void shiftTopToBottom(int colNum, int rowNum, FloorTile tile) {
+        shiftTilesTopToBottom(colNum, rowNum, tile);
         shiftPlayerPiecesTopToBottom(colNum);
     }
 
@@ -243,34 +243,35 @@ public class GameBoard {
 
     private Position nextPositionTopToBottom(Position pos) {
         return (pos.getRowNum() == nRows - 1
-                ? switchPositionTopToBottom(new Position(0, pos.getColNum()))
-                : switchPositionTopToBottom(new Position(pos.getRowNum() + 1, pos.getColNum())));
+                ? new Position(0, pos.getColNum())
+                : new Position(pos.getRowNum() + 1, pos.getColNum()));
     }
 
+    /*@Deprecated
     private Position switchPositionTopToBottom(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionLeftToRight(nextPositionTopToBottom(pos));
+            return switchPositionTopToBottom(nextPositionTopToBottom(pos));
         } else {
             return pos;
         }
-    }
+    }*/
 
-    private void shiftTilesTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
+    private void shiftTilesTopToBottom(int colNum, int rowNum, FloorTile tile) {
         for (int i = nRows - 1; i != 0; i--) {
             board[i][colNum] = board[i - 1][colNum];
             if (activeEffects.get(new Position(i - 1, colNum)) != null) {
                 activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i - 1, colNum)));
+                activeEffects.remove(new Position(i - 1, colNum));
             }
         }
-        tile.rotateClockwise(rotation);
         board[rowNum + 1][colNum] = tile;
     }
 
-    private void shiftBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
+    private void shiftBottomToTop(int colNum, int rowNum, FloorTile tile) {
         //Shift Player Piece:
         shiftPlayerPiecesBottomToTop(colNum);
-        shiftTilesBottomToTop(colNum, rowNum, tile, rotation);
+        shiftTilesBottomToTop(colNum, rowNum, tile);
     }
 
     private void shiftPlayerPiecesBottomToTop(int colNum) {
@@ -285,27 +286,28 @@ public class GameBoard {
 
     private Position nextPositionBottomToTop(Position pos) {
         return (pos.getRowNum() == 0
-                ? switchPositionBottomToTop(new Position(nRows - 1, pos.getColNum()))
-                : switchPositionBottomToTop(new Position(pos.getRowNum() - 1, pos.getColNum())));
+                ? new Position(nRows - 1, pos.getColNum())
+                : new Position(pos.getRowNum() - 1, pos.getColNum()));
     }
 
+   /* @Deprecated
     private Position switchPositionBottomToTop(Position pos) {
         System.out.println(getEffectAt(pos));
         if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionLeftToRight(nextPositionBottomToTop(pos));
+            return switchPositionBottomToTop(nextPositionBottomToTop(pos));
         } else {
             return pos;
         }
-    }
+    }*/
 
-    private void shiftTilesBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
+    private void shiftTilesBottomToTop(int colNum, int rowNum, FloorTile tile) {
         for (int i = 0; i < nRows - 1; i++) {
             board[i][colNum] = board[i + 1][colNum];
             if (activeEffects.get(new Position(i + 1, colNum)) != null) {
                 activeEffects.put(new Position(i, colNum), activeEffects.get(new Position(i + 1, colNum)));
+                activeEffects.remove(new Position(i + 1, colNum));
             }
         }
-        tile.rotateClockwise(rotation);
         board[rowNum - 1][colNum] = tile;
     }
 
@@ -401,10 +403,10 @@ public class GameBoard {
                 Position position = iterator.next();
                 if (activeEffects.get(position).getRemainingDuration() == 1) {
                     iterator.remove();
-                    System.out.println("removed"); //todo remove
+                    //System.out.println("removed"); //todo remove
                 } else {
                     activeEffects.get(position).decrementRemainingDuration();
-                    System.out.println("dec"); //todo remove
+                    //System.out.println("dec"); //todo remove
                 }
             }
         }
@@ -442,10 +444,18 @@ public class GameBoard {
         return name;
     }
 
+    public PlayerPiece getPlayerPiece(int i) {
+        return playerPieces[i];
+    }
+
     public static void main(String[] args) {
         int p = 13;
         int mask = 2;
         System.out.println(p & mask);
+    }
+
+    public int getNumOfPlayerPieces() {
+        return playerPiecePositions.length;
     }
 
     /*public static void main(String[] args) {

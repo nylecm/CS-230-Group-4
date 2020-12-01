@@ -1,0 +1,29 @@
+.main_pane {
+    -fx-background-color: BLACK; /*DEBUG ONLY*/
+}
+
+.label {
+    -fx-text-fill: WHITE;
+    -fx-font-size: 14;
+}
+
+.text-field {
+    -fx-text-fill: WHITE;
+    -fx-border-color: WHITE;
+    -fx-border-width: 2;
+    -fx-background-color: BLACK;
+}
+
+.password-field {
+    -fx-text-fill: WHITE;
+    -fx-border-color: WHITE;
+    -fx-border-width: 2;
+    -fx-background-color: BLACK;
+}
+
+.button {
+    -fx-text-fill: WHITE;
+    -fx-border-color: WHITE;
+    -fx-border-width: 2;
+    -fx-background-color: BLACK;
+}

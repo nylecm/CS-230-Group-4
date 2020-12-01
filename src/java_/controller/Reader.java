@@ -1,21 +1,14 @@
 package java_.controller;
 
-import java_.game.tile.*;
-import java_.util.Position;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Reader {
-
     private File file;
     private Scanner in;
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
-    private static final String DELIMITER = "` ";
+    private static final String DELIMITER = "`";
 
     public List<String> readGameBoardNames() throws FileNotFoundException {
         List<String> output = new ArrayList<>();

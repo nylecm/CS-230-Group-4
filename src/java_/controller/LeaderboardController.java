@@ -42,6 +42,9 @@ public class LeaderboardController implements Initializable {
     @FXML
     private ChoiceBox gameBoardSelect;
 
+    private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
+    private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";
+
     private Table tableOne;
     private Object Table;
 
@@ -85,7 +88,7 @@ public class LeaderboardController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Reader r = new Reader();
-        File[] fileNames = r.readFileNames("data/user_stats");
+        File[] fileNames = r.readFileNames(USER_STATS_FOLDER_DIRECTORY);
         addGameBoardStatFileNames(fileNames);
 
         name.setCellValueFactory(new PropertyValueFactory<>("rName"));
@@ -102,7 +105,7 @@ public class LeaderboardController implements Initializable {
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource(MAIN_MENU_PATH));
         currentStage.setScene(new Scene(mainMenu));
     }
 
