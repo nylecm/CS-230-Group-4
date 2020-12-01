@@ -1,14 +1,16 @@
 package java_.util.security;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
 
+/**
+ *
+ * @author Hladky Matej original version, nylecm major overhaul.
+ */
 public class RegisterHandler {
 
     private static final String USERS_FILE_PATH = "users.txt";
@@ -23,7 +25,6 @@ public class RegisterHandler {
 
         while (in.hasNextLine()) {
             if (in.next().equals(username)) {
-                isUserFileEmpty = false;
                 throw new IllegalArgumentException(USER_DUPLICATE_USERNAME_MSG);
             } else {
                 isUserFileEmpty = false;
