@@ -2,9 +2,7 @@ package java_.controller;
 
 import java_.game.controller.GameService;
 import java_.game.player.PlayerService;
-import java_.game.tile.FloorTile;
-import java_.game.tile.GameBoard;
-import java_.game.tile.TileType;
+import java_.game.tile.*;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -16,6 +14,7 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -56,7 +55,11 @@ public class GameControllerDummy implements Initializable {
     @FXML
     private ImageView floorTileToBeInserted;
 
-    @FXML ImageView actionTile;
+    @FXML
+    private ImageView actionTile;
+
+    @FXML
+    private Button drawTileButton;
 
     @FXML
     private Group edgeTileGroup;
@@ -355,7 +358,7 @@ public class GameControllerDummy implements Initializable {
 
     //TODO Without animation, testing
     private void slideColTemp(int col, int row) {
-        ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+        ImageView floorTileDisplay = getFloorTileImageView(floorTileToBeInserted.getImage());
         floorTileDisplay.setLayoutX(col * TILE_WIDTH);
         floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
         floorTileDisplay.toFront();
@@ -419,7 +422,7 @@ public class GameControllerDummy implements Initializable {
     }
 
     private void slideRowTemp(int row, int col) {
-        ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
+        ImageView floorTileDisplay = getFloorTileImageView(floorTileToBeInserted.getImage());
         floorTileDisplay.setLayoutX(col * TILE_WIDTH);
         floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
         floorTileDisplay.toFront();
@@ -524,6 +527,27 @@ public class GameControllerDummy implements Initializable {
         timeline.setOnFinished(event -> {
             tileGroup.getChildren().remove(pushedOfTile);
         });
+    }
+
+    @FXML
+    public void onDrawTileButtonClicked() {
+        Tile drawnTile = GameService.getInstance().getSilkBag().take();
+        if (drawnTile instanceof FloorTile) {
+            Image tileImage = new Image((getFloorTileType((FloorTile) drawnTile)));
+            floorTileToBeInserted.setImage(tileImage);
+        } else { //Action Tile drawn
+            System.out.println("Bowser time");
+        }
+    }
+
+    @FXML
+    public void onRotateClockwiseButtonClicked() {
+        floorTileToBeInserted.setRotate(floorTileToBeInserted.getRotate() + 90);
+    }
+
+    @FXML
+    public void onRotateAntiClockwiseButtonClicked() {
+        floorTileToBeInserted.setRotate(floorTileToBeInserted.getRotate() - 90);
     }
 
     private ImageView getFloorTileImageView(Image floorTileImage) {

@@ -99,7 +99,7 @@ public class GameService {
             tilesForSilkBag.addAll(floorTiles);
             tilesForSilkBag.addAll(actionTiles);
 
-            silkBag = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
+            silkBag = new SilkBag(tilesForSilkBag);
 
             return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName);
