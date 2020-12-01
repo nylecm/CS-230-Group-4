@@ -24,10 +24,13 @@ public class LoadGameController implements Initializable {
     @FXML
     private ChoiceBox loadGameSelect;
 
+    private static final String SAVES_FOLDER_DIRECTORY = "data/saves";
+    private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Reader r = new Reader();
-        File[] fileNames = r.readFileNames("data/saves");
+        File[] fileNames = r.readFileNames(SAVES_FOLDER_DIRECTORY);
         addSaveFileNames(fileNames);
     }
 
@@ -37,7 +40,7 @@ public class LoadGameController implements Initializable {
 
     public void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource(MAIN_MENU_PATH));
         currentStage.setScene(new Scene(mainMenu));
     }
 
