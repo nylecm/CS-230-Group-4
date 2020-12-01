@@ -162,8 +162,10 @@ public class NewGameController implements Initializable {
     private final static String LOG_IN_SUCCESS_STRING = "Login Successful!";
     private final static String LOG_IN_FAILURE_STRING = "Invalid/Duplicate Credentials!";
     private final static String NO_PLAYER_PIECE_SELECTED_MSG = "Player Piece Not Selected!";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
     private final static int MIN_NUMBER_OF_PLAYERS = 2;
     private final static int MAX_NUMBER_OF_PLAYERS = 4;
+
     private final URL[] playerPieceImageURLs = new URL[MAX_NUMBER_OF_PLAYERS];
 
     private final boolean[] isPlayerReady = new boolean[4];
@@ -177,7 +179,7 @@ public class NewGameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundFill backgroundFill = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File("src/view/res/img/space_uranus.png").toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
