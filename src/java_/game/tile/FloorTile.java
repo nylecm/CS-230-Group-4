@@ -126,6 +126,16 @@ public class FloorTile extends Tile {
             paths = availablePaths[currentPathIndex - 1];
         }
     }
+    
+    public int getRotationFromDefaultRotationClockwise() throws IllegalStateException {
+        for (int i = 0; i < availablePaths.length; i++) {
+            if (paths == availablePaths[i]) {
+                 return i;
+            }
+        }
+        // Unlikely:
+        throw new IllegalStateException("Unable to find rotation amount!");
+    }
 
     /**
      * Gets paths.

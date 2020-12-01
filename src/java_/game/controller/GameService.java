@@ -36,6 +36,7 @@ public class GameService {
 
     /**
      * Returns the current instance of GameService. If there isn't one, a new one is made and returned.
+     *
      * @return The current or new instance of GameService.
      */
     public static GameService getInstance() {
@@ -47,7 +48,8 @@ public class GameService {
 
     /**
      * Sets a new instance of GameService to be a game that had been previously been saved to a file.
-     * @param players All players participating in the game.
+     *
+     * @param players   All players participating in the game.
      * @param boardName The name of the board the game is being played on.
      * @throws FileNotFoundException If the gameboard file path cannot be found an exception is thrown.
      */
@@ -91,7 +93,6 @@ public class GameService {
             }
             // Dealing with non-fixed floor tiles:
             ArrayList<FloorTile> floorTiles = readFloorTiles(in);
-            Collections.shuffle(floorTiles);
 
             // Taking first floor tiles for the initial set to populate game board.
             FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
@@ -99,7 +100,6 @@ public class GameService {
 
             //Action tiles:
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
-            Collections.shuffle(actionTiles);
 
             // Player Pieces:
             Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
@@ -169,7 +169,7 @@ public class GameService {
     }
 
     public void loadSavedInstance(File f) throws FileNotFoundException {
-        remake(); //todo future homer's problem
+        remake();
 
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
@@ -178,10 +178,11 @@ public class GameService {
         String name = in.next();
         int nRows = in.nextInt();
         int nCols = in.nextInt();
-        int turnCount = in.nextInt();
+        turnCount = in.nextInt();
         in.nextLine();
 
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
+
         //effect map...
 
         for (int i = 0; i < nRows * nCols; i++) {
@@ -230,6 +231,7 @@ public class GameService {
 
     /**
      * Saves the current instance of the game to a file.
+     *
      * @param saveFileName The name of the file in which the game data is to be stored.
      * @throws IOException If a file cannot be created due to an invalid file path.
      */
@@ -273,8 +275,8 @@ public class GameService {
     }
 
     private void writeGameInstanceDetails(PrintWriter out) {
-        out.print(playerService.getPlayers().length); // Number of players
-        out.print(DELIMITER);
+        /*out.print(playerService.getPlayers().length); // Number of players
+        out.print(DELIMITER);*/
         out.print(gameBoard.getName());
         out.print(DELIMITER);
         out.print(gameBoard.getnRows());
@@ -289,9 +291,11 @@ public class GameService {
     private void writeGameBoardInstanceTileDetails(PrintWriter out) {
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
-                out.print(gameBoard.getTileAt(i, j).getPaths());
+                out.print(gameBoard.getTileAt(i, j).getType());
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).isFixed());
+                out.print(DELIMITER);
+                out.print(gameBoard.getTileAt(i, j).getRotationFromDefaultRotationClockwise());
                 out.print(DELIMITER);
 
                 if (gameBoard.getEffectAt(new Position(i, j)) != null) {
@@ -351,6 +355,7 @@ public class GameService {
 
     /**
      * Returns the PlayerService belonging to the GameService.
+     *
      * @return The GameService's PlayerService.
      */
     public PlayerService getPlayerService() {
@@ -359,6 +364,7 @@ public class GameService {
 
     /**
      * Returns the current turn number for the game.
+     *
      * @return The number of turns made.
      */
     public int getTurnCount() {
@@ -367,6 +373,7 @@ public class GameService {
 
     /**
      * Returns true if a Player has won the game.
+     *
      * @return True if a player has won the game, otherwise false.
      */
     public boolean isWin() {
@@ -382,6 +389,7 @@ public class GameService {
 
     /**
      * Returns a new instance of GameService.
+     *
      * @return The new instance of GameService.
      */
     public GameService remake() {
@@ -390,6 +398,7 @@ public class GameService {
 
     /**
      * Returns the gameboard for the GameService
+     *
      * @return The gameboard used for the game.
      */
     public GameBoard getGameBoard() {
@@ -398,11 +407,13 @@ public class GameService {
 
     /**
      * Retunrs the SilkBag being used by the GameService.
+     *
      * @return The GameService's SilkBag.
      */
     public SilkBag getSilkBag() {
         return silkBag;
     }
+
     /**
      * The entry point of application, for testing only. todo remove this.
      *
@@ -454,11 +465,11 @@ public class GameService {
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
 
-        gs.gameBoard.insert(-1,0, new FloorTile(TileType.STRAIGHT, false), 0);
-        gs.gameBoard.insert(-1,0, new FloorTile(TileType.STRAIGHT, false), 1);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 1);
         System.out.println(gs.gameBoard);
-        System.out.println(gs.gameBoard.getTileAt(0,0));
-        System.out.println(gs.gameBoard.getTileAt(0,1));
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
 
 
     }
