@@ -18,6 +18,8 @@ public class FloorTile extends Tile {
     private final static int[] CORNER_TILE_PATHS = {12, 6, 3, 9}; // NE, SE, SW, NW
     private final static int[] T_SHAPED_TILE_PATHS = {14, 7, 11, 13}; // NES, ESW, SWN, WNE
 
+    private final static String TILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
+
     private final boolean isFixed;
     private int paths;
     private int[] availablePaths;
@@ -56,7 +58,7 @@ public class FloorTile extends Tile {
                 paths = availablePaths[0];
                 break;
             default:
-                throw new IllegalArgumentException("Invalid tile type entered.");
+                throw new IllegalArgumentException(TILE_TYPE_INVALID_MSG);
         }
     }
 

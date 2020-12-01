@@ -27,6 +27,8 @@ public class GameService {
     private static final String GAME_BOARD_FILE_PATH =
             "data/game_board" + DATA_FILE_EXTENSION;
     private static final String SAVE_GAME_FILE_PATH = "data/saves/";
+    private static final String NO_LEVEL_WITH_SUCH_NAME_MSG =
+            "No level with such name found!";
 
     private GameService() {
         playerService = PlayerService.getInstance().remake();
@@ -102,7 +104,7 @@ public class GameService {
             return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
                     floorTilesForGameBoard, nCols, nRows, boardName);
         }
-        throw new IllegalArgumentException("No level with such name found!");
+        throw new IllegalArgumentException(NO_LEVEL_WITH_SUCH_NAME_MSG);
     }
 
     private ArrayList<FloorTile> readFloorTiles(Scanner in) {
