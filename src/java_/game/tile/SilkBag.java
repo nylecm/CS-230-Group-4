@@ -28,6 +28,7 @@ public class SilkBag {
         }
     }
 
+    @Deprecated
     /**
      * Instantiates a new silk bag without filling it with tiles.
      */

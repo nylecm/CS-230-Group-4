@@ -293,20 +293,23 @@ public class GameControllerDummy implements Initializable {
         });
 
         edgeTileDisplay.setOnDragDropped(event -> {
-            int tileCol = getTileCol(edgeTileDisplay);
-            int tileRow = getTileRow(edgeTileDisplay);
+            ImageView source = (ImageView) event.getGestureSource();
+            if (source == drawnFloorTile) {
+                int tileCol = getTileCol(edgeTileDisplay);
+                int tileRow = getTileRow(edgeTileDisplay);
 
-            System.out.println("Col: " + tileCol);
-            System.out.println("Row: " + tileRow );
+                System.out.println("Col: " + tileCol);
+                System.out.println("Row: " + tileRow);
 
-            if (tileCol == - 1 || tileCol == gameBoardView.getWidth()) {
-                slideRowTemp(tileRow, tileCol);
-            } else if ((tileRow == - 1 || tileRow == gameBoardView.getHeight())) {
-                slideColTemp(tileCol, tileRow);
+                if (tileCol == -1 || tileCol == gameBoardView.getWidth()) {
+                    slideRowTemp(tileRow, tileCol);
+                } else if ((tileRow == -1 || tileRow == gameBoardView.getHeight())) {
+                    slideColTemp(tileCol, tileRow);
+                }
+                //TODO Store?
+                GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
+                displayGameBoardFlat(GameService.getInstance().getGameBoard());
             }
-            //TODO Store?
-            GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
-            displayGameBoardFlat(GameService.getInstance().getGameBoard());
         });
     }
 
@@ -338,7 +341,7 @@ public class GameControllerDummy implements Initializable {
             if (playerPieceGroup.getChildren().contains(source)) {
                 source.setLayoutX(floorTileDisplay.getLayoutX() + 6);
                 source.setLayoutY(floorTileDisplay.getLayoutY() + 6);
-            } else { //Action Tile, TODO better filtering?
+            } else if (source == drawnActionTile) {
                 int area = 3; //Does not allow rectangle areas
 
                 double centerY = floorTileDisplay.getLayoutY();
