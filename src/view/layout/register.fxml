@@ -1,45 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<?import java.net.URL?>
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="546.0" prefWidth="720.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="java_.controller.RegisterController" fx:id="mainBox" styleClass="main_pane">
+<VBox fx:id="mainBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="720.0" spacing="20.0" styleClass="main_pane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.RegisterController">
     <children>
-        <Label text="Register">
-            <font>
-                <Font size="30.0"/>
-            </font>
-        </Label>
-        <TextField fx:id="username" maxWidth="400.0" minWidth="120.0" promptText="Username"/>
-        <TextField fx:id="email" maxWidth="400.0" minWidth="120.0" promptText="Email"/>
-        <PasswordField fx:id="password" maxWidth="400.0" minWidth="120.0" promptText="Password"/>
-        <PasswordField fx:id="passwordRepeat" maxWidth="400.0" minWidth="120.0"
-                       promptText="Repeat Password"/>
-        <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="200.0"
-              prefHeight="25.0" prefWidth="403.0" spacing="15.0">
+      <HBox alignment="CENTER_LEFT" minWidth="120.0" prefHeight="100.0" prefWidth="200.0">
+         <children>
+                <Button fx:id="onBackButtonClicked" minWidth="70.0" mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin></Button>
+              <Label text="Register">
+                  <font>
+                      <Font size="30.0" />
+                  </font>
+              </Label>
+         </children>
+      </HBox>
+        <TextField fx:id="username" maxWidth="400.0" minWidth="120.0" promptText="Username" />
+        <TextField fx:id="email" maxWidth="400.0" minWidth="120.0" promptText="Email" />
+        <PasswordField fx:id="password" maxWidth="400.0" minWidth="120.0" promptText="Password" />
+        <PasswordField fx:id="passwordRepeat" maxWidth="400.0" minWidth="120.0" promptText="Repeat Password" />
+        <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="200.0" prefHeight="25.0" prefWidth="403.0" spacing="15.0">
             <children>
-                <Button fx:id="onBackButtonClicked" minWidth="70.0" mnemonicParsing="false"
-                        onAction="#onBackButtonClicked" text="Back"/>
-                <Button fx:id="registerButton" minWidth="70.0" mnemonicParsing="false"
-                        onAction="#onRegisterButtonClicked" prefHeight="25.0" prefWidth="63.0"
-                        text="Register"/>
+              <Label fx:id="registerStatusLabel" />
+                <Button fx:id="registerButton" minWidth="70.0" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="25.0" prefWidth="63.0" text="Register" />
             </children>
             <VBox.margin>
-                <Insets/>
+                <Insets />
             </VBox.margin>
         </HBox>
-        <Label fx:id="registerStatusLabel" text="debug"/>
     </children>
     <padding>
-        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+        <Insets bottom="50.0" left="100.0" right="100.0" top="50.0" />
     </padding>
     <stylesheets>
-        <URL value="@register.css"/>
+        <URL value="@register.css" />
     </stylesheets>
 </VBox>
