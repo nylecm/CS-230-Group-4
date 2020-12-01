@@ -59,12 +59,5 @@ public class PasswordEncoder {
         BigInteger bigInteger = new BigInteger(1, array);
         return bigInteger.toString(16);
     }
-
-    public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        String passwordToStore = "Hello5_Hi";
-        String enteredPassword = "Hello5_Hi";
-
-        System.out.println(validatePassword(enteredPassword, encodePassword(passwordToStore)));
-    }
 }
 

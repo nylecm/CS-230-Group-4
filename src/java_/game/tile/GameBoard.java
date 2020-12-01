@@ -3,7 +3,6 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
-import javafx.scene.effect.Effect;
 
 import java.util.*;
 
@@ -11,9 +10,9 @@ public class GameBoard {
     private final int nRows; // height
     private final int nCols; // width
     private final String name;
-    private PlayerPiece[] playerPieces;
+    private final PlayerPiece[] playerPieces;
     private final Position[] playerPiecePositions;
-    private HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
+    private final HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
     private final FloorTile[][] board;
 
     @Deprecated
