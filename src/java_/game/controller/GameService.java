@@ -274,7 +274,7 @@ public class GameService {
     private void writeGameBoardInstanceTileDetails(PrintWriter out) {
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
-                out.print(gameBoard.getTileAt(i, j).getPaths());
+                out.print(gameBoard.getTileAt(i, j).getPathsBits());
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).isFixed());
                 out.print(DELIMITER);
