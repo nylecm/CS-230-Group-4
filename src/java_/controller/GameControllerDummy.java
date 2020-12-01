@@ -1,7 +1,6 @@
 package java_.controller;
 
 import java_.game.controller.GameService;
-import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
@@ -11,7 +10,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -22,10 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -43,6 +38,8 @@ public class GameControllerDummy implements Initializable {
 
     private static final int PLAYER_PIECE_HEIGHT = 28;
 
+    private Tile drawnTile;
+
     @FXML
     private ScrollPane scrollPane;
 
@@ -53,10 +50,10 @@ public class GameControllerDummy implements Initializable {
     private Dimension2D gameBoardView;
 
     @FXML
-    private ImageView floorTileToBeInserted;
+    private ImageView drawnFloorTile;
 
     @FXML
-    private ImageView actionTile;
+    private ImageView drawnActionTile;
 
     @FXML
     private Button drawTileButton;
@@ -86,11 +83,6 @@ public class GameControllerDummy implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         GameService gameService = GameService.getInstance();
 
-        edgeTileGroup = new Group();
-        tileGroup = new Group();
-        playerPieceGroup = new Group();
-        effectGroup = new Group();
-
         GameBoard gameBoard = gameService.getGameBoard();
 
         //TODO: Replace width and height with values from GameBoard
@@ -99,16 +91,16 @@ public class GameControllerDummy implements Initializable {
         //TODO: Replace with isometric view
         displayGameBoardFlat(gameBoard);
 
-        floorTileToBeInserted.setOnDragDetected(event -> {
-            Dragboard dragboard = floorTileToBeInserted.startDragAndDrop(TransferMode.MOVE);
+        drawnFloorTile.setOnDragDetected(event -> {
+            Dragboard dragboard = drawnFloorTile.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.putImage(floorTileImage);
             dragboard.setContent(content);
             event.consume();
         });
 
-        actionTile.setOnDragDetected(event -> {
-            Dragboard dragboard = actionTile.startDragAndDrop(TransferMode.MOVE);
+        drawnActionTile.setOnDragDetected(event -> {
+            Dragboard dragboard = drawnActionTile.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.putImage(actionTileImage);
             dragboard.setContent(content);
@@ -117,12 +109,17 @@ public class GameControllerDummy implements Initializable {
     }
 
     private void displayGameBoardFlat(GameBoard gameBoard) {
+        edgeTileGroup = new Group();
+        tileGroup = new Group();
+        playerPieceGroup = new Group();
+        effectGroup = new Group();
+
         displayEdges();
         displayFloorTiles(gameBoard);
         displayPlayerPieces(gameBoard);
         setEffectBorders();
 
-        content.getChildren().addAll(edgeTileGroup, tileGroup, effectGroup, playerPieceGroup);
+        content.getChildren().addAll(tileGroup, effectGroup, edgeTileGroup, playerPieceGroup);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setContent(content);
@@ -174,7 +171,7 @@ public class GameControllerDummy implements Initializable {
         for (int row = 0; row < gameBoardView.getHeight(); row++) {
             for (int col = 0; col < gameBoardView.getWidth(); col++) {
 
-                Image floorTileImage = new Image(getFloorTileType(gameBoard.getTileAt(row, col)));
+                Image floorTileImage = new Image(getFloorTileTypeImage(gameBoard.getTileAt(row, col)));
                 ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
                 floorTileDisplay.setLayoutX(col * TILE_WIDTH);
                 floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
@@ -307,6 +304,9 @@ public class GameControllerDummy implements Initializable {
             } else if ((tileRow == - 1 || tileRow == gameBoardView.getHeight())) {
                 slideColTemp(tileCol, tileRow);
             }
+            //TODO Store?
+            GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
+            displayGameBoardFlat(GameService.getInstance().getGameBoard());
         });
     }
 
@@ -358,7 +358,8 @@ public class GameControllerDummy implements Initializable {
 
     //TODO Without animation, testing
     private void slideColTemp(int col, int row) {
-        ImageView floorTileDisplay = getFloorTileImageView(floorTileToBeInserted.getImage());
+        ImageView floorTileDisplay = getFloorTileImageView(drawnFloorTile.getImage());
+        floorTileDisplay.setRotate(drawnFloorTile.getRotate());
         floorTileDisplay.setLayoutX(col * TILE_WIDTH);
         floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
         floorTileDisplay.toFront();
@@ -422,7 +423,8 @@ public class GameControllerDummy implements Initializable {
     }
 
     private void slideRowTemp(int row, int col) {
-        ImageView floorTileDisplay = getFloorTileImageView(floorTileToBeInserted.getImage());
+        ImageView floorTileDisplay = getFloorTileImageView(drawnFloorTile.getImage());
+        floorTileDisplay.setRotate(drawnFloorTile.getRotate());
         floorTileDisplay.setLayoutX(col * TILE_WIDTH);
         floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
         floorTileDisplay.toFront();
@@ -531,23 +533,24 @@ public class GameControllerDummy implements Initializable {
 
     @FXML
     public void onDrawTileButtonClicked() {
-        Tile drawnTile = GameService.getInstance().getSilkBag().take();
+        drawnTile = GameService.getInstance().getSilkBag().take();
         if (drawnTile instanceof FloorTile) {
-            Image tileImage = new Image((getFloorTileType((FloorTile) drawnTile)));
-            floorTileToBeInserted.setImage(tileImage);
+            Image newFloorTileImage = new Image((getFloorTileTypeImage((FloorTile) drawnTile)));
+            drawnFloorTile.setImage(newFloorTileImage);
         } else { //Action Tile drawn
-            System.out.println("Bowser time");
+            Image newActionTileImage = new Image((getActionTileTypeImage((ActionTile) drawnTile)));
+            drawnActionTile.setImage(newActionTileImage);
         }
     }
 
     @FXML
     public void onRotateClockwiseButtonClicked() {
-        floorTileToBeInserted.setRotate(floorTileToBeInserted.getRotate() + 90);
+        drawnFloorTile.setRotate(drawnFloorTile.getRotate() + 90);
     }
 
     @FXML
     public void onRotateAntiClockwiseButtonClicked() {
-        floorTileToBeInserted.setRotate(floorTileToBeInserted.getRotate() - 90);
+        drawnFloorTile.setRotate(drawnFloorTile.getRotate() - 90);
     }
 
     private ImageView getFloorTileImageView(Image floorTileImage) {
@@ -565,7 +568,7 @@ public class GameControllerDummy implements Initializable {
         return (int) (tileDisplay.getLayoutY() / TILE_HEIGHT);
     }
 
-    private String getFloorTileType(FloorTile floorTile) {
+    private String getFloorTileTypeImage(FloorTile floorTile) {
         TileType type = floorTile.getType();
         switch (type) {
             case STRAIGHT:
@@ -576,6 +579,21 @@ public class GameControllerDummy implements Initializable {
                 return "t-shapedFlat.png";
             case GOAL:
                 return "goalFlat.png";
+        }
+        return null;
+    }
+
+    private String getActionTileTypeImage(ActionTile actionTile) {
+        TileType type = actionTile.getType();
+        switch (type) {
+            case FIRE:
+                return "fireFlat.png";
+            case ICE:
+                return "iceFlat.png";
+            case BACKTRACK:
+                return "backtrackFlat.png";
+            case DOUBLE_MOVE:
+                return "doublemoveFlat.png";
         }
         return null;
     }
