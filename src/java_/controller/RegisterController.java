@@ -24,6 +24,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Register controller handles users registering their accounts. This includes their username, email and password.
+ */
 public class RegisterController implements Initializable {
 
     private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
@@ -60,6 +63,7 @@ public class RegisterController implements Initializable {
     private final String EMAIL_INVALID_MSG = "Email invalid!";
     private final String PASSWORD_INVALID_MSG = "Password invalid!";
     private final String PASSWORD_NO_MATCH_MSG = "Passwords don't match!";
+
 
     @FXML
     private void onRegisterButtonClicked(ActionEvent event) {

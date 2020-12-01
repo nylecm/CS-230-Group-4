@@ -9,6 +9,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
 
+/**
+ * Handles the process of a user registering a new account in the game.
+ * The account details are stored in a file by the handler.
+ */
 public class RegisterHandler {
 
     private static final String USERS_FILE_PATH = "users.txt";
@@ -16,6 +20,14 @@ public class RegisterHandler {
             "User with such username exists!";
     private static final String DELIMITER = "`";
 
+    /**
+     * Registers the new account by storing the user account data to a file.
+     * @param username The username for the registered account.
+     * @param email The email for the registered account.
+     * @param password The password for the registered account.
+     * @throws IOException If there is an error writing user details to the file.
+     * @throws IllegalArgumentException If the user has entered a username that already exists for another account.
+     */
     public static void register(String username, String email, String password) throws IOException, IllegalArgumentException {
         Scanner in = new Scanner(new File(USERS_FILE_PATH));
         in.useDelimiter("`");
