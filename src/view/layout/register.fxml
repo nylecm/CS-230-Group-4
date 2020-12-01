@@ -16,7 +16,7 @@
                </HBox.margin></Button>
               <Label text="Register">
                   <font>
-                      <Font size="30.0" />
+                      <Font size="40.0" />
                   </font>
               </Label>
          </children>
