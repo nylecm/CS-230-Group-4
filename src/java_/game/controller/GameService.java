@@ -6,7 +6,6 @@ import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
 
-import javax.swing.text.PlainDocument;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,7 +22,10 @@ public class GameService {
     private boolean isWin;
 
     private static final String DELIMITER = "`";
-    private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
+    private static final String FILE_WORD_SPACER = "_";
+    private static final String DATA_FILE_EXTENSION = ".txt";
+    private static final String GAME_BOARD_FILE_PATH =
+            "data/game_board" + DATA_FILE_EXTENSION;
     private static final String SAVE_GAME_FILE_PATH = "data/saves/";
 
     private GameService() {
@@ -49,13 +51,13 @@ public class GameService {
         gameBoard = readSelectGameBoard(boardName, players.length, in, playerPieces);
         in.close();
 
-        //todo read player file for
         playerService.setPlayers(players);
         playerService.setGameService(this);
     }
 
-    private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in, PlayerPiece[] playerPieces) throws IllegalArgumentException {
-        while (in.hasNextLine() && in.next().equals(boardName)) {//todo to be completed fully when other classes complete...
+    private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in,
+                                          PlayerPiece[] playerPieces) throws IllegalArgumentException {
+        while (in.hasNextLine() && in.next().equals(boardName)) {
             int nRows = in.nextInt();
             int nCols = in.nextInt();
 
@@ -75,7 +77,6 @@ public class GameService {
                 fixedTiles[i] = t;
                 fixedTilePositions[i] = p;
             }
-
             // Dealing with non-fixed floor tiles:
             ArrayList<FloorTile> floorTiles = readFloorTiles(in);
             Collections.shuffle(floorTiles);
@@ -88,10 +89,10 @@ public class GameService {
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
             Collections.shuffle(actionTiles);
 
-            // Silk B
             // Player Pieces:
             Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
-            // todo player service...
+
+            // Silk Bag:
             ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
             tilesForSilkBag.addAll(floorTiles);
             tilesForSilkBag.addAll(actionTiles);
@@ -99,7 +100,7 @@ public class GameService {
             silkBag = new SilkBag(tilesForSilkBag.toArray(new Tile[0]));
 
             return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
-                    floorTilesForGameBoard, nCols, nRows, boardName); // todo consider keeping silk bag in game service...
+                    floorTilesForGameBoard, nCols, nRows, boardName);
         }
         throw new IllegalArgumentException("No level with such name found!");
     }
@@ -155,7 +156,6 @@ public class GameService {
         return positions;
     }
 
-
     public void loadSavedInstance(File f) throws FileNotFoundException {
         remake(); //todo future homer's problem
 
@@ -208,9 +208,10 @@ public class GameService {
 
     public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
-            playerService.playerTurn(playerService.getPlayer(turnCount % playerService.getPlayers().length)); // todo improve player service
+            playerService.playerTurn(playerService.getPlayer(turnCount
+                    % playerService.getPlayers().length)); // todo improve player service
             System.out.println("Have fun!");
-            gameBoard.refreshEffects(); // todo check
+            gameBoard.refreshEffects();
             turnCount++;
         }
     }
@@ -231,7 +232,8 @@ public class GameService {
     }
 
     private File createFile(String fileName) throws IOException {
-        File gameSaveFile = new File(SAVE_GAME_FILE_PATH + fileName + ".txt");
+        File gameSaveFile = new File
+                (SAVE_GAME_FILE_PATH + fileName + DATA_FILE_EXTENSION);
 
         boolean isFileCreated = false;
         final int limitOfFilesWithSameName = 256;
@@ -240,11 +242,10 @@ public class GameService {
         while (!isFileCreated && filesWithSameName < limitOfFilesWithSameName) {
             if (gameSaveFile.createNewFile()) {
                 isFileCreated = true;
-                System.out.println("File Created!");
             } else {
                 filesWithSameName++;
-                gameSaveFile = new File(SAVE_GAME_FILE_PATH + fileName + "_" + filesWithSameName + ".txt");
-                System.out.println("File not created yet!");
+                gameSaveFile = new File(SAVE_GAME_FILE_PATH + fileName +
+                        FILE_WORD_SPACER + filesWithSameName + DATA_FILE_EXTENSION);
             }
         }
 
@@ -355,6 +356,10 @@ public class GameService {
         return gameBoard;
     }
 
+    public SilkBag getSilkBag() {
+        return silkBag;
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
@@ -402,8 +407,6 @@ public class GameService {
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
     }
 
-
-
     /*private class FloorTilePositionBundle {
         private FloorTile floorTile;
         private Position position;
@@ -429,8 +432,4 @@ public class GameService {
             this.position = position;
         }
     }*/
-
-    public SilkBag getSilkBag() {
-        return silkBag;
-    }
 }
