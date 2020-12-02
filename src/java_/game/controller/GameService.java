@@ -386,6 +386,10 @@ public class GameService {
         return turnCount;
     }
 
+    public Player getCurrentPlayer() {
+        return playerService.getPlayers()[getTurnCount() % playerService.getPlayers().length];
+    }
+
     /**
      * Returns true if a Player has won the game.
      *

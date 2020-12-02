@@ -5,6 +5,7 @@ public class EffectFactory {
             "Tile has an effect that is not supported by the factory!";
 
     public static Effect getEffect(TileType type) {
+
         if (ActionTile.ACTION_TILE_TYPES.contains(type)) {
             if (type == TileType.ICE) {
                 return new AreaEffect(EffectType.ICE, 1, 4); //todo update duration, and get rid of magic numbers.
