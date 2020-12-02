@@ -6,6 +6,7 @@ import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
 import java_.util.generic_data_structures.Link;
+import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Pos;
 
 import java.awt.*;
@@ -129,7 +130,7 @@ public class GameService {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
 
             Position p = new Position(row, col);
-            FloorTile t = new FloorTile(tileType, true, false, rotation);
+            FloorTile t = new FloorTile(tileType, true, rotation);
             fixedTiles[i] = t;
             fixedTilePositions[i] = p;
         }
@@ -145,7 +146,7 @@ public class GameService {
             int nOfThisType = in.nextInt();
 
             for (int j = 0; j < nOfThisType; j++) {
-                FloorTile ft = new FloorTile(tileType, false);
+                FloorTile ft = new FloorTile(tileType);
                 System.out.println("Ft: ");
                 floorTiles.add(ft);
             }
@@ -247,8 +248,10 @@ public class GameService {
 
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
         for (int i = 0; i < nRows * nCols; i++) {
-            int paths = in.nextInt();
+            TileType tileType = TileType.valueOf(in.next().toUpperCase());
             boolean isFixed = in.nextBoolean();
+            int rotation = in.nextInt();
+            floorTilesForGameBoard[i] = new FloorTile(tileType,isFixed,rotation);
         }
         in.nextLine();
 
@@ -355,13 +358,13 @@ public class GameService {
     }
 
     private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) {
-        for (int i = 0; i < playerService.getPlayers().length; i++) {
+        /*for (int i = 0; i < playerService.getPlayers().length; i++) {
             Position playerPiecePosition = gameBoard.getPlayerPiecePosition(i);
             out.print(playerPiecePosition.getRowNum());
             out.print(DELIMITER);
             out.print(playerPiecePosition.getColNum());
             out.print(DELIMITER);
-        }
+        }*/
 
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
@@ -372,7 +375,7 @@ public class GameService {
                 out.print(gameBoard.getTileAt(i, j).getRotation()); //todo check Matej's method
                 out.print(DELIMITER);
 
-                if (gameBoard.getEffectAt(new Position(i, j)) != null) {
+                /*if (gameBoard.getEffectAt(new Position(i, j)) != null) {
                     out.print(true);
                     out.print(DELIMITER);
                     out.print(gameBoard.getEffectAt(new Position(i, j)).getEffectType());
@@ -384,7 +387,7 @@ public class GameService {
                 } else {
                     out.print(false);
                     out.print(DELIMITER);
-                }
+                }*/
             }
         }
         out.print('\n');
@@ -505,10 +508,13 @@ public class GameService {
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, MalformedURLException {
+        JFXPanel jfxPanel = new JFXPanel(); //suppresses strange error...
+
+
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new Player[]{new Player("bob", new PlayerPiece())}, "oberon_1");
+                new Player[]{new Player("bob", new PlayerPiece(new File("bob.png").toURL()))}, "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
         System.out.println(gs.gameBoard);
@@ -523,7 +529,7 @@ public class GameService {
         AreaEffect test = gs.gameBoard.getActiveEffects().get(new Position(0, 0));
         System.out.println(test);
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT), 0);
         System.out.println();
 
         for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
@@ -551,7 +557,7 @@ public class GameService {
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 0);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED), 0);
 
         System.out.println("r1");
         System.out.println(gs.gameBoard.getTileAt(0, 0));
@@ -559,7 +565,7 @@ public class GameService {
         System.out.println(gs.gameBoard.getTileAt(0, 2));
         System.out.println(gs.gameBoard.getTileAt(0, 3));
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 1);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED), 1);
 
         System.out.println("r2");
         System.out.println(gs.gameBoard.getTileAt(0, 0));
@@ -567,7 +573,7 @@ public class GameService {
         System.out.println(gs.gameBoard.getTileAt(0, 2));
         System.out.println(gs.gameBoard.getTileAt(0, 3));
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 2);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED), 2);
 
         System.out.println("r3");
         System.out.println(gs.gameBoard.getTileAt(0, 0));
@@ -575,7 +581,7 @@ public class GameService {
         System.out.println(gs.gameBoard.getTileAt(0, 2));
         System.out.println(gs.gameBoard.getTileAt(0, 3));
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 3);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED), 3);
 
         System.out.println("r4");
         System.out.println(gs.gameBoard.getTileAt(0, 0));
@@ -583,7 +589,7 @@ public class GameService {
         System.out.println(gs.gameBoard.getTileAt(0, 2));
         System.out.println(gs.gameBoard.getTileAt(0, 3));
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 4);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED), 4);
 
 
         System.out.println("r5");
@@ -602,7 +608,7 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_19.txt"));
+            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_22.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

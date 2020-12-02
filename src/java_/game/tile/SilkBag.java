@@ -55,7 +55,7 @@ public class SilkBag {
 
         if (FloorTile.FLOOR_TILE_TYPES.contains(tileType)) {
             tiles.dequeue();
-            return new FloorTile(tileType, false);
+            return new FloorTile(tileType);
         } else {
             tiles.dequeue();
             return new ActionTile(tileType);
