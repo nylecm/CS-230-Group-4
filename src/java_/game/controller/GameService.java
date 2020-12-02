@@ -134,13 +134,10 @@ public class GameService {
 
         for (int i = 0; i < FloorTile.FLOOR_TILE_TYPES.size(); i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
-            System.out.println(tileType);
             int nOfThisType = in.nextInt();
-            System.out.println(nOfThisType);
 
             for (int j = 0; j < nOfThisType; j++) {
                 floorTiles.add(new FloorTile(tileType, false));
-                System.out.println("test");
             }
         }
         return floorTiles;
