@@ -18,6 +18,22 @@ public class PlayerPiece {
     private final Stack<Position> previousPlayerPiecePositions;
 
     private Image image;
+    private URL imageURL;
+
+    /**
+     * Instantiates a PlayerPiece giving it an image.
+     * @param imageFilePath The file path for the image which is to be set for the PlayerPiece.
+     */
+    public PlayerPiece(URL imageFilePath) {
+        previousPlayerPiecePositions = new Stack<>();
+        imageURL = imageFilePath;
+        image = new Image(String.valueOf(imageFilePath));
+    }
+
+    @Deprecated //fixme test only
+    public PlayerPiece() {
+        previousPlayerPiecePositions = new Stack<>();
+    }
 
     /**
      * Returns the image representing PlayerPiece.
@@ -27,26 +43,18 @@ public class PlayerPiece {
         return image;
     }
 
+    //todo javadoc this + update
+    public URL getImageURL() {
+        return imageURL;
+    }
+
     /**
      * Sets an image to represent the PlayerPiece.
      * @param imageFilePath The file path for the image which is to be set for the PlayerPiece.
      */
     public void setImage(URL imageFilePath) {
+        imageURL = imageFilePath;
         image = new Image(String.valueOf(imageFilePath));
-    }
-
-    /**
-     * Instantiates a PlayerPiece giving it an image.
-     * @param imageFilePath The file path for the image which is to be set for the PlayerPiece.
-     */
-    public PlayerPiece(URL imageFilePath) {
-        previousPlayerPiecePositions = new Stack<>();
-        image = new Image(String.valueOf(imageFilePath));
-    }
-
-    @Deprecated //fixme test only
-    public PlayerPiece() {
-        previousPlayerPiecePositions = new Stack<>();
     }
 
     /**
