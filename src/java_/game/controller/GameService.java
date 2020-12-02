@@ -482,8 +482,50 @@ public class GameService {
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 1);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 0);
+
+        System.out.println("r1");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 1);
+
+        System.out.println("r2");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 2);
+
+        System.out.println("r3");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 3);
+
+        System.out.println("r4");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 4);
+
+
+        System.out.println("r5");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        System.out.println();
+
+
         System.out.println(gs.gameBoard);
         System.out.println(gs.gameBoard.getTileAt(1, 0).getPathsBits());
         System.out.println(gs.gameBoard.getTileAt(0, 1));

@@ -75,7 +75,7 @@ public class GameBoard {
 
                 if (board[i][j] == null) {
                     board[i][j] = tiles[nextFloorTile];
-                    nextFloorTile += 1;
+                    nextFloorTile++;
                 }
             }
         }
