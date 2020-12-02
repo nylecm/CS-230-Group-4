@@ -6,6 +6,7 @@ import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
 import java_.util.generic_data_structures.Link;
+import javafx.geometry.Pos;
 
 import java.awt.*;
 import java.io.File;
@@ -224,10 +225,24 @@ public class GameService {
 
         for (int i = 0; i < nPlayers; i++) {
             String username = in.next();
-            Player player = new Player(username, playerPieces[i]);
-            players[i] = player;
+            players[i] = new Player(username, playerPieces[i]);
+
+            int numberOfDrawnActionTiles = in.nextInt();
+            TileType[] drawnActionTiles = new TileType[numberOfDrawnActionTiles];
+
+            for (int j = 0; j < numberOfDrawnActionTiles; j++) {
+                drawnActionTiles[i] = TileType.valueOf(in.next().toUpperCase());
+            }
+            players[i].addDrawnActionTiles(drawnActionTiles);
+
+            int numberOfPreviouslyAppliedEffects = in.nextInt();
+            EffectType[] previouslyAppliedEffects = new EffectType[numberOfPreviouslyAppliedEffects];
+
+            for (int j = 0; j < numberOfDrawnActionTiles; j++) {
+                previouslyAppliedEffects[i] = EffectType.valueOf(in.next().toUpperCase());
+            }
+            players[i].addPreviouslyAppliedEffects(previouslyAppliedEffects);
             in.nextLine();
-            //TODO sort out kept action tiles & prev effects... maybe with the help of a special constructor...
         }
 
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
@@ -237,7 +252,7 @@ public class GameService {
         }
         in.nextLine();
 
-        gameBoard = new GameBoard(playerPieces,playerPositions, floorTilesForGameBoard,nCols,nRows,gameBoardName);
+        gameBoard = new GameBoard(playerPieces, playerPositions, floorTilesForGameBoard, nCols, nRows, gameBoardName);
         PlayerService.getInstance().setPlayers(players); //todo player effects...
 
         silkBag = new SilkBag();
@@ -247,52 +262,18 @@ public class GameService {
         }
         in.nextLine();
 
-        //
-
-        /*int n
-        for (int i = 0; i < ; i++) {
-
-        }*/
-
-        /*boolean hasEffect = in.nextBoolean();
-            EffectType effectType = EffectType.valueOf(in.next());
-            int remainingDur = in.nextInt();
-            String radiusStr = in.next();
-            int radius = Integer.parseInt(radiusStr);*/
-
-
-
-        //TODO sort out effects
-        //TODO
-
-        AreaEffect[] areaEffects = new AreaEffect[nRows * nCols];
-        //effect map...
-
-
-        /*GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions,
-                FloorTile[] tiles, int nCols, int nRows, String name) {*/
-
-        //GameBoard gameBoard = new GameBoard()
-
-
-        //PlayerService.getInstance().setPlayers();
-
-
-
-
-        in.close();
-        //GameBoard = new GameBoard();
-        //PlayerService = new PlayerService();
-    }
-
-    public void gameplayLoop() { // todo gameplay loop...
-        while (!isWin) {
-            playerService.playerTurn(playerService.getPlayer(turnCount
-                    % playerService.getPlayers().length)); // todo improve player service
-            System.out.println("Have fun!");
-            gameBoard.refreshEffects();
-            turnCount++;
+        int nAreaEffects = in.nextInt();
+        for (int i = 0; i < nAreaEffects; i++) {
+            int effectRow = in.nextInt();
+            int effectCol = in.nextInt();
+            Position effectPos = new Position(effectRow, effectCol);
+            EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
+            int radius = in.nextInt();
+            int durationRemaining = in.nextInt();
+            AreaEffect areaEffect = new AreaEffect(effectType, radius, durationRemaining);
+            gameBoard.applyEffect(areaEffect, effectPos);
         }
+        in.close();
     }
 
     /**
@@ -421,6 +402,16 @@ public class GameService {
             out.print(DELIMITER);
         }
         out.print('\n');
+    }
+
+    public void gameplayLoop() { // todo gameplay loop...
+        while (!isWin) {
+            playerService.playerTurn(playerService.getPlayer(turnCount
+                    % playerService.getPlayers().length)); // todo improve player service
+            System.out.println("Have fun!");
+            gameBoard.refreshEffects();
+            turnCount++;
+        }
     }
 
     /**
@@ -590,7 +581,7 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File ("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_19.txt"));
+            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_19.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
