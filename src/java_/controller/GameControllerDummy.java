@@ -147,8 +147,8 @@ public class GameControllerDummy implements Initializable {
 
             setEdgeTileEventHandlers(edgeTileDisplayTop);
             setEdgeTileEventHandlers(edgeTileDisplayBottom);
-
         }
+
         for (int i = 0; i < gameBoardView.getHeight(); i++) {
             edgeTileDisplayLeft = getFloorTileImageView(edgeTileImage);
             edgeTileDisplayRight = getFloorTileImageView(edgeTileImage);
@@ -164,6 +164,11 @@ public class GameControllerDummy implements Initializable {
 
             setEdgeTileEventHandlers(edgeTileDisplayLeft);
             setEdgeTileEventHandlers(edgeTileDisplayRight);
+
+            if (GameService.getInstance().getGameBoard().isRowFixed(getTileRow(edgeTileDisplayLeft)) || GameService.getInstance().getGameBoard().isRowFixed(getTileRow(edgeTileDisplayRight))) {
+                edgeTileDisplayLeft.setVisible(false);
+                edgeTileDisplayRight.setVisible(false);
+            }
         }
     }
 

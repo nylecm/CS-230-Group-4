@@ -340,7 +340,7 @@ public class GameBoard {
         board[rowNum - 1][colNum] = tile;
     }
 
-    private boolean isRowFixed(int rowNum) { // todo consider Matej's GUI based sol...
+    public boolean isRowFixed(int rowNum) { // todo consider Matej's GUI based sol...
         if (rowNum == -1) {
             rowNum += 1;
         } else if (rowNum == nRows) {
@@ -354,7 +354,7 @@ public class GameBoard {
         return false; // See bottom for commented out code...
     }
 
-    private boolean isColumnFixed(int colNum) {
+    public boolean isColumnFixed(int colNum) {
         if (colNum == -1) {
             colNum += 1;
         } else if (colNum == nCols) {
