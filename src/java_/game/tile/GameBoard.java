@@ -198,7 +198,7 @@ public class GameBoard {
     }*/
 
     private void shiftTilesLeftToRight(int colNum, int rowNum, FloorTile tile, int rotation) {
-        tile.rotateClockwise(rotation);
+        tile.rotate(rotation);
         for (int i = nCols - 1; i != 0; i--) {
             board[rowNum][i] = board[rowNum][i - 1]; // Right tile is now the tile to its left.
 
@@ -242,7 +242,7 @@ public class GameBoard {
     }*/
 
     private void shiftTilesRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
-        tile.rotateClockwise(rotation);
+        tile.rotate(rotation);
         for (int i = 0; i < nCols - 1; i++) {
             board[rowNum][i] = board[rowNum][i + 1];
             if (activeEffects.get(new Position(rowNum, i + 1)) != null) {
@@ -285,7 +285,7 @@ public class GameBoard {
     }*/
 
     private void shiftTilesTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
-        tile.rotateClockwise(rotation);
+        tile.rotate(rotation);
         for (int i = nRows - 1; i != 0; i--) {
             board[i][colNum] = board[i - 1][colNum];
             if (activeEffects.get(new Position(i - 1, colNum)) != null) {
@@ -329,7 +329,7 @@ public class GameBoard {
     }*/
 
     private void shiftTilesBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
-        tile.rotateClockwise(rotation);
+        tile.rotate(rotation);
         for (int i = 0; i < nRows - 1; i++) {
             board[i][colNum] = board[i + 1][colNum];
             if (activeEffects.get(new Position(i + 1, colNum)) != null) {

@@ -1,6 +1,5 @@
 package java_.game.tile;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 
 /**

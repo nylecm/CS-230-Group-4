@@ -30,6 +30,8 @@ public class GameService {
     private static final String NO_LEVEL_WITH_SUCH_NAME_MSG =
             "No level with such name found!";
 
+    private static final int MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME = 256;
+
     private GameService() {
         playerService = PlayerService.getInstance().remake();
     }
@@ -76,27 +78,17 @@ public class GameService {
             int nCols = in.nextInt();
 
             // Dealing with fixed tiles:
-            int nFixedTiles = in.nextInt();
-            FloorTile[] fixedTiles = new FloorTile[nFixedTiles];
-            Position[] fixedTilePositions = new Position[nFixedTiles];
+            FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
 
-            for (int i = 0; i < nFixedTiles; i++) {
-                int rotation = in.nextInt();
-                int row = in.nextInt();
-                int col = in.nextInt();
-                TileType tileType = TileType.valueOf(in.next().toUpperCase());
+            FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
+            Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
 
-                Position p = new Position(row, col);
-                FloorTile t = new FloorTile(tileType, true, false, rotation);
-                fixedTiles[i] = t;
-                fixedTilePositions[i] = p;
-            }
             // Dealing with non-fixed floor tiles:
             ArrayList<FloorTile> floorTiles = readFloorTiles(in);
 
             // Taking first floor tiles for the initial set to populate game board.
             FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
-                    (nRows, nCols, nFixedTiles, floorTiles);
+                    (nRows, nCols, fixedTiles.length, floorTiles);
 
             //Action tiles:
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
@@ -115,6 +107,26 @@ public class GameService {
                     floorTilesForGameBoard, nCols, nRows, boardName);
         }
         throw new IllegalArgumentException(NO_LEVEL_WITH_SUCH_NAME_MSG);
+    }
+
+    private FloorTilePositionBundle readFixedTiles(Scanner in) {
+        int nFixedTiles = in.nextInt();
+        FloorTile[] fixedTiles = new FloorTile[nFixedTiles];
+        Position[] fixedTilePositions = new Position[nFixedTiles];
+
+        for (int i = 0; i < nFixedTiles; i++) {
+            int rotation = in.nextInt();
+            int row = in.nextInt();
+            int col = in.nextInt();
+            TileType tileType = TileType.valueOf(in.next().toUpperCase());
+
+            Position p = new Position(row, col);
+            FloorTile t = new FloorTile(tileType, true, false, rotation);
+            fixedTiles[i] = t;
+            fixedTilePositions[i] = p;
+        }
+
+        return new FloorTilePositionBundle(fixedTiles, fixedTilePositions);
     }
 
     private ArrayList<FloorTile> readFloorTiles(Scanner in) {
@@ -255,10 +267,9 @@ public class GameService {
                 (SAVE_GAME_FILE_PATH + fileName + DATA_FILE_EXTENSION);
 
         boolean isFileCreated = false;
-        final int limitOfFilesWithSameName = 256;
         int filesWithSameName = 0;
 
-        while (!isFileCreated && filesWithSameName < limitOfFilesWithSameName) {
+        while (!isFileCreated && filesWithSameName < MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME) {
             if (gameSaveFile.createNewFile()) {
                 isFileCreated = true;
             } else {
@@ -295,7 +306,7 @@ public class GameService {
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).isFixed());
                 out.print(DELIMITER);
-                out.print(gameBoard.getTileAt(i, j).getRotationFromDefaultRotationClockwise());
+                //todo out.print(gameBoard.getTileAt(i, j).getRotationFromDefaultRotationClockwise());
                 out.print(DELIMITER);
 
                 if (gameBoard.getEffectAt(new Position(i, j)) != null) {
@@ -474,29 +485,21 @@ public class GameService {
 
     }
 
-    /*private class FloorTilePositionBundle {
-        private FloorTile floorTile;
-        private Position position;
+    private static class FloorTilePositionBundle {
+        private final FloorTile[] floorTiles;
+        private final Position[] positions;
 
-        public FloorTilePositionBundle(FloorTile floorTile, Position position) {
-            this.floorTile = floorTile;
-            this.position = position;
+        public FloorTilePositionBundle(FloorTile[] floorTiles, Position[] positions) {
+            this.floorTiles = floorTiles;
+            this.positions = positions;
         }
 
-        public FloorTile getFloorTile() {
-            return floorTile;
+        public FloorTile[] getFloorTiles() {
+            return floorTiles;
         }
 
-        public void setFloorTile(FloorTile floorTile) {
-            this.floorTile = floorTile;
+        public Position[] getPositions() {
+            return positions;
         }
-
-        public Position getPosition() {
-            return position;
-        }
-
-        public void setPosition(Position position) {
-            this.position = position;
-        }
-    }*/
+    }
 }
