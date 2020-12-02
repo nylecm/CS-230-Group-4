@@ -22,6 +22,9 @@ import java_.util.MessageOfTheDayService;
 
 import java.util.ResourceBundle;
 
+/**
+ * The controller for the main menu interface.
+ */
 public class MainMenuController implements Initializable {
 
     @FXML
@@ -38,10 +41,19 @@ public class MainMenuController implements Initializable {
     private static final String REGISTER_PATH = "../../view/layout/register.fxml";
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
+    /**
+     * Sets the message of the day in the main menu.
+     * @throws IOException If the message of the day cannot be retrieved.
+     */
     private void setMessageOfTheDay() throws IOException {
         messageOfTheDay.setText(MessageOfTheDayService.getMessage());
     }
 
+    /**
+     * Initialises the main menu, setting its background and setting the message of the day.
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundFill backgroundFill = null;
@@ -59,6 +71,11 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Opens the new game screen.
+     * @param e When the newGame button is clicked.
+     * @throws IOException If the new game file path is incorrect.
+     */
     @FXML
     private void onNewGameButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -66,6 +83,12 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(newGame));
     }
 
+
+    /**
+     * Opens the load game screen.
+     * @param e When the loadGame button is clicked.
+     * @throws IOException If the load game file path is incorrect.
+     */
     @FXML
     private void onLoadGameButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -73,6 +96,11 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(loadGame));
     }
 
+    /**
+     * Opens the customise profile screen.
+     * @param e When the customise profile button is clicked.
+     * @throws IOException If the customise profile file path is incorrect.
+     */
     @FXML
     private void onCustomiseProfileButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -80,6 +108,11 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(customiseProfile));
     }
 
+    /**
+     * Opens the leaderboard screen.
+     * @param e When the leaderboard button is clicked.
+     * @throws IOException If the leaderboard file path is incorrect.
+     */
     @FXML
     private void onLeaderboardButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -87,6 +120,11 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(newGame));
     }
 
+    /**
+     * Opens the settings screen.
+     * @param e When the settings button is clicked.
+     * @throws IOException If the setting file path is incorrect
+     */
     @FXML
     private void onSettingsButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -94,6 +132,11 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(newGame));
     }
 
+    /**
+     * Opens the register screen.
+     * @param e When the register button is clicked.
+     * @throws IOException If the register file path is incorrect
+     */
     @FXML
     private void onRegisterButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -101,6 +144,10 @@ public class MainMenuController implements Initializable {
         currentStage.setScene(new Scene(newGame));
     }
 
+    /**
+     * Quits the game. Closes all windows.
+     * @param e When the quit button is clicked.
+     */
     @FXML
     private void onQuitButtonClicked(ActionEvent e) {
         System.exit(0);

@@ -5,12 +5,17 @@ import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
+import java_.util.generic_data_structures.Link;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class GameService {
     private static GameService instance = null;
@@ -73,38 +78,40 @@ public class GameService {
 
     private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in,
                                           PlayerPiece[] playerPieces) throws IllegalArgumentException {
-        while (in.hasNextLine() && in.next().equals(boardName)) {
-            int nRows = in.nextInt();
-            int nCols = in.nextInt();
+        while (in.hasNextLine()) {
+            if (in.next().equals(boardName)) {
+                int nRows = in.nextInt();
+                int nCols = in.nextInt();
 
-            // Dealing with fixed tiles:
-            FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
+                // Dealing with fixed tiles:
+                FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
 
-            FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
-            Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
+                FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
+                Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
 
-            // Dealing with non-fixed floor tiles:
-            ArrayList<FloorTile> floorTiles = readFloorTiles(in);
+                // Dealing with non-fixed floor tiles:
+                ArrayList<FloorTile> floorTiles = readFloorTiles(in);
 
-            // Taking first floor tiles for the initial set to populate game board.
-            FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
-                    (nRows, nCols, fixedTiles.length, floorTiles);
+                // Taking first floor tiles for the initial set to populate game board.
+                FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
+                        (nRows, nCols, fixedTiles.length, floorTiles);
 
-            //Action tiles:
-            ArrayList<ActionTile> actionTiles = readActionTiles(in);
+                //Action tiles:
+                ArrayList<ActionTile> actionTiles = readActionTiles(in);
 
-            // Player Pieces:
-            Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
+                // Player Pieces:
+                Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
 
-            // Silk Bag:
-            ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
-            tilesForSilkBag.addAll(floorTiles);
-            tilesForSilkBag.addAll(actionTiles);
+                // Silk Bag:
+                ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
+                tilesForSilkBag.addAll(floorTiles);
+                tilesForSilkBag.addAll(actionTiles);
 
-            silkBag = new SilkBag(tilesForSilkBag);
+                silkBag = new SilkBag(tilesForSilkBag);
 
-            return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
-                    floorTilesForGameBoard, nCols, nRows, boardName);
+                return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
+                        floorTilesForGameBoard, nCols, nRows, boardName);
+            }
         }
         throw new IllegalArgumentException(NO_LEVEL_WITH_SUCH_NAME_MSG);
     }
@@ -184,53 +191,96 @@ public class GameService {
         return positions;
     }
 
-    public void loadSavedInstance(File f) throws FileNotFoundException {
+    public void loadSavedInstance(File f) throws FileNotFoundException, MalformedURLException {
         remake();
 
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
 
-        //int nPlayers = in.nextInt();
-        String name = in.next();
+        int nPlayers = in.nextInt();
+        String gameBoardName = in.next();
         int nRows = in.nextInt();
         int nCols = in.nextInt();
         turnCount = in.nextInt();
         in.nextLine();
 
+
+        Position[] playerPositions = new Position[nPlayers];
+
+        for (int i = 0; i < nPlayers; i++) {
+            int row = in.nextInt();
+            int col = in.nextInt();
+            playerPositions[i] = new Position(row, col);
+        }
+
+        PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
+
+        for (int i = 0; i < nPlayers; i++) {
+            URL playerPieceImageURL = new URL(in.next());
+            playerPieces[i] = new PlayerPiece(playerPieceImageURL);
+        }
+
+        Player[] players = new Player[nPlayers];
+
+        for (int i = 0; i < nPlayers; i++) {
+            String username = in.next();
+            Player player = new Player(username, playerPieces[i]);
+            players[i] = player;
+            in.nextLine();
+            //TODO sort out kept action tiles & prev effects... maybe with the help of a special constructor...
+        }
+
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
-
-        //effect map...
-
         for (int i = 0; i < nRows * nCols; i++) {
             int paths = in.nextInt();
             boolean isFixed = in.nextBoolean();
-            boolean hasEffect = in.nextBoolean();
-            EffectType effectType = EffectType.valueOf(in.next());
-            int remainingDur = in.nextInt();
-            String radiusStr = in.next();
-            int radius = Integer.parseInt(radiusStr);
         }
         in.nextLine();
+
+        gameBoard = new GameBoard(playerPieces,playerPositions, floorTilesForGameBoard,nCols,nRows,gameBoardName);
+        PlayerService.getInstance().setPlayers(players); //todo player effects...
 
         silkBag = new SilkBag();
 
         while (in.hasNext()) {
             silkBag.put(TileType.valueOf(in.next().toUpperCase()));
         }
+        in.nextLine();
 
-        int nPlayers = 0;
-        List<Player> players = new ArrayList<>();
+        //
 
-        while (in.hasNextLine()) {
+        /*int n
+        for (int i = 0; i < ; i++) {
 
-            nPlayers++;
-            String username = in.next();
-            int rowNum = in.nextInt();
-            int colNum = in.nextInt();
-            int numOfDrawnActionTiles = in.nextInt();
-            //  Player player = new Player(username, );
-        }
+        }*/
 
+        /*boolean hasEffect = in.nextBoolean();
+            EffectType effectType = EffectType.valueOf(in.next());
+            int remainingDur = in.nextInt();
+            String radiusStr = in.next();
+            int radius = Integer.parseInt(radiusStr);*/
+
+
+
+        //TODO sort out effects
+        //TODO
+
+        AreaEffect[] areaEffects = new AreaEffect[nRows * nCols];
+        //effect map...
+
+
+        /*GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions,
+                FloorTile[] tiles, int nCols, int nRows, String name) {*/
+
+        //GameBoard gameBoard = new GameBoard()
+
+
+        //PlayerService.getInstance().setPlayers();
+
+
+
+
+        in.close();
         //GameBoard = new GameBoard();
         //PlayerService = new PlayerService();
     }
@@ -258,9 +308,9 @@ public class GameService {
         out = new PrintWriter(gameSaveFile);
 
         writeGameInstanceDetails(out);
-        writeGameBoardInstanceTileDetails(out);
-        writeSilkBagInstanceDetails(out);
         writePlayerInstanceDetailsForAllPlayers(out);
+        writeGameBoardInstanceTileDetails(out, playerService.getPlayers().length);
+        writeSilkBagInstanceDetails(out);
 
         out.flush();
         out.close();
@@ -290,8 +340,8 @@ public class GameService {
     }
 
     private void writeGameInstanceDetails(PrintWriter out) {
-        /*out.print(playerService.getPlayers().length); // Number of players
-        out.print(DELIMITER);*/
+        out.print(playerService.getPlayers().length); // Number of players
+        out.print(DELIMITER);
         out.print(gameBoard.getName());
         out.print(DELIMITER);
         out.print(gameBoard.getnRows());
@@ -303,14 +353,22 @@ public class GameService {
         out.print('\n');
     }
 
-    private void writeGameBoardInstanceTileDetails(PrintWriter out) {
+    private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) {
+        for (int i = 0; i < playerService.getPlayers().length; i++) {
+            Position playerPiecePosition = gameBoard.getPlayerPiecePosition(i);
+            out.print(playerPiecePosition.getRowNum());
+            out.print(DELIMITER);
+            out.print(playerPiecePosition.getColNum());
+            out.print(DELIMITER);
+        }
+
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
                 out.print(gameBoard.getTileAt(i, j).getType());
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).isFixed());
                 out.print(DELIMITER);
-                //todo out.print(gameBoard.getTileAt(i, j).getRotationFromDefaultRotationClockwise());
+                out.print(gameBoard.getTileAt(i, j).getRotation()); //todo check Matej's method
                 out.print(DELIMITER);
 
                 if (gameBoard.getEffectAt(new Position(i, j)) != null) {
@@ -348,11 +406,8 @@ public class GameService {
     private void writePlayerInstanceDetails(PrintWriter out, int i) {
         out.print(playerService.getPlayer(i).getUsername());
         out.print(DELIMITER);
-        out.print(gameBoard.getPlayerPiecePosition(i).getRowNum());
+        out.print(playerService.getPlayer(i).getPlayerPiece().getImageURL()); //todo test...
         out.print(DELIMITER);
-        out.print(gameBoard.getPlayerPiecePosition(i).getColNum());
-        out.print(DELIMITER);
-
         out.print(playerService.getPlayer(i).getDrawnActionTiles().size()); // N of drawn action tiles.
         out.print(DELIMITER);
 
@@ -484,12 +539,61 @@ public class GameService {
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
 
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
-        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 1);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 0);
+
+        System.out.println("r1");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 1);
+
+        System.out.println("r2");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 2);
+
+        System.out.println("r3");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 3);
+
+        System.out.println("r4");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED, false), 4);
+
+
+        System.out.println("r5");
+        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+        System.out.println(gs.gameBoard.getTileAt(0, 2));
+        System.out.println(gs.gameBoard.getTileAt(0, 3));
+
+        System.out.println();
+
+
         System.out.println(gs.gameBoard);
-        System.out.println(gs.gameBoard.getTileAt(-1, 0).getPathsBits());
+        System.out.println(gs.gameBoard.getTileAt(1, 0).getPathsBits());
         System.out.println(gs.gameBoard.getTileAt(0, 1));
 
+        gs.destroy();
+
+        try {
+            gs.loadSavedInstance(new File ("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_19.txt"));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
     }
 

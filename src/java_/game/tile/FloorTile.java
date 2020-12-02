@@ -82,6 +82,17 @@ public class FloorTile extends Tile {
         rotation = rotationAmount % 4;
     }
 
+    @Override
+    public String toString() {
+        return "FloorTile{" +
+                "isFixed=" + isFixed +
+                ", pathsBits=" + pathsBits +
+                ", isGoalTile=" + isGoalTile +
+                ", rotation=" + rotation +
+                ", type=" + type +
+                '}';
+    }
+
     public int getPathsBits() {
         return pathsBits;
     }
