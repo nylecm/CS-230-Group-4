@@ -83,14 +83,11 @@ public class GameBoard {
 
     public boolean validateMove(int sourceCol, int sourceRow, int targetCol, int targetRow, int sourceBitmask, int oppositeBitmask) {
         FloorTile sourceFloorTile = board[sourceRow][sourceCol];
-        System.out.println(sourceFloorTile.getType());
         FloorTile targetFloorTile = board[targetRow][targetCol];
-        System.out.println(targetFloorTile.getType());
 
         int sourceFloorTilePaths = sourceFloorTile.getPathsBits();
         int targetFloorTilePaths = targetFloorTile.getPathsBits();
-        System.out.println(sourceFloorTilePaths);
-        System.out.println(targetFloorTilePaths);
+
         return (sourceFloorTilePaths & sourceBitmask) == sourceBitmask && (targetFloorTilePaths & oppositeBitmask) == oppositeBitmask;
     }
 
