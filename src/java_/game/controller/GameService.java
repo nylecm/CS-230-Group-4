@@ -250,8 +250,9 @@ public class GameService {
         for (int i = 0; i < nRows * nCols; i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
             boolean isFixed = in.nextBoolean();
-            int rotation = in.nextInt();
-            floorTilesForGameBoard[i] = new FloorTile(tileType,isFixed,rotation);
+            String rotationStr = in.next();
+            int rotation = Integer.parseInt(rotationStr);
+            floorTilesForGameBoard[i] = new FloorTile(tileType, isFixed, rotation);
         }
         in.nextLine();
 
@@ -260,19 +261,21 @@ public class GameService {
 
         silkBag = new SilkBag();
 
-        while (in.hasNext()) {
+        int c = 0;
+        while (in.hasNextLine() && c < 1) {
             silkBag.put(TileType.valueOf(in.next().toUpperCase()));
+            c++;
         }
         in.nextLine();
 
-        int nAreaEffects = in.nextInt();
-        for (int i = 0; i < nAreaEffects; i++) {
+        while (in.hasNext()) {
             int effectRow = in.nextInt();
             int effectCol = in.nextInt();
             Position effectPos = new Position(effectRow, effectCol);
             EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
             int radius = in.nextInt();
-            int durationRemaining = in.nextInt();
+            String durationRemainingStr = in.next();
+            int durationRemaining = Integer.parseInt(durationRemainingStr);
             AreaEffect areaEffect = new AreaEffect(effectType, radius, durationRemaining);
             gameBoard.applyEffect(areaEffect, effectPos);
         }
@@ -297,6 +300,7 @@ public class GameService {
         writePlayerInstanceDetailsForAllPlayers(out);
         writeGameBoardInstanceTileDetails(out, playerService.getPlayers().length);
         writeSilkBagInstanceDetails(out);
+        writeAreaEffectDetails(out);
 
         out.flush();
         out.close();
@@ -391,6 +395,23 @@ public class GameService {
             }
         }
         out.print('\n');
+    }
+
+    private void writeAreaEffectDetails(PrintWriter out) {
+        Set<Position> activeEffectPositions = gameBoard.getActiveEffectPositions();
+
+        for (Position effectPosition : activeEffectPositions) {
+            out.print(effectPosition.getRowNum());
+            out.print(DELIMITER);
+            out.print(effectPosition.getColNum());
+            out.print(DELIMITER);
+            out.print(gameBoard.getEffectAt(effectPosition).getEffectType());
+            out.print(DELIMITER);
+            out.print(gameBoard.getEffectAt(effectPosition).getRemainingDuration());
+            out.print(DELIMITER);
+            out.print(gameBoard.getEffectAt(effectPosition).getRadius());
+            out.print(DELIMITER);
+        }
     }
 
     private void writeSilkBagInstanceDetails(PrintWriter out) {
@@ -608,7 +629,7 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_22.txt"));
+            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_32.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
