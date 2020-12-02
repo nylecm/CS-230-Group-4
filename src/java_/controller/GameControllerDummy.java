@@ -147,6 +147,11 @@ public class GameControllerDummy implements Initializable {
 
             setEdgeTileEventHandlers(edgeTileDisplayTop);
             setEdgeTileEventHandlers(edgeTileDisplayBottom);
+
+            if (GameService.getInstance().getGameBoard().isRowFixed(getTileCol(edgeTileDisplayTop)) || GameService.getInstance().getGameBoard().isRowFixed(getTileCol(edgeTileDisplayBottom))) {
+                edgeTileDisplayTop.setVisible(false);
+                edgeTileDisplayBottom.setVisible(false);
+            }
         }
 
         for (int i = 0; i < gameBoardView.getHeight(); i++) {
