@@ -134,11 +134,13 @@ public class GameService {
 
         for (int i = 0; i < FloorTile.FLOOR_TILE_TYPES.size(); i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
+            System.out.println(tileType);
             int nOfThisType = in.nextInt();
-            FloorTile t = new FloorTile(tileType, false);
+            System.out.println(nOfThisType);
 
             for (int j = 0; j < nOfThisType; j++) {
-                floorTiles.add(t);
+                floorTiles.add(new FloorTile(tileType, false));
+                System.out.println("test");
             }
         }
         return floorTiles;
@@ -146,7 +148,7 @@ public class GameService {
 
     private FloorTile[] getFloorTilesForGameBoard
             (int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
-        FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles]; // todo check if nFixed Tiles is greater than nCol * nRow
+        FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles];
 
         for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
             floorTilesForGameBoard[i] = floorTiles.get(0);
@@ -211,7 +213,7 @@ public class GameService {
         silkBag = new SilkBag();
 
         while (in.hasNext()) {
-            silkBag.put(TileType.valueOf(in.next()));
+            silkBag.put(TileType.valueOf(in.next().toUpperCase()));
         }
 
         int nPlayers = 0;
@@ -479,7 +481,7 @@ public class GameService {
         gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 1);
         System.out.println(gs.gameBoard);
-        System.out.println(gs.gameBoard.getTileAt(0, 0));
+        System.out.println(gs.gameBoard.getTileAt(-1, 0).getPathsBits());
         System.out.println(gs.gameBoard.getTileAt(0, 1));
 
 
