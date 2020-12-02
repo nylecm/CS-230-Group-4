@@ -12,6 +12,7 @@ import java.util.Arrays;
 public class PasswordEncoder {
 
     private static final String HASHING_ALGORITHM = "PBKDF2WithHmacSHA1";
+    private static final String PASSWORD_ENCODER_SPLITTER = "/";
     private static final int SALT_BYTES = 16;
     private static final int ITERATIONS = 65536;
     private static final int KEY_LENGTH = 128;
@@ -24,21 +25,25 @@ public class PasswordEncoder {
         String output = null;
         try {
             byte[] hash = generateHash(password, salt);
-            output = bytesToHex(salt) + "/" + bytesToHex(hash);
+            output = bytesToHex(salt) + PASSWORD_ENCODER_SPLITTER + bytesToHex(hash);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
         return output;
     }
 
-    public static byte[] generateHash(String password, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, KEY_LENGTH);
-        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(HASHING_ALGORITHM);
+    public static byte[] generateHash(String password, byte[] salt)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+        KeySpec spec = new PBEKeySpec
+                (password.toCharArray(), salt, ITERATIONS, KEY_LENGTH);
+        SecretKeyFactory secretKeyFactory =
+                SecretKeyFactory.getInstance(HASHING_ALGORITHM);
         return secretKeyFactory.generateSecret(spec).getEncoded();
     }
 
-    public static boolean validatePassword(String password, String encodedPassword) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        String[] encodedPasswordParts = encodedPassword.split("/");
+    public static boolean validatePassword(String password, String encodedPassword)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+        String[] encodedPasswordParts = encodedPassword.split(PASSWORD_ENCODER_SPLITTER);
         byte[] salt = hexStringToByteArray(encodedPasswordParts[0]);
         byte[] hash = hexStringToByteArray(encodedPasswordParts[1]);
         byte[] tempHash = generateHash(password, salt);

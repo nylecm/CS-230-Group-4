@@ -1,8 +1,5 @@
 package java_.controller;
 
-import java_.game.tile.*;
-import java_.util.Position;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;

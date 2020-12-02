@@ -173,6 +173,7 @@
             </children>
         </HBox>
         <Button minWidth="200.0" mnemonicParsing="false" onAction="#onStartGameButtonClicked" prefHeight="60.0" prefWidth="160.0" text="Start Game" />
+      <Label fx:id="startGameStatusLabel" text="Label" />
     </children>
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
