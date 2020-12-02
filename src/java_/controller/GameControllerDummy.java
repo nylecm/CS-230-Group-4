@@ -1,6 +1,7 @@
 package java_.controller;
 
 import java_.game.controller.GameService;
+import java_.game.player.Player;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
@@ -10,6 +11,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -20,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
@@ -56,6 +59,9 @@ public class GameControllerDummy implements Initializable {
     private ImageView drawnActionTile;
 
     @FXML
+    private HBox drawnActionTiles;
+
+    @FXML
     private Button drawTileButton;
 
     @FXML
@@ -89,7 +95,7 @@ public class GameControllerDummy implements Initializable {
         gameBoardView = new Dimension2D(gameBoard.getnCols(), gameBoard.getnRows());
 
         //TODO: Replace with isometric view
-        displayGameBoardFlat(gameBoard);
+        displayGameView(gameBoard);
 
         drawnFloorTile.setOnDragDetected(event -> {
             Dragboard dragboard = drawnFloorTile.startDragAndDrop(TransferMode.MOVE);
@@ -108,16 +114,25 @@ public class GameControllerDummy implements Initializable {
         });
     }
 
-    private void displayGameBoardFlat(GameBoard gameBoard) {
+    private void displayGameView(GameBoard gameBoard) {
         edgeTileGroup = new Group();
         tileGroup = new Group();
         playerPieceGroup = new Group();
         effectGroup = new Group();
 
+        //Build GameBoard
         displayEdges();
         displayFloorTiles(gameBoard);
         displayPlayerPieces(gameBoard);
         setEffectBorders();
+
+        //Build Player queue
+        //TODO Implement
+
+        //Build ActionTiles list
+        displayActionTiles(GameService.getInstance().getCurrentPlayer());
+
+
 
         content.getChildren().addAll(tileGroup, edgeTileGroup, effectGroup, playerPieceGroup);
         scrollPane.setFitToWidth(true);
@@ -194,7 +209,6 @@ public class GameControllerDummy implements Initializable {
         }
     }
 
-    //TODO: Implement
     private void displayPlayerPieces(GameBoard gameBoard) {
         Image leftTopImage = new Image("leftTop.png");
         ImageView leftTop = new ImageView(leftTopImage);
@@ -293,6 +307,17 @@ public class GameControllerDummy implements Initializable {
         effectGroup.getChildren().add(rightBottom);
     }
 
+    public void displayActionTiles(Player player) {
+        List<ActionTile> playersActionTiles = GameService.getInstance().getPlayerService().getDrawnActionTiles(player);
+        if (!playersActionTiles.isEmpty()) {
+            for (ActionTile actionTile : playersActionTiles) {
+                Image actionTileImage = new Image(getActionTileTypeImage(actionTile));
+                ImageView actionTileDisplay = new ImageView(actionTileImage);
+                drawnActionTiles.getChildren().add(actionTileDisplay);
+            }
+        }
+    }
+
     public void setEdgeTileEventHandlers(ImageView edgeTileDisplay) {
         edgeTileDisplay.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.ANY);
@@ -322,7 +347,7 @@ public class GameControllerDummy implements Initializable {
                     GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
                 }
                 //TODO Store?
-                displayGameBoardFlat(GameService.getInstance().getGameBoard());
+                displayGameView(GameService.getInstance().getGameBoard());
             }
         });
     }
@@ -401,6 +426,9 @@ public class GameControllerDummy implements Initializable {
                 double centerY = floorTileDisplay.getLayoutY();
                 double centerX = floorTileDisplay.getLayoutX();
 
+                int centerCol = getTileCol(floorTileDisplay);
+                int centerRow = getTileRow(floorTileDisplay);
+
                 for (int row = 0; row < area; row++) {
                     for (int col = 0; col < area; col++) {
                         ImageView effectDisplay = getFloorTileImageView(source.getImage());
@@ -415,6 +443,12 @@ public class GameControllerDummy implements Initializable {
                         effectGroup.getChildren().add(effectDisplay);
                     }
                 }
+
+//                int usedActionTileIndex = drawnActionTiles.getChildren().indexOf(drawnActionTile);
+//                ActionTile usedActionTile = GameService.getInstance().getPlayerService().getDrawnActionTile(GameService.getInstance().getCurrentPlayer(), usedActionTileIndex);
+//                usedActionTile.use();
+//
+//                GameService.getInstance().getPlayerService().getDrawnActionTiles(GameService.getInstance().getCurrentPlayer());
             }
         });
     }
@@ -644,7 +678,10 @@ public class GameControllerDummy implements Initializable {
 
     @FXML
     public void onDrawTileButtonClicked() {
-        drawnTile = GameService.getInstance().getSilkBag().take();
+//        Tile drawnTile = GameService.getInstance().getPlayerService().playerTurn(null); //Get current player
+
+        Tile drawnTile = GameService.getInstance().getSilkBag().take();
+
         if (drawnTile instanceof FloorTile) {
             Image newFloorTileImage = new Image((getFloorTileTypeImage((FloorTile) drawnTile)));
             drawnFloorTile.setImage(newFloorTileImage);

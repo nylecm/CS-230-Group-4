@@ -3,6 +3,8 @@ package java_.game.player;
 import java_.game.controller.GameService;
 import java_.game.tile.*;
 
+import java.util.List;
+
 public class PlayerService {
     private static PlayerService playerService = null;
     private GameService gameService;
@@ -23,13 +25,14 @@ public class PlayerService {
         return playerService;
     }
 
-    public void playerTurn(Player p) {
+    public Tile playerTurn(Player p) {
         Tile drawnTile = GameService.getInstance().getSilkBag().take();
         if (drawnTile instanceof ActionTile) {
             p.addDrawnActionTile((ActionTile) drawnTile);
         } else {
             //TODO: Add FloorTile to the viewport
         }
+        return drawnTile;
         //(Apply effects)
         //Move PlayerPiece
         //After turn, game checks effects
@@ -57,6 +60,14 @@ public class PlayerService {
 
     public void addDrawnActionTile(Player p, ActionTile actionTile) {
         p.addDrawnActionTile(actionTile);
+    }
+
+    public List<ActionTile> getDrawnActionTiles(Player p) {
+        return p.getDrawnActionTiles();
+    }
+
+    public ActionTile getDrawnActionTile(Player p, int index) {
+        return getDrawnActionTiles(p).get(index);
     }
 
     public Player[] getPlayers() {
