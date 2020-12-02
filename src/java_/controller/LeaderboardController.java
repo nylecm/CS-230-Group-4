@@ -43,12 +43,6 @@ public class LeaderboardController implements Initializable {
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
     private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";
 
-    private Table tableOne;
-    private Object Table;
-
-    //Un-comment if using file reader.
-    //@FXML ObservableList<Table> data = FXCollections.observableArrayList();
-
     public LeaderboardController() {
     }
 
