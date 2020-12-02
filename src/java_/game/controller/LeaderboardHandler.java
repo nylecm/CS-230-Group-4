@@ -5,6 +5,8 @@ import java_.game.player.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LeaderboardHandler {
@@ -18,13 +20,17 @@ public class LeaderboardHandler {
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(USER_STATS_FOLDER_DIRECTORY);
         for (File file: fileNames) {
-           //System.out.println(file.getName());
             if (file.getName().equals(gameboardName)) {
 
                 File gameboardFile = new File(USER_STATS_FOLDER_DIRECTORY + "/" + gameboardName);
                 Scanner in = new Scanner(gameboardFile);
 
+                ArrayList<String> newFileLines = new ArrayList<>();
+
+                int numPlayersInFile = 0;
                 while (in.hasNextLine()) {
+
+                    numPlayersInFile +=1;
 
                     String[] currentPlayerStats = in.nextLine().split(DELIMITER);
                     for (String w : currentPlayerStats) { //todo remove
@@ -37,25 +43,18 @@ public class LeaderboardHandler {
                             currentPlayerStats[2] = String.valueOf(Integer.valueOf(currentPlayerStats[2]) + 1); //todo probably being stupid - it's 2am
                         }
                     }
-
-
-                    //todo printwriter stuff
-
-                    for (String w : currentPlayerStats) { //todo remove
-                        System.out.println(w);
-                    }
-
+                    String newFileLine = currentPlayerStats[0] + DELIMITER + currentPlayerStats[1] + DELIMITER + currentPlayerStats[2] + DELIMITER;
+                    newFileLines.add(newFileLine);
 
                 }
-
-                //System.out.println(in.nextLine());
-
-
-
+                in.close();
+                PrintWriter fileWriter = new PrintWriter(gameboardFile);
+                for (String line : newFileLines) {
+                    fileWriter.println(line);
+                }
+                fileWriter.close();
             }
         }
-
-
     }
 
     public static void main(String[] args) {
