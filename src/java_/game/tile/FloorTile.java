@@ -47,7 +47,6 @@ public class FloorTile extends Tile {
                 break;
             case CORNER:
                 pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
-                System.out.println(pathsBits);
                 break;
             case T_SHAPED:
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
