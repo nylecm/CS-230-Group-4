@@ -21,7 +21,7 @@
             <children>
             <VBox alignment="CENTER_LEFT" prefHeight="98.0" prefWidth="145.0" spacing="30.0">
                <children>
-                  <HBox fx:id="drawnActionTiles" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                      <children>
                         <ImageView fx:id="drawnActionTile" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -73,6 +73,7 @@
                   <Image url="@../../bag.png" />
                </image>
             </ImageView>
+            <Button fx:id="endTurnButton" mnemonicParsing="false" text="End Turn" />
          </children>
       </VBox>
    </right>

@@ -3,7 +3,6 @@ package java_.controller;
 import java_.game.controller.GameService;
 import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
-import java_.util.generic_data_structures.Link;
 import java_.util.security.LoginHandler;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -24,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.*;
 
@@ -520,7 +518,7 @@ public class NewGameController implements Initializable {
             GameService.getInstance().loadNewGame(players, (String) gameBoardSelect.getValue());
 
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
+            Pane game = (Pane) FXMLLoader.load(getClass().getResource("reworkedGuiFiles/gameMain.fxml"));
             currentStage.setScene(new Scene(game));
         } else {
             startGameStatusLabel.setText("Ensure min. 2 players are logged in, with confirmed player pieces.");

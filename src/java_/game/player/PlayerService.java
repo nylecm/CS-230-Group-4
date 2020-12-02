@@ -29,13 +29,8 @@ public class PlayerService {
         Tile drawnTile = GameService.getInstance().getSilkBag().take();
         if (drawnTile instanceof ActionTile) {
             p.addDrawnActionTile((ActionTile) drawnTile);
-        } else {
-            //TODO: Add FloorTile to the viewport
         }
         return drawnTile;
-        //(Apply effects)
-        //Move PlayerPiece
-        //After turn, game checks effects
     }
 
     public void applyBackTrackEffect(int playerNum) {

@@ -1,5 +1,6 @@
 package java_.game.controller;
 
+import java_.controller.GameController;
 import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class GameService {
     private static GameService instance = null;
+    private GameController controller;
 
     private GameBoard gameBoard;
     private final PlayerService playerService;
@@ -285,14 +287,9 @@ public class GameService {
         //PlayerService = new PlayerService();
     }
 
-    public void gameplayLoop() { // todo gameplay loop...
-        while (!isWin) {
-            playerService.playerTurn(playerService.getPlayer(turnCount
-                    % playerService.getPlayers().length)); // todo improve player service
-            System.out.println("Have fun!");
-            gameBoard.refreshEffects();
-            turnCount++;
-        }
+    public void nextTurn() { // todo gameplay loop...
+        gameBoard.refreshEffects();
+        turnCount++;
     }
 
     /**
@@ -442,7 +439,7 @@ public class GameService {
     }
 
     public Player getCurrentPlayer() {
-        return playerService.getPlayers()[getTurnCount() % playerService.getPlayers().length];
+        return playerService.getPlayer(getTurnCount() % playerService.getPlayers().length);
     }
 
     /**
