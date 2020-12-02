@@ -28,6 +28,7 @@ public class GameService {
     private int turnCount;
     private boolean isWin;
     private boolean actionTilePlayed; //TODO Move somewhere else?
+    private boolean playerPieceMoved; //TODO Move somewhere else?
 
     private static final String DELIMITER = "`";
     private static final String FILE_WORD_SPACER = "_";
@@ -289,6 +290,8 @@ public class GameService {
     }
 
     public void nextTurn() { // todo gameplay loop...
+        actionTilePlayed = false;
+        playerPieceMoved = false;
         gameBoard.refreshEffects();
         turnCount++;
     }
@@ -439,8 +442,8 @@ public class GameService {
         return turnCount;
     }
 
-    public Player getCurrentPlayer() {
-        return playerService.getPlayer(getTurnCount() % playerService.getPlayers().length);
+    public int getCurrentPlayerNum() {
+        return getTurnCount() % playerService.getPlayers().length;
     }
 
     /**
@@ -486,8 +489,20 @@ public class GameService {
         return silkBag;
     }
 
-    public boolean actionTilePlayed() {
+    public boolean getActionTilePlayed() {
         return actionTilePlayed;
+    }
+
+    public void setActionTilePlayed(boolean actionTilePlayed) {
+        this.actionTilePlayed = actionTilePlayed;
+    }
+
+    public boolean getPlayerPieceMoved() {
+        return playerPieceMoved;
+    }
+
+    public void setPlayerPieceMoved(boolean playerPieceMoved) {
+        this.playerPieceMoved = playerPieceMoved;
     }
 
     /**

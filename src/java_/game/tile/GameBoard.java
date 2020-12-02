@@ -83,6 +83,9 @@ public class GameBoard {
     }
 
     public boolean validateMove(int sourceCol, int sourceRow, int targetCol, int targetRow, int sourceBitmask, int oppositeBitmask) {
+        if (activeEffects.containsKey(new Position(targetRow, targetCol))) {
+            return false;
+        }
         FloorTile sourceFloorTile = board[sourceRow][sourceCol];
         FloorTile targetFloorTile = board[targetRow][targetCol];
 

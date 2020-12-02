@@ -21,7 +21,7 @@
             <children>
             <VBox alignment="CENTER_LEFT" prefHeight="98.0" prefWidth="145.0" spacing="30.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                  <HBox fx:id="drawnActionTiles" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                      <children>
                         <ImageView fx:id="drawnActionTile" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -30,21 +30,6 @@
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
-                        </ImageView>
-                        <ImageView fx:id="drawnActionTile1" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../actionTile.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="drawnActionTile2" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../actionTile.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="drawnActionTile3" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../actionTile.png" />
-                           </image>
                         </ImageView>
                      </children>
                   </HBox>

@@ -2,6 +2,7 @@ package java_.controller;
 
 import java_.game.controller.GameService;
 import java_.game.player.Player;
+import java_.game.player.PlayerPiece;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.animation.KeyFrame;
@@ -21,11 +22,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -99,34 +102,59 @@ public class GameControllerDummy implements Initializable {
         displayGameView(gameBoard);
 
         drawnFloorTile.setOnDragDetected(event -> {
-            Dragboard dragboard = drawnFloorTile.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.putImage(floorTileImage);
-            dragboard.setContent(content);
-            event.consume();
-        });
-
-        drawnActionTile.setOnDragDetected(event -> {
-            Dragboard dragboard = drawnActionTile.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.putImage(actionTileImage);
-            dragboard.setContent(content);
-            event.consume();
+            if ( drawnFloorTile.getImage() != null) {
+                Dragboard dragboard = drawnFloorTile.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                content.putImage(drawnFloorTile.getImage());
+                dragboard.setContent(content);
+                event.consume();
+            }
         });
 
         endTurnButton.setOnMouseClicked(event -> {
+            if (!gameService.getPlayerPieceMoved() && playerPieceCanMove()) {
+                System.out.println("You have to move player piece!");
+                event.consume();
+            }
             gameService.nextTurn();
             displayGameView(gameBoard);
         });
     }
 
-    public void initialLoad(GameBoard gameBoard) {
-        displayGameView(gameBoard);
+    private boolean playerPieceCanMove() {
+        int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
+        int currentPlayerPieceCol = GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum).getColNum();
+        int currentPlayerPieceRow = GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum).getRowNum();
 
-        //First animations
+        //Current tile
+        byte sourcePathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol).getPathsBits();
 
-        //Build Player queue
-        //TODO Implement
+        byte targetPathsBits;
+
+        //Left
+        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol - 1).getPathsBits();
+        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol - 1, currentPlayerPieceRow, sourcePathsBits, targetPathsBits)) {
+            return true;
+        }
+        //Right
+        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol + 1).getPathsBits();
+        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol + 1, currentPlayerPieceRow, sourcePathsBits, targetPathsBits)) {
+            return true;
+        }
+
+        //Above
+        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow - 1, currentPlayerPieceCol).getPathsBits();
+        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow - 1, sourcePathsBits, targetPathsBits)) {
+            return true;
+        }
+
+        //Below
+        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow + 1, currentPlayerPieceCol).getPathsBits();
+        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow + 1, sourcePathsBits, targetPathsBits)) {
+            return true;
+        }
+
+        return false;
     }
 
     private void displayGameView(GameBoard gameBoard) {
@@ -142,10 +170,11 @@ public class GameControllerDummy implements Initializable {
         setEffectBorders();
 
         //Build Player queue
-        //TODO Implement
+
 
         //Build ActionTiles list
-        displayActionTiles(GameService.getInstance().getCurrentPlayer());
+        int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
+        displayActionTiles(GameService.getInstance().getPlayerService().getPlayer(currentPlayerNum));
 
         content.getChildren().addAll(tileGroup, edgeTileGroup, effectGroup, playerPieceGroup);
         scrollPane.setFitToWidth(true);
@@ -272,11 +301,21 @@ public class GameControllerDummy implements Initializable {
             playerPieceGroup.getChildren().add(playerPieceDisplay);
 
             playerPieceDisplay.setOnDragDetected(event -> {
-                Dragboard dragboard = playerPieceDisplay.startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(playerPieceDisplay.getImage());
-                dragboard.setContent(content);
-                event.consume();
+                ImageView source = (ImageView) event.getSource();
+                int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
+                PlayerPiece currentPlayerPiece = GameService.getInstance().getGameBoard().getPlayerPiece(currentPlayerNum);
+                int sourcePlayerPieceCol = getTileCol(source);
+                int sourcePlayerPieceRow = getTileRow(source);
+                Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
+                if (draggedPlayerPiecePosition.equals(currentPlayerPiece)) {
+                    Dragboard dragboard = playerPieceDisplay.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(playerPieceDisplay.getImage());
+                    dragboard.setContent(content);
+                    event.consume();
+                } else {
+                    System.out.println("You can't move someone else's PlayerPiece dumbass!");
+                }
             });
 
             playerPieceDisplay.setOnMouseClicked(event -> {
@@ -320,14 +359,11 @@ public class GameControllerDummy implements Initializable {
         effectGroup.getChildren().add(rightBottom);
     }
 
-    public void displayActionTiles(Player player) {
-        List<ActionTile> playersActionTiles = GameService.getInstance().getPlayerService().getDrawnActionTiles(player);
-        if (!playersActionTiles.isEmpty()) {
-            for (ActionTile actionTile : playersActionTiles) {
-                Image actionTileImage = new Image(getActionTileTypeImage(actionTile));
-                ImageView actionTileDisplay = new ImageView(actionTileImage);
-                drawnActionTiles.getChildren().add(actionTileDisplay);
-            }
+    public void displayActionTiles(Player currentPlayer) {
+        for (ActionTile actionTile : currentPlayer.getDrawnActionTiles()) {
+            Image actionTileImage = new Image(getActionTileTypeImage(actionTile));
+            ImageView actionTileDisplay = new ImageView(actionTileImage);
+            drawnActionTiles.getChildren().add(actionTileDisplay);
         }
     }
 
@@ -359,6 +395,7 @@ public class GameControllerDummy implements Initializable {
                     System.out.println("Yes 2");
                     GameService.getInstance().getGameBoard().insert(tileCol, tileRow, (FloorTile) drawnTile, (int) drawnFloorTile.getRotate() / 90);
                 }
+                drawnFloorTile.setImage(null);
                 //TODO Store?
                 displayGameView(GameService.getInstance().getGameBoard());
             }
@@ -433,7 +470,7 @@ public class GameControllerDummy implements Initializable {
                 FloorTile targetFloorTile = GameService.getInstance().getGameBoard().getTileAt(getTileRow(floorTileDisplay), getTileCol(floorTileDisplay));
 
 
-            } else if (source == drawnActionTile) {
+            } else if (drawnActionTiles.getChildren().contains(source)) {
                 int area = 3; //Does not allow rectangle areas
 
                 double centerY = floorTileDisplay.getLayoutY();
@@ -456,6 +493,7 @@ public class GameControllerDummy implements Initializable {
                         effectGroup.getChildren().add(effectDisplay);
                     }
                 }
+                event.setDropCompleted(true);
 
 //                int usedActionTileIndex = drawnActionTiles.getChildren().indexOf(drawnActionTile);
 //                ActionTile usedActionTile = GameService.getInstance().getPlayerService().getDrawnActionTile(GameService.getInstance().getCurrentPlayer(), usedActionTileIndex);
@@ -693,14 +731,32 @@ public class GameControllerDummy implements Initializable {
     public void onDrawTileButtonClicked() {
 //        Tile drawnTile = GameService.getInstance().getPlayerService().playerTurn(null); //Get current player
 
-        Tile drawnTile = GameService.getInstance().getSilkBag().take();
+        drawnTile = GameService.getInstance().getSilkBag().take();
 
         if (drawnTile instanceof FloorTile) {
             Image newFloorTileImage = new Image((getFloorTileTypeImage((FloorTile) drawnTile)));
             drawnFloorTile.setImage(newFloorTileImage);
         } else { //Action Tile drawn
             Image newActionTileImage = new Image((getActionTileTypeImage((ActionTile) drawnTile)));
-            drawnActionTile.setImage(newActionTileImage);
+            ImageView drawnActionTileDisplay = new ImageView(newActionTileImage);
+            drawnActionTiles.getChildren().add(drawnActionTileDisplay);
+
+            drawnActionTileDisplay.setOnDragDetected(event -> {
+                if (!GameService.getInstance().getActionTilePlayed()) {
+                    Dragboard dragboard = drawnActionTileDisplay.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(actionTileImage);
+                    dragboard.setContent(content);
+                    event.consume();
+                } else {
+                    System.out.println("You can't use ActionTile anymore you idiot");
+                }
+            });
+
+            drawnActionTileDisplay.setOnDragDone(event -> {
+                drawnActionTiles.getChildren().remove(drawnActionTileDisplay);
+                GameService.getInstance().setActionTilePlayed(true);
+            });
         }
     }
 
