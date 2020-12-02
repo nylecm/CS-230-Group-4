@@ -193,11 +193,13 @@ public class GameService {
     }
 
     public void loadSavedInstance(File f) throws FileNotFoundException, MalformedURLException {
+        //todo chance that it works 1/4
         remake();
 
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
 
+        //Read game details
         int nPlayers = in.nextInt();
         String gameBoardName = in.next();
         int nRows = in.nextInt();
@@ -205,24 +207,22 @@ public class GameService {
         turnCount = in.nextInt();
         in.nextLine();
 
-
         Position[] playerPositions = new Position[nPlayers];
-
         for (int i = 0; i < nPlayers; i++) {
             int row = in.nextInt();
             int col = in.nextInt();
             playerPositions[i] = new Position(row, col);
         }
+        in.nextLine();
 
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
-
         for (int i = 0; i < nPlayers; i++) {
             URL playerPieceImageURL = new URL(in.next());
             playerPieces[i] = new PlayerPiece(playerPieceImageURL);
         }
+        in.nextLine();
 
         Player[] players = new Player[nPlayers];
-
         for (int i = 0; i < nPlayers; i++) {
             String username = in.next();
             players[i] = new Player(username, playerPieces[i]);
@@ -289,12 +289,32 @@ public class GameService {
         out = new PrintWriter(gameSaveFile);
 
         writeGameInstanceDetails(out);
+        writePlayerPiecePositionDetails(out);
+        writePlayerPieceDetails(out);
         writePlayerInstanceDetailsForAllPlayers(out);
         writeGameBoardInstanceTileDetails(out, playerService.getPlayers().length);
         writeSilkBagInstanceDetails(out);
 
         out.flush();
         out.close();
+    }
+
+    private void writePlayerPiecePositionDetails(PrintWriter out) {
+        for (int i = 0; i < playerService.getPlayers().length; i++) {
+            out.print(gameBoard.getPlayerPiecePosition(i).getRowNum());
+            out.print(DELIMITER);
+            out.print(gameBoard.getPlayerPiecePosition(i).getColNum());
+            out.print(DELIMITER);
+        }
+        out.print('\n');
+    }
+
+    private void writePlayerPieceDetails(PrintWriter out) {
+        for (int i = 0; i < playerService.getPlayers().length; i++) {
+            out.print(gameBoard.getPlayerPiece(i).getImageURL().toString());
+            out.print(DELIMITER);
+        }
+        out.print('\n');
     }
 
     private File createFile(String fileName) throws IOException {
@@ -387,8 +407,6 @@ public class GameService {
     private void writePlayerInstanceDetails(PrintWriter out, int i) {
         out.print(playerService.getPlayer(i).getUsername());
         out.print(DELIMITER);
-        out.print(playerService.getPlayer(i).getPlayerPiece().getImageURL()); //todo test...
-        out.print(DELIMITER);
         out.print(playerService.getPlayer(i).getDrawnActionTiles().size()); // N of drawn action tiles.
         out.print(DELIMITER);
 
@@ -396,6 +414,9 @@ public class GameService {
             out.print(actionTile.getType().toString());
             out.print(DELIMITER);
         }
+
+        out.print(playerService.getPlayer(i).getPreviousAppliedEffect().size()); // N of drawn action tiles.
+        out.print(DELIMITER);
 
         for (EffectType effect : playerService.getPlayer(i).getPreviousAppliedEffect()) {
             out.print(effect);
