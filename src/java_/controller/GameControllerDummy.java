@@ -330,6 +330,11 @@ public class GameControllerDummy implements Initializable {
         floorTileDisplay.setOnMouseClicked(event -> {
             System.out.println("Col: " + getTileCol(floorTileDisplay));
             System.out.println("Row: " + getTileRow(floorTileDisplay));
+
+            int tileCol = getTileCol(floorTileDisplay);
+            int tileRow = getTileRow(floorTileDisplay);
+
+            System.out.println("Paths: " + GameService.getInstance().getGameBoard().getTileAt(tileRow, tileCol).getPathsBits());
         });
 
         floorTileDisplay.setOnDragOver(event ->  {

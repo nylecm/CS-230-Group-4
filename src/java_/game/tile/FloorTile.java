@@ -41,13 +41,13 @@ public class FloorTile extends Tile {
         this.isFixed = isFixed;
         this.isGoalTile = isGoalTile;
 
-        isGoalTile = true;
         switch (type) {
             case STRAIGHT:
                 pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
                 break;
             case CORNER:
                 pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
+                System.out.println(pathsBits);
                 break;
             case T_SHAPED:
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
@@ -56,7 +56,7 @@ public class FloorTile extends Tile {
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
                 break;
         }
-        this.rotate(rotationAmount);
+        rotate(rotationAmount);
     }
 
     public void rotate(int rotationAmount) {
@@ -66,7 +66,7 @@ public class FloorTile extends Tile {
         }
     }
 
-    public byte getPathsBits() {
+    public int getPathsBits() {
         return pathsBits;
     }
 
