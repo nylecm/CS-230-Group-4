@@ -30,7 +30,23 @@ public class FloorTile extends Tile {
      */
     public FloorTile(TileType type, boolean isFixed) throws IllegalArgumentException {
         super(type, FLOOR_TILE_TYPES);
-        new FloorTile(type, isFixed, false, 0);
+
+        switch (type) {
+            case STRAIGHT:
+                pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
+                break;
+            case CORNER:
+                pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
+                break;
+            case T_SHAPED:
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
+                break;
+            case GOAL:
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
+                break;
+        }
+
+        System.out.println("EYY " + pathsBits);
     }
 
     // Creates a pre-rotated tile (for fixed tiles)
@@ -64,7 +80,7 @@ public class FloorTile extends Tile {
         }
     }
 
-    public byte getPathsBits() {
+    public int getPathsBits() {
         return pathsBits;
     }
 
