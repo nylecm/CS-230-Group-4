@@ -130,7 +130,7 @@ public class GameControllerDummy implements Initializable {
         //TODO Implement
 
         //Build ActionTiles list
-        displayActionTiles(currPlayer);
+        displayActionTiles(GameService.getInstance().getCurrentPlayer());
 
 
 
@@ -444,6 +444,11 @@ public class GameControllerDummy implements Initializable {
                     }
                 }
 
+//                int usedActionTileIndex = drawnActionTiles.getChildren().indexOf(drawnActionTile);
+//                ActionTile usedActionTile = GameService.getInstance().getPlayerService().getDrawnActionTile(GameService.getInstance().getCurrentPlayer(), usedActionTileIndex);
+//                usedActionTile.use();
+//
+//                GameService.getInstance().getPlayerService().getDrawnActionTiles(GameService.getInstance().getCurrentPlayer());
             }
         });
     }
@@ -673,7 +678,9 @@ public class GameControllerDummy implements Initializable {
 
     @FXML
     public void onDrawTileButtonClicked() {
-        Tile drawnTile = GameService.getInstance().getPlayerService().playerTurn(null); //Get current player
+//        Tile drawnTile = GameService.getInstance().getPlayerService().playerTurn(null); //Get current player
+
+        Tile drawnTile = GameService.getInstance().getSilkBag().take();
 
         if (drawnTile instanceof FloorTile) {
             Image newFloorTileImage = new Image((getFloorTileTypeImage((FloorTile) drawnTile)));

@@ -1,6 +1,7 @@
 package java_.game.tile;
 
 import java_.game.controller.GameService;
+import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
@@ -375,7 +376,18 @@ public class GameBoard {
         return false;
     }
 
-    public void applyEffect(AreaEffect effect, Position p) throws IllegalStateException {
+    public void useActionTile(ActionTile actionTile, Position pos) {
+        if (actionTile.use() instanceof AreaEffect) {
+            applyEffect((AreaEffect) actionTile.use(), pos);
+        } else if (actionTile.use() instanceof  PlayerEffect) {
+            Effect effect = actionTile.use();
+            if (effect.getEffectType() == EffectType.BACKTRACK) {
+
+            }
+        }
+    }
+
+    public void applyEffect(AreaEffect effect, Position pos) throws IllegalStateException {
         int effectRadius = effect.getRadius();
         int diameter = effectRadius * 2;
         int effectWidth = 1 + diameter; // Includes centre.
@@ -383,7 +395,7 @@ public class GameBoard {
         Set<Position> playerPiecePos = new HashSet<>(Arrays.asList(playerPiecePositions));
 
         Position effectStartPos = new Position
-                (p.getRowNum() - effectRadius, p.getColNum() - effectRadius);
+                (pos.getRowNum() - effectRadius, pos.getColNum() - effectRadius);
 
         for (int i = effectStartPos.getRowNum(); i < effectStartPos.getRowNum() + effectWidth; i++) {
             for (int j = effectStartPos.getColNum(); j < effectStartPos.getColNum() + effectWidth; j++) {

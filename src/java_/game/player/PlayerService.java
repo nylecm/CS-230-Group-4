@@ -66,6 +66,10 @@ public class PlayerService {
         return p.getDrawnActionTiles();
     }
 
+    public ActionTile getDrawnActionTile(Player p, int index) {
+        return getDrawnActionTiles(p).get(index);
+    }
+
     public Player[] getPlayers() {
         return players;
     }
