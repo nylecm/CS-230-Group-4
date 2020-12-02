@@ -16,11 +16,12 @@ public class FloorTile extends Tile {
     public static final int SOUTH_PATH_MASK = 0x2; //0010
     public static final int WEST_PATH_MASK = 0x1; //0001
 
-    private static final String TILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
+    private static final String šTILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
 
     private boolean isFixed;
     private byte pathsBits;
     private boolean isGoalTile;
+    private int rotation;
 
     /**
      * Instantiates a new Floor tile.
@@ -78,6 +79,7 @@ public class FloorTile extends Tile {
             pathsBits = (byte) (pathsBits << 3);
             pathsBits = (byte) (((pathsBits & 0xf0) >> 4) + (pathsBits & 0xf));
         }
+        rotation = rotationAmount % 4;
     }
 
     public int getPathsBits() {
@@ -100,6 +102,10 @@ public class FloorTile extends Tile {
      */
     public boolean isGoalTile() {
         return isGoalTile;
+    }
+
+    public int getRotation() {
+        return rotation;
     }
 
     public static void main(String[] args) {

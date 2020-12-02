@@ -175,6 +175,7 @@ public class GameControllerDummy implements Initializable {
                 ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
                 floorTileDisplay.setLayoutX(col * TILE_WIDTH);
                 floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
+                floorTileDisplay.setRotate(gameBoard.getTileAt(row, col).);
 
                 setFloorTileEventHandlers(floorTileDisplay);
 
