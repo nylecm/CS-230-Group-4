@@ -342,8 +342,43 @@ public class GameControllerDummy implements Initializable {
         floorTileDisplay.setOnDragDropped(event -> {
             ImageView source = (ImageView) event.getGestureSource();
             if (playerPieceGroup.getChildren().contains(source)) {
-                source.setLayoutX(floorTileDisplay.getLayoutX() + 6);
-                source.setLayoutY(floorTileDisplay.getLayoutY() + 6);
+                int sourceFloorTileCol = getTileCol(source);
+                int sourceFloorTileRow = getTileRow(source);
+                System.out.println(sourceFloorTileCol + ", " + sourceFloorTileRow);
+
+                int targetFloorTileCol = getTileCol(floorTileDisplay);
+                int targetFloorTileRow = getTileRow(floorTileDisplay);
+                System.out.println(targetFloorTileCol + ", " + targetFloorTileRow);
+
+                int sourceBitmask;
+                int oppositeBitmask;
+                if (sourceFloorTileRow < targetFloorTileRow) {
+                    System.out.println("Going south");
+                    sourceBitmask = FloorTile.SOUTH_PATH_MASK;
+                    oppositeBitmask = FloorTile.NORTH_PATH_MASK;
+                } else if (sourceFloorTileRow > targetFloorTileRow) {
+                    System.out.println("Going north");
+                    sourceBitmask = FloorTile.NORTH_PATH_MASK;
+                    oppositeBitmask = FloorTile.NORTH_PATH_MASK;
+                } else if (sourceFloorTileCol < targetFloorTileCol) {
+                    System.out.println("Going east");
+                    sourceBitmask = FloorTile.EAST_PATH_MASK;
+                    oppositeBitmask = FloorTile.WEST_PATH_MASK;
+                } else {
+                    System.out.println("Going west");
+                    sourceBitmask = FloorTile.WEST_PATH_MASK;
+                    oppositeBitmask = FloorTile.EAST_PATH_MASK;
+                }
+
+                if (GameService.getInstance().getGameBoard().validateMove(sourceFloorTileCol, sourceFloorTileRow, targetFloorTileCol, targetFloorTileRow, sourceBitmask, oppositeBitmask)) {
+                    source.setLayoutX(floorTileDisplay.getLayoutX() + 6);
+                    source.setLayoutY(floorTileDisplay.getLayoutY() + 6);
+                }
+
+                FloorTile sourceFloorTile = GameService.getInstance().getGameBoard().getTileAt(getTileRow(source), getTileCol(source));
+                FloorTile targetFloorTile = GameService.getInstance().getGameBoard().getTileAt(getTileRow(floorTileDisplay), getTileCol(floorTileDisplay));
+
+
             } else if (source == drawnActionTile) {
                 int area = 3; //Does not allow rectangle areas
 

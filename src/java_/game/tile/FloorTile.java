@@ -12,18 +12,16 @@ public class FloorTile extends Tile {
     public final static EnumSet<TileType> FLOOR_TILE_TYPES =
             EnumSet.of(TileType.STRAIGHT, TileType.CORNER, TileType.T_SHAPED, TileType.GOAL);
 
-    private final static int[] GOAL_TILE_ROTATIONS = {15}; // NESW
-    private final static int[] STRAIGHT_TILE_PATHS = {10, 5}; // NS, WE
-    // rotation = 0  1  2  3
-    private final static int[] CORNER_TILE_PATHS = {12, 6, 3, 9}; // NE, SE, SW, NW
-    private final static int[] T_SHAPED_TILE_PATHS = {14, 7, 11, 13}; // NES, ESW, SWN, WNE
+    public static final int NORTH_PATH_MASK = 0x8; //1000
+    public static final int EAST_PATH_MASK = 0x4; //0100
+    public static final int SOUTH_PATH_MASK = 0x2; //0010
+    public static final int WEST_PATH_MASK = 0x1; //0001
 
-    private final static String TILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
+    private static final String TILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
 
-    private final boolean isFixed;
-    private int paths;
-    private int[] availablePaths;
-    private final boolean isGoalTile;
+    private boolean isFixed;
+    private byte pathsBits;
+    private boolean isGoalTile;
 
     /**
      * Instantiates a new Floor tile.
@@ -33,117 +31,42 @@ public class FloorTile extends Tile {
      */
     public FloorTile(TileType type, boolean isFixed) throws IllegalArgumentException {
         super(type, FLOOR_TILE_TYPES);
-
-        this.isFixed = isFixed;
-
-        switch (type) {
-            case STRAIGHT:
-                availablePaths = STRAIGHT_TILE_PATHS;
-                paths = availablePaths[0];
-                isGoalTile = false;
-                break;
-            case CORNER:
-                availablePaths = CORNER_TILE_PATHS;
-                paths = availablePaths[0];
-                isGoalTile = false;
-                break;
-            case T_SHAPED:
-                availablePaths = T_SHAPED_TILE_PATHS;
-                paths = availablePaths[0];
-                isGoalTile = false;
-                break;
-            case GOAL:
-                isGoalTile = true;
-                availablePaths = GOAL_TILE_ROTATIONS;
-                paths = availablePaths[0];
-                break;
-            default:
-                throw new IllegalArgumentException(TILE_TYPE_INVALID_MSG);
-        }
+        new FloorTile(type, isFixed, false, 0);
     }
 
     // Creates a pre-rotated tile (for fixed tiles)
-    public FloorTile(TileType type, boolean isFixed, boolean isGoalTile, int rotationAmount) { //todo consider restricting this method for fixed tiles only...
+    public FloorTile(TileType type, boolean isFixed, boolean isGoalTile, int rotationAmount) {
         super(type, FLOOR_TILE_TYPES);
 
         this.isFixed = isFixed;
         this.isGoalTile = isGoalTile;
 
+        isGoalTile = true;
         switch (type) {
             case STRAIGHT:
-                availablePaths = STRAIGHT_TILE_PATHS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
+                pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
                 break;
             case CORNER:
-                availablePaths = CORNER_TILE_PATHS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
+                pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
                 break;
             case T_SHAPED:
-                availablePaths = T_SHAPED_TILE_PATHS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
                 break;
             case GOAL:
-                availablePaths = GOAL_TILE_ROTATIONS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
                 break;
         }
+        this.rotate(rotationAmount);
     }
 
-    public void rotateClockwise() {
-        int currentPathIndex = -1;
-
-        for (int i = 0; i < availablePaths.length; i++) {
-            if (availablePaths[i] == paths) {
-                currentPathIndex = i;
-            }
-        }
-
-        if (currentPathIndex == availablePaths.length - 1) {
-            paths = availablePaths[0];
-        } else {
-            paths = availablePaths[currentPathIndex + 1];
-        }
-    }
-
-    public void rotateClockwise(int rotationAmount) {
+    public void rotate(int rotationAmount) {
         for (int i = 0; i < rotationAmount; i++) {
-            rotateClockwise();
+            pathsBits = (byte) (pathsBits << 3);
+            pathsBits = (byte) (((pathsBits & 0xf0) >> 4) + (pathsBits & 0xf));
         }
     }
-
-    public void rotateAntiClockwise() {
-        int currentPathIndex = -1;
-
-        for (int i = 0; i < availablePaths.length; i++) {
-            if (availablePaths[i] == paths) {
-                currentPathIndex = i;
-            }
-        }
-
-        if (currentPathIndex == 0) {
-            paths = availablePaths[availablePaths.length - 1];
-        } else {
-            paths = availablePaths[currentPathIndex - 1];
-        }
-    }
-    
-    public int getRotationFromDefaultRotationClockwise() throws IllegalStateException {
-        for (int i = 0; i < availablePaths.length; i++) {
-            if (paths == availablePaths[i]) {
-                 return i;
-            }
-        }
-        // Unlikely:
-        throw new IllegalStateException("Unable to find rotation amount!");
-    }
-
-    /**
-     * Gets paths.
-     *
-     * @return the paths
-     */
-    public int getPaths() {
-        return paths;
+    public byte getPathsBits() {
+        return pathsBits;
     }
 
     /**
@@ -164,56 +87,7 @@ public class FloorTile extends Tile {
         return isGoalTile;
     }
 
-    @Override
-    public String toString() {
-        return "game.tile.FloorTile{" +
-                "isFixed=" + isFixed +
-                ", paths=" + paths +
-                ", availablePaths=" + Arrays.toString(availablePaths) +
-                ", isGoalTile=" + isGoalTile +
-                '}';
-    }
-
     public static void main(String[] args) {
-        FloorTile t1 = new FloorTile(TileType.STRAIGHT, false);
-        System.out.println(t1);
-        t1.rotateClockwise();
-        System.out.println(t1);
-        t1.rotateAntiClockwise();
-        System.out.println(t1);
 
-        System.out.println();
-
-        FloorTile t2 = new FloorTile(TileType.T_SHAPED, false);
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-
-        System.out.println();
-
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-
-        System.out.println();
-
-        FloorTile t3 = new FloorTile(TileType.GOAL, false);
-        System.out.println(t3);
-        t3.rotateClockwise();
-        System.out.println(t3);
-        t3.rotateAntiClockwise();
-        System.out.println(t3);
     }
 }
