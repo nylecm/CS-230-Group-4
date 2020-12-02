@@ -249,6 +249,11 @@ public class GameService {
 
         //
 
+        /*int n
+        for (int i = 0; i < ; i++) {
+
+        }*/
+
         /*boolean hasEffect = in.nextBoolean();
             EffectType effectType = EffectType.valueOf(in.next());
             int remainingDur = in.nextInt();
