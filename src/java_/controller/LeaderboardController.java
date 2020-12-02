@@ -3,6 +3,7 @@ package java_.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
@@ -19,16 +20,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 
 public class LeaderboardController implements Initializable {
 
+    @FXML
+    private BorderPane mainBox;
     @FXML
     private TableView<Table> tableID;
     @FXML
@@ -42,6 +48,7 @@ public class LeaderboardController implements Initializable {
 
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
     private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
     public LeaderboardController() {
     }
@@ -79,6 +86,15 @@ public class LeaderboardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        BackgroundFill backgroundFill = null;
+        try {
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        mainBox.setBackground(new Background(backgroundFill));
+
+
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(USER_STATS_FOLDER_DIRECTORY);
         addGameBoardStatFileNames(fileNames);

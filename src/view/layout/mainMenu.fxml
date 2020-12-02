@@ -7,9 +7,8 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="546.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.MainMenuController"
-      styleClass="main_pane"
-      fx:id="mainBox">
-    <children>
+      styleClass="main_pane" fx:id="mainBox">
+<children>
         <VBox alignment="CENTER" prefHeight="549.0" prefWidth="720.0" spacing="20.0">
             <children>
                 <Label styleClass="heading" alignment="TOP_CENTER" layoutX="356.0" layoutY="57.0"
