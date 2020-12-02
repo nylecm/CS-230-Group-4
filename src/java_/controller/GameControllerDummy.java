@@ -411,9 +411,57 @@ public class GameControllerDummy implements Initializable {
                             || getTileRow(effectDisplay) >= gameBoardView.getHeight() || getTileRow(effectDisplay) < 0) {
                             effectDisplay.setVisible(false);
                         }
-                        effectDisplay.setEffectHandlersEvent();
+                        setEffectEventHandlers(effectDisplay);
                         effectGroup.getChildren().add(effectDisplay);
                     }
+                }
+            }
+        });
+    }
+
+    public void setEffectEventHandlers(ImageView effectDisplay) {
+        effectDisplay.setOnDragOver(event ->  {
+            event.acceptTransferModes(TransferMode.ANY);
+        });
+
+        effectDisplay.setOnDragDropped(event -> {
+            ImageView source = (ImageView) event.getGestureSource();
+            if (playerPieceGroup.getChildren().contains(source)) {
+                int sourceFloorTileCol = getTileCol(source);
+                int sourceFloorTileRow = getTileRow(source);
+
+                int targetFloorTileCol = getTileCol(effectDisplay);
+                int targetFloorTileRow = getTileRow(effectDisplay);
+
+                Node targetFloorTile = tileGroup.getChildren()
+                        .stream()
+                        .filter(t -> getTileCol((ImageView) t) == targetFloorTileCol &&
+                                getTileRow((ImageView) t) == targetFloorTileRow)
+                        .collect(Collectors.toList()).get(0);
+
+
+                int sourceBitmask;
+                int oppositeBitmask;
+                if (sourceFloorTileRow < targetFloorTileRow) {
+                    System.out.println("Going south");
+                    sourceBitmask = FloorTile.SOUTH_PATH_MASK;
+                    oppositeBitmask = FloorTile.NORTH_PATH_MASK;
+                } else if (sourceFloorTileRow > targetFloorTileRow) {
+                    System.out.println("Going north");
+                    sourceBitmask = FloorTile.NORTH_PATH_MASK;
+                    oppositeBitmask = FloorTile.SOUTH_PATH_MASK;
+                } else if (sourceFloorTileCol < targetFloorTileCol) {
+                    System.out.println("Going east");
+                    sourceBitmask = FloorTile.EAST_PATH_MASK;
+                    oppositeBitmask = FloorTile.WEST_PATH_MASK;
+                } else {
+                    System.out.println("Going west");
+                    sourceBitmask = FloorTile.WEST_PATH_MASK;
+                    oppositeBitmask = FloorTile.EAST_PATH_MASK;
+                }
+                if (GameService.getInstance().getGameBoard().validateMove(sourceFloorTileCol, sourceFloorTileRow, targetFloorTileCol, targetFloorTileRow, sourceBitmask, oppositeBitmask)) {
+                    source.setLayoutX(targetFloorTile.getLayoutX() + 6);
+                    source.setLayoutY(targetFloorTile.getLayoutY() + 6);
                 }
             }
         });
