@@ -40,22 +40,34 @@ public class GameBoard {
         this.nCols = nCols;
         this.board = new FloorTile[nRows][nCols];
 
-        insertFixedTiles(fixedTiles, fixedTilePositions);
-        fillGaps(tiles);
+        insertTilesAtPositions(fixedTiles, fixedTilePositions);
+        insertTiles(tiles);
     }
 
-    private void insertFixedTiles(FloorTile[] fixedTiles, Position[] fixedTilePositions) {
-        for (int i = 0; i < fixedTiles.length; i++) {
-            int rowNum = fixedTilePositions[i].getRowNum();
-            int colNum = fixedTilePositions[i].getColNum();
+    public GameBoard(PlayerPiece[] playerPieces, Position[] playerPiecePositions,
+                     FloorTile[] tiles, int nCols, int nRows, String name) {
+        this.playerPieces = playerPieces;
+        this.playerPiecePositions = playerPiecePositions;
+        this.name = name;
+        this.nRows = nRows;
+        this.nCols = nCols;
+        this.board = new FloorTile[nRows][nCols];
+
+        insertTiles(tiles);
+    }
+
+    private void insertTilesAtPositions(FloorTile[] tiles, Position[] positions) {
+        for (int i = 0; i < tiles.length; i++) {
+            int rowNum = positions[i].getRowNum();
+            int colNum = positions[i].getColNum();
 
             if (board[rowNum][colNum] == null) {
-                board[rowNum][colNum] = fixedTiles[i];
+                board[rowNum][colNum] = tiles[i];
             }
         }
     }
 
-    private void fillGaps(FloorTile[] tiles) {
+    public void insertTiles(FloorTile[] tiles) {
         int nextFloorTile = 0;
 
         for (int i = 0; i < nRows; i++) {
@@ -286,8 +298,8 @@ public class GameBoard {
 
     private void shiftBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
         //Shift Player Piece:
-        shiftPlayerPiecesBottomToTop(colNum);
         shiftTilesBottomToTop(colNum, rowNum, tile, rotation);
+        shiftPlayerPiecesBottomToTop(colNum);
     }
 
     private void shiftPlayerPiecesBottomToTop(int colNum) {

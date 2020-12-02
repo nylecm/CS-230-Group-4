@@ -30,12 +30,15 @@ public class GameService {
     private static final String NO_LEVEL_WITH_SUCH_NAME_MSG =
             "No level with such name found!";
 
+    private static final int MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME = 256;
+
     private GameService() {
         playerService = PlayerService.getInstance().remake();
     }
 
     /**
      * Returns the current instance of GameService. If there isn't one, a new one is made and returned.
+     *
      * @return The current or new instance of GameService.
      */
     public static GameService getInstance() {
@@ -47,7 +50,8 @@ public class GameService {
 
     /**
      * Sets a new instance of GameService to be a game that had been previously been saved to a file.
-     * @param players All players participating in the game.
+     *
+     * @param players   All players participating in the game.
      * @param boardName The name of the board the game is being played on.
      * @throws FileNotFoundException If the gameboard file path cannot be found an exception is thrown.
      */
@@ -74,32 +78,20 @@ public class GameService {
             int nCols = in.nextInt();
 
             // Dealing with fixed tiles:
-            int nFixedTiles = in.nextInt();
-            FloorTile[] fixedTiles = new FloorTile[nFixedTiles];
-            Position[] fixedTilePositions = new Position[nFixedTiles];
+            FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
 
-            for (int i = 0; i < nFixedTiles; i++) {
-                int rotation = in.nextInt();
-                int row = in.nextInt();
-                int col = in.nextInt();
-                TileType tileType = TileType.valueOf(in.next().toUpperCase());
+            FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
+            Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
 
-                Position p = new Position(row, col);
-                FloorTile t = new FloorTile(tileType, true, false, rotation);
-                fixedTiles[i] = t;
-                fixedTilePositions[i] = p;
-            }
             // Dealing with non-fixed floor tiles:
             ArrayList<FloorTile> floorTiles = readFloorTiles(in);
-            Collections.shuffle(floorTiles);
 
             // Taking first floor tiles for the initial set to populate game board.
             FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
-                    (nRows, nCols, nFixedTiles, floorTiles);
+                    (nRows, nCols, fixedTiles.length, floorTiles);
 
             //Action tiles:
             ArrayList<ActionTile> actionTiles = readActionTiles(in);
-            Collections.shuffle(actionTiles);
 
             // Player Pieces:
             Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
@@ -117,16 +109,35 @@ public class GameService {
         throw new IllegalArgumentException(NO_LEVEL_WITH_SUCH_NAME_MSG);
     }
 
+    private FloorTilePositionBundle readFixedTiles(Scanner in) {
+        int nFixedTiles = in.nextInt();
+        FloorTile[] fixedTiles = new FloorTile[nFixedTiles];
+        Position[] fixedTilePositions = new Position[nFixedTiles];
+
+        for (int i = 0; i < nFixedTiles; i++) {
+            int rotation = in.nextInt();
+            int row = in.nextInt();
+            int col = in.nextInt();
+            TileType tileType = TileType.valueOf(in.next().toUpperCase());
+
+            Position p = new Position(row, col);
+            FloorTile t = new FloorTile(tileType, true, false, rotation);
+            fixedTiles[i] = t;
+            fixedTilePositions[i] = p;
+        }
+
+        return new FloorTilePositionBundle(fixedTiles, fixedTilePositions);
+    }
+
     private ArrayList<FloorTile> readFloorTiles(Scanner in) {
         ArrayList<FloorTile> floorTiles = new ArrayList<>();
 
         for (int i = 0; i < FloorTile.FLOOR_TILE_TYPES.size(); i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
             int nOfThisType = in.nextInt();
-            FloorTile t = new FloorTile(tileType, false);
 
             for (int j = 0; j < nOfThisType; j++) {
-                floorTiles.add(t);
+                floorTiles.add(new FloorTile(tileType, false));
             }
         }
         return floorTiles;
@@ -134,7 +145,7 @@ public class GameService {
 
     private FloorTile[] getFloorTilesForGameBoard
             (int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
-        FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles]; // todo check if nFixed Tiles is greater than nCol * nRow
+        FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles];
 
         for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
             floorTilesForGameBoard[i] = floorTiles.get(0);
@@ -169,7 +180,7 @@ public class GameService {
     }
 
     public void loadSavedInstance(File f) throws FileNotFoundException {
-        remake(); //todo future homer's problem
+        remake();
 
         Scanner in = new Scanner(f);
         in.useDelimiter(DELIMITER);
@@ -178,10 +189,11 @@ public class GameService {
         String name = in.next();
         int nRows = in.nextInt();
         int nCols = in.nextInt();
-        int turnCount = in.nextInt();
+        turnCount = in.nextInt();
         in.nextLine();
 
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
+
         //effect map...
 
         for (int i = 0; i < nRows * nCols; i++) {
@@ -198,7 +210,7 @@ public class GameService {
         silkBag = new SilkBag();
 
         while (in.hasNext()) {
-            silkBag.put(TileType.valueOf(in.next()));
+            silkBag.put(TileType.valueOf(in.next().toUpperCase()));
         }
 
         int nPlayers = 0;
@@ -230,6 +242,7 @@ public class GameService {
 
     /**
      * Saves the current instance of the game to a file.
+     *
      * @param saveFileName The name of the file in which the game data is to be stored.
      * @throws IOException If a file cannot be created due to an invalid file path.
      */
@@ -253,10 +266,9 @@ public class GameService {
                 (SAVE_GAME_FILE_PATH + fileName + DATA_FILE_EXTENSION);
 
         boolean isFileCreated = false;
-        final int limitOfFilesWithSameName = 256;
         int filesWithSameName = 0;
 
-        while (!isFileCreated && filesWithSameName < limitOfFilesWithSameName) {
+        while (!isFileCreated && filesWithSameName < MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME) {
             if (gameSaveFile.createNewFile()) {
                 isFileCreated = true;
             } else {
@@ -273,8 +285,8 @@ public class GameService {
     }
 
     private void writeGameInstanceDetails(PrintWriter out) {
-        out.print(playerService.getPlayers().length); // Number of players
-        out.print(DELIMITER);
+        /*out.print(playerService.getPlayers().length); // Number of players
+        out.print(DELIMITER);*/
         out.print(gameBoard.getName());
         out.print(DELIMITER);
         out.print(gameBoard.getnRows());
@@ -289,9 +301,11 @@ public class GameService {
     private void writeGameBoardInstanceTileDetails(PrintWriter out) {
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
-                out.print(gameBoard.getTileAt(i, j).getPathsBits());
+                out.print(gameBoard.getTileAt(i, j).getType());
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).isFixed());
+                out.print(DELIMITER);
+                //todo out.print(gameBoard.getTileAt(i, j).getRotationFromDefaultRotationClockwise());
                 out.print(DELIMITER);
 
                 if (gameBoard.getEffectAt(new Position(i, j)) != null) {
@@ -351,6 +365,7 @@ public class GameService {
 
     /**
      * Returns the PlayerService belonging to the GameService.
+     *
      * @return The GameService's PlayerService.
      */
     public PlayerService getPlayerService() {
@@ -359,6 +374,7 @@ public class GameService {
 
     /**
      * Returns the current turn number for the game.
+     *
      * @return The number of turns made.
      */
     public int getTurnCount() {
@@ -367,6 +383,7 @@ public class GameService {
 
     /**
      * Returns true if a Player has won the game.
+     *
      * @return True if a player has won the game, otherwise false.
      */
     public boolean isWin() {
@@ -382,6 +399,7 @@ public class GameService {
 
     /**
      * Returns a new instance of GameService.
+     *
      * @return The new instance of GameService.
      */
     public GameService remake() {
@@ -390,6 +408,7 @@ public class GameService {
 
     /**
      * Returns the gameboard for the GameService
+     *
      * @return The gameboard used for the game.
      */
     public GameBoard getGameBoard() {
@@ -398,11 +417,13 @@ public class GameService {
 
     /**
      * Retunrs the SilkBag being used by the GameService.
+     *
      * @return The GameService's SilkBag.
      */
     public SilkBag getSilkBag() {
         return silkBag;
     }
+
     /**
      * The entry point of application, for testing only. todo remove this.
      *
@@ -453,31 +474,31 @@ public class GameService {
 
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
+
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
+        gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 1);
+        System.out.println(gs.gameBoard);
+        System.out.println(gs.gameBoard.getTileAt(-1, 0).getPathsBits());
+        System.out.println(gs.gameBoard.getTileAt(0, 1));
+
+
     }
 
-    /*private class FloorTilePositionBundle {
-        private FloorTile floorTile;
-        private Position position;
+    private static class FloorTilePositionBundle {
+        private final FloorTile[] floorTiles;
+        private final Position[] positions;
 
-        public FloorTilePositionBundle(FloorTile floorTile, Position position) {
-            this.floorTile = floorTile;
-            this.position = position;
+        public FloorTilePositionBundle(FloorTile[] floorTiles, Position[] positions) {
+            this.floorTiles = floorTiles;
+            this.positions = positions;
         }
 
-        public FloorTile getFloorTile() {
-            return floorTile;
+        public FloorTile[] getFloorTiles() {
+            return floorTiles;
         }
 
-        public void setFloorTile(FloorTile floorTile) {
-            this.floorTile = floorTile;
+        public Position[] getPositions() {
+            return positions;
         }
-
-        public Position getPosition() {
-            return position;
-        }
-
-        public void setPosition(Position position) {
-            this.position = position;
-        }
-    }*/
+    }
 }

@@ -1,6 +1,5 @@
 package java_.game.tile;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 
 /**
@@ -65,7 +64,7 @@ public class FloorTile extends Tile {
         }
     }
 
-    public int getPathsBits() {
+    public byte getPathsBits() {
         return pathsBits;
     }
 
@@ -86,7 +85,6 @@ public class FloorTile extends Tile {
     public boolean isGoalTile() {
         return isGoalTile;
     }
-
 
     public static void main(String[] args) {
 
