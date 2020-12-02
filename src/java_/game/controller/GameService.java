@@ -5,6 +5,7 @@ import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
+import java_.util.generic_data_structures.Link;
 
 import java.awt.*;
 import java.io.File;
@@ -239,6 +240,14 @@ public class GameService {
         gameBoard = new GameBoard(playerPieces,playerPositions, floorTilesForGameBoard,nCols,nRows,gameBoardName);
         PlayerService.getInstance().setPlayers(players); //todo player effects...
 
+        silkBag = new SilkBag();
+
+        while (in.hasNext()) {
+            silkBag.put(TileType.valueOf(in.next().toUpperCase()));
+        }
+        in.nextLine();
+
+        //
 
         /*boolean hasEffect = in.nextBoolean();
             EffectType effectType = EffectType.valueOf(in.next());
@@ -264,11 +273,6 @@ public class GameService {
         //PlayerService.getInstance().setPlayers();
 
 
-        silkBag = new SilkBag();
-
-        while (in.hasNext()) {
-            silkBag.put(TileType.valueOf(in.next().toUpperCase()));
-        }
 
 
         in.close();
