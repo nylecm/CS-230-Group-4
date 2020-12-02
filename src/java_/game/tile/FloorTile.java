@@ -16,11 +16,12 @@ public class FloorTile extends Tile {
     public static final int SOUTH_PATH_MASK = 0x2; //0010
     public static final int WEST_PATH_MASK = 0x1; //0001
 
-    private static final String TILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
+    private static final String šTILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
 
     private boolean isFixed;
     private byte pathsBits;
     private boolean isGoalTile;
+    private int rotation;
 
     /**
      * Instantiates a new Floor tile.
@@ -30,17 +31,7 @@ public class FloorTile extends Tile {
      */
     public FloorTile(TileType type, boolean isFixed) throws IllegalArgumentException {
         super(type, FLOOR_TILE_TYPES);
-        new FloorTile(type, isFixed, false, 0);
-    }
 
-    // Creates a pre-rotated tile (for fixed tiles)
-    public FloorTile(TileType type, boolean isFixed, boolean isGoalTile, int rotationAmount) {
-        super(type, FLOOR_TILE_TYPES);
-
-        this.isFixed = isFixed;
-        this.isGoalTile = isGoalTile;
-
-        isGoalTile = true;
         switch (type) {
             case STRAIGHT:
                 pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
@@ -55,7 +46,32 @@ public class FloorTile extends Tile {
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
                 break;
         }
-        this.rotate(rotationAmount);
+
+        System.out.println("EYY " + pathsBits);
+    }
+
+    // Creates a pre-rotated tile (for fixed tiles)
+    public FloorTile(TileType type, boolean isFixed, boolean isGoalTile, int rotationAmount) {
+        super(type, FLOOR_TILE_TYPES);
+
+        this.isFixed = isFixed;
+        this.isGoalTile = isGoalTile;
+
+        switch (type) {
+            case STRAIGHT:
+                pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
+                break;
+            case CORNER:
+                pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
+                break;
+            case T_SHAPED:
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
+                break;
+            case GOAL:
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
+                break;
+        }
+        rotate(rotationAmount);
     }
 
     public void rotate(int rotationAmount) {
@@ -63,8 +79,10 @@ public class FloorTile extends Tile {
             pathsBits = (byte) (pathsBits << 3);
             pathsBits = (byte) (((pathsBits & 0xf0) >> 4) + (pathsBits & 0xf));
         }
+        rotation = rotationAmount % 4;
     }
-    public byte getPathsBits() {
+
+    public int getPathsBits() {
         return pathsBits;
     }
 
@@ -84,6 +102,10 @@ public class FloorTile extends Tile {
      */
     public boolean isGoalTile() {
         return isGoalTile;
+    }
+
+    public int getRotation() {
+        return rotation;
     }
 
     public static void main(String[] args) {

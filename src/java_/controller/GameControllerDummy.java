@@ -148,7 +148,12 @@ public class GameControllerDummy implements Initializable {
             setEdgeTileEventHandlers(edgeTileDisplayTop);
             setEdgeTileEventHandlers(edgeTileDisplayBottom);
 
+            if (GameService.getInstance().getGameBoard().isRowFixed(getTileCol(edgeTileDisplayTop)) || GameService.getInstance().getGameBoard().isRowFixed(getTileCol(edgeTileDisplayBottom))) {
+                edgeTileDisplayTop.setVisible(false);
+                edgeTileDisplayBottom.setVisible(false);
+            }
         }
+
         for (int i = 0; i < gameBoardView.getHeight(); i++) {
             edgeTileDisplayLeft = getFloorTileImageView(edgeTileImage);
             edgeTileDisplayRight = getFloorTileImageView(edgeTileImage);
@@ -164,6 +169,11 @@ public class GameControllerDummy implements Initializable {
 
             setEdgeTileEventHandlers(edgeTileDisplayLeft);
             setEdgeTileEventHandlers(edgeTileDisplayRight);
+
+            if (GameService.getInstance().getGameBoard().isRowFixed(getTileRow(edgeTileDisplayLeft)) || GameService.getInstance().getGameBoard().isRowFixed(getTileRow(edgeTileDisplayRight))) {
+                edgeTileDisplayLeft.setVisible(false);
+                edgeTileDisplayRight.setVisible(false);
+            }
         }
     }
 
@@ -175,6 +185,7 @@ public class GameControllerDummy implements Initializable {
                 ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
                 floorTileDisplay.setLayoutX(col * TILE_WIDTH);
                 floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
+                floorTileDisplay.setRotate(gameBoard.getTileAt(row, col).getRotation() * 90);
 
                 setFloorTileEventHandlers(floorTileDisplay);
 
@@ -333,6 +344,11 @@ public class GameControllerDummy implements Initializable {
         floorTileDisplay.setOnMouseClicked(event -> {
             System.out.println("Col: " + getTileCol(floorTileDisplay));
             System.out.println("Row: " + getTileRow(floorTileDisplay));
+
+            int tileCol = getTileCol(floorTileDisplay);
+            int tileRow = getTileRow(floorTileDisplay);
+
+            System.out.println("Paths: " + GameService.getInstance().getGameBoard().getTileAt(tileRow, tileCol).getPathsBits());
         });
 
         floorTileDisplay.setOnDragOver(event ->  {

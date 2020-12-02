@@ -14,7 +14,7 @@ public abstract class Tile {
 
     public Tile(TileType type, EnumSet<TileType> typesAllowed) {
         if (typesAllowed.contains(type)) {
-            this.type = type ;
+            this.type = type;
         } else {
             throw new IllegalArgumentException(FLOOR_TILE_NOT_OF_ALLOWED_TYPE_MSG);
         }

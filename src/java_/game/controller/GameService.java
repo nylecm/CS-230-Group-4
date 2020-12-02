@@ -139,8 +139,13 @@ public class GameService {
             int nOfThisType = in.nextInt();
 
             for (int j = 0; j < nOfThisType; j++) {
-                floorTiles.add(new FloorTile(tileType, false));
+                FloorTile ft = new FloorTile(tileType, false);
+                System.out.println("Ft: ");
+                floorTiles.add(ft);
             }
+        }
+        for (FloorTile floorTile : floorTiles) {
+            System.out.println(floorTile.getPathsBits());
         }
         return floorTiles;
     }
