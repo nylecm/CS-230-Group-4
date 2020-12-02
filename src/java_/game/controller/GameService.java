@@ -73,38 +73,40 @@ public class GameService {
 
     private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in,
                                           PlayerPiece[] playerPieces) throws IllegalArgumentException {
-        while (in.hasNextLine() && in.next().equals(boardName)) {
-            int nRows = in.nextInt();
-            int nCols = in.nextInt();
+        while (in.hasNextLine()) {
+            if (in.next().equals(boardName)) {
+                int nRows = in.nextInt();
+                int nCols = in.nextInt();
 
-            // Dealing with fixed tiles:
-            FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
+                // Dealing with fixed tiles:
+                FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
 
-            FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
-            Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
+                FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
+                Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
 
-            // Dealing with non-fixed floor tiles:
-            ArrayList<FloorTile> floorTiles = readFloorTiles(in);
+                // Dealing with non-fixed floor tiles:
+                ArrayList<FloorTile> floorTiles = readFloorTiles(in);
 
-            // Taking first floor tiles for the initial set to populate game board.
-            FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
-                    (nRows, nCols, fixedTiles.length, floorTiles);
+                // Taking first floor tiles for the initial set to populate game board.
+                FloorTile[] floorTilesForGameBoard = getFloorTilesForGameBoard
+                        (nRows, nCols, fixedTiles.length, floorTiles);
 
-            //Action tiles:
-            ArrayList<ActionTile> actionTiles = readActionTiles(in);
+                //Action tiles:
+                ArrayList<ActionTile> actionTiles = readActionTiles(in);
 
-            // Player Pieces:
-            Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
+                // Player Pieces:
+                Position[] playerPiecePositions = readPlayerPiecePositions(nPlayers, in);
 
-            // Silk Bag:
-            ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
-            tilesForSilkBag.addAll(floorTiles);
-            tilesForSilkBag.addAll(actionTiles);
+                // Silk Bag:
+                ArrayList<Tile> tilesForSilkBag = new ArrayList<>();
+                tilesForSilkBag.addAll(floorTiles);
+                tilesForSilkBag.addAll(actionTiles);
 
-            silkBag = new SilkBag(tilesForSilkBag);
+                silkBag = new SilkBag(tilesForSilkBag);
 
-            return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
-                    floorTilesForGameBoard, nCols, nRows, boardName);
+                return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
+                        floorTilesForGameBoard, nCols, nRows, boardName);
+            }
         }
         throw new IllegalArgumentException(NO_LEVEL_WITH_SUCH_NAME_MSG);
     }
@@ -478,7 +480,7 @@ public class GameService {
         gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 0);
         gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false), 1);
         System.out.println(gs.gameBoard);
-        System.out.println(gs.gameBoard.getTileAt(-1, 0).getPathsBits());
+        System.out.println(gs.gameBoard.getTileAt(1, 0).getPathsBits());
         System.out.println(gs.gameBoard.getTileAt(0, 1));
 
 
