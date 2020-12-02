@@ -28,6 +28,9 @@ import java.net.URI;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Controls the newgame interface for creating a new game with up to four players and on a gameboard of the user's choice.
+ */
 public class NewGameController implements Initializable {
 
     @FXML
@@ -175,6 +178,11 @@ public class NewGameController implements Initializable {
     private final Set<String> currentUserNames = new HashSet<>();
 
 
+    /**
+     * Initialises the NewGame screen, giving it background, a list of available gameboards, allows PlayerPiece selection and Players to log in.
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundFill backgroundFill = null;
@@ -257,10 +265,18 @@ public class NewGameController implements Initializable {
         });
     }
 
+    /**
+     * Adds all available gameboards to the interface allowing players to select their desired board.
+     * @param gameBoardNames The name of the gameboards to be added.
+     */
     private void addGameBoardNames(List<String> gameBoardNames) {
         gameBoardSelect.setItems(FXCollections.observableArrayList(gameBoardNames));
     }
 
+    /**
+     * Handles Player1 log in credentials, allowing them to log in and have authorisation to play the game.
+     * @param actionEvent When the Player1LogIn button is clicked.
+     */
     @FXML
     public void onPlayer1LogInButtonPressed(ActionEvent actionEvent) {
         String username = (currentUserNames.contains(player1Username.getText())
@@ -307,6 +323,10 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Handles Player2 log in credentials, allowing them to log in and have authorisation to play the game.
+     * @param actionEvent When the Player2LogIn button is clicked.
+     */
     @FXML
     public void onPlayer2LogInButtonPressed(ActionEvent actionEvent) {
         String username = (currentUserNames.contains(player2Username.getText())
@@ -353,6 +373,10 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Handles Player3 log in credentials, allowing them to log in and have authorisation to play the game.
+     * @param actionEvent When the Player3LogIn button is clicked.
+     */
     @FXML
     public void onPlayer3LogInButtonPressed(ActionEvent actionEvent) {
         String username = (currentUserNames.contains(player3Username.getText())
@@ -373,6 +397,7 @@ public class NewGameController implements Initializable {
             isPlayerReady[2] = false;
         }
     }
+
 
     @FXML
     public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
@@ -399,6 +424,10 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Handles Player1 log in credentials, allowing them to log in and have authorisation to play the game.
+     * @param actionEvent When the Player1LogIn button is clicked.
+     */
     @FXML
     public void onPlayer4LogInButtonPressed(ActionEvent actionEvent) {
         String username = (currentUserNames.contains(player4Username.getText())
