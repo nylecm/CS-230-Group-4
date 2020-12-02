@@ -27,6 +27,7 @@ public class GameService {
     private SilkBag silkBag;
     private int turnCount;
     private boolean isWin;
+    private boolean actionTilePlayed; //TODO Move somewhere else?
 
     private static final String DELIMITER = "`";
     private static final String FILE_WORD_SPACER = "_";
@@ -483,6 +484,10 @@ public class GameService {
      */
     public SilkBag getSilkBag() {
         return silkBag;
+    }
+
+    public boolean actionTilePlayed() {
+        return actionTilePlayed;
     }
 
     /**

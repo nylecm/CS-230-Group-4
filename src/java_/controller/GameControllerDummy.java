@@ -93,7 +93,6 @@ public class GameControllerDummy implements Initializable {
 
         GameBoard gameBoard = gameService.getGameBoard();
 
-        //TODO: Replace width and height with values from GameBoard
         gameBoardView = new Dimension2D(gameBoard.getnCols(), gameBoard.getnRows());
 
         //TODO: Replace with isometric view
@@ -121,24 +120,13 @@ public class GameControllerDummy implements Initializable {
         });
     }
 
-    public void playerTurn(Tile drawnTile) {
-        while (!turnFinished) {
-            //Animate drawing a tile from the SilkBag:
+    public void initialLoad(GameBoard gameBoard) {
+        displayGameView(gameBoard);
 
-            //Put the drawn tile on the screen
-            if (drawnTile instanceof FloorTile) {
-                Image newFloorTileImage = new Image((getFloorTileTypeImage((FloorTile) drawnTile)));
-                drawnFloorTile.setImage(newFloorTileImage);
-            } else { //Action Tile drawn
-                Image newActionTileImage = new Image((getActionTileTypeImage((ActionTile) drawnTile)));
-                drawnActionTile.setImage(newActionTileImage);
-            }
+        //First animations
 
-            endTurnButton.setOnMouseClicked(event -> {
-                turnFinished = true;
-            });
-
-        }
+        //Build Player queue
+        //TODO Implement
     }
 
     private void displayGameView(GameBoard gameBoard) {

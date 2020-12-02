@@ -518,7 +518,7 @@ public class NewGameController implements Initializable {
             GameService.getInstance().loadNewGame(players, (String) gameBoardSelect.getValue());
 
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Pane game = (Pane) FXMLLoader.load(getClass().getResource("reworkedGuiFiles/gameMain.fxml"));
+            Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
             currentStage.setScene(new Scene(game));
         } else {
             startGameStatusLabel.setText("Ensure min. 2 players are logged in, with confirmed player pieces.");
