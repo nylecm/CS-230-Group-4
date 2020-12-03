@@ -9,6 +9,7 @@ import java_.util.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -123,8 +124,9 @@ public class GameController implements Initializable {
         //Build GameBoard
         displayEdges();
         displayFloorTiles();
-        displayPlayerPieces();
         setEffectBorders();
+        displayEffects();
+        displayPlayerPieces();
 
         //View GameBoard
         content = new StackPane();
@@ -219,6 +221,18 @@ public class GameController implements Initializable {
 
                 tileGroup.getChildren().add(floorTileImageView);
             }
+        }
+    }
+
+    private void displayEffects() {
+        for (Position position : gameBoard.getActiveEffectPositions()) {
+            AreaEffect effect = gameBoard.getEffectAt(position);
+            Image effectImage = new Image(getEffectTypeImage(effect));
+            ImageView effectImageView = getTileImageView(effectImage);
+            effectImageView.setLayoutX(position.getColNum() * TILE_WIDTH);
+            effectImageView.setLayoutY(position.getRowNum() * TILE_HEIGHT);
+
+            effectGroup.getChildren().add(effectImageView);
         }
     }
 
@@ -706,12 +720,12 @@ public class GameController implements Initializable {
         }
     }
 
-    private void applyEffectImageView(ImageView effectImageView, ImageView targetFloorTile) {
+    private void applyEffectImageView(ImageView effectImageView, ImageView floorTileImageView) {
         //TODO Get from corresponding class
         int area = 3;
 
-        double centerY = targetFloorTile.getLayoutY();
-        double centerX = targetFloorTile.getLayoutX();
+        double centerY = floorTileImageView.getLayoutY();
+        double centerX = floorTileImageView.getLayoutX();
 
         for (int row = 0; row < area; row++) {
             for (int col = 0; col < area; col++) {
@@ -790,6 +804,21 @@ public class GameController implements Initializable {
                 return "iceFlat.png";
             case BACKTRACK:
                 return "backtrackFlat.png";
+            case DOUBLE_MOVE:
+                return "doublemoveFlat.png";
+        }
+        return null;
+    }
+
+    private String getEffectTypeImage(AreaEffect areaEffect) {
+        EffectType type = areaEffect.getEffectType();
+        switch (type) {
+            case FIRE:
+                return "doublemoveFlat.png";
+            case ICE:
+                return "doublemoveFlat.png";
+            case BACKTRACK:
+                return "doublemoveFlat.png";
             case DOUBLE_MOVE:
                 return "doublemoveFlat.png";
         }
