@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
@@ -18,9 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -36,6 +36,9 @@ import java.util.Scanner;
 public class LoadGameController implements Initializable {
 
     @FXML
+    private VBox mainPane;
+
+    @FXML
     private HBox logInFormHBox;
 
     @FXML
@@ -43,12 +46,22 @@ public class LoadGameController implements Initializable {
 
     private static final String SAVES_FOLDER_DIRECTORY = "data/saves";
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
     private static final String DELIMITER = "`";
 
     private final LinkedList<VBox> logInVBoxes = new LinkedList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        BackgroundFill backgroundFill = null;
+        try {
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        mainPane.setBackground(new Background(backgroundFill));
+        mainPane.setMinWidth(614);
+
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(SAVES_FOLDER_DIRECTORY);
         addSaveFileNames(fileNames);
