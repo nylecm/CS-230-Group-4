@@ -116,6 +116,8 @@ public class GameController implements Initializable {
     }
 
     private void displayGameView() {
+        System.out.println("Current Player Number: " + gameService.getCurrentPlayerNum());
+
         edgeTileGroup = new Group();
         tileGroup = new Group();
         playerPieceGroup = new Group();
@@ -143,10 +145,10 @@ public class GameController implements Initializable {
             }
         }
 
-        //Build ActionTiles list of current player
 
+        //Build ActionTiles list of current player
         //Remove current ActionTiles for next round
-        if (playersActionTiles.getChildren().isEmpty()) {
+        if (!playersActionTiles.getChildren().isEmpty()) {
             playersActionTiles.getChildren().clear();
         }
         int currentPlayerNum = gameService.getCurrentPlayerNum();
@@ -578,8 +580,6 @@ public class GameController implements Initializable {
     //TODO Remove, part of the game "loop"
     @FXML
     private void onDrawTileButtonClicked() {
-//        Tile drawnTile = GameService.getInstance().getPlayerService().playerTurn(null); //Get current player
-
         drawnTile = gameService.getSilkBag().take();
 
         if (drawnTile instanceof FloorTile) {
@@ -588,8 +588,11 @@ public class GameController implements Initializable {
         } else {
             Image newActionTileImage = new Image((getActionTileTypeImage((ActionTile) drawnTile)));
             ImageView drawnActionTileImageView = new ImageView(newActionTileImage);
+
+            //Add to GUI
             playersActionTiles.getChildren().add(drawnActionTileImageView);
 
+            //Add to Player class
             gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).addDrawnActionTile((ActionTile) drawnTile);
 
             drawnActionTileImageView.setOnDragDetected(event -> {
@@ -605,9 +608,10 @@ public class GameController implements Initializable {
             });
 
             drawnActionTileImageView.setOnDragDone(event -> {
-                playersActionTiles.getChildren().remove(drawnActionTileImageView);
 
                 int usedActionTileIndex = playersActionTiles.getChildren().indexOf(drawnActionTileImageView);
+
+                playersActionTiles.getChildren().remove(drawnActionTileImageView);
                 gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().remove(usedActionTileIndex);
                 gameService.setActionTilePlayed(true);
             });
