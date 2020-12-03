@@ -83,7 +83,11 @@ public class LoadGameController implements Initializable {
         Image[] playerPieces = new Image[nPlayers];
 
         for (int i = 0; i < nPlayers; i++) {
-            playerPieces[i] = new Image(in.next()); // check this
+            try {
+                playerPieces[i] = new Image(String.valueOf(new File(in.next()).toURI().toURL())); // check this
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
         in.nextLine();
 

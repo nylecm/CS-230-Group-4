@@ -167,7 +167,7 @@ public class NewGameController implements Initializable {
     private final static int MIN_NUMBER_OF_PLAYERS = 2;
     private final static int MAX_NUMBER_OF_PLAYERS = 4;
 
-    private final URL[] playerPieceImageURLs = new URL[MAX_NUMBER_OF_PLAYERS];
+    private final File[] playerPieceImageFiles = new File[MAX_NUMBER_OF_PLAYERS];
 
     private final boolean[] isPlayerReady = new boolean[4];
     private final String[] usernames = new String[4];
@@ -219,7 +219,7 @@ public class NewGameController implements Initializable {
             if (player1PlayerPieceSelect.getValue() != null) {
                 try {
                     player1PlayerPieceImage.setImage(new Image(String.valueOf(player1PlayerPieceSelect.getValue().toURL())));
-                    playerPieceImageURLs[0] = player1PlayerPieceSelect.getValue().toURL();
+                    playerPieceImageFiles[0] = player1PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -231,7 +231,7 @@ public class NewGameController implements Initializable {
             if (player2PlayerPieceSelect.getValue() != null) {
                 try {
                     player2PlayerPieceImage.setImage(new Image(String.valueOf(player2PlayerPieceSelect.getValue().toURL())));
-                    playerPieceImageURLs[1] = player2PlayerPieceSelect.getValue().toURL();
+                    playerPieceImageFiles[1] = player2PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -243,7 +243,7 @@ public class NewGameController implements Initializable {
             if (player3PlayerPieceSelect.getValue() != null) {
                 try {
                     player3PlayerPieceImage.setImage(new Image(String.valueOf(player3PlayerPieceSelect.getValue().toURL())));
-                    playerPieceImageURLs[2] = player3PlayerPieceSelect.getValue().toURL();
+                    playerPieceImageFiles[2] = player3PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -255,7 +255,7 @@ public class NewGameController implements Initializable {
             if (player4PlayerPieceSelect.getValue() != null) {
                 try {
                     player4PlayerPieceImage.setImage(new Image(String.valueOf(player4PlayerPieceSelect.getValue().toURL())));
-                    playerPieceImageURLs[3] = player4PlayerPieceSelect.getValue().toURL();
+                    playerPieceImageFiles[3] = player4PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -309,7 +309,7 @@ public class NewGameController implements Initializable {
                 player1PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[0] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageURLs[0]);
+                currentlySelectedPlayerPieces.remove(playerPieceImageFiles);
                 currentlySelectedPlayerPieces.add(playerPieceSelected);
                 player2SetUpVBox.setDisable(false);
                 player1PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
@@ -359,7 +359,7 @@ public class NewGameController implements Initializable {
                 player2PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[1] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageURLs[1]);
+                currentlySelectedPlayerPieces.remove(playerPieceImageFiles[1]);
                 currentlySelectedPlayerPieces.add(playerPieceSelected);
                 player3SetUpVBox.setDisable(false);
                 player2PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
@@ -410,7 +410,7 @@ public class NewGameController implements Initializable {
                 player3PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[2] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageURLs[2]);
+                currentlySelectedPlayerPieces.remove(playerPieceImageFiles[2]);
                 currentlySelectedPlayerPieces.add(playerPieceSelected);
                 player4SetUpVBox.setDisable(false);
                 player3PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
@@ -460,7 +460,7 @@ public class NewGameController implements Initializable {
                 player4PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[3] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageURLs[3]);
+                currentlySelectedPlayerPieces.remove(playerPieceImageFiles[3]);
                 currentlySelectedPlayerPieces.add(playerPieceSelected);
                 player4PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
                 isPlayerReady[3] = true;
@@ -509,7 +509,7 @@ public class NewGameController implements Initializable {
             while (nPlayersCreated < nPlayers) {
                 if (isPlayerReady[i]) {
                     players[nPlayersCreated] = new Player(usernames[i],
-                            new PlayerPiece(playerPieceImageURLs[i])); //todo test
+                            new PlayerPiece(playerPieceImageFiles[i])); //todo test
                     nPlayersCreated++;
                 }
                 i++;

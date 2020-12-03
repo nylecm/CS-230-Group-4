@@ -4,6 +4,8 @@ import java_.util.Position;
 import javafx.scene.image.Image;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Stack;
 
@@ -18,16 +20,16 @@ public class PlayerPiece {
     private final Stack<Position> previousPlayerPiecePositions;
 
     private Image image;
-    private URL imageURL;
+    private File imageFile;
 
     /**
      * Instantiates a PlayerPiece giving it an image.
      * @param imageFilePath The file path for the image which is to be set for the PlayerPiece.
      */
-    public PlayerPiece(URL imageFilePath) {
+    public PlayerPiece(File imageFile) throws MalformedURLException {
         previousPlayerPiecePositions = new Stack<>();
-        imageURL = imageFilePath;
-        image = new Image(String.valueOf(imageFilePath));
+        this.imageFile = imageFile;
+        image = new Image(String.valueOf(imageFile.toURI().toURL()));
     }
 
     @Deprecated //fixme test only
@@ -44,17 +46,17 @@ public class PlayerPiece {
     }
 
     //todo javadoc this + update
-    public URL getImageURL() {
-        return imageURL;
+    public File getImageFile() {
+        return imageFile;
     }
 
     /**
      * Sets an image to represent the PlayerPiece.
      * @param imageFilePath The file path for the image which is to be set for the PlayerPiece.
      */
-    public void setImage(URL imageFilePath) {
-        imageURL = imageFilePath;
-        image = new Image(String.valueOf(imageFilePath));
+    public void setImage(File imageFile) throws MalformedURLException {
+        this.imageFile = imageFile;
+        image = new Image(String.valueOf(imageFile.toURI().toURL()));
     }
 
     /**

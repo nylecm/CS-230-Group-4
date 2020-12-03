@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
@@ -224,8 +225,9 @@ public class GameService {
 
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-            URL playerPieceImageURL = new URL(in.next());
-            playerPieces[i] = new PlayerPiece(playerPieceImageURL);
+
+            File playerPieceImageFile = new File(in.next()); //todo find a less hacky way
+            playerPieces[i] = new PlayerPiece(playerPieceImageFile);
         }
         in.nextLine();
 
@@ -337,7 +339,7 @@ public class GameService {
 
     private void writePlayerPieceDetails(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
-            out.print(gameBoard.getPlayerPiece(i).getImageURL().toString());
+            out.print(gameBoard.getPlayerPiece(i).getImageFile());
             out.print(DELIMITER);
         }
         out.print('\n');
@@ -381,14 +383,6 @@ public class GameService {
     }
 
     private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) {
-        /*for (int i = 0; i < playerService.getPlayers().length; i++) {
-            Position playerPiecePosition = gameBoard.getPlayerPiecePosition(i);
-            out.print(playerPiecePosition.getRowNum());
-            out.print(DELIMITER);
-            out.print(playerPiecePosition.getColNum());
-            out.print(DELIMITER);
-        }*/
-
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
                 out.print(gameBoard.getTileAt(i, j).getType());
@@ -397,20 +391,6 @@ public class GameService {
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).getRotation()); //todo check Matej's method
                 out.print(DELIMITER);
-
-                /*if (gameBoard.getEffectAt(new Position(i, j)) != null) {
-                    out.print(true);
-                    out.print(DELIMITER);
-                    out.print(gameBoard.getEffectAt(new Position(i, j)).getEffectType());
-                    out.print(DELIMITER);
-                    out.print(gameBoard.getEffectAt(new Position(i, j)).getRemainingDuration());
-                    out.print(DELIMITER);
-                    out.print(gameBoard.getEffectAt(new Position(i, j)).getRadius());
-                    out.print(DELIMITER);
-                } else {
-                    out.print(false);
-                    out.print(DELIMITER);
-                }*/
             }
         }
         out.print('\n');
@@ -573,9 +553,9 @@ public class GameService {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
                 new Player[]{new Player("nylecm", new PlayerPiece
-                        (new File("view/res/img/player_piece/alien_ufo_1.png").toURL())),
+                        (new File("view/res/img/player_piece/alien_ufo_1.png"))),
                         new Player("nylecm1", new PlayerPiece
-                                (new File("view/res/img/player_piece/alien_ufo_2.png").toURL()))},
+                                (new File("view/res/img/player_piece/alien_ufo_2.png")))},
                 "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
