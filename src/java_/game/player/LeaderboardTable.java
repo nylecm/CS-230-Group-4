@@ -3,12 +3,12 @@ package java_.game.player;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Table {
+public class LeaderboardTable {
     private final SimpleStringProperty rName;
     private final SimpleIntegerProperty rWins;
     private final SimpleIntegerProperty rLosses;
 
-    public Table(String name, int wins, int losses) {
+    public LeaderboardTable(String name, int wins, int losses) {
         this.rName = new SimpleStringProperty(name);
         this.rWins = new SimpleIntegerProperty(wins);
         this.rLosses = new SimpleIntegerProperty(losses);
