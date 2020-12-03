@@ -65,12 +65,50 @@ public class CoinHandler {
         lineWriter.close();
     }
 
+    public static void increaseStreak(String username) throws FileNotFoundException {
+
+        Scanner in = new Scanner(new File(PLAYER_COINS_FILEPATH));
+        in.useDelimiter(DELIMITER);
+        while (in.hasNextLine()) {
+
+            String fileUsername = in.next();
+            int nCoins = in.nextInt();
+            int streak = in.nextInt();
+            String lastLoginDate = in.next();
+            in.nextLine();
+
+
+
+            /*
+            System.out.print(in.next());
+            System.out.print(in.nextInt());
+            System.out.print(in.nextInt());
+            System.out.println(in.next());
+            */
+
+
+
+
+
+
+
+        }
+
+
+
+
+    }
+
+
     public static void main(String[] args) throws FileNotFoundException {
+        /*
         Player player1 = new Player("nylecm", null);
         Player player2 = new Player("bob101", null);
         Player[] players = new Player[2];
         players[0] = player1;
         players[1] = player2;
         updateCoins(players, 0);
+        */
+        increaseStreak("samcox");
     }
 }
