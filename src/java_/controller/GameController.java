@@ -398,20 +398,22 @@ public class GameController implements Initializable {
         playerPieceImageView.setOnDragDetected(event -> {
             ImageView source = (ImageView) event.getSource();
 
-            int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
-            int sourcePlayerPieceCol = getItemCol(source);
-            int sourcePlayerPieceRow = getItemRow(source);
-            Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
+            if (!gameService.getPlayerPieceMoved()) {
+                int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
+                int sourcePlayerPieceCol = getItemCol(source);
+                int sourcePlayerPieceRow = getItemRow(source);
+                Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
 
-            //Check if the Player is dragging theirs PlayerPiece
-            if (draggedPlayerPiecePosition.equals(GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum))) {
-                Dragboard dragboard = playerPieceImageView.startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(playerPieceImageView.getImage());
-                dragboard.setContent(content);
-                event.consume();
-            } else {
-                System.out.println("You can't move someone else's PlayerPiece dumbass!");
+                //Check if the Player is dragging theirs PlayerPiece
+                if (draggedPlayerPiecePosition.equals(GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum))) {
+                    Dragboard dragboard = playerPieceImageView.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(playerPieceImageView.getImage());
+                    dragboard.setContent(content);
+                    event.consume();
+                } else {
+                    System.out.println("You can't move someone else's PlayerPiece dumbass!");
+                }
             }
         });
     }
@@ -702,6 +704,9 @@ public class GameController implements Initializable {
             playerPieceImageView.setLayoutX(targetFloorTile.getLayoutX() + 6);
             playerPieceImageView.setLayoutY(targetFloorTile.getLayoutY() + 6);
             gameBoard.movePlayerPiece(targetFloorTileRow, targetFloorTileCol);
+
+            //Disable more than one move
+            gameService.setPlayerPieceMoved(true);
 
             //Check for win
             //TODO Implement
