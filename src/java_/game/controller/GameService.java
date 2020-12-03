@@ -141,7 +141,6 @@ public class GameService {
             fixedTiles[i] = t;
             fixedTilePositions[i] = p;
         }
-
         return new FloorTilePositionBundle(fixedTiles, fixedTilePositions);
     }
 
@@ -253,6 +252,9 @@ public class GameService {
             in.nextLine();
         }
 
+        playerService.setPlayers(players);
+        playerService.setGameService(this);
+
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
         for (int i = 0; i < nRows * nCols; i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
@@ -287,8 +289,9 @@ public class GameService {
             gameBoard.applyEffect(areaEffect, effectPos);
         }
         in.close();
-        //GameBoard = new GameBoard();
-        //PlayerService = new PlayerService();
+
+        actionTilePlayed = true; //todo check with mateo
+        playerPieceMoved = true; //
     }
 
     public void nextTurn() { // todo gameplay loop...
@@ -567,7 +570,11 @@ public class GameService {
 
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new Player[]{new Player("nylecm", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_1.png").toURL())), new Player("nylecm1", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_2.png").toURL()))}, "oberon_1");
+                new Player[]{new Player("nylecm", new PlayerPiece
+                        (new File("view/res/img/player_piece/alien_ufo_1.png").toURL())),
+                        new Player("nylecm1", new PlayerPiece
+                                (new File("view/res/img/player_piece/alien_ufo_2.png").toURL()))},
+                "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
         System.out.println(gs.gameBoard);
