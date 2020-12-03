@@ -43,6 +43,7 @@ public class LeaderboardController implements Initializable {
 
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
     private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
     private LeaderboardTable leaderboardTableOne;
     private Object Table;
