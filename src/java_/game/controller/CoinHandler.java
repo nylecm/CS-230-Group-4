@@ -4,6 +4,8 @@ import java_.game.player.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CoinHandler {
@@ -15,18 +17,20 @@ public class CoinHandler {
     private static final String DELIMITER = "`";
 
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
-        int nTurns = GameService.getInstance().getTurnCount();
+        //int nTurns = GameService.getInstance().getTurnCount(); todo uncomment
+        int nTurns = 100;
         int nPlayers = players.length;
 
         int effort = nTurns / nPlayers;
 
-        int winningCoins = (int)(effort * FACTOR * WINNING_MULTIPLIER);
+        int winningCoins = (int)(effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
         int losingCoins = (int)(effort * FACTOR * LOSING_MULTIPLIER);
-
 
         File coinFile = new File(PLAYER_COINS_FILEPATH);
         Scanner in = new Scanner(coinFile);
         in.useDelimiter(DELIMITER);
+        //PrintWriter lineWriter = new PrintWriter(coinFile);;
+        ArrayList<String> newFileLines = new ArrayList<>();
         while (in.hasNextLine()) {
 
             Scanner ln = new Scanner(in.nextLine());
@@ -39,32 +43,32 @@ public class CoinHandler {
                 ownedPlayerPieces += ln.next() + "`";
             }
             for (int i = 0; i < players.length; i++) {
-
-
-
-
+                if (players[i].getUsername().equals(username) && i == winningPlayerIndex) {
+                    nCoins += winningCoins;
+                } else if (players[i].getUsername().equals(username) && i != winningPlayerIndex) {
+                    nCoins += losingCoins;
+                }
             }
+            //lineWriter.println(username + DELIMITER + nCoins + DELIMITER + nPlayerPieces + ownedPlayerPieces); //todo fix print writer
             //System.out.println(ownedPlayerPieces);
-
-
+            newFileLines.add(username + DELIMITER + nCoins + DELIMITER + nPlayerPieces + ownedPlayerPieces);
         }
 
 
+        PrintWriter lineWriter = new PrintWriter(coinFile);
+        for (String newFileLine: newFileLines) {
+            lineWriter.println(newFileLine);
+        }
+        lineWriter.flush();
+        lineWriter.close();
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Player player1 = new Player("samcox", null);
-        Player player2 = new Player("bob01", null);
+        Player player1 = new Player("nylecm", null);
+        Player player2 = new Player("bob101", null);
         Player[] players = new Player[2];
         players[0] = player1;
         players[1] = player2;
         updateCoins(players, 0);
     }
-
-
-
-
-
-
-
 }
