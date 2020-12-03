@@ -18,7 +18,7 @@ public class CoinHandler {
 
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
         //int nTurns = GameService.getInstance().getTurnCount(); todo uncomment
-        int nTurns = 100;
+        int nTurns = 100; //todo remove
         int nPlayers = players.length;
 
         int effort = nTurns / nPlayers;
@@ -56,7 +56,7 @@ public class CoinHandler {
             newFileLines.add(username + DELIMITER + nCoins + DELIMITER + dailyStreak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + ownedPlayerPieces);
         }
 
-
+        //todo remove array list after fixing printWriter
         PrintWriter lineWriter = new PrintWriter(coinFile);
         for (String newFileLine: newFileLines) {
             lineWriter.println(newFileLine);
