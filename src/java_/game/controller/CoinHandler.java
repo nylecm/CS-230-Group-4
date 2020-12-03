@@ -5,7 +5,10 @@ import java_.game.player.Player;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class CoinHandler {
@@ -65,7 +68,7 @@ public class CoinHandler {
         lineWriter.close();
     }
 
-    public static void increaseStreak(String username) throws FileNotFoundException {
+    public static void increaseStreak(String username) throws FileNotFoundException, ParseException {
 
         Scanner in = new Scanner(new File(PLAYER_COINS_FILEPATH));
         in.useDelimiter(DELIMITER);
@@ -77,6 +80,24 @@ public class CoinHandler {
             String lastLoginDate = in.next();
             in.nextLine();
 
+
+            //Calculating day after previous login date
+            SimpleDateFormat yyyyddmm = new SimpleDateFormat("yyyy-mm-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(yyyyddmm.parse(lastLoginDate));
+            calendar.add(Calendar.DATE, 1);
+            String dayAfterLastLogin = yyyyddmm.format(calendar.getTime());
+            System.out.println(dayAfterLastLogin);
+
+            //Today's date
+            calendar = Calendar.getInstance();
+            String dateToday = yyyyddmm.format(calendar.getTime());
+
+            if (dayAfterLastLogin.equals(dateToday)) { // consecutive days logged in
+                streak += 1; //increase streak
+            } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)){ //Logged in two different days that are more than a day apart.
+                streak = 1; //reset streak
+            }
 
 
             /*
@@ -100,7 +121,7 @@ public class CoinHandler {
     }
 
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, ParseException {
         /*
         Player player1 = new Player("nylecm", null);
         Player player2 = new Player("bob101", null);
