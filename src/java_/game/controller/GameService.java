@@ -6,20 +6,14 @@ import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
-import java_.util.generic_data_structures.Link;
 import javafx.embed.swing.JFXPanel;
-import javafx.geometry.Pos;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.List;
 
 public class GameService {
     private static GameService instance = null;
@@ -397,7 +391,7 @@ public class GameService {
     }
 
     private void writeAreaEffectDetails(PrintWriter out) {
-        Set<Position> activeEffectPositions = gameBoard.getActiveEffectPositions();
+        Set<Position> activeEffectPositions = gameBoard.getPositionsWithActiveEffects();
 
         for (Position effectPosition : activeEffectPositions) {
             out.print(effectPosition.getRowNum());
@@ -564,6 +558,9 @@ public class GameService {
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
 
         gs.gameBoard.applyEffect(effect, new Position(4, 0));
+        System.out.println("lemon");
+        System.out.println(gs.gameBoard.getPositionsWithActiveEffects());
+
         for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
         }

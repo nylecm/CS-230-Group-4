@@ -53,14 +53,17 @@ public class LoadGameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        BackgroundFill backgroundFill = null;
+        BackgroundImage backgroundImage = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundImage = new BackgroundImage(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURL())),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(0, 0, false, false, false, true));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mainPane.setBackground(new Background(backgroundFill));
+        mainPane.setBackground(new Background(backgroundImage));
         mainPane.setMinWidth(614);
+        mainPane.getBackground().getImages().get(0).getImage();
 
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(SAVES_FOLDER_DIRECTORY);

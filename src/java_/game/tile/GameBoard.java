@@ -1,7 +1,6 @@
 package java_.game.tile;
 
 import java_.game.controller.GameService;
-import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 
@@ -15,12 +14,6 @@ public class GameBoard {
     private final Position[] playerPiecePositions;
     private final HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
     private final FloorTile[][] board;
-
-    @Deprecated
-    public Set<Position> getPositionsWithActiveEffects() {
-        return activeEffects.keySet();
-    }
-    //temp todo remove
 
     @Deprecated
     public HashMap<Position, AreaEffect> getActiveEffects() {
@@ -389,7 +382,7 @@ public class GameBoard {
     public void useActionTile(ActionTile actionTile, Position pos) {
         if (actionTile.use() instanceof AreaEffect) {
             applyEffect((AreaEffect) actionTile.use(), pos);
-        } else if (actionTile.use() instanceof  PlayerEffect) {
+        } else if (actionTile.use() instanceof PlayerEffect) {
             Effect effect = actionTile.use();
             if (effect.getEffectType() == EffectType.BACKTRACK) {
 
@@ -506,87 +499,7 @@ public class GameBoard {
         return playerPiecePositions.length;
     }
 
-    public Set<Position> getActiveEffectPositions() {
+    public Set<Position> getPositionsWithActiveEffects() {
         return activeEffects.keySet();
     }
-
-    /*public static void main(String[] args) {
-        //PlayerPiece[] playerPieces = new PlayerPiece[0];
-        Position[] playerPiecePositions = new Position[0];
-        Tile[] newTiles = new Tile[0];
-        SilkBag silkBag = new SilkBag(newTiles);
-
-        FloorTile A = new FloorTile(TileType.CORNER, true);
-        FloorTile B = new FloorTile(TileType.STRAIGHT, true);
-        FloorTile C = new FloorTile(TileType.T_SHAPED, true);
-
-        FloorTile[] fixedTiles = new FloorTile[3];
-        fixedTiles[0] = A;
-        fixedTiles[1] = B;
-        fixedTiles[2] = C;
-
-        Position[] fixedTilePositions = new Position[3];
-        fixedTilePositions[0] = new Position(0, 0);
-        fixedTilePositions[1] = new Position(1, 1);
-        fixedTilePositions[2] = new Position(2, 2);
-
-        FloorTile D = new FloorTile(TileType.CORNER, false);
-        FloorTile E = new FloorTile(TileType.CORNER, false);
-        FloorTile F = new FloorTile(TileType.T_SHAPED, false);
-        FloorTile G = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile H = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile I = new FloorTile(TileType.CORNER, false);
-        FloorTile J = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile K = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile L = new FloorTile(TileType.STRAIGHT, false);
-
-
-        FloorTile[] tiles = new FloorTile[9];
-        tiles[0] = D;
-        tiles[1] = E;
-        tiles[2] = F;
-        tiles[3] = G;
-        tiles[4] = H;
-        tiles[5] = I;
-        tiles[6] = J;
-        tiles[7] = K;
-        tiles[8] = L;
-
-        GameBoard firstgame = new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions, tiles, 4, 3, "hello");
-
-        System.out.println(firstgame);
-
-        AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
-
-        firstgame.applyEffect(effect, new Position(1, 0));
-        for (Position pos : firstgame.positionsWithActiveEffects) {
-            System.out.println(pos.getRowNum() + " " + pos.getColNum());
-        }
-
-        AreaEffect test = firstgame.activeEffects.get(new Position(0, 0));
-        System.out.println(test);
-        firstgame.insert(0, -1, new FloorTile(TileType.STRAIGHT, false), 0);
-
-
-        System.out.println(test);
-
-
-        *//*
-         FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
-         FloorTile insert2 = new FloorTile(TileType.CORNER, false, false);
-         FloorTile insert3 = new FloorTile(TileType.T_SHAPED, false, false);
-         FloorTile insert4 = new FloorTile(TileType.CORNER, false, false);
-         *//*
-
-     *//*
-         firstgame.insert(-1, 0, insert1);
-         System.out.println(firstgame);
-         firstgame.insert(4, 1, insert2);
-         System.out.println(firstgame);
-         firstgame.insert(1, -1, insert3);
-         System.out.println(firstgame);
-         firstgame.insert(0, 4, insert4);
-         System.out.println(firstgame);
-         *//*
-    }*/
 }

@@ -3,13 +3,11 @@ package java_.controller;
 
 import java_.game.controller.GameService;
 import java_.game.player.Player;
-import java_.game.player.PlayerPiece;
 import java_.game.tile.*;
 import java_.util.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -225,7 +223,7 @@ public class GameController implements Initializable {
     }
 
     private void displayEffects() {
-        for (Position position : gameBoard.getActiveEffectPositions()) {
+        for (Position position : gameBoard.getPositionsWithActiveEffects()) {
             AreaEffect effect = gameBoard.getEffectAt(position);
             Image effectImage = new Image(getEffectTypeImage(effect));
             ImageView effectImageView = getTileImageView(effectImage);
