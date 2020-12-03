@@ -93,6 +93,8 @@ public class GameControllerDummy implements Initializable {
 
     private boolean turnFinished;
 
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         GameService gameService = GameService.getInstance();
@@ -128,26 +130,22 @@ public class GameControllerDummy implements Initializable {
         });
     }
 
+
+
+
     private boolean playerPieceCanMove() {
         int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
         int currentPlayerPieceCol = GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum).getColNum();
         int currentPlayerPieceRow = GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum).getRowNum();
 
-        //Current tile
-        byte sourcePathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol).getPathsBits();
-
-        byte targetPathsBits;
-
         //Left
         if (currentPlayerPieceCol != 0) {
-            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol - 1).getPathsBits();
             if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol - 1, currentPlayerPieceRow, FloorTile.WEST_PATH_MASK, FloorTile.EAST_PATH_MASK)) {
                 return true;
             }
         }
         //Right
         if (currentPlayerPieceCol != gameBoardView.getWidth() - 1) {
-            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol + 1).getPathsBits();
             if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol + 1, currentPlayerPieceRow, FloorTile.EAST_PATH_MASK, FloorTile.WEST_PATH_MASK)) {
                 return true;
             }
@@ -155,7 +153,6 @@ public class GameControllerDummy implements Initializable {
 
         //Above
         if (currentPlayerPieceRow != 0) {
-            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow - 1, currentPlayerPieceCol).getPathsBits();
             if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow - 1, FloorTile.NORTH_PATH_MASK, FloorTile.SOUTH_PATH_MASK)) {
                 return true;
             }
@@ -163,7 +160,6 @@ public class GameControllerDummy implements Initializable {
 
         //Below
         if (currentPlayerPieceRow != gameBoardView.getHeight()) {
-            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow + 1, currentPlayerPieceCol).getPathsBits();
             if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow + 1, FloorTile.SOUTH_PATH_MASK, FloorTile.NORTH_PATH_MASK)) {
                 return true;
             }
@@ -171,6 +167,10 @@ public class GameControllerDummy implements Initializable {
 
         return false;
     }
+
+
+
+
 
     private void displayGameView(GameBoard gameBoard) {
         edgeTileGroup = new Group();
@@ -499,9 +499,6 @@ public class GameControllerDummy implements Initializable {
                 double centerY = floorTileDisplay.getLayoutY();
                 double centerX = floorTileDisplay.getLayoutX();
 
-                int centerCol = getTileCol(floorTileDisplay);
-                int centerRow = getTileRow(floorTileDisplay);
-
                 for (int row = 0; row < area; row++) {
                     for (int col = 0; col < area; col++) {
                         ImageView effectDisplay = getFloorTileImageView(source.getImage());
@@ -574,6 +571,12 @@ public class GameControllerDummy implements Initializable {
             }
         });
     }
+
+
+
+
+
+
 
     //TODO Without animation, testing
     private void slideColTemp(int col, int row) {
@@ -749,6 +752,13 @@ public class GameControllerDummy implements Initializable {
             tileGroup.getChildren().remove(pushedOfTile);
         });
     }
+
+
+
+
+
+
+
 
     @FXML
     public void onDrawTileButtonClicked() {
