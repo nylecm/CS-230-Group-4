@@ -37,6 +37,8 @@ public class CoinHandler {
             ln.useDelimiter(DELIMITER);
             String username = ln.next();
             int nCoins = ln.nextInt();
+            int dailyStreak = ln.nextInt();
+            String lastLoginDate = ln.next();
             int nPlayerPieces = ln.nextInt();
             String ownedPlayerPieces = DELIMITER;
             while (ln.hasNext()) {
@@ -51,7 +53,7 @@ public class CoinHandler {
             }
             //lineWriter.println(username + DELIMITER + nCoins + DELIMITER + nPlayerPieces + ownedPlayerPieces); //todo fix print writer
             //System.out.println(ownedPlayerPieces);
-            newFileLines.add(username + DELIMITER + nCoins + DELIMITER + nPlayerPieces + ownedPlayerPieces);
+            newFileLines.add(username + DELIMITER + nCoins + DELIMITER + dailyStreak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + ownedPlayerPieces);
         }
 
 
