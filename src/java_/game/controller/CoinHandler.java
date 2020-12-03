@@ -18,6 +18,9 @@ public class CoinHandler {
     private static final int LOSING_MULTIPLIER = 1;
     private static final String PLAYER_COINS_FILEPATH = "data/user_coins.txt";
     private static final String DELIMITER = "`";
+    private static final int DAILY_LOGIN_COIN_INCREMENT = 10;
+    private static final double DAILY_LOGIN_MODIFIER = 1.2;
+    private static final int DAILY_LOGIN_REWARD_CAP = 146;
 
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
         //int nTurns = GameService.getInstance().getTurnCount(); todo uncomment
@@ -100,6 +103,8 @@ public class CoinHandler {
             }
 
 
+
+
             /*
             System.out.print(in.next());
             System.out.print(in.nextInt());
@@ -120,6 +125,16 @@ public class CoinHandler {
 
     }
 
+    private static int streakCoins(int streak) {
+        int streakValue = 10;
+        int i = 1;
+        while (streakValue < DAILY_LOGIN_REWARD_CAP && i < streak) {
+            streakValue = (int) ((streakValue + 10) * 1.2);
+            i++;
+        }
+        return streakValue;
+    }
+
 
     public static void main(String[] args) throws FileNotFoundException, ParseException {
         /*
@@ -130,6 +145,7 @@ public class CoinHandler {
         players[1] = player2;
         updateCoins(players, 0);
         */
-        increaseStreak("samcox");
+        //increaseStreak("samcox");
+        System.out.println(streakCoins(1));
     }
 }
