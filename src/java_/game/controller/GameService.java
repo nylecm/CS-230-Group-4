@@ -78,6 +78,9 @@ public class GameService {
 
         playerService.setPlayers(players);
         playerService.setGameService(this);
+
+        actionTilePlayed = false;
+        playerPieceMoved = false;
     }
 
     private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in,

@@ -95,6 +95,13 @@ public class GameBoard {
         return (sourceFloorTilePaths & sourceBitmask) == sourceBitmask && (targetFloorTilePaths & oppositeBitmask) == oppositeBitmask;
     }
 
+    public void movePlayerPiece(int newRow, int newCol) {
+        int currentPlayerNumber = GameService.getInstance().getCurrentPlayerNum();
+        playerPieces[currentPlayerNumber].addPreviousPlayerPosition(playerPiecePositions[currentPlayerNumber]);
+        playerPiecePositions[currentPlayerNumber] = new Position(newRow, newCol);
+        GameService.getInstance().setPlayerPieceMoved(true);
+    }
+
     public void movePlayerPieceUp(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum() - 1, curPos.getColNum());

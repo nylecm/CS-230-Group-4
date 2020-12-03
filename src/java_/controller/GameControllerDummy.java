@@ -65,6 +65,9 @@ public class GameControllerDummy implements Initializable {
     private HBox drawnActionTiles;
 
     @FXML
+    private HBox playerQueue;
+
+    @FXML
     private Button endTurnButton;
 
     @FXML
@@ -112,12 +115,16 @@ public class GameControllerDummy implements Initializable {
         });
 
         endTurnButton.setOnMouseClicked(event -> {
-            if (!gameService.getPlayerPieceMoved() && playerPieceCanMove()) {
+            if (playerPieceCanMove() && !GameService.getInstance().getPlayerPieceMoved()) {
                 System.out.println("You have to move player piece!");
                 event.consume();
+            } else {
+                ImageView currentPlayerPiecePreview = (ImageView) playerQueue.getChildren().get(0);
+                playerQueue.getChildren().remove(0);
+                playerQueue.getChildren().add(currentPlayerPiecePreview);
+                gameService.nextTurn();
+                displayGameView(gameBoard);
             }
-            gameService.nextTurn();
-            displayGameView(gameBoard);
         });
     }
 
@@ -132,26 +139,34 @@ public class GameControllerDummy implements Initializable {
         byte targetPathsBits;
 
         //Left
-        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol - 1).getPathsBits();
-        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol - 1, currentPlayerPieceRow, sourcePathsBits, targetPathsBits)) {
-            return true;
+        if (currentPlayerPieceCol != 0) {
+            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol - 1).getPathsBits();
+            if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol - 1, currentPlayerPieceRow, FloorTile.WEST_PATH_MASK, FloorTile.EAST_PATH_MASK)) {
+                return true;
+            }
         }
         //Right
-        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol + 1).getPathsBits();
-        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol + 1, currentPlayerPieceRow, sourcePathsBits, targetPathsBits)) {
-            return true;
+        if (currentPlayerPieceCol != gameBoardView.getWidth() - 1) {
+            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow, currentPlayerPieceCol + 1).getPathsBits();
+            if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol + 1, currentPlayerPieceRow, FloorTile.EAST_PATH_MASK, FloorTile.WEST_PATH_MASK)) {
+                return true;
+            }
         }
 
         //Above
-        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow - 1, currentPlayerPieceCol).getPathsBits();
-        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow - 1, sourcePathsBits, targetPathsBits)) {
-            return true;
+        if (currentPlayerPieceRow != 0) {
+            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow - 1, currentPlayerPieceCol).getPathsBits();
+            if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow - 1, FloorTile.NORTH_PATH_MASK, FloorTile.SOUTH_PATH_MASK)) {
+                return true;
+            }
         }
 
         //Below
-        targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow + 1, currentPlayerPieceCol).getPathsBits();
-        if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow + 1, sourcePathsBits, targetPathsBits)) {
-            return true;
+        if (currentPlayerPieceRow != gameBoardView.getHeight()) {
+            targetPathsBits = GameService.getInstance().getGameBoard().getTileAt(currentPlayerPieceRow + 1, currentPlayerPieceCol).getPathsBits();
+            if (GameService.getInstance().getGameBoard().validateMove(currentPlayerPieceCol, currentPlayerPieceRow, currentPlayerPieceCol, currentPlayerPieceRow + 1, FloorTile.SOUTH_PATH_MASK, FloorTile.NORTH_PATH_MASK)) {
+                return true;
+            }
         }
 
         return false;
@@ -170,6 +185,13 @@ public class GameControllerDummy implements Initializable {
         setEffectBorders();
 
         //Build Player queue
+        if (playerQueue.getChildren().size() != GameService.getInstance().getPlayerService().getPlayers().length) {
+            for (int i = 0; i < GameService.getInstance().getPlayerService().getPlayers().length; i++) {
+                Image playerPieceImage = GameService.getInstance().getPlayerService().getPlayer(i).getPlayerPiece().getImage();
+                ImageView playerPiecePreview = new ImageView(playerPieceImage);
+                playerQueue.getChildren().add(playerPiecePreview);
+            }
+        }
 
 
         //Build ActionTiles list
@@ -242,7 +264,7 @@ public class GameControllerDummy implements Initializable {
                 ImageView floorTileDisplay = getFloorTileImageView(floorTileImage);
                 floorTileDisplay.setLayoutX(col * TILE_WIDTH);
                 floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
-                floorTileDisplay.setRotate(- gameBoard.getTileAt(row, col).getRotation() * 90);
+                floorTileDisplay.setRotate(gameBoard.getTileAt(row, col).getRotation() * 90);
 
                 setFloorTileEventHandlers(floorTileDisplay);
 
@@ -307,7 +329,7 @@ public class GameControllerDummy implements Initializable {
                 int sourcePlayerPieceCol = getTileCol(source);
                 int sourcePlayerPieceRow = getTileRow(source);
                 Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
-                if (draggedPlayerPiecePosition.equals(currentPlayerPiece)) {
+                if (draggedPlayerPiecePosition.equals(GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum))) {
                     Dragboard dragboard = playerPieceDisplay.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
                     content.putImage(playerPieceDisplay.getImage());
@@ -464,6 +486,7 @@ public class GameControllerDummy implements Initializable {
                 if (GameService.getInstance().getGameBoard().validateMove(sourceFloorTileCol, sourceFloorTileRow, targetFloorTileCol, targetFloorTileRow, sourceBitmask, oppositeBitmask)) {
                     source.setLayoutX(floorTileDisplay.getLayoutX() + 6);
                     source.setLayoutY(floorTileDisplay.getLayoutY() + 6);
+                    GameService.getInstance().getGameBoard().movePlayerPiece(targetFloorTileRow, targetFloorTileCol);
                 }
 
                 FloorTile sourceFloorTile = GameService.getInstance().getGameBoard().getTileAt(getTileRow(source), getTileCol(source));
