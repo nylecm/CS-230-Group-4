@@ -567,7 +567,7 @@ public class GameService {
 
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new Player[]{new Player("bob", new PlayerPiece(new File("bob.png").toURL()))}, "oberon_1");
+                new Player[]{new Player("bob", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_1.png").toURL())), new Player("bob1", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_2.png").toURL()))}, "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
         System.out.println(gs.gameBoard);
@@ -661,7 +661,7 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_32.txt"));
+            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_2.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.*;
 
 /**
- * Controls the newgame interface for creating a new game with up to four players and on a gameboard of the user's choice.
+ * Controls the new game user interface for creating a new game with up to four players and on a game board of the user's choice.
  */
 public class NewGameController implements Initializable {
 
