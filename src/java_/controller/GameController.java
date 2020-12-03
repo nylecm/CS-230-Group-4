@@ -9,6 +9,7 @@ import java_.util.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -33,9 +34,9 @@ public class GameController implements Initializable {
 
     private GameBoard gameBoard;
 
-    private static final int TILE_WIDTH = 80;
+    private static final int TILE_WIDTH = 64;
 
-    private  static final int TILE_HEIGHT = 80;
+    private  static final int TILE_HEIGHT = 64;
 
     private static final int PLAYER_PIECE_WIDTH = 28;
 
@@ -64,9 +65,6 @@ public class GameController implements Initializable {
 
     @FXML
     private ImageView drawnFloorTile;
-
-    @FXML
-    private ImageView drawnActionTile;
 
     @FXML
     private HBox playersActionTiles;
@@ -116,6 +114,8 @@ public class GameController implements Initializable {
     }
 
     private void displayGameView() {
+        System.out.println("Current Player Number: " + gameService.getCurrentPlayerNum());
+
         edgeTileGroup = new Group();
         tileGroup = new Group();
         playerPieceGroup = new Group();
@@ -124,8 +124,9 @@ public class GameController implements Initializable {
         //Build GameBoard
         displayEdges();
         displayFloorTiles();
-        displayPlayerPieces();
         setEffectBorders();
+        displayEffects();
+        displayPlayerPieces();
 
         //View GameBoard
         content = new StackPane();
@@ -143,10 +144,10 @@ public class GameController implements Initializable {
             }
         }
 
-        //Build ActionTiles list of current player
 
+        //Build ActionTiles list of current player
         //Remove current ActionTiles for next round
-        if (playersActionTiles.getChildren().isEmpty()) {
+        if (!playersActionTiles.getChildren().isEmpty()) {
             playersActionTiles.getChildren().clear();
         }
         int currentPlayerNum = gameService.getCurrentPlayerNum();
@@ -220,6 +221,18 @@ public class GameController implements Initializable {
 
                 tileGroup.getChildren().add(floorTileImageView);
             }
+        }
+    }
+
+    private void displayEffects() {
+        for (Position position : gameBoard.getActiveEffectPositions()) {
+            AreaEffect effect = gameBoard.getEffectAt(position);
+            Image effectImage = new Image(getEffectTypeImage(effect));
+            ImageView effectImageView = getTileImageView(effectImage);
+            effectImageView.setLayoutX(position.getColNum() * TILE_WIDTH);
+            effectImageView.setLayoutY(position.getRowNum() * TILE_HEIGHT);
+
+            effectGroup.getChildren().add(effectImageView);
         }
     }
 
@@ -381,13 +394,14 @@ public class GameController implements Initializable {
         floorTileImageView.setOnDragDropped(event -> {
             ImageView source = (ImageView) event.getGestureSource();
 
-            //PlayerPiece dropped
+            //PlayerPieceImageView dropped
             if (playerPieceGroup.getChildren().contains(source)) {
                 movePlayerPieceImageView(source, floorTileImageView);
 
-            //ActionTile dropped
+            //ActionTileImageView dropped
             } else if (playersActionTiles.getChildren().contains(source)){
                 applyEffectImageView(source, floorTileImageView);
+                removeActionTile(source, getItemCol(floorTileImageView), getItemRow(floorTileImageView));
                 event.setDropCompleted(true);
             }
         });
@@ -398,20 +412,22 @@ public class GameController implements Initializable {
         playerPieceImageView.setOnDragDetected(event -> {
             ImageView source = (ImageView) event.getSource();
 
-            int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
-            int sourcePlayerPieceCol = getItemCol(source);
-            int sourcePlayerPieceRow = getItemRow(source);
-            Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
+            if (!gameService.getPlayerPieceMoved()) {
+                int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
+                int sourcePlayerPieceCol = getItemCol(source);
+                int sourcePlayerPieceRow = getItemRow(source);
+                Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
 
-            //Check if the Player is dragging theirs PlayerPiece
-            if (draggedPlayerPiecePosition.equals(GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum))) {
-                Dragboard dragboard = playerPieceImageView.startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(playerPieceImageView.getImage());
-                dragboard.setContent(content);
-                event.consume();
-            } else {
-                System.out.println("You can't move someone else's PlayerPiece dumbass!");
+                //Check if the Player is dragging theirs PlayerPiece
+                if (draggedPlayerPiecePosition.equals(GameService.getInstance().getGameBoard().getPlayerPiecePosition(currentPlayerNum))) {
+                    Dragboard dragboard = playerPieceImageView.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(playerPieceImageView.getImage());
+                    dragboard.setContent(content);
+                    event.consume();
+                } else {
+                    System.out.println("You can't move someone else's PlayerPiece dumbass!");
+                }
             }
         });
     }
@@ -576,8 +592,6 @@ public class GameController implements Initializable {
     //TODO Remove, part of the game "loop"
     @FXML
     private void onDrawTileButtonClicked() {
-//        Tile drawnTile = GameService.getInstance().getPlayerService().playerTurn(null); //Get current player
-
         drawnTile = gameService.getSilkBag().take();
 
         if (drawnTile instanceof FloorTile) {
@@ -586,8 +600,11 @@ public class GameController implements Initializable {
         } else {
             Image newActionTileImage = new Image((getActionTileTypeImage((ActionTile) drawnTile)));
             ImageView drawnActionTileImageView = new ImageView(newActionTileImage);
+
+            //Add to GUI
             playersActionTiles.getChildren().add(drawnActionTileImageView);
 
+            //Add to Player class
             gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).addDrawnActionTile((ActionTile) drawnTile);
 
             drawnActionTileImageView.setOnDragDetected(event -> {
@@ -600,14 +617,6 @@ public class GameController implements Initializable {
                 } else {
                     System.out.println("You can't use ActionTile anymore you idiot");
                 }
-            });
-
-            drawnActionTileImageView.setOnDragDone(event -> {
-                playersActionTiles.getChildren().remove(drawnActionTileImageView);
-
-                int usedActionTileIndex = playersActionTiles.getChildren().indexOf(drawnActionTileImageView);
-                gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().remove(usedActionTileIndex);
-                gameService.setActionTilePlayed(true);
             });
         }
     }
@@ -711,12 +720,12 @@ public class GameController implements Initializable {
         }
     }
 
-    private void applyEffectImageView(ImageView effectImageView, ImageView targetFloorTile) {
+    private void applyEffectImageView(ImageView effectImageView, ImageView floorTileImageView) {
         //TODO Get from corresponding class
         int area = 3;
 
-        double centerY = targetFloorTile.getLayoutY();
-        double centerX = targetFloorTile.getLayoutX();
+        double centerY = floorTileImageView.getLayoutY();
+        double centerX = floorTileImageView.getLayoutX();
 
         for (int row = 0; row < area; row++) {
             for (int col = 0; col < area; col++) {
@@ -732,6 +741,20 @@ public class GameController implements Initializable {
                 effectGroup.getChildren().add(effectDisplay);
             }
         }
+    }
+
+    private void removeActionTile(ImageView actionTileImageView, int col, int row) {
+        int usedActionTileIndex = playersActionTiles.getChildren().indexOf(actionTileImageView);
+
+        //Remove ActionTile from Player class
+        playersActionTiles.getChildren().remove(actionTileImageView);
+
+        ActionTile usedActionTile = gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().get(usedActionTileIndex);
+        gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().remove(usedActionTileIndex);
+        gameService.setActionTilePlayed(true);
+
+        //Apply effect on the GameBoard
+        gameBoard.applyEffect((AreaEffect) usedActionTile.use(), new Position(row, col));
     }
 
     private ImageView getTileImageView(Image tileImage) {
@@ -781,6 +804,21 @@ public class GameController implements Initializable {
                 return "iceFlat.png";
             case BACKTRACK:
                 return "backtrackFlat.png";
+            case DOUBLE_MOVE:
+                return "doublemoveFlat.png";
+        }
+        return null;
+    }
+
+    private String getEffectTypeImage(AreaEffect areaEffect) {
+        EffectType type = areaEffect.getEffectType();
+        switch (type) {
+            case FIRE:
+                return "doublemoveFlat.png";
+            case ICE:
+                return "doublemoveFlat.png";
+            case BACKTRACK:
+                return "doublemoveFlat.png";
             case DOUBLE_MOVE:
                 return "doublemoveFlat.png";
         }
