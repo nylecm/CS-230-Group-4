@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -22,7 +23,9 @@ import java.util.ResourceBundle;
 public class LoadGameController implements Initializable {
 
     @FXML
-    private ChoiceBox loadGameSelect;
+    private HBox logInFormHBox;
+    @FXML
+    private ChoiceBox<File> loadGameSelect;
 
     private static final String SAVES_FOLDER_DIRECTORY = "data/saves";
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
@@ -32,6 +35,20 @@ public class LoadGameController implements Initializable {
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(SAVES_FOLDER_DIRECTORY);
         addSaveFileNames(fileNames);
+
+        loadGameSelect.setOnAction(event -> {
+            if (loadGameSelect.getValue() != null) {
+                readFileForVerificationDetails(loadGameSelect.getValue());
+            }
+        });
+    }
+
+    private void readFileForVerificationDetails(File file) {
+        // Read username
+        // Read number of Players
+        // Read player pieces used
+
+        // Create log in form v boxes.
     }
 
     private void addSaveFileNames(File[] fileNames) {
