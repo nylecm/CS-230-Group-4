@@ -13,6 +13,9 @@ import java.util.Scanner;
 
 public class CoinHandler {
 
+
+    //todo testing
+
     private static final double FACTOR = 0.2;
     private static final int WINNING_MULTIPLIER = 5;
     private static final int LOSING_MULTIPLIER = 1;
@@ -46,9 +49,9 @@ public class CoinHandler {
             int dailyStreak = ln.nextInt();
             String lastLoginDate = ln.next();
             int nPlayerPieces = ln.nextInt();
-            String ownedPlayerPieces = DELIMITER;
+            String ownedPlayerPieces = "";
             while (ln.hasNext()) {
-                ownedPlayerPieces += ln.next() + "`";
+                ownedPlayerPieces += ln.next() + DELIMITER;
             }
             for (int i = 0; i < players.length; i++) {
                 if (players[i].getUsername().equals(username) && i == winningPlayerIndex) {
@@ -59,7 +62,7 @@ public class CoinHandler {
             }
             //lineWriter.println(username + DELIMITER + nCoins + DELIMITER + nPlayerPieces + ownedPlayerPieces); //todo fix print writer
             //System.out.println(ownedPlayerPieces);
-            newFileLines.add(username + DELIMITER + nCoins + DELIMITER + dailyStreak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + ownedPlayerPieces);
+            newFileLines.add(username + DELIMITER + nCoins + DELIMITER + dailyStreak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + ownedPlayerPieces);
         }
 
         //todo remove array list after fixing printWriter
@@ -75,13 +78,22 @@ public class CoinHandler {
 
         Scanner in = new Scanner(new File(PLAYER_COINS_FILEPATH));
         in.useDelimiter(DELIMITER);
+        ArrayList<String> newFileLines = new ArrayList<>();
         while (in.hasNextLine()) {
 
-            String fileUsername = in.next();
-            int nCoins = in.nextInt();
-            int streak = in.nextInt();
-            String lastLoginDate = in.next();
-            in.nextLine();
+            Scanner ln = new Scanner(in.nextLine());
+            ln.useDelimiter(DELIMITER);
+
+            String fileUsername = ln.next();
+            int nCoins = ln.nextInt();
+            int streak = ln.nextInt();
+            String lastLoginDate = ln.next();
+            int nPlayerPieces = ln.nextInt();
+            String playerPieces = "";
+            while (ln.hasNext()) {
+                playerPieces += ln.next() + DELIMITER;
+            }
+
 
 
             //Calculating day after previous login date
@@ -90,7 +102,6 @@ public class CoinHandler {
             calendar.setTime(yyyyddmm.parse(lastLoginDate));
             calendar.add(Calendar.DATE, 1);
             String dayAfterLastLogin = yyyyddmm.format(calendar.getTime());
-            System.out.println(dayAfterLastLogin);
 
             //Today's date
             calendar = Calendar.getInstance();
@@ -102,7 +113,15 @@ public class CoinHandler {
                 streak = 1; //reset streak
             }
 
+            nCoins += streakCoins(streak);
 
+            newFileLines.add(fileUsername + DELIMITER + nCoins + DELIMITER + streak + DELIMITER + dateToday + DELIMITER + nPlayerPieces + DELIMITER + playerPieces);
+            //System.out.println(newFileLines);
+
+
+            for (String newLine: newFileLines) {
+                System.out.println(newLine);
+            }
 
 
             /*
@@ -145,7 +164,7 @@ public class CoinHandler {
         players[1] = player2;
         updateCoins(players, 0);
         */
-        //increaseStreak("samcox");
-        System.out.println(streakCoins(1));
+        increaseStreak("samcox");
+        //System.out.println(streakCoins(1));
     }
 }
