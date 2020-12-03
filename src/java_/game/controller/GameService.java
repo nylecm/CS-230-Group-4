@@ -269,11 +269,11 @@ public class GameService {
         PlayerService.getInstance().setPlayers(players); //todo player effects...
 
         silkBag = new SilkBag();
+        String silkBagSizeStr = in.next();
+        int silkBagSize = Integer.parseInt(silkBagSizeStr);
 
-        int c = 0;
-        while (in.hasNextLine() && c < 1) {
+        for (int i = 0; i < silkBagSize; i++) {
             silkBag.put(TileType.valueOf(in.next().toUpperCase()));
-            c++;
         }
         in.nextLine();
 
@@ -434,6 +434,8 @@ public class GameService {
     }
 
     private void writeSilkBagInstanceDetails(PrintWriter out) {
+        out.print(silkBag.size());
+        out.print(DELIMITER);
         while (!silkBag.isEmpty()) {
             out.print(silkBag.take().getType());
             out.print(DELIMITER);
@@ -668,7 +670,7 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_2.txt"));
+            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

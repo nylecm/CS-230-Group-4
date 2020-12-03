@@ -1,10 +1,9 @@
 package java_.game.tile;
 
-import java_.util.generic_data_structures.Queue;
+import com.sun.jmx.remote.internal.ArrayQueue;
+import java_.util.generic_data_structures.Link;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * A silk bag holds tiles of arbitrary type. Tiles can be put into the silk bag,
@@ -14,7 +13,7 @@ import java.util.NoSuchElementException;
  * @author nylecm, paired with ashrw0
  */
 public class SilkBag {
-    private final Queue<TileType> tiles = new Queue<>();
+    private final Queue<TileType> tiles = new LinkedList<>();
 
     /**
      * Instantiates a new Silk bag, filling it with tiles.
@@ -24,11 +23,10 @@ public class SilkBag {
     public SilkBag(List<Tile> newTiles) {
         Collections.shuffle(newTiles);
         for (Tile tile : newTiles) {
-            tiles.enqueue(tile.getType());
+            tiles.add(tile.getType());
         }
     }
 
-    @Deprecated
     /**
      * Instantiates a new silk bag without filling it with tiles.
      */
@@ -41,7 +39,7 @@ public class SilkBag {
      * @param t the tile to be put into the silk bag.
      */
     public void put(TileType t) {
-        tiles.enqueue(t);
+        tiles.add(t);
     }
 
     /**
@@ -54,10 +52,10 @@ public class SilkBag {
         TileType tileType = tiles.peek();
 
         if (FloorTile.FLOOR_TILE_TYPES.contains(tileType)) {
-            tiles.dequeue();
+            tiles.remove();
             return new FloorTile(tileType);
         } else {
-            tiles.dequeue();
+            tiles.remove();
             return new ActionTile(tileType);
         }
     }
@@ -71,6 +69,9 @@ public class SilkBag {
         return tiles.isEmpty();
     }
 
+    public int size() {
+        return tiles.size();
+    }
 
     /**
      * Prints the contents of the silk bag.
@@ -88,11 +89,12 @@ public class SilkBag {
      * The entry point of application, for testing only. todo remove this.
      *
      * @param args the input arguments
-     *//*
-    public static void main(String[] args) {
-        Tile[] ts = {new ActionTile(TileType.FIRE)};
+     */
 
-        SilkBag s = new SilkBag(ts);
+    public static void main(String[] args) {
+
+
+        SilkBag s = new SilkBag();
 
         s.put(TileType.FIRE);
         s.put(TileType.ICE);
@@ -104,17 +106,18 @@ public class SilkBag {
         s.put(TileType.FIRE);
         s.put(TileType.FIRE);
 
-        System.out.println(s);
-
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
+        System.out.println(s.size());
 
         System.out.println(s);
 
         s.take();
+        s.take();
+        s.take();
+        s.take();
+        s.take();
+
+        System.out.println(s);
+
         s.take();
         s.take();
         s.take();
@@ -122,5 +125,5 @@ public class SilkBag {
 
         System.out.println(s);
         //s.take();
-    }*/
+    }
 }
