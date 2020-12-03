@@ -30,12 +30,9 @@ public class LeaderboardHandler {
                 int numPlayersInFile = 0;
                 while (in.hasNextLine()) {
 
-                    numPlayersInFile +=1;
+                    numPlayersInFile +=1; //todo
 
                     String[] currentPlayerStats = in.nextLine().split(DELIMITER);
-                    for (String w : currentPlayerStats) { //todo remove
-                        System.out.println(w);
-                    }
                     for (int i = 0; i < players.length; i++) {
                         if (players[i].getUsername().equals(currentPlayerStats[0]) && i == winningPlayerIndex) { //The current line contains the stats of the winning player of the game
                             currentPlayerStats[1] = String.valueOf(Integer.valueOf(currentPlayerStats[1]) + 1); //todo probably being stupid - it's 2am
@@ -49,9 +46,10 @@ public class LeaderboardHandler {
                 }
                 in.close();
                 PrintWriter fileWriter = new PrintWriter(gameboardFile);
-                for (String line : newFileLines) {
+                for (String line : newFileLines) { //todo
                     fileWriter.println(line);
                 }
+                fileWriter.flush();
                 fileWriter.close();
             }
         }
