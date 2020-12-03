@@ -83,6 +83,9 @@ public class GameBoard {
     }
 
     public boolean validateMove(int sourceCol, int sourceRow, int targetCol, int targetRow, int sourceBitmask, int oppositeBitmask) {
+        if (activeEffects.containsKey(new Position(targetRow, targetCol))) {
+            return false;
+        }
         FloorTile sourceFloorTile = board[sourceRow][sourceCol];
         FloorTile targetFloorTile = board[targetRow][targetCol];
 
@@ -90,6 +93,13 @@ public class GameBoard {
         int targetFloorTilePaths = targetFloorTile.getPathsBits();
 
         return (sourceFloorTilePaths & sourceBitmask) == sourceBitmask && (targetFloorTilePaths & oppositeBitmask) == oppositeBitmask;
+    }
+
+    public void movePlayerPiece(int newRow, int newCol) {
+        int currentPlayerNumber = GameService.getInstance().getCurrentPlayerNum();
+        playerPieces[currentPlayerNumber].addPreviousPlayerPosition(playerPiecePositions[currentPlayerNumber]);
+        playerPiecePositions[currentPlayerNumber] = new Position(newRow, newCol);
+        GameService.getInstance().setPlayerPieceMoved(true);
     }
 
     public void movePlayerPieceUp(int playerNumber) {

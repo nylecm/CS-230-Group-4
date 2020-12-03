@@ -3,7 +3,6 @@ package java_.controller;
 import java_.game.controller.GameService;
 import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
-import java_.util.generic_data_structures.Link;
 import java_.util.security.LoginHandler;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -24,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.*;
 

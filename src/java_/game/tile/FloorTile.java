@@ -101,7 +101,7 @@ public class FloorTile extends Tile {
                 '}';
     }
 
-    public int getPathsBits() {
+    public byte getPathsBits() {
         return pathsBits;
     }
 
