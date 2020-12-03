@@ -3,11 +3,9 @@ package java_.game.player;
 import java_.game.tile.ActionTile;
 
 import java_.game.tile.EffectType;
+import java_.game.tile.TileType;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The player which is one of up to four players that participates in the game. A player has a PlayerPiece which represents
@@ -93,5 +91,15 @@ public class Player {
                 ", drawnActionTiles=" + drawnActionTiles +
                 ", playerPiece=" + playerPiece +
                 '}';
+    }
+
+    public void addDrawnActionTiles(TileType[] drawnActionTilesToBeAdded) {
+        for (TileType tile: drawnActionTilesToBeAdded) {
+            drawnActionTiles.add(new ActionTile(tile));
+        }
+    }
+
+    public void addPreviouslyAppliedEffects(EffectType[] previouslyAppliedActionTiles) {
+        previousAppliedEffect.addAll(Arrays.asList(previouslyAppliedActionTiles));
     }
 }

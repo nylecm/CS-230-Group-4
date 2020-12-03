@@ -29,20 +29,25 @@ public class FloorTile extends Tile {
      * @param type    the type name
      * @param isFixed the is fixed
      */
-    public FloorTile(TileType type, boolean isFixed) throws IllegalArgumentException {
+    public FloorTile(TileType type) throws IllegalArgumentException {
         super(type, FLOOR_TILE_TYPES);
+        isFixed = false;
 
         switch (type) {
             case STRAIGHT:
+                isGoalTile = false;
                 pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
                 break;
             case CORNER:
+                isGoalTile = false;
                 pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
                 break;
             case T_SHAPED:
+                isGoalTile = false;
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
                 break;
             case GOAL:
+                isGoalTile = true;
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
                 break;
         }
@@ -50,24 +55,27 @@ public class FloorTile extends Tile {
         System.out.println("EYY " + pathsBits);
     }
 
-    // Creates a pre-rotated tile (for fixed tiles)
-    public FloorTile(TileType type, boolean isFixed, boolean isGoalTile, int rotationAmount) {
+    // Creates a pre-rotated tile
+    public FloorTile(TileType type, boolean isFixed, int rotationAmount) {
         super(type, FLOOR_TILE_TYPES);
 
         this.isFixed = isFixed;
-        this.isGoalTile = isGoalTile;
 
         switch (type) {
             case STRAIGHT:
+                isGoalTile = false;
                 pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
                 break;
             case CORNER:
+                isGoalTile = false;
                 pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
                 break;
             case T_SHAPED:
+                isGoalTile = false;
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
                 break;
             case GOAL:
+                isGoalTile = true;
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
                 break;
         }

@@ -506,6 +506,10 @@ public class GameBoard {
         return playerPiecePositions.length;
     }
 
+    public Set<Position> getActiveEffectPositions() {
+        return activeEffects.keySet();
+    }
+
     /*public static void main(String[] args) {
         //PlayerPiece[] playerPieces = new PlayerPiece[0];
         Position[] playerPiecePositions = new Position[0];
