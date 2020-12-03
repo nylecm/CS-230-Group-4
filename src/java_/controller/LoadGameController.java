@@ -93,6 +93,7 @@ public class LoadGameController implements Initializable {
             playerUsernames[i] = in.next();
             in.nextLine();
         }
+        in.close();
 
         for (int i = 0; i < nPlayers; i++) {
             createPasswordEntryForm(playerUsernames[i], playerPieces[i]);
@@ -131,9 +132,10 @@ public class LoadGameController implements Initializable {
             VBox userLoginForm = logInVBoxes.get(i);
             Label userUsername = (Label) userLoginForm.getChildren().get(0);
             PasswordField userPassword = (PasswordField) userLoginForm.getChildren().get(1);
-            if (LoginHandler.login(userUsername.getText(), userPassword.getText())) {
+            if (!LoginHandler.login(userUsername.getText(), userPassword.getText())) {
                 isIncorrectPasswordEntered = true;
             }
+            i++;
         }
 
         if (!isIncorrectPasswordEntered) {
@@ -154,7 +156,7 @@ public class LoadGameController implements Initializable {
                 ioException.printStackTrace();
             }
         } else {
-
+            System.out.println("WRONG PW");
             //Handle incorrect password
         }
     }

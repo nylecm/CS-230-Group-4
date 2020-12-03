@@ -280,10 +280,10 @@ public class GameService {
             int effectCol = in.nextInt();
             Position effectPos = new Position(effectRow, effectCol);
             EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
-            int radius = in.nextInt();
+            int radius = in.nextInt(); //todo reconsider this...
             String durationRemainingStr = in.next();
             int durationRemaining = Integer.parseInt(durationRemainingStr);
-            AreaEffect areaEffect = new AreaEffect(effectType, radius, durationRemaining);
+            AreaEffect areaEffect = new AreaEffect(effectType, 0, durationRemaining);
             gameBoard.applyEffect(areaEffect, effectPos);
         }
         in.close();
@@ -567,14 +567,14 @@ public class GameService {
 
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
-                new Player[]{new Player("bob", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_1.png").toURL())), new Player("bob1", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_2.png").toURL()))}, "oberon_1");
+                new Player[]{new Player("nylecm", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_1.png").toURL())), new Player("nylecm1", new PlayerPiece(new File("view/res/img/player_piece/alien_ufo_2.png").toURL()))}, "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
         System.out.println(gs.gameBoard);
 
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
 
-        gs.gameBoard.applyEffect(effect, new Position(1, 0));
+        gs.gameBoard.applyEffect(effect, new Position(4, 0));
         for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
         }
