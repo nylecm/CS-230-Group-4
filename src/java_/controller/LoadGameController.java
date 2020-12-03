@@ -124,7 +124,7 @@ public class LoadGameController implements Initializable {
         currentStage.setScene(new Scene(mainMenu));
     }
 
-    public void onLoadGameButtonClicked(ActionEvent e) {
+    public void onLoadGameButtonClicked(ActionEvent e) throws IOException {
         boolean isIncorrectPasswordEntered = false;
         int i = 0;
 
@@ -148,13 +148,8 @@ public class LoadGameController implements Initializable {
             }
 
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Pane game = null;
-            try {
-                game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
-                currentStage.setScene(new Scene(game));
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/gameDummy.fxml"));
+            currentStage.setScene(new Scene(game));
         } else {
             System.out.println("WRONG PW");
             //Handle incorrect password
