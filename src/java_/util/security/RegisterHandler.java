@@ -49,5 +49,9 @@ public class RegisterHandler {
 
         byte[] userRecordBytes = userRecord.getBytes();
         Files.write(Paths.get(USERS_FILE_PATH), userRecordBytes, StandardOpenOption.APPEND);
+
+
+
+
     }
 }
