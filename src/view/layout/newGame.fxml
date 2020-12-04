@@ -12,178 +12,230 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="800.0" spacing="20.0" styleClass="main_pane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.NewGameController">
+<VBox fx:id="mainBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="820.0" spacing="20.0"
+      styleClass="main_pane" xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.NewGameController">
     <children>
         <HBox alignment="CENTER_LEFT">
             <children>
                 <Button mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back">
                     <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets right="10.0"/>
                     </HBox.margin>
                 </Button>
                 <Label text="New Game">
                     <font>
-                        <Font size="38.0" />
+                        <Font size="38.0"/>
                     </font>
                 </Label>
             </children>
         </HBox>
         <HBox alignment="CENTER" prefHeight="34.0" prefWidth="1631.0" spacing="30.0">
             <children>
-                <Label minWidth="100.0" text="Select Game Board:" />
-                <ChoiceBox fx:id="gameBoardSelect" minWidth="150.0" prefWidth="150.0" />
+                <Label minWidth="100.0" text="Select Game Board:"/>
+                <ChoiceBox fx:id="gameBoardSelect" minWidth="150.0" prefWidth="150.0"/>
             </children>
         </HBox>
         <HBox alignment="BOTTOM_CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
             <children>
-                <VBox fx:id="player1SetUpVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                <VBox fx:id="player1SetUpVBox" alignment="CENTER" spacing="10.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
                         <Label text="Player 1">
                             <font>
-                                <Font size="20.0" />
+                                <Font size="20.0"/>
                             </font>
                         </Label>
                         <VBox spacing="5.0">
                             <children>
-                                <TextField fx:id="player1Username" promptText="Username" text="nylecm" />
-                                <PasswordField fx:id="player1Password" promptText="Password" text="Password123" />
+                                <TextField fx:id="player1Username" promptText="Username"
+                                           text="nylecm"/>
+                                <PasswordField fx:id="player1Password" promptText="Password"
+                                               text="Password123"/>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <Button fx:id="player1LogIn" minWidth="40.0" mnemonicParsing="false" onAction="#onPlayer1LogInButtonPressed" text="LogIn" />
+                                        <Button fx:id="player1LogIn" minWidth="40.0"
+                                                mnemonicParsing="false"
+                                                onAction="#onPlayer1LogInButtonPressed"
+                                                text="LogIn"/>
                                         <Label fx:id="player1LogInStatusLabel" text="debug text">
                                             <padding>
-                                                <Insets left="5.0" />
+                                                <Insets left="5.0"/>
                                             </padding>
                                         </Label>
                                     </children>
                                 </HBox>
                             </children>
                         </VBox>
-                        <VBox fx:id="player1PlayerPieceSelectionVBox" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                        <VBox fx:id="player1PlayerPieceSelectionVBox" prefHeight="200.0"
+                              prefWidth="100.0" spacing="5.0">
                             <children>
-                                <Label text="Select Player Piece" />
-                                <ChoiceBox fx:id="player1PlayerPieceSelect" prefWidth="1000.0" />
-                                <Label fx:id="player1PlayerPieceStatus" text="Label" />
-                                <ImageView fx:id="player1PlayerPieceImage" fitHeight="151.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" />
-                                <Button fx:id="player1PlayerPieceConfirm" minWidth="100.0" mnemonicParsing="false" onAction="#onPlayer1PlayerPieceConfirmClicked" prefHeight="112.0" prefWidth="129.0" text="Confirm Selection" />
+                                <Label text="Select Player Piece"/>
+                                <ChoiceBox fx:id="player1PlayerPieceSelect" prefWidth="1000.0"/>
+                                <Label fx:id="player1PlayerPieceStatus" text="Label"/>
+                                <ImageView fx:id="player1PlayerPieceImage" fitHeight="151.0"
+                                           fitWidth="182.0" pickOnBounds="true"
+                                           preserveRatio="true"/>
+                                <Button fx:id="player1PlayerPieceConfirm" minWidth="100.0"
+                                        mnemonicParsing="false"
+                                        onAction="#onPlayer1PlayerPieceConfirmClicked"
+                                        prefHeight="112.0" prefWidth="129.0"
+                                        text="Confirm Selection"/>
                             </children>
                         </VBox>
                     </children>
                 </VBox>
-                <VBox fx:id="player2SetUpVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                <VBox fx:id="player2SetUpVBox" alignment="CENTER" spacing="10.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
                         <Label text="Player 2">
                             <font>
-                                <Font size="20.0" />
+                                <Font size="20.0"/>
                             </font>
                         </Label>
                         <VBox spacing="5.0">
                             <children>
-                                <TextField fx:id="player2Username" promptText="Username" text="nylecm1" />
-                                <PasswordField fx:id="player2Password" promptText="Password" text="Password123" />
+                                <TextField fx:id="player2Username" promptText="Username"
+                                           text="nylecm1"/>
+                                <PasswordField fx:id="player2Password" promptText="Password"
+                                               text="Password123"/>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <Button fx:id="player2LogIn" minWidth="40.0" mnemonicParsing="false" onAction="#onPlayer2LogInButtonPressed" text="LogIn" />
+                                        <Button fx:id="player2LogIn" minWidth="40.0"
+                                                mnemonicParsing="false"
+                                                onAction="#onPlayer2LogInButtonPressed"
+                                                text="LogIn"/>
                                         <Label fx:id="player2LogInStatusLabel" text="debug text">
                                             <padding>
-                                                <Insets left="5.0" />
+                                                <Insets left="5.0"/>
                                             </padding>
                                         </Label>
                                     </children>
                                 </HBox>
                             </children>
                         </VBox>
-                        <VBox fx:id="player2PlayerPieceSelectionVBox" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                        <VBox fx:id="player2PlayerPieceSelectionVBox" prefHeight="200.0"
+                              prefWidth="100.0" spacing="5.0">
                             <children>
-                                <Label text="Select Player Piece" />
-                                <ChoiceBox fx:id="player2PlayerPieceSelect" prefWidth="1000.0" />
-                                <Label fx:id="player2PlayerPieceStatus" text="Label" />
-                                <ImageView fx:id="player2PlayerPieceImage" fitHeight="151.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" />
-                                <Button fx:id="player2PlayerPieceConfirm" minWidth="100.0" mnemonicParsing="false" onAction="#onPlayer2PlayerPieceConfirmClicked" prefHeight="112.0" prefWidth="129.0" text="Confirm Selection" />
+                                <Label text="Select Player Piece"/>
+                                <ChoiceBox fx:id="player2PlayerPieceSelect" prefWidth="1000.0"/>
+                                <Label fx:id="player2PlayerPieceStatus" text="Label"/>
+                                <ImageView fx:id="player2PlayerPieceImage" fitHeight="151.0"
+                                           fitWidth="182.0" pickOnBounds="true"
+                                           preserveRatio="true"/>
+                                <Button fx:id="player2PlayerPieceConfirm" minWidth="100.0"
+                                        mnemonicParsing="false"
+                                        onAction="#onPlayer2PlayerPieceConfirmClicked"
+                                        prefHeight="112.0" prefWidth="129.0"
+                                        text="Confirm Selection"/>
                             </children>
                         </VBox>
                     </children>
                 </VBox>
-                <VBox fx:id="player3SetUpVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                <VBox fx:id="player3SetUpVBox" alignment="CENTER" spacing="10.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
                         <Label text="Player 3">
                             <font>
-                                <Font size="20.0" />
+                                <Font size="20.0"/>
                             </font>
                         </Label>
                         <VBox spacing="5.0">
                             <children>
-                                <TextField fx:id="player3Username" promptText="Username" />
-                                <PasswordField fx:id="player3Password" promptText="Password" />
+                                <TextField fx:id="player3Username" promptText="Username"/>
+                                <PasswordField fx:id="player3Password" promptText="Password"/>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <Button fx:id="player3LogIn" minWidth="40.0" mnemonicParsing="false" onAction="#onPlayer3LogInButtonPressed" text="LogIn" />
+                                        <Button fx:id="player3LogIn" minWidth="40.0"
+                                                mnemonicParsing="false"
+                                                onAction="#onPlayer3LogInButtonPressed"
+                                                text="LogIn"/>
                                         <Label fx:id="player3LogInStatusLabel" text="debug text">
                                             <padding>
-                                                <Insets left="5.0" />
+                                                <Insets left="5.0"/>
                                             </padding>
                                         </Label>
                                     </children>
                                 </HBox>
                             </children>
                         </VBox>
-                        <VBox fx:id="player3PlayerPieceSelectionVBox" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                        <VBox fx:id="player3PlayerPieceSelectionVBox" prefHeight="200.0"
+                              prefWidth="100.0" spacing="5.0">
                             <children>
-                                <Label text="Select Player Piece" />
-                                <ChoiceBox fx:id="player3PlayerPieceSelect" prefWidth="1000.0" />
-                                <Label fx:id="player3PlayerPieceStatus" text="Label" />
-                                <ImageView fx:id="player3PlayerPieceImage" fitHeight="151.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" />
-                                <Button fx:id="player3PlayerPieceConfirm" minWidth="100.0" mnemonicParsing="false" onAction="#onPlayer3PlayerPieceConfirmClicked" prefHeight="112.0" prefWidth="129.0" text="Confirm Selection" />
+                                <Label text="Select Player Piece"/>
+                                <ChoiceBox fx:id="player3PlayerPieceSelect" prefWidth="1000.0"/>
+                                <Label fx:id="player3PlayerPieceStatus" text="Label"/>
+                                <ImageView fx:id="player3PlayerPieceImage" fitHeight="151.0"
+                                           fitWidth="182.0" pickOnBounds="true"
+                                           preserveRatio="true"/>
+                                <Button fx:id="player3PlayerPieceConfirm" minWidth="100.0"
+                                        mnemonicParsing="false"
+                                        onAction="#onPlayer3PlayerPieceConfirmClicked"
+                                        prefHeight="112.0" prefWidth="129.0"
+                                        text="Confirm Selection"/>
                             </children>
                         </VBox>
                     </children>
                 </VBox>
-                <VBox fx:id="player4SetUpVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                <VBox fx:id="player4SetUpVBox" alignment="CENTER" spacing="10.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
                         <Label text="Player 4">
                             <font>
-                                <Font size="20.0" />
+                                <Font size="20.0"/>
                             </font>
                         </Label>
                         <VBox spacing="5.0">
                             <children>
-                                <TextField fx:id="player4Username" promptText="Username" />
-                                <PasswordField fx:id="player4Password" promptText="Password" />
+                                <TextField fx:id="player4Username" promptText="Username"/>
+                                <PasswordField fx:id="player4Password" promptText="Password"/>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <Button fx:id="player4LogIn" minWidth="40.0" mnemonicParsing="false" onAction="#onPlayer4LogInButtonPressed" text="LogIn" />
+                                        <Button fx:id="player4LogIn" minWidth="40.0"
+                                                mnemonicParsing="false"
+                                                onAction="#onPlayer4LogInButtonPressed"
+                                                text="LogIn"/>
                                         <Label fx:id="player4LogInStatusLabel" text="debug text">
                                             <padding>
-                                                <Insets left="5.0" />
+                                                <Insets left="5.0"/>
                                             </padding>
                                         </Label>
                                     </children>
                                 </HBox>
                             </children>
                         </VBox>
-                        <VBox fx:id="player4PlayerPieceSelectionVBox" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                        <VBox fx:id="player4PlayerPieceSelectionVBox" prefHeight="200.0"
+                              prefWidth="100.0" spacing="5.0">
                             <children>
-                                <Label text="Select Player Piece" />
-                                <ChoiceBox fx:id="player4PlayerPieceSelect" prefWidth="1000.0" />
-                                <Label fx:id="player4PlayerPieceStatus" text="Label" />
-                                <ImageView fx:id="player4PlayerPieceImage" fitHeight="151.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true" />
-                                <Button fx:id="player4PlayerPieceConfirm" minWidth="100.0" mnemonicParsing="false" onAction="#onPlayer4PlayerPieceConfirmClicked" prefHeight="112.0" prefWidth="129.0" text="Confirm Selection" />
+                                <Label text="Select Player Piece"/>
+                                <ChoiceBox fx:id="player4PlayerPieceSelect" prefWidth="1000.0"/>
+                                <Label fx:id="player4PlayerPieceStatus" text="Label"/>
+                                <ImageView fx:id="player4PlayerPieceImage" fitHeight="151.0"
+                                           fitWidth="182.0" pickOnBounds="true"
+                                           preserveRatio="true"/>
+                                <Button fx:id="player4PlayerPieceConfirm" minWidth="100.0"
+                                        mnemonicParsing="false"
+                                        onAction="#onPlayer4PlayerPieceConfirmClicked"
+                                        prefHeight="112.0" prefWidth="129.0"
+                                        text="Confirm Selection"/>
                             </children>
                         </VBox>
                     </children>
                     <HBox.margin>
-                        <Insets />
+                        <Insets/>
                     </HBox.margin>
                 </VBox>
             </children>
         </HBox>
-        <Button minWidth="200.0" mnemonicParsing="false" onAction="#onStartGameButtonClicked" prefHeight="60.0" prefWidth="160.0" text="Start Game" />
-      <Label fx:id="startGameStatusLabel" text="Label" />
+        <Button minWidth="200.0" mnemonicParsing="false" onAction="#onStartGameButtonClicked"
+                prefHeight="60.0" prefWidth="160.0" text="Start Game"/>
+        <Label fx:id="startGameStatusLabel" text="Label"/>
     </children>
     <padding>
-        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
     </padding>
     <stylesheets>
-        <URL value="@new_game.css" />
+        <URL value="@new_game.css"/>
     </stylesheets>
 </VBox>
