@@ -28,6 +28,8 @@ public class CoinHandler {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
+
+
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
         //int nTurns = GameService.getInstance().getTurnCount(); todo uncomment
         int nTurns = 100; //todo remove
@@ -50,9 +52,11 @@ public class CoinHandler {
             String lastLoginDate = ln.next();
             int nPlayerPieces = ln.nextInt();
             String ownedPlayerPieces = "";
+
             while (ln.hasNext()) {
                 ownedPlayerPieces += ln.next() + DELIMITER;
             }
+
             for (int i = 0; i < players.length; i++) {
                 if (players[i].getUsername().equals(username) && i == winningPlayerIndex) {
                     nCoins += winningCoins;
@@ -73,9 +77,6 @@ public class CoinHandler {
         lineWriter.flush();
         lineWriter.close();
     }
-
-
-
 
     public static void giveCoins(String username, int coins) throws FileNotFoundException {
         File coinFile = new File(PLAYER_COINS_FILEPATH);
@@ -132,8 +133,6 @@ public class CoinHandler {
             while (ln.hasNext()) {
                 playerPieces += ln.next() + DELIMITER;
             }
-
-
 
             //Calculating day after previous login date
             SimpleDateFormat yyyyddmm = new SimpleDateFormat(DATE_FORMAT);
