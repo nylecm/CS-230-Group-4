@@ -103,7 +103,6 @@ public class LoadGameController implements Initializable {
         }
         in.nextLine();
 
-
         String[] playerUsernames = new String[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
             playerUsernames[i] = in.next();
