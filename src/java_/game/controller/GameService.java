@@ -35,6 +35,8 @@ public class GameService {
     private static final String SAVE_GAME_FILE_PATH = "data/saves/";
     private static final String NO_LEVEL_WITH_SUCH_NAME_MSG =
             "No level with such name found!";
+    public static final String TOO_MANY_FILES_WITH_SAME_NAME_MSG =
+            "Too many files with same name!";
 
     private static final int MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME = 256;
 
@@ -194,7 +196,6 @@ public class GameService {
     }
 
     public void loadSavedInstance(File f) throws FileNotFoundException, MalformedURLException {
-        //todo chance that it works 1/4
         remake();
 
         Scanner in = new Scanner(f);
@@ -208,6 +209,27 @@ public class GameService {
         turnCount = in.nextInt();
         in.nextLine();
 
+        Position[] playerPositions = getSavedPlayerPositions(in, nPlayers);
+        PlayerPiece[] playerPieces = getSavedPlayerPieceImages(in, nPlayers);
+        Player[] players = getSavedInstancePlayers(in, nPlayers, playerPieces);
+
+        playerService.setPlayers(players);
+        playerService.setGameService(this);
+
+        FloorTile[] floorTilesForGameBoard = getSavedFloorTiles(in, nRows, nCols);
+
+        gameBoard = new GameBoard(playerPieces, playerPositions, floorTilesForGameBoard, nCols, nRows, gameBoardName);
+        PlayerService.getInstance().setPlayers(players);
+
+        readSavedSilkBag(in);
+
+        readSavedInstanceAreaEffects(in);
+
+        actionTilePlayed = false;
+        playerPieceMoved = false;
+    }
+
+    private Position[] getSavedPlayerPositions(Scanner in, int nPlayers) {
         Position[] playerPositions = new Position[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
             int row = in.nextInt();
@@ -215,15 +237,20 @@ public class GameService {
             playerPositions[i] = new Position(row, col);
         }
         in.nextLine();
+        return playerPositions;
+    }
 
+    private PlayerPiece[] getSavedPlayerPieceImages(Scanner in, int nPlayers) throws MalformedURLException {
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-
             File playerPieceImageFile = new File(in.next()); //todo find a less hacky way
             playerPieces[i] = new PlayerPiece(playerPieceImageFile);
         }
         in.nextLine();
+        return playerPieces;
+    }
 
+    private Player[] getSavedInstancePlayers(Scanner in, int nPlayers, PlayerPiece[] playerPieces) {
         Player[] players = new Player[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
             String username = in.next();
@@ -246,10 +273,10 @@ public class GameService {
             players[i].addPreviouslyAppliedEffects(previouslyAppliedEffects);
             in.nextLine();
         }
+        return players;
+    }
 
-        playerService.setPlayers(players);
-        playerService.setGameService(this);
-
+    private FloorTile[] getSavedFloorTiles(Scanner in, int nRows, int nCols) {
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
         for (int i = 0; i < nRows * nCols; i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
@@ -259,10 +286,10 @@ public class GameService {
             floorTilesForGameBoard[i] = new FloorTile(tileType, isFixed, rotation);
         }
         in.nextLine();
+        return floorTilesForGameBoard;
+    }
 
-        gameBoard = new GameBoard(playerPieces, playerPositions, floorTilesForGameBoard, nCols, nRows, gameBoardName);
-        PlayerService.getInstance().setPlayers(players); //todo player effects...
-
+    private void readSavedSilkBag(Scanner in) {
         silkBag = new SilkBag();
         String silkBagSizeStr = in.next();
         int silkBagSize = Integer.parseInt(silkBagSizeStr);
@@ -271,22 +298,20 @@ public class GameService {
             silkBag.put(TileType.valueOf(in.next().toUpperCase()));
         }
         in.nextLine();
+    }
 
+    private void readSavedInstanceAreaEffects(Scanner in) {
         while (in.hasNext()) {
             int effectRow = in.nextInt();
             int effectCol = in.nextInt();
             Position effectPos = new Position(effectRow, effectCol);
             EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
-            int radius = in.nextInt(); //todo reconsider this...
             String durationRemainingStr = in.next();
             int durationRemaining = Integer.parseInt(durationRemainingStr);
             AreaEffect areaEffect = new AreaEffect(effectType, 0, durationRemaining);
             gameBoard.applyEffect(areaEffect, effectPos);
         }
         in.close();
-
-        actionTilePlayed = true; //todo check with mateo
-        playerPieceMoved = true; //
     }
 
     public void nextTurn() { // todo gameplay loop...
@@ -356,7 +381,7 @@ public class GameService {
         }
 
         if (!isFileCreated) {
-            throw new IllegalArgumentException("Too many files with same name!");
+            throw new IllegalArgumentException(TOO_MANY_FILES_WITH_SAME_NAME_MSG);
         }
         return gameSaveFile;
     }
