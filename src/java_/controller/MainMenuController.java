@@ -58,7 +58,8 @@ public class MainMenuController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundFill backgroundFill = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundFill = new BackgroundFill(new ImagePattern
+                    (new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -79,7 +80,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onNewGameButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane newGame = (Pane) FXMLLoader.load(getClass().getResource(NEW_GAME_PATH));
+        Pane newGame = FXMLLoader.load(getClass().getResource(NEW_GAME_PATH));
         currentStage.setScene(new Scene(newGame));
     }
 
@@ -92,7 +93,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onLoadGameButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane loadGame = (Pane) FXMLLoader.load(getClass().getResource(LOAD_GAME_PATH));
+        Pane loadGame = FXMLLoader.load(getClass().getResource(LOAD_GAME_PATH));
         currentStage.setScene(new Scene(loadGame));
     }
 
@@ -104,7 +105,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onCustomiseProfileButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane customiseProfile = (Pane) FXMLLoader.load(getClass().getResource(CUSTOMISE_PROFILE_PATH));
+        Pane customiseProfile = FXMLLoader.load(getClass().getResource(CUSTOMISE_PROFILE_PATH));
         currentStage.setScene(new Scene(customiseProfile));
     }
 
@@ -116,7 +117,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onLeaderboardButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane newGame = (Pane) FXMLLoader.load(getClass().getResource(LEADERBOARD_PATH));
+        Pane newGame = FXMLLoader.load(getClass().getResource(LEADERBOARD_PATH));
         currentStage.setScene(new Scene(newGame));
     }
 
@@ -128,7 +129,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onSettingsButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane newGame = (Pane) FXMLLoader.load(getClass().getResource(SETTINGS_PATH));
+        Pane newGame = FXMLLoader.load(getClass().getResource(SETTINGS_PATH));
         currentStage.setScene(new Scene(newGame));
     }
 
@@ -140,7 +141,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onRegisterButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane newGame = (Pane) FXMLLoader.load(getClass().getResource(REGISTER_PATH));
+        Pane newGame = FXMLLoader.load(getClass().getResource(REGISTER_PATH));
         currentStage.setScene(new Scene(newGame));
     }
 
