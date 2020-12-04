@@ -99,7 +99,6 @@ public class GameBoard {
         int currentPlayerNumber = GameService.getInstance().getCurrentPlayerNum();
         playerPieces[currentPlayerNumber].addPreviousPlayerPosition(playerPiecePositions[currentPlayerNumber]);
         playerPiecePositions[currentPlayerNumber] = new Position(newRow, newCol);
-        GameService.getInstance().setPlayerPieceMoved(true);
     }
 
     public void movePlayerPieceUp(int playerNumber) {

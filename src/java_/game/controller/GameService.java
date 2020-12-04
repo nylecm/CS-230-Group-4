@@ -29,8 +29,6 @@ public class GameService {
     private SilkBag silkBag;
     private int turnCount;
     private boolean isWin;
-    private boolean actionTilePlayed; //TODO Move somewhere else?
-    private boolean playerPieceMoved; //TODO Move somewhere else?
 
     private static final String DELIMITER = "`";
     private static final String FILE_WORD_SPACER = "_";
@@ -80,9 +78,6 @@ public class GameService {
 
         playerService.setPlayers(players);
         playerService.setGameService(this);
-
-        actionTilePlayed = false;
-        playerPieceMoved = false;
     }
 
     private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in,
@@ -289,14 +284,9 @@ public class GameService {
             gameBoard.applyEffect(areaEffect, effectPos);
         }
         in.close();
-
-        actionTilePlayed = true; //todo check with mateo
-        playerPieceMoved = true; //
     }
 
     public void nextTurn() { // todo gameplay loop...
-        actionTilePlayed = false;
-        playerPieceMoved = false;
         gameBoard.refreshEffects();
         turnCount++;
     }
@@ -543,22 +533,6 @@ public class GameService {
      */
     public SilkBag getSilkBag() {
         return silkBag;
-    }
-
-    public boolean getActionTilePlayed() {
-        return actionTilePlayed;
-    }
-
-    public void setActionTilePlayed(boolean actionTilePlayed) {
-        this.actionTilePlayed = actionTilePlayed;
-    }
-
-    public boolean getPlayerPieceMoved() {
-        return playerPieceMoved;
-    }
-
-    public void setPlayerPieceMoved(boolean playerPieceMoved) {
-        this.playerPieceMoved = playerPieceMoved;
     }
 
     /**
