@@ -185,7 +185,7 @@ public class NewGameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundFill backgroundFill = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -218,7 +218,7 @@ public class NewGameController implements Initializable {
         player1PlayerPieceSelect.setOnAction(event -> {
             if (player1PlayerPieceSelect.getValue() != null) {
                 try {
-                    player1PlayerPieceImage.setImage(new Image(String.valueOf(player1PlayerPieceSelect.getValue().toURL())));
+                    player1PlayerPieceImage.setImage(new Image(String.valueOf(player1PlayerPieceSelect.getValue().toURI().toURL())));
                     playerPieceImageFiles[0] = player1PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -230,7 +230,7 @@ public class NewGameController implements Initializable {
         player2PlayerPieceSelect.setOnAction(event -> {
             if (player2PlayerPieceSelect.getValue() != null) {
                 try {
-                    player2PlayerPieceImage.setImage(new Image(String.valueOf(player2PlayerPieceSelect.getValue().toURL())));
+                    player2PlayerPieceImage.setImage(new Image(String.valueOf(player2PlayerPieceSelect.getValue().toURI().toURL())));
                     playerPieceImageFiles[1] = player2PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -242,7 +242,7 @@ public class NewGameController implements Initializable {
         player3PlayerPieceSelect.setOnAction(event -> {
             if (player3PlayerPieceSelect.getValue() != null) {
                 try {
-                    player3PlayerPieceImage.setImage(new Image(String.valueOf(player3PlayerPieceSelect.getValue().toURL())));
+                    player3PlayerPieceImage.setImage(new Image(String.valueOf(player3PlayerPieceSelect.getValue().toURI().toURL())));
                     playerPieceImageFiles[2] = player3PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -254,7 +254,7 @@ public class NewGameController implements Initializable {
         player4PlayerPieceSelect.setOnAction(event -> {
             if (player4PlayerPieceSelect.getValue() != null) {
                 try {
-                    player4PlayerPieceImage.setImage(new Image(String.valueOf(player4PlayerPieceSelect.getValue().toURL())));
+                    player4PlayerPieceImage.setImage(new Image(String.valueOf(player4PlayerPieceSelect.getValue().toURI().toURL())));
                     playerPieceImageFiles[3] = player4PlayerPieceSelect.getValue();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -301,7 +301,7 @@ public class NewGameController implements Initializable {
         if (player1PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player1PlayerPieceSelect.getValue().toURL();
+                playerPieceSelected = player1PlayerPieceSelect.getValue().toURI().toURL();
             } catch (MalformedURLException e) {
                 player1PlayerPieceStatus.setText("Invalid path!");
             }
@@ -351,7 +351,7 @@ public class NewGameController implements Initializable {
         if (player2PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player2PlayerPieceSelect.getValue().toURL();
+                playerPieceSelected = player2PlayerPieceSelect.getValue().toURI().toURL();
             } catch (MalformedURLException e) {
                 player2PlayerPieceStatus.setText("Invalid path!");
             }
@@ -402,7 +402,7 @@ public class NewGameController implements Initializable {
         if (player3PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player3PlayerPieceSelect.getValue().toURL();
+                playerPieceSelected = player3PlayerPieceSelect.getValue().toURI().toURL();
             } catch (MalformedURLException e) {
                 player3PlayerPieceStatus.setText("Invalid path!");
             }
@@ -452,7 +452,7 @@ public class NewGameController implements Initializable {
         if (player4PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player4PlayerPieceSelect.getValue().toURL();
+                playerPieceSelected = player4PlayerPieceSelect.getValue().toURI().toURL();
             } catch (MalformedURLException e) {
                 player4PlayerPieceStatus.setText("Invalid path!");
             }
@@ -478,17 +478,6 @@ public class NewGameController implements Initializable {
         LinkedList<File> playerPieceFiles = new LinkedList<>(Arrays.asList(playerPieces));
         playerPieceSelect.setItems(FXCollections.observableList(playerPieceFiles));
     }
-
-    private <R> R toURL(File file) {
-        try {
-            return (R) file.toURI().toURL();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
 
     @FXML
     private void onStartGameButtonClicked(ActionEvent e) throws IOException {
