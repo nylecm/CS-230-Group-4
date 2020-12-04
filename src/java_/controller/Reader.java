@@ -8,6 +8,8 @@ public class Reader {
     private File file;
     private Scanner in;
     private static final String GAME_BOARD_FILE_PATH = "data/game_board.txt";
+    private static final int GAME_BOARD_DEFINITION_LINE_FREQUENCY = 2;
+
     private static final String DELIMITER = "`";
 
     public List<String> readGameBoardNames() throws FileNotFoundException {
@@ -17,7 +19,7 @@ public class Reader {
         in.useDelimiter(DELIMITER);
         int lineCount = 1;
         while (in.hasNextLine()) {
-            if (lineCount % 2 == 1) {
+            if (lineCount % GAME_BOARD_DEFINITION_LINE_FREQUENCY == 1) {
                 output.add(in.next());
             }
             in.nextLine();

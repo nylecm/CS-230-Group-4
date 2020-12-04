@@ -1,7 +1,6 @@
 package java_.game.tile;
 
 import java_.game.controller.GameService;
-import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
 import javafx.geometry.Pos;
@@ -9,6 +8,8 @@ import javafx.geometry.Pos;
 import java.util.*;
 
 public class GameBoard {
+    public static final String FIRE_EFFECT_WHERE_THERE_IS_A_PLAYER = "Cannot apply fire effect where there is a player.";
+    public static final String INVALID_ROW_COLUMN_COMBO_MSG = "Invalid row/column combination entered.";
     private final int nRows; // height
     private final int nCols; // width
     private final String name;
@@ -16,17 +17,6 @@ public class GameBoard {
     private final Position[] playerPiecePositions;
     private final HashMap<Position, AreaEffect> activeEffects = new HashMap<>();
     private final FloorTile[][] board;
-
-    @Deprecated
-    public Set<Position> getPositionsWithActiveEffects() {
-        return activeEffects.keySet();
-    }
-    //temp todo remove
-
-    @Deprecated
-    public HashMap<Position, AreaEffect> getActiveEffects() {
-        return activeEffects;
-    }
 
     public FloorTile getTileAt(int row, int col) {
         return board[row][col];
@@ -142,15 +132,12 @@ public class GameBoard {
         }*/
     }
 
-    // todo GUI Check if pos to the left exists: Check if pos to the left is on fire:
-    // todo GUI Check if pos to the left has common path:
     public void movePlayerPieceLeft(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() - 1);
         playerPiecePositions[playerNumber] = newPos;
         playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
-
     public void insert(int colNum, int rowNum, FloorTile tile, int rotation)
             throws IllegalArgumentException {
         FloorTile pushedOffTile; // Tile being pushed off
@@ -168,7 +155,7 @@ public class GameBoard {
             pushedOffTile = board[0][colNum];
             shiftBottomToTop(colNum, rowNum, tile, rotation);
         } else {
-            throw new IllegalArgumentException("Invalid row/column combination entered.");
+            throw new IllegalArgumentException(INVALID_ROW_COLUMN_COMBO_MSG);
         }
         assert pushedOffTile != null;
         GameService.getInstance().getSilkBag().put(pushedOffTile.getType());
@@ -194,16 +181,6 @@ public class GameBoard {
                 ? new Position(pos.getRowNum(), 0)
                 : new Position(pos.getRowNum(), pos.getColNum() + 1));
     }
-
-    /*@Deprecated
-    private Position switchPositionLeftToRight(Position pos) {
-        System.out.println(getEffectAt(pos));
-        if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionLeftToRight(nextPositionLeftToRight(pos));
-        } else {
-            return pos;
-        }
-    }*/
 
     private void shiftTilesLeftToRight(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
@@ -239,6 +216,7 @@ public class GameBoard {
                 : new Position(pos.getRowNum(), pos.getColNum() - 1));
     }
 
+
     /*@Deprecated
     private Position switchPositionRightToLeft(Position pos) {
         System.out.println(getEffectAt(pos));
@@ -248,7 +226,6 @@ public class GameBoard {
             return pos;
         }
     }*/
-
     private void shiftTilesRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
         for (int i = 0; i < nCols - 1; i++) {
@@ -282,6 +259,7 @@ public class GameBoard {
                 : new Position(pos.getRowNum() + 1, pos.getColNum()));
     }
 
+
     /*@Deprecated
     private Position switchPositionTopToBottom(Position pos) {
         System.out.println(getEffectAt(pos));
@@ -291,7 +269,6 @@ public class GameBoard {
             return pos;
         }
     }*/
-
     private void shiftTilesTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
         for (int i = nRows - 1; i != 0; i--) {
@@ -326,6 +303,7 @@ public class GameBoard {
                 : new Position(pos.getRowNum() - 1, pos.getColNum()));
     }
 
+
    /* @Deprecated
     private Position switchPositionBottomToTop(Position pos) {
         System.out.println(getEffectAt(pos));
@@ -335,7 +313,6 @@ public class GameBoard {
             return pos;
         }
     }*/
-
     private void shiftTilesBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
         for (int i = 0; i < nRows - 1; i++) {
@@ -362,7 +339,7 @@ public class GameBoard {
         return false; // See bottom for commented out code...
     }
 
-    public boolean isColumnFixed(int colNum) {
+    public boolean isColumnFixed(int colNum) { //handled by gui.
         if (colNum == -1) {
             colNum += 1;
         } else if (colNum == nCols) {
@@ -389,7 +366,7 @@ public class GameBoard {
     public void useActionTile(ActionTile actionTile, Position pos) {
         if (actionTile.use() instanceof AreaEffect) {
             applyEffect((AreaEffect) actionTile.use(), pos);
-        } else if (actionTile.use() instanceof  PlayerEffect) {
+        } else if (actionTile.use() instanceof PlayerEffect) {
             Effect effect = actionTile.use();
             if (effect.getEffectType() == EffectType.BACKTRACK) {
 
@@ -414,7 +391,7 @@ public class GameBoard {
                     assert board[i][j] != null;
                     Position affectedPos = new Position(i, j);
                     if (effect.effectType == EffectType.FIRE && playerPiecePos.contains(affectedPos)) {
-                        throw new IllegalStateException("Cannot apply fire effect where there is a player.");
+                        throw new IllegalStateException(FIRE_EFFECT_WHERE_THERE_IS_A_PLAYER);
                     }
                     activeEffects.put(affectedPos, effect);
                 }
@@ -437,10 +414,6 @@ public class GameBoard {
         return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) == null)
                 || ((getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null)
                 && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)));
-    }
-
-    public AreaEffect getEffectAt(Position pos) {
-        return activeEffects.get(pos);
     }
 
     public void refreshEffects() {//todo check if broken
@@ -467,6 +440,10 @@ public class GameBoard {
 //                }
 //            }
 //        }
+    }
+
+    public AreaEffect getEffectAt(Position pos) {
+        return activeEffects.get(pos);
     }
 
     public String toString() {
@@ -505,97 +482,16 @@ public class GameBoard {
         return playerPieces[i];
     }
 
-    public static void main(String[] args) {
-        int p = 13;
-        int mask = 2;
-        System.out.println(p & mask);
+    @Deprecated
+    public HashMap<Position, AreaEffect> getActiveEffects() {
+        return activeEffects;
     }
 
     public int getNumOfPlayerPieces() {
         return playerPiecePositions.length;
     }
 
-    public Set<Position> getActiveEffectPositions() {
+    public Set<Position> getPositionsWithActiveEffects() {
         return activeEffects.keySet();
     }
-
-    /*public static void main(String[] args) {
-        //PlayerPiece[] playerPieces = new PlayerPiece[0];
-        Position[] playerPiecePositions = new Position[0];
-        Tile[] newTiles = new Tile[0];
-        SilkBag silkBag = new SilkBag(newTiles);
-
-        FloorTile A = new FloorTile(TileType.CORNER, true);
-        FloorTile B = new FloorTile(TileType.STRAIGHT, true);
-        FloorTile C = new FloorTile(TileType.T_SHAPED, true);
-
-        FloorTile[] fixedTiles = new FloorTile[3];
-        fixedTiles[0] = A;
-        fixedTiles[1] = B;
-        fixedTiles[2] = C;
-
-        Position[] fixedTilePositions = new Position[3];
-        fixedTilePositions[0] = new Position(0, 0);
-        fixedTilePositions[1] = new Position(1, 1);
-        fixedTilePositions[2] = new Position(2, 2);
-
-        FloorTile D = new FloorTile(TileType.CORNER, false);
-        FloorTile E = new FloorTile(TileType.CORNER, false);
-        FloorTile F = new FloorTile(TileType.T_SHAPED, false);
-        FloorTile G = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile H = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile I = new FloorTile(TileType.CORNER, false);
-        FloorTile J = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile K = new FloorTile(TileType.STRAIGHT, false);
-        FloorTile L = new FloorTile(TileType.STRAIGHT, false);
-
-
-        FloorTile[] tiles = new FloorTile[9];
-        tiles[0] = D;
-        tiles[1] = E;
-        tiles[2] = F;
-        tiles[3] = G;
-        tiles[4] = H;
-        tiles[5] = I;
-        tiles[6] = J;
-        tiles[7] = K;
-        tiles[8] = L;
-
-        GameBoard firstgame = new GameBoard(playerPiecePositions, fixedTiles, fixedTilePositions, tiles, 4, 3, "hello");
-
-        System.out.println(firstgame);
-
-        AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
-
-        firstgame.applyEffect(effect, new Position(1, 0));
-        for (Position pos : firstgame.positionsWithActiveEffects) {
-            System.out.println(pos.getRowNum() + " " + pos.getColNum());
-        }
-
-        AreaEffect test = firstgame.activeEffects.get(new Position(0, 0));
-        System.out.println(test);
-        firstgame.insert(0, -1, new FloorTile(TileType.STRAIGHT, false), 0);
-
-
-        System.out.println(test);
-
-
-        *//*
-         FloorTile insert1 = new FloorTile(TileType.STRAIGHT, false, false);
-         FloorTile insert2 = new FloorTile(TileType.CORNER, false, false);
-         FloorTile insert3 = new FloorTile(TileType.T_SHAPED, false, false);
-         FloorTile insert4 = new FloorTile(TileType.CORNER, false, false);
-         *//*
-
-     *//*
-         firstgame.insert(-1, 0, insert1);
-         System.out.println(firstgame);
-         firstgame.insert(4, 1, insert2);
-         System.out.println(firstgame);
-         firstgame.insert(1, -1, insert3);
-         System.out.println(firstgame);
-         firstgame.insert(0, 4, insert4);
-         System.out.println(firstgame);
-         *//*
-    }*/
 }

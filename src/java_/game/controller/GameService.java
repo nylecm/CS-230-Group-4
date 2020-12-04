@@ -6,21 +6,17 @@ import java_.game.player.PlayerPiece;
 import java_.game.player.PlayerService;
 import java_.game.tile.*;
 import java_.util.Position;
-import java_.util.generic_data_structures.Link;
 import javafx.embed.swing.JFXPanel;
-import javafx.geometry.Pos;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 public class GameService {
+    public static final String PLAYER_PIECE_PATH_START = "src\\";
     private static GameService instance = null;
     private GameController controller;
 
@@ -38,6 +34,8 @@ public class GameService {
     private static final String SAVE_GAME_FILE_PATH = "data/saves/";
     private static final String NO_LEVEL_WITH_SUCH_NAME_MSG =
             "No level with such name found!";
+    public static final String TOO_MANY_FILES_WITH_SAME_NAME_MSG =
+            "Too many files with same name!";
 
     private static final int MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME = 256;
 
@@ -89,7 +87,6 @@ public class GameService {
 
                 // Dealing with fixed tiles:
                 FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
-
                 FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
                 Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
 
@@ -195,7 +192,6 @@ public class GameService {
     }
 
     public void loadSavedInstance(File f) throws FileNotFoundException, MalformedURLException {
-        //todo chance that it works 1/4
         remake();
 
         Scanner in = new Scanner(f);
@@ -209,6 +205,23 @@ public class GameService {
         turnCount = in.nextInt();
         in.nextLine();
 
+        Position[] playerPositions = getSavedPlayerPositions(in, nPlayers);
+        PlayerPiece[] playerPieces = getSavedPlayerPieceImages(in, nPlayers);
+        Player[] players = getSavedInstancePlayers(in, nPlayers, playerPieces);
+
+        playerService.setPlayers(players);
+        playerService.setGameService(this);
+
+        FloorTile[] floorTilesForGameBoard = getSavedFloorTiles(in, nRows, nCols);
+
+        gameBoard = new GameBoard(playerPieces, playerPositions, floorTilesForGameBoard, nCols, nRows, gameBoardName);
+        PlayerService.getInstance().setPlayers(players);
+        readSavedSilkBag(in);
+        readSavedInstanceAreaEffects(in);
+        in.close();
+    }
+
+    private Position[] getSavedPlayerPositions(Scanner in, int nPlayers) {
         Position[] playerPositions = new Position[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
             int row = in.nextInt();
@@ -216,14 +229,20 @@ public class GameService {
             playerPositions[i] = new Position(row, col);
         }
         in.nextLine();
+        return playerPositions;
+    }
 
+    private PlayerPiece[] getSavedPlayerPieceImages(Scanner in, int nPlayers) throws MalformedURLException {
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-            URL playerPieceImageURL = new URL(in.next());
-            playerPieces[i] = new PlayerPiece(playerPieceImageURL);
+            File playerPieceImageFile = new File(in.next()); //todo find a less hacky way
+            playerPieces[i] = new PlayerPiece(playerPieceImageFile);
         }
         in.nextLine();
+        return playerPieces;
+    }
 
+    private Player[] getSavedInstancePlayers(Scanner in, int nPlayers, PlayerPiece[] playerPieces) {
         Player[] players = new Player[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
             String username = in.next();
@@ -246,10 +265,10 @@ public class GameService {
             players[i].addPreviouslyAppliedEffects(previouslyAppliedEffects);
             in.nextLine();
         }
+        return players;
+    }
 
-        playerService.setPlayers(players);
-        playerService.setGameService(this);
-
+    private FloorTile[] getSavedFloorTiles(Scanner in, int nRows, int nCols) {
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
         for (int i = 0; i < nRows * nCols; i++) {
             TileType tileType = TileType.valueOf(in.next().toUpperCase());
@@ -259,10 +278,10 @@ public class GameService {
             floorTilesForGameBoard[i] = new FloorTile(tileType, isFixed, rotation);
         }
         in.nextLine();
+        return floorTilesForGameBoard;
+    }
 
-        gameBoard = new GameBoard(playerPieces, playerPositions, floorTilesForGameBoard, nCols, nRows, gameBoardName);
-        PlayerService.getInstance().setPlayers(players); //todo player effects...
-
+    private void readSavedSilkBag(Scanner in) {
         silkBag = new SilkBag();
         String silkBagSizeStr = in.next();
         int silkBagSize = Integer.parseInt(silkBagSizeStr);
@@ -271,15 +290,17 @@ public class GameService {
             silkBag.put(TileType.valueOf(in.next().toUpperCase()));
         }
         in.nextLine();
+    }
 
+    private void readSavedInstanceAreaEffects(Scanner in) {
         while (in.hasNext()) {
             int effectRow = in.nextInt();
             int effectCol = in.nextInt();
-            Position effectPos = new Position(effectRow, effectCol);
-            EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
-            int radius = in.nextInt(); //todo reconsider this...
             String durationRemainingStr = in.next();
             int durationRemaining = Integer.parseInt(durationRemainingStr);
+            EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
+
+            Position effectPos = new Position(effectRow, effectCol);
             AreaEffect areaEffect = new AreaEffect(effectType, 0, durationRemaining);
             gameBoard.applyEffect(areaEffect, effectPos);
         }
@@ -327,7 +348,7 @@ public class GameService {
 
     private void writePlayerPieceDetails(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
-            out.print(gameBoard.getPlayerPiece(i).getImageURL().toString());
+            out.print(PLAYER_PIECE_PATH_START + gameBoard.getPlayerPiece(i).getImageFile());
             out.print(DELIMITER);
         }
         out.print('\n');
@@ -351,7 +372,7 @@ public class GameService {
         }
 
         if (!isFileCreated) {
-            throw new IllegalArgumentException("Too many files with same name!");
+            throw new IllegalArgumentException(TOO_MANY_FILES_WITH_SAME_NAME_MSG);
         }
         return gameSaveFile;
     }
@@ -371,14 +392,6 @@ public class GameService {
     }
 
     private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) {
-        /*for (int i = 0; i < playerService.getPlayers().length; i++) {
-            Position playerPiecePosition = gameBoard.getPlayerPiecePosition(i);
-            out.print(playerPiecePosition.getRowNum());
-            out.print(DELIMITER);
-            out.print(playerPiecePosition.getColNum());
-            out.print(DELIMITER);
-        }*/
-
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
                 out.print(gameBoard.getTileAt(i, j).getType());
@@ -387,38 +400,22 @@ public class GameService {
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).getRotation()); //todo check Matej's method
                 out.print(DELIMITER);
-
-                /*if (gameBoard.getEffectAt(new Position(i, j)) != null) {
-                    out.print(true);
-                    out.print(DELIMITER);
-                    out.print(gameBoard.getEffectAt(new Position(i, j)).getEffectType());
-                    out.print(DELIMITER);
-                    out.print(gameBoard.getEffectAt(new Position(i, j)).getRemainingDuration());
-                    out.print(DELIMITER);
-                    out.print(gameBoard.getEffectAt(new Position(i, j)).getRadius());
-                    out.print(DELIMITER);
-                } else {
-                    out.print(false);
-                    out.print(DELIMITER);
-                }*/
             }
         }
         out.print('\n');
     }
 
     private void writeAreaEffectDetails(PrintWriter out) {
-        Set<Position> activeEffectPositions = gameBoard.getActiveEffectPositions();
+        Set<Position> activeEffectPositions = gameBoard.getPositionsWithActiveEffects();
 
         for (Position effectPosition : activeEffectPositions) {
             out.print(effectPosition.getRowNum());
             out.print(DELIMITER);
             out.print(effectPosition.getColNum());
             out.print(DELIMITER);
-            out.print(gameBoard.getEffectAt(effectPosition).getEffectType());
-            out.print(DELIMITER);
             out.print(gameBoard.getEffectAt(effectPosition).getRemainingDuration());
             out.print(DELIMITER);
-            out.print(gameBoard.getEffectAt(effectPosition).getRadius());
+            out.print(gameBoard.getEffectAt(effectPosition).getEffectType().toString());
             out.print(DELIMITER);
         }
     }
@@ -460,7 +457,7 @@ public class GameService {
         out.print('\n');
     }
 
-    public void gameplayLoop() { // todo gameplay loop...
+  /*  public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
             playerService.playerTurn(playerService.getPlayer(turnCount
                     % playerService.getPlayers().length)); // todo improve player service
@@ -468,7 +465,7 @@ public class GameService {
             gameBoard.refreshEffects();
             turnCount++;
         }
-    }
+    }*/
 
     /**
      * Returns the PlayerService belonging to the GameService.
@@ -547,9 +544,10 @@ public class GameService {
         GameService gs = GameService.getInstance();
         gs.loadNewGame(
                 new Player[]{new Player("nylecm", new PlayerPiece
-                        (new File("view/res/img/player_piece/alien_ufo_1.png").toURL())),
+                        (new File("view/res/img/player_piece/alien_ufo_1.png"))),
                         new Player("nylecm1", new PlayerPiece
-                                (new File("view/res/img/player_piece/alien_ufo_2.png").toURL()))},
+                                (new File("view/res/img/player_piece/alien_ufo_2.png"))), new Player("nylecm2", new PlayerPiece
+                        (new File("view/res/img/player_piece/homer.png")))},
                 "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
@@ -558,6 +556,9 @@ public class GameService {
         AreaEffect effect = new AreaEffect(EffectType.FIRE, 1, 3);
 
         gs.gameBoard.applyEffect(effect, new Position(4, 0));
+        System.out.println("lemon");
+        System.out.println(gs.gameBoard.getPositionsWithActiveEffects());
+
         for (Position pos : gs.gameBoard.getPositionsWithActiveEffects()) {
             System.out.println(pos.getRowNum() + " " + pos.getColNum());
         }
@@ -644,11 +645,10 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron.txt"));
+            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_3.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
     }
 
     private static class FloorTilePositionBundle {

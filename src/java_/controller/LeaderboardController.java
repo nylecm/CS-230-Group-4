@@ -5,16 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import com.sun.org.apache.bcel.internal.classfile.ConstantNameAndType;
-import java_.game.player.Table;
-import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java_.game.player.LeaderboardTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,13 +31,13 @@ public class LeaderboardController implements Initializable {
     @FXML
     private BorderPane mainBox;
     @FXML
-    private TableView<Table> tableID;
+    private TableView<LeaderboardTable> tableID;
     @FXML
-    private TableColumn<Table, String> name;
+    private TableColumn<LeaderboardTable, String> name;
     @FXML
-    private TableColumn<Table, Integer> wins;
+    private TableColumn<LeaderboardTable, Integer> wins;
     @FXML
-    private TableColumn<Table, Integer> losses;
+    private TableColumn<LeaderboardTable, Integer> losses;
     @FXML
     private ChoiceBox gameBoardSelect;
 
@@ -52,12 +45,18 @@ public class LeaderboardController implements Initializable {
     private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
+    private LeaderboardTable leaderboardTableOne;
+    private Object Table;
+
+    //Un-comment if using file reader.
+    //@FXML ObservableList<Table> data = FXCollections.observableArrayList();
+
     public LeaderboardController() {
     }
 
     //Reading data in manually
     @FXML
-    ObservableList<Table> data = FXCollections.observableArrayList();
+    ObservableList<LeaderboardTable> data = FXCollections.observableArrayList();
 
     //todo add ability to see stats for all game boards.
     //
@@ -65,7 +64,7 @@ public class LeaderboardController implements Initializable {
     private void readStatFile(File statFile) throws FileNotFoundException {
         data.clear();
 
-        List<Table> playerStats = new LinkedList<>();
+        List<LeaderboardTable> playerStats = new LinkedList<>();
 
         Scanner in = new Scanner(statFile);
         in.useDelimiter("`");
@@ -75,12 +74,12 @@ public class LeaderboardController implements Initializable {
             int wins = in.nextInt();
             String lossesStr = in.next();
             int losses = Integer.parseInt(lossesStr);
-            playerStats.add(new Table(name, wins, losses));
+            playerStats.add(new LeaderboardTable(name, wins, losses));
             in.nextLine();
         }
         in.close();
 
-        playerStats.sort(Comparator.comparingInt(java_.game.player.Table::getrWins));
+        playerStats.sort(Comparator.comparingInt(LeaderboardTable::getrWins));
         Collections.reverse(playerStats);
 
         data.addAll(playerStats);
@@ -131,7 +130,7 @@ public class LeaderboardController implements Initializable {
     @FXML
     private void onTotalStatsButtonClicked(ActionEvent e) throws IOException {
 
-        List<Table> playerStats = new LinkedList<>();
+        List<LeaderboardTable> playerStats = new LinkedList<>();
         ArrayList<Integer> playerWins = new ArrayList<Integer>();
         ArrayList<Integer> playerLosses = new ArrayList<Integer>();
         ArrayList<String> playerNames = new ArrayList<String>();
@@ -189,7 +188,7 @@ public class LeaderboardController implements Initializable {
             int wins = playerWins.get(k);
             int losses = playerLosses.get(k);
 
-            playerStats.add(new Table(name, wins, losses));
+            playerStats.add(new LeaderboardTable(name, wins, losses));
         }
         data.addAll(playerStats);
         tableID.setItems(data);
