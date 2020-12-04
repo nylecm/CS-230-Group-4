@@ -35,7 +35,7 @@ public class MainMenuController implements Initializable {
 
     private static final String NEW_GAME_PATH = "../../view/layout/newGame.fxml";
     private static final String LOAD_GAME_PATH = "../../view/layout/loadGame.fxml";
-    private static final String CUSTOMISE_PROFILE_PATH = "../../view/layout/CustomiseProfile.fxml";
+    private static final String CUSTOMISE_PROFILE_PATH = "../../view/layout/PlayerPiecePurchase.fxml";
     private static final String LEADERBOARD_PATH = "../../view/layout/leaderboard.fxml";
     private static final String SETTINGS_PATH = "../../view/layout/settings.fxml";
     private static final String REGISTER_PATH = "../../view/layout/register.fxml";

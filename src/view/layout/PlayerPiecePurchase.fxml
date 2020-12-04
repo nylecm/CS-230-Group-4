@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.PlayerPiecePurchaseController">
+   <center>
+      <VBox BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <HBox prefHeight="132.0" prefWidth="200.0">
+               <children>
+                  <VBox fillWidth="false" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Username:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label text="Password:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <TextField fx:id="usernameField" />
+                        <PasswordField fx:id="passwordField" />
+                        <Button mnemonicParsing="false" onAction="#onLoginButtonClicked" prefHeight="25.0" prefWidth="104.0" text="Login" />
+                     </children>
+                  </VBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="320.0" left="200.0" right="200.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="52.0" prefWidth="600.0">
+               <children>
+                  <VBox prefHeight="52.0" prefWidth="123.0">
+                     <children>
+                        <Label prefHeight="52.0" prefWidth="141.0" text="Coins Available:">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+                  <Label fx:id="coinNumber" prefHeight="45.0" prefWidth="63.0" text="0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="200.0" right="100.0" top="-300.0" />
+               </VBox.margin>
+            </HBox>
+            <VBox prefHeight="198.0" prefWidth="549.0">
+               <children>
+                  <HBox prefHeight="36.0" prefWidth="98.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <children>
+                        <Label prefHeight="31.0" prefWidth="206.0" text="Player pieces you can buy:">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <ChoiceBox fx:id="affordablePlayerPieces" prefHeight="25.0" prefWidth="200.0" />
+                  <HBox prefHeight="32.0" prefWidth="400.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#onBuyButtonClicked" prefHeight="40.0" prefWidth="86.0" text="Buy" />
+                        <Button mnemonicParsing="false" onAction="#onOwnedPiecesButtonClicked" prefHeight="40.0" prefWidth="91.0" text="Owned Pieces">
+                           <HBox.margin>
+                              <Insets left="23.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="239.0">
+                     <VBox.margin>
+                        <Insets right="200.0" />
+                     </VBox.margin>
+                     <children>
+                        <ListView fx:id="preOwnedPieces" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets left="200.0" />
+               </VBox.margin>
+            </VBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
