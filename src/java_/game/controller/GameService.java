@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.util.*;
 
 public class GameService {
+    public static final String PLAYER_PIECE_PATH_START = "src/";
     private static GameService instance = null;
     private GameController controller;
 
@@ -357,7 +358,7 @@ public class GameService {
 
     private void writePlayerPieceDetails(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
-            out.print("src/" + gameBoard.getPlayerPiece(i).getImageFile());
+            out.print(PLAYER_PIECE_PATH_START + gameBoard.getPlayerPiece(i).getImageFile());
             out.print(DELIMITER);
         }
         out.print('\n');
