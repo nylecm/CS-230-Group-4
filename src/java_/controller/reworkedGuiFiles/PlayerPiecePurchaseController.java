@@ -1,3 +1,5 @@
+package java_.controller.reworkedGuiFiles;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,8 +14,8 @@ import java.io.FileWriter;
 
 public class PlayerPiecePurchaseController {
 
-    private final String USER_COINFILE_DIRECTORY = "C:\\Users\\Waleed's PC\\Desktop\\Leaderboard\\src\\Data\\user_coins.txt";
-    private final String PLAYERPIECE_PRICE_DIRECTORY = "C:\\Users\\Waleed's PC\\Desktop\\Leaderboard\\src\\Data\\playerPiecePrice.txt";
+    private final String USER_COINFILE_DIRECTORY = "data/user_coins.txt";
+    private final String PLAYERPIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
     @FXML private Boolean userFound = false;
     @FXML private TextField usernameField;
     @FXML private String username = "";
