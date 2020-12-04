@@ -16,7 +16,7 @@ import java.net.MalformedURLException;
 import java.util.*;
 
 public class GameService {
-    public static final String PLAYER_PIECE_PATH_START = "src/";
+    public static final String PLAYER_PIECE_PATH_START = "src\\";
     private static GameService instance = null;
     private GameController controller;
 
@@ -221,10 +221,9 @@ public class GameService {
 
         gameBoard = new GameBoard(playerPieces, playerPositions, floorTilesForGameBoard, nCols, nRows, gameBoardName);
         PlayerService.getInstance().setPlayers(players);
-
         readSavedSilkBag(in);
-
         readSavedInstanceAreaEffects(in);
+        in.close();
 
         actionTilePlayed = false;
         playerPieceMoved = false;
@@ -305,14 +304,14 @@ public class GameService {
         while (in.hasNext()) {
             int effectRow = in.nextInt();
             int effectCol = in.nextInt();
-            Position effectPos = new Position(effectRow, effectCol);
-            EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
             String durationRemainingStr = in.next();
             int durationRemaining = Integer.parseInt(durationRemainingStr);
+            EffectType effectType = EffectType.valueOf(in.next().toUpperCase());
+
+            Position effectPos = new Position(effectRow, effectCol);
             AreaEffect areaEffect = new AreaEffect(effectType, 0, durationRemaining);
             gameBoard.applyEffect(areaEffect, effectPos);
         }
-        in.close();
     }
 
     public void nextTurn() { // todo gameplay loop...
@@ -423,11 +422,9 @@ public class GameService {
             out.print(DELIMITER);
             out.print(effectPosition.getColNum());
             out.print(DELIMITER);
-            out.print(gameBoard.getEffectAt(effectPosition).getEffectType());
-            out.print(DELIMITER);
             out.print(gameBoard.getEffectAt(effectPosition).getRemainingDuration());
             out.print(DELIMITER);
-            out.print(gameBoard.getEffectAt(effectPosition).getRadius());
+            out.print(gameBoard.getEffectAt(effectPosition).getEffectType().toString());
             out.print(DELIMITER);
         }
     }
@@ -673,11 +670,10 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron.txt"));
+            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_3.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
     }
 
     private static class FloorTilePositionBundle {

@@ -39,7 +39,7 @@ public class LoadGameController implements Initializable {
     @FXML
     private ChoiceBox<File> loadGameSelect;
 
-    private static final String SAVES_FOLDER_DIRECTORY = "data/saves";
+    private static final String SAVES_FOLDER_DIRECTORY = "data\\saves";
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
     private static final String GAME_PATH = "../../view/layout/gameDummy.fxml";
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
@@ -73,7 +73,6 @@ public class LoadGameController implements Initializable {
         loadGameSelect.setOnAction(event -> {
             if (loadGameSelect.getValue() != null) {
                 try {
-                    loadGameSelect.getItems().clear();
                     logInVBoxes.clear();
                     logInFormHBox.getChildren().clear();
                     readFileForPlayerInfo(loadGameSelect.getValue());
@@ -85,12 +84,7 @@ public class LoadGameController implements Initializable {
     }
 
     private void readFileForPlayerInfo(File file) throws FileNotFoundException {
-        // Read username
-        // Read number of Players
-        // Read player pieces used
-
-        // Create log in form v boxes.
-
+        System.out.println(file);
         Scanner in = new Scanner(file);
         in.useDelimiter(DELIMITER);
         String nPlayersStr = in.next();
