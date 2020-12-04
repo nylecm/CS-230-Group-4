@@ -6,6 +6,9 @@ import java_.game.tile.*;
 import java.util.List;
 
 public class PlayerService {
+    public static final String BACKTRACK_EFFECT_PREVIOUSLY_APPLIED_TO_PLAYER = "Backtrack effect has been previously applied to that player.";
+    public static final int TARGET_NUMBER_OF_BACKTRACKS = 2;
+    public static final String BACK_TRACK_EFFECT_IS_NOT_POSSIBLE = "Back track effect is not possible.";
     private static PlayerService playerService = null;
     private GameService gameService;
 
@@ -35,14 +38,14 @@ public class PlayerService {
 
     public void applyBackTrackEffect(int playerNum) {
         if (players[playerNum].getPreviousAppliedEffect().contains(EffectType.BACKTRACK)) {
-            throw new IllegalStateException("Backtrack effect has been previously applied to that player.");
+            throw new IllegalStateException(BACKTRACK_EFFECT_PREVIOUSLY_APPLIED_TO_PLAYER);
         } else {
             if (gameService.getGameBoard().isBacktrackPossible(playerNum)) {
-                gameService.getGameBoard().backtrack(playerNum, 2); //todo magic number
+                gameService.getGameBoard().backtrack(playerNum, TARGET_NUMBER_OF_BACKTRACKS); //todo magic number
             } else {
-                System.out.println("fail");
+                throw new IllegalStateException(BACK_TRACK_EFFECT_IS_NOT_POSSIBLE);
             }
-        } //todo finish off
+        }
     }
 
     public void addPreviouslyAppliedEffect(Player p, EffectType e) {
