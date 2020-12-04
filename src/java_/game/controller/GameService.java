@@ -89,7 +89,6 @@ public class GameService {
 
                 // Dealing with fixed tiles:
                 FloorTilePositionBundle fixedTileAndPositions = readFixedTiles(in);
-
                 FloorTile[] fixedTiles = fixedTileAndPositions.getFloorTiles();
                 Position[] fixedTilePositions = fixedTileAndPositions.getPositions();
 
@@ -444,7 +443,7 @@ public class GameService {
         out.print('\n');
     }
 
-    public void gameplayLoop() { // todo gameplay loop...
+  /*  public void gameplayLoop() { // todo gameplay loop...
         while (!isWin) {
             playerService.playerTurn(playerService.getPlayer(turnCount
                     % playerService.getPlayers().length)); // todo improve player service
@@ -452,7 +451,7 @@ public class GameService {
             gameBoard.refreshEffects();
             turnCount++;
         }
-    }
+    }*/
 
     /**
      * Returns the PlayerService belonging to the GameService.
