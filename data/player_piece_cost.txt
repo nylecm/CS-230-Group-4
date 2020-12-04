@@ -22,3 +22,6 @@ top_hat`250`
 turing`750`
 wheelbarrow`250`
 yellow_temp_pp.png`0`
+homer.png`10`
+alien_ufo_1.png`5`
+alien_ufo_2.png`5`
