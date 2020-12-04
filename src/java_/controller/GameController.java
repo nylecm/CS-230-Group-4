@@ -285,7 +285,7 @@ public class GameController implements Initializable {
     private void displayEffects() {
         for (Position position : gameBoard.getActiveEffectPositions()) {
             AreaEffect effect = gameBoard.getEffectAt(position);
-            Image effectImage = new Image(getEffectTypeImage(effect));
+            Image effectImage = new Image(getEffectTypeImage(effect.getEffectType()));
             ImageView effectImageView = getTileImageView(effectImage);
             effectImageView.setLayoutX(position.getColNum() * TILE_WIDTH);
             effectImageView.setLayoutY(position.getRowNum() * TILE_HEIGHT);
@@ -889,16 +889,21 @@ public class GameController implements Initializable {
 
         for (int row = 0; row < area; row++) {
             for (int col = 0; col < area; col++) {
-                ImageView effectDisplay = getTileImageView(effectImageView.getImage());
-                effectDisplay.setLayoutY(centerY + TILE_HEIGHT - row * TILE_WIDTH);
-                effectDisplay.setLayoutX(centerX - TILE_WIDTH + col * TILE_WIDTH);
+                int usedActionTileIndex = playersActionTiles.getChildren().indexOf(effectImageView);
+                ActionTile usedActionTile = gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().get(usedActionTileIndex);
+
+                Image effectOverlayImage = new Image(getEffectTypeImage(usedActionTile.use().getEffectType()));
+                ImageView effectOverlayImageView = new ImageView(effectOverlayImage);
+
+                effectOverlayImageView.setLayoutY(centerY + TILE_HEIGHT - row * TILE_WIDTH);
+                effectOverlayImageView.setLayoutX(centerX - TILE_WIDTH + col * TILE_WIDTH);
                 //TODO Delete them all together?
-                if (getItemCol(effectDisplay) >= gameBoardView.getWidth() || getItemCol(effectDisplay) < 0
-                        || getItemRow(effectDisplay) >= gameBoardView.getHeight() || getItemRow(effectDisplay) < 0) {
-                    effectDisplay.setVisible(false);
+                if (getItemCol(effectOverlayImageView) >= gameBoardView.getWidth() || getItemCol(effectOverlayImageView) < 0
+                        || getItemRow(effectOverlayImageView) >= gameBoardView.getHeight() || getItemRow(effectOverlayImageView) < 0) {
+                    effectOverlayImageView.setVisible(false);
                 }
-                setEffectEventHandlers(effectDisplay);
-                effectGroup.getChildren().add(effectDisplay);
+                setEffectEventHandlers(effectOverlayImageView);
+                effectGroup.getChildren().add(effectOverlayImageView);
             }
         }
     }
@@ -1000,17 +1005,12 @@ public class GameController implements Initializable {
         return null;
     }
 
-    private String getEffectTypeImage(AreaEffect areaEffect) {
-        EffectType type = areaEffect.getEffectType();
+    private String getEffectTypeImage(EffectType type) {
         switch (type) {
             case FIRE:
-                return "doublemoveFlat.png";
+                return "fireOverlay.png";
             case ICE:
-                return "doublemoveFlat.png";
-            case BACKTRACK:
-                return "doublemoveFlat.png";
-            case DOUBLE_MOVE:
-                return "doublemoveFlat.png";
+                return "iceOverlay.png";
         }
         return null;
     }
