@@ -35,7 +35,7 @@ public class NewGameController implements Initializable {
     private VBox mainBox;
 
     @FXML
-    private ChoiceBox gameBoardSelect;
+    private ChoiceBox<String> gameBoardSelect;
 
     @FXML
     private VBox player1SetUpVBox;
@@ -45,9 +45,6 @@ public class NewGameController implements Initializable {
 
     @FXML
     private PasswordField player1Password;
-
-    @FXML
-    private Button player1LogIn;
 
     @FXML
     private Label player1LogInStatusLabel;
@@ -65,9 +62,6 @@ public class NewGameController implements Initializable {
     private ImageView player1PlayerPieceImage;
 
     @FXML
-    private Button player1PlayerPieceConfirm;
-
-    @FXML
     private VBox player2SetUpVBox;
 
     @FXML
@@ -75,9 +69,6 @@ public class NewGameController implements Initializable {
 
     @FXML
     private PasswordField player2Password;
-
-    @FXML
-    private Button player2LogIn;
 
     @FXML
     private Label player2LogInStatusLabel;
@@ -95,9 +86,6 @@ public class NewGameController implements Initializable {
     private ImageView player2PlayerPieceImage;
 
     @FXML
-    private Button player2PlayerPieceConfirm;
-
-    @FXML
     private VBox player3SetUpVBox;
 
     @FXML
@@ -105,9 +93,6 @@ public class NewGameController implements Initializable {
 
     @FXML
     private PasswordField player3Password;
-
-    @FXML
-    private Button player3LogIn;
 
     @FXML
     private Label player3LogInStatusLabel;
@@ -125,9 +110,6 @@ public class NewGameController implements Initializable {
     private ImageView player3PlayerPieceImage;
 
     @FXML
-    private Button player3PlayerPieceConfirm;
-
-    @FXML
     private VBox player4SetUpVBox;
 
     @FXML
@@ -135,9 +117,6 @@ public class NewGameController implements Initializable {
 
     @FXML
     private PasswordField player4Password;
-
-    @FXML
-    private Button player4LogIn;
 
     @FXML
     private Label player4LogInStatusLabel;
@@ -153,9 +132,6 @@ public class NewGameController implements Initializable {
 
     @FXML
     private ImageView player4PlayerPieceImage;
-
-    @FXML
-    private Button player4PlayerPieceConfirm;
 
     @FXML
     private Label startGameStatusLabel;
@@ -178,6 +154,7 @@ public class NewGameController implements Initializable {
 
     /**
      * Initialises the NewGame screen, giving it background, a list of available gameboards, allows PlayerPiece selection and Players to log in.
+     *
      * @param location
      * @param resources
      */
@@ -214,7 +191,6 @@ public class NewGameController implements Initializable {
             }
         });
 
-        // fixme find less hacky way...
         player1PlayerPieceSelect.setOnAction(event -> {
             if (player1PlayerPieceSelect.getValue() != null) {
                 try {
@@ -226,7 +202,6 @@ public class NewGameController implements Initializable {
             }
         });
 
-        // fixme find less hacky way...
         player2PlayerPieceSelect.setOnAction(event -> {
             if (player2PlayerPieceSelect.getValue() != null) {
                 try {
@@ -238,7 +213,6 @@ public class NewGameController implements Initializable {
             }
         });
 
-        // fixme find less hacky way...
         player3PlayerPieceSelect.setOnAction(event -> {
             if (player3PlayerPieceSelect.getValue() != null) {
                 try {
@@ -250,7 +224,6 @@ public class NewGameController implements Initializable {
             }
         });
 
-        // fixme find less hacky way...
         player4PlayerPieceSelect.setOnAction(event -> {
             if (player4PlayerPieceSelect.getValue() != null) {
                 try {
@@ -265,6 +238,7 @@ public class NewGameController implements Initializable {
 
     /**
      * Adds all available gameboards to the interface allowing players to select their desired board.
+     *
      * @param gameBoardNames The name of the gameboards to be added.
      */
     private void addGameBoardNames(List<String> gameBoardNames) {
@@ -273,6 +247,7 @@ public class NewGameController implements Initializable {
 
     /**
      * Handles Player1 log in credentials, allowing them to log in and have authorisation to play the game.
+     *
      * @param actionEvent When the Player1LogIn button is clicked.
      */
     @FXML
@@ -284,11 +259,7 @@ public class NewGameController implements Initializable {
             player1LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
             currentUserNames.add(username);
             player1PlayerPieceSelectionVBox.setDisable(false);
-            try {
-                populateWithPlayerPieces(player1PlayerPieceSelect);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            populateWithPlayerPieces(player1PlayerPieceSelect);
             usernames[0] = username;
         } else {
             player1LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
@@ -323,6 +294,7 @@ public class NewGameController implements Initializable {
 
     /**
      * Handles Player2 log in credentials, allowing them to log in and have authorisation to play the game.
+     *
      * @param actionEvent When the Player2LogIn button is clicked.
      */
     @FXML
@@ -334,11 +306,7 @@ public class NewGameController implements Initializable {
             player2LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
             currentUserNames.add(username);
             player2PlayerPieceSelectionVBox.setDisable(false);
-            try {
-                populateWithPlayerPieces(player2PlayerPieceSelect);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            populateWithPlayerPieces(player2PlayerPieceSelect);
             usernames[1] = username;
         } else {
             player2LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
@@ -373,6 +341,7 @@ public class NewGameController implements Initializable {
 
     /**
      * Handles Player3 log in credentials, allowing them to log in and have authorisation to play the game.
+     *
      * @param actionEvent When the Player3LogIn button is clicked.
      */
     @FXML
@@ -384,11 +353,7 @@ public class NewGameController implements Initializable {
             player3LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
             currentUserNames.add(username);
             player3PlayerPieceSelectionVBox.setDisable(false);
-            try {
-                populateWithPlayerPieces(player3PlayerPieceSelect);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            populateWithPlayerPieces(player3PlayerPieceSelect);
             usernames[2] = username;
         } else {
             player3LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
@@ -424,6 +389,7 @@ public class NewGameController implements Initializable {
 
     /**
      * Handles Player1 log in credentials, allowing them to log in and have authorisation to play the game.
+     *
      * @param actionEvent When the Player1LogIn button is clicked.
      */
     @FXML
@@ -435,11 +401,7 @@ public class NewGameController implements Initializable {
             player4LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
             currentUserNames.add(username);
             player4PlayerPieceSelectionVBox.setDisable(false);
-            try {
-                populateWithPlayerPieces(player4PlayerPieceSelect);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            populateWithPlayerPieces(player4PlayerPieceSelect);
             usernames[3] = username;
         } else {
             player4LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
@@ -472,7 +434,7 @@ public class NewGameController implements Initializable {
     }
 
 
-    private void populateWithPlayerPieces(ChoiceBox<File> playerPieceSelect) throws MalformedURLException {
+    private void populateWithPlayerPieces(ChoiceBox<File> playerPieceSelect) {
         Reader reader = new Reader();
         File[] playerPieces = reader.readFileNames("src/view/res/img/player_piece");
         LinkedList<File> playerPieceFiles = new LinkedList<>(Arrays.asList(playerPieces));
@@ -503,7 +465,6 @@ public class NewGameController implements Initializable {
                 }
                 i++;
             }
-
             GameService.getInstance().loadNewGame(players, (String) gameBoardSelect.getValue());
 
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();

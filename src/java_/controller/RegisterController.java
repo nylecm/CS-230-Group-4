@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -18,7 +17,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,23 +27,12 @@ import java.util.ResourceBundle;
  */
 public class RegisterController implements Initializable {
 
-    private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
-
-    private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple? xxx@xxx.xxxx
-
-    private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //Might be broken
 
     @FXML
     private VBox mainBox;
 
     @FXML
     private Label registerStatusLabel;
-
-    @FXML
-    private Button registerButton;
-
-    @FXML
-    private Button backButton;
 
     @FXML
     private TextField username;
@@ -59,11 +46,20 @@ public class RegisterController implements Initializable {
     @FXML
     private PasswordField passwordRepeat;
 
-    private final String USERNAME_INVALID_MSG = "Username invalid!"; //TODO MAKE MESSAGES MORE USEFUL
-    private final String EMAIL_INVALID_MSG = "Email invalid!";
-    private final String PASSWORD_INVALID_MSG = "Password invalid!";
-    private final String PASSWORD_NO_MATCH_MSG = "Passwords don't match!";
+    private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
+    private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
+    private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple? xxx@xxx.xxxx
+    private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //Might be broken
+
+    private static final String USERNAME_INVALID_MSG = "Username invalid!"; //TODO MAKE MESSAGES MORE USEFUL
+    private static final String EMAIL_INVALID_MSG = "Email invalid!";
+    private static final String PASSWORD_INVALID_MSG = "Password invalid!";
+    private static final String PASSWORD_NO_MATCH_MSG = "Passwords don't match!";
+    private static final String ACCOUNT_REGISTERED_MSG = "Account Registered!";
+    private static final String FILE_NOT_FOUND_OR_ERROR_ACCESSING_IT_MSG = "Error, users file not found, or error accessing it!";
+    public static final String DUPLICATE_USER_NAME_MSG = "Duplicate user name!";
 
     @FXML
     private void onRegisterButtonClicked(ActionEvent event) {
@@ -74,15 +70,15 @@ public class RegisterController implements Initializable {
         if (validate(username, email, password, passwordRepeat)) {
             try {
                 RegisterHandler.register(username, email, password);
-                registerStatusLabel.setText("Account Registered!");
+                registerStatusLabel.setText(ACCOUNT_REGISTERED_MSG);
                 this.username.setText("");
                 this.email.setText("");
                 this.password.setText("");
                 this.passwordRepeat.setText("");
             } catch (IOException e) {
-                registerStatusLabel.setText("Error, users file not found, or error accessing it!");
-            } catch (IllegalArgumentException e2) { //todo custom exception...
-                registerStatusLabel.setText("Duplicate user name!");
+                registerStatusLabel.setText(FILE_NOT_FOUND_OR_ERROR_ACCESSING_IT_MSG);
+            } catch (IllegalArgumentException e2) {
+                registerStatusLabel.setText(DUPLICATE_USER_NAME_MSG);
             }
         }
     }
@@ -126,7 +122,7 @@ public class RegisterController implements Initializable {
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource(MAIN_MENU_PATH));
         currentStage.setScene(new Scene(mainMenu));
     }
 
@@ -134,7 +130,7 @@ public class RegisterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundFill backgroundFill = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File("src/view/res/img/space_uranus.png").toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

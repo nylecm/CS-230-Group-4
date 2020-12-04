@@ -36,7 +36,7 @@ public class PlayerService {
         return drawnTile;
     }
 
-    public void applyBackTrackEffect(int playerNum) {
+    public void applyBackTrackEffect(int playerNum) throws IllegalStateException {
         if (players[playerNum].getPreviousAppliedEffect().contains(EffectType.BACKTRACK)) {
             throw new IllegalStateException(BACKTRACK_EFFECT_PREVIOUSLY_APPLIED_TO_PLAYER);
         } else {
