@@ -38,7 +38,6 @@ public class CoinHandler {
         File coinFile = new File(PLAYER_COINS_FILEPATH);
         Scanner in = new Scanner(coinFile);
         in.useDelimiter(DELIMITER);
-        //PrintWriter lineWriter = new PrintWriter(coinFile);;
         ArrayList<String> newFileLines = new ArrayList<>();
         while (in.hasNextLine()) {
 
@@ -75,8 +74,8 @@ public class CoinHandler {
     }
 
     public static void increaseStreak(String username) throws FileNotFoundException, ParseException {
-
-        Scanner in = new Scanner(new File(PLAYER_COINS_FILEPATH));
+        File coinFile = new File(PLAYER_COINS_FILEPATH);
+        Scanner in = new Scanner(coinFile);
         in.useDelimiter(DELIMITER);
         ArrayList<String> newFileLines = new ArrayList<>();
         while (in.hasNextLine()) {
@@ -97,50 +96,43 @@ public class CoinHandler {
 
 
             //Calculating day after previous login date
-            SimpleDateFormat yyyyddmm = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat yyyyddmm = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(yyyyddmm.parse(lastLoginDate));
             calendar.add(Calendar.DATE, 1);
             String dayAfterLastLogin = yyyyddmm.format(calendar.getTime());
+           // System.out.print(dayAfterLastLogin);
+
 
             //Today's date
             calendar = Calendar.getInstance();
             String dateToday = yyyyddmm.format(calendar.getTime());
 
-            if (dayAfterLastLogin.equals(dateToday)) { // consecutive days logged in
-                streak += 1; //increase streak
-            } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)){ //Logged in two different days that are more than a day apart.
-                streak = 1; //reset streak
+
+            //System.out.print(dayAfterLastLogin);
+            //System.out.println();
+
+            if (username.equals(fileUsername)) {
+                lastLoginDate = dateToday;
+                if (dayAfterLastLogin.equals(dateToday)) { // consecutive days logged in
+                    streak += 1; //increase streak
+                    nCoins += streakCoins(streak);
+                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)){ //Logged in two different days that are more than a day apart.
+                    streak = 1; //reset streak
+                    nCoins += streakCoins(streak);
+                }
             }
 
-            nCoins += streakCoins(streak);
-
-            newFileLines.add(fileUsername + DELIMITER + nCoins + DELIMITER + streak + DELIMITER + dateToday + DELIMITER + nPlayerPieces + DELIMITER + playerPieces);
-            //System.out.println(newFileLines);
-
-
-            for (String newLine: newFileLines) {
-                System.out.println(newLine);
-            }
-
-
-            /*
-            System.out.print(in.next());
-            System.out.print(in.nextInt());
-            System.out.print(in.nextInt());
-            System.out.println(in.next());
-            */
-
-
-
-
-
-
+            String newFileLine = fileUsername + DELIMITER + nCoins + DELIMITER + streak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + playerPieces;
+            newFileLines.add(newFileLine);
 
         }
-
-
-
+        PrintWriter lineWriter = new PrintWriter(coinFile);
+        for (String newLine: newFileLines) {
+            lineWriter.println(newLine);
+        }
+        lineWriter.flush();
+        lineWriter.close();
 
     }
 
@@ -155,6 +147,9 @@ public class CoinHandler {
     }
 
 
+
+
+
     public static void main(String[] args) throws FileNotFoundException, ParseException {
         /*
         Player player1 = new Player("nylecm", null);
@@ -164,7 +159,7 @@ public class CoinHandler {
         players[1] = player2;
         updateCoins(players, 0);
         */
-        increaseStreak("samcox");
+        increaseStreak("nylecm2");
         //System.out.println(streakCoins(1));
     }
 }
