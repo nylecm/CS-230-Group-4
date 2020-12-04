@@ -333,7 +333,7 @@ public class GameService {
 
     private void writePlayerPieceDetails(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
-            out.print(gameBoard.getPlayerPiece(i).getImageFile());
+            out.print("src/" + gameBoard.getPlayerPiece(i).getImageFile());
             out.print(DELIMITER);
         }
         out.print('\n');
@@ -549,7 +549,8 @@ public class GameService {
                 new Player[]{new Player("nylecm", new PlayerPiece
                         (new File("view/res/img/player_piece/alien_ufo_1.png"))),
                         new Player("nylecm1", new PlayerPiece
-                                (new File("view/res/img/player_piece/alien_ufo_2.png")))},
+                                (new File("view/res/img/player_piece/alien_ufo_2.png"))), new Player("nylecm2", new PlayerPiece
+                        (new File("view/res/img/player_piece/homer.png")))},
                 "oberon_1");
         System.out.println(gs.gameBoard);
         //gs.gameBoard.insert(-1, 0, new FloorTile(TileType.STRAIGHT, false));
