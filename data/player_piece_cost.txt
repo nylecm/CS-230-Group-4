@@ -8,7 +8,7 @@ dog.png`250
 dragon.png`100`
 elephant.png`100
 fall_guy.png`300
-football.png`50`
+football.png`40`
 ghost.png`200`
 liam.png`1000`
 mr_monopoly`500`
