@@ -1,5 +1,6 @@
 package java_.game.controller;
 
+import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultElement;
 import java_.game.player.Player;
 
 import java.io.File;
@@ -60,6 +61,7 @@ public class CoinHandler {
                 }
             }
             newFileLines.add(username + DELIMITER + nCoins + DELIMITER + dailyStreak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + ownedPlayerPieces);
+            ln.close();
         }
 
         in.close();
@@ -75,15 +77,39 @@ public class CoinHandler {
 
 
 
-    public static void giveCoins(int nCoins, String username) throws FileNotFoundException {
+    public static void giveCoins(String username, int coins) throws FileNotFoundException {
         File coinFile = new File(PLAYER_COINS_FILEPATH);
         Scanner in = new Scanner(coinFile);
         in.useDelimiter(DELIMITER);
         ArrayList<String> newFileLines = new ArrayList<>();
 
+        while (in.hasNextLine()) {
 
+            Scanner ln = new Scanner(in.nextLine());
+            ln.useDelimiter(DELIMITER);
+            String fileUsername = ln.next();
+            int nCoins = ln.nextInt();
+            int streak = ln.nextInt();
+            String lastLoginDate = ln.next();
+            int nPlayerPieces = ln.nextInt();
+            String playerPieces = "";
+            while (ln.hasNext()) {
+                playerPieces += ln.next() + DELIMITER;
+            }
+            if (fileUsername.equals(username)) {
+                nCoins += coins;
+            }
 
+            newFileLines.add(fileUsername + DELIMITER + nCoins + DELIMITER + streak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + playerPieces);
+            ln.close();
+        }
+        in.close();
 
+        PrintWriter lineWriter = new PrintWriter(coinFile);
+        for (String newFileLine: newFileLines) {
+            lineWriter.println(newFileLine);
+        }
+        lineWriter.close();
     }
 
 
@@ -134,6 +160,7 @@ public class CoinHandler {
             String newFileLine = fileUsername + DELIMITER + nCoins + DELIMITER + streak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + playerPieces;
             newFileLines.add(newFileLine);
 
+            ln.close();
         }
         in.close();
         PrintWriter lineWriter = new PrintWriter(coinFile);
@@ -168,7 +195,8 @@ public class CoinHandler {
         players[1] = player2;
         updateCoins(players, 0);
         */
-        increaseDailyStreak("nylecm2");
+        //increaseDailyStreak("nylecm2");
+        giveCoins("nylecm1", 10);
         //System.out.println(streakCoins(1));
     }
 }
