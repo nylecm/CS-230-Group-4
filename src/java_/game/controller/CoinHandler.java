@@ -155,14 +155,15 @@ public class CoinHandler {
             String dateToday = yyyyddmm.format(calendar.getTime());
 
             if (username.equals(fileUsername)) {
-                lastLoginDate = dateToday;
+
                 if (dayAfterLastLogin.equals(dateToday)) { // consecutive days logged in
                     streak += 1; //increase streak
                     nCoins += streakCoins(streak);
-                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)) { //Logged in two different days that are more than a day apart.
+                } else if (!lastLoginDate.equals(dateToday)) { //Logged in two different days that are more than a day apart.
                     streak = 1; //reset streak
                     nCoins += streakCoins(streak);
                 }
+                lastLoginDate = dateToday;
             }
 
             String newFileLine = fileUsername + DELIMITER + nCoins + DELIMITER + streak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + playerPieces;
