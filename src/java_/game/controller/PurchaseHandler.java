@@ -24,6 +24,7 @@ public class PurchaseHandler {
         Scanner in = new Scanner(priceFile);
         in.useDelimiter(DELIMITER);
         while (in.hasNextLine()) {
+            in.next(); //todo
             String playerPiece = in.next();
             if (playerPiece.equals(newPlayerPiece)) {
                 piecePrice = in.nextInt();
@@ -83,6 +84,7 @@ public class PurchaseHandler {
         ArrayList<String> freePlayerPiecesNames = new ArrayList<>();
 
         while (in.hasNextLine()) {
+            in.next(); //todo
             String playerPieceName = in.next();
             String costStr = in.next();
             if (Integer.parseInt(costStr) == 0) {
@@ -98,9 +100,10 @@ public class PurchaseHandler {
         Calendar calendar = Calendar.getInstance();
         String dateToday = yyyyddmm.format(calendar.getTime());
 
-        String userRecord = username + DELIMITER + 0 + DELIMITER + 0 + DELIMITER + dateToday + DELIMITER + 0 + DELIMITER;
+        String userRecord = username + DELIMITER + 0 + DELIMITER + 0 + DELIMITER + dateToday + DELIMITER + 1 + DELIMITER + "dummy" +DELIMITER+"\n";
 
         byte[] userRecordBytes = userRecord.getBytes();
+
         Files.write(Paths.get(USER_COINFILE_DIRECTORY), userRecordBytes, StandardOpenOption.APPEND);
         buyAllFreePlayerPieces(username);
     }
