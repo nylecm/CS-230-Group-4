@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -30,6 +31,8 @@
                     </HBox>
                     <VBox>
                         <children>
+                     <Label text="Number of Coins" />
+                     <Label fx:id="coinNumber" text="Label" />
                             <HBox>
                                 <VBox.margin>
                                     <Insets />
@@ -40,10 +43,10 @@
                                             <Font size="17.0" />
                                         </font>
                                     </Label>
-                           <Label fx:id="coinNumber" text="Label" />
                                 </children>
                             </HBox>
                             <ChoiceBox fx:id="affordablePlayerPieces" prefHeight="26.0" prefWidth="191.0" />
+                     <ImageView fx:id="playerPiecePreview" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                             <HBox>
                                 <children>
                                     <Button mnemonicParsing="false" onAction="#onBuyButtonClicked" text="Buy" />
@@ -53,11 +56,6 @@
                                         </HBox.margin>
                                     </Button>
                                 </children>
-                            </HBox>
-                            <HBox prefHeight="100.0" prefWidth="239.0">
-                                <VBox.margin>
-                                    <Insets right="200.0" />
-                                </VBox.margin>
                             </HBox>
                         </children>
                         <VBox.margin>

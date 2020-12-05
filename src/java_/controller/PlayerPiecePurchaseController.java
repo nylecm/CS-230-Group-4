@@ -5,18 +5,27 @@ import java_.game.controller.PurchaseHandler;
 import java_.util.security.LoginHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
-public class PlayerPiecePurchaseController {
+public class PlayerPiecePurchaseController implements Initializable {
 
     private static final String USER_COIN_FILE_DIRECTORY = "data/user_coins.txt";
     private static final String PLAYER_PIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
     public static final String DELIMITER = "`";
+
+    @FXML
+    private ImageView playerPiecePreview;
 
     @FXML
     private PasswordField passwordField;
@@ -104,5 +113,18 @@ public class PlayerPiecePurchaseController {
             }
         }
         preOwnedPieces.getItems().addAll(list);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        affordablePlayerPieces.setOnAction(event -> {
+            if (affordablePlayerPieces.getValue() != null) {
+                try {
+                    playerPiecePreview.setImage(new Image(String.valueOf(new File ("src/view/res/img/player_piece/" + affordablePlayerPieces.getValue()).toURI().toURL())));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
