@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class PlayerPiecePurchaseController {
@@ -26,15 +27,10 @@ public class PlayerPiecePurchaseController {
     private Label coinNumber;
 
     @FXML
-    private ListView preOwnedPieces;
+    private ListView<String> preOwnedPieces;
 
     @FXML
     private ChoiceBox<String> affordablePlayerPieces;
-
-    /*private Boolean isUserFound = false;
-    private String username = "";
-    private String userCoinAmount;
-    private int userNoCoins;*/
 
     @FXML
     private void onLoginButtonClicked(ActionEvent e) throws IOException {
@@ -97,9 +93,7 @@ public class PlayerPiecePurchaseController {
             String playerPiece = in.next();
             String[] parts = in.nextLine().split(DELIMITER);
             if (playerPiece.equals(usernameField.getText())) {
-                for (int i = 5; i < parts.length; i++) {
-                    list.add(parts[i]);
-                }
+                list.addAll(Arrays.asList(parts).subList(5, parts.length));
             }
         }
         preOwnedPieces.getItems().addAll(list);
