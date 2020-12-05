@@ -1,6 +1,7 @@
 package java_.controller;
 
 import java_.game.controller.GameService;
+import java_.game.controller.PurchaseHandler;
 import java_.game.player.Player;
 import java_.game.player.PlayerPiece;
 import java_.util.security.LoginHandler;
@@ -53,7 +54,7 @@ public class NewGameController implements Initializable {
     private VBox player1PlayerPieceSelectionVBox;
 
     @FXML
-    private ChoiceBox<File> player1PlayerPieceSelect;
+    private ChoiceBox<String> player1PlayerPieceSelect;
 
     @FXML
     public Label player1PlayerPieceStatus;
@@ -77,7 +78,7 @@ public class NewGameController implements Initializable {
     private VBox player2PlayerPieceSelectionVBox;
 
     @FXML
-    private ChoiceBox<File> player2PlayerPieceSelect;
+    private ChoiceBox<String> player2PlayerPieceSelect;
 
     @FXML
     public Label player2PlayerPieceStatus;
@@ -101,7 +102,7 @@ public class NewGameController implements Initializable {
     private VBox player3PlayerPieceSelectionVBox;
 
     @FXML
-    private ChoiceBox<File> player3PlayerPieceSelect;
+    private ChoiceBox<String> player3PlayerPieceSelect;
 
     @FXML
     public Label player3PlayerPieceStatus;
@@ -125,7 +126,7 @@ public class NewGameController implements Initializable {
     private VBox player4PlayerPieceSelectionVBox;
 
     @FXML
-    private ChoiceBox<File> player4PlayerPieceSelect;
+    private ChoiceBox<String> player4PlayerPieceSelect;
 
     @FXML
     public Label player4PlayerPieceStatus;
@@ -145,12 +146,20 @@ public class NewGameController implements Initializable {
 
     private final File[] playerPieceImageFiles = new File[MAX_NUMBER_OF_PLAYERS];
 
-    private final boolean[] isPlayerReady = new boolean[4];
-    private final String[] usernames = new String[4];
+    private final boolean[] isPlayerReady = new boolean[MAX_NUMBER_OF_PLAYERS];
+    private final String[] usernames = new String[MAX_NUMBER_OF_PLAYERS];
 
     private final Set<URL> currentlySelectedPlayerPieces = new HashSet<>();
-    private final Set<String> currentUserNames = new HashSet<>();
 
+    private boolean isUserTryingToLogInTwice(String username, int playerIndex) {
+        for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
+            if (usernames[i] != null && usernames[i].equals(username) && i != playerIndex) {
+                System.out.println(i);
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Initialises the NewGame screen, giving it background, a list of available gameboards, allows PlayerPiece selection and Players to log in.
@@ -194,8 +203,9 @@ public class NewGameController implements Initializable {
         player1PlayerPieceSelect.setOnAction(event -> {
             if (player1PlayerPieceSelect.getValue() != null) {
                 try {
-                    player1PlayerPieceImage.setImage(new Image(String.valueOf(player1PlayerPieceSelect.getValue().toURI().toURL())));
-                    playerPieceImageFiles[0] = player1PlayerPieceSelect.getValue();
+                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player1PlayerPieceSelect.getValue());
+                    player1PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
+                    playerPieceImageFiles[0] = playerPieceFile;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -205,8 +215,9 @@ public class NewGameController implements Initializable {
         player2PlayerPieceSelect.setOnAction(event -> {
             if (player2PlayerPieceSelect.getValue() != null) {
                 try {
-                    player2PlayerPieceImage.setImage(new Image(String.valueOf(player2PlayerPieceSelect.getValue().toURI().toURL())));
-                    playerPieceImageFiles[1] = player2PlayerPieceSelect.getValue();
+                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player2PlayerPieceSelect.getValue());
+                    player2PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
+                    playerPieceImageFiles[1] = playerPieceFile;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -216,8 +227,9 @@ public class NewGameController implements Initializable {
         player3PlayerPieceSelect.setOnAction(event -> {
             if (player3PlayerPieceSelect.getValue() != null) {
                 try {
-                    player3PlayerPieceImage.setImage(new Image(String.valueOf(player3PlayerPieceSelect.getValue().toURI().toURL())));
-                    playerPieceImageFiles[2] = player3PlayerPieceSelect.getValue();
+                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player3PlayerPieceSelect.getValue());
+                    player3PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
+                    playerPieceImageFiles[2] = playerPieceFile;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -227,8 +239,9 @@ public class NewGameController implements Initializable {
         player4PlayerPieceSelect.setOnAction(event -> {
             if (player4PlayerPieceSelect.getValue() != null) {
                 try {
-                    player4PlayerPieceImage.setImage(new Image(String.valueOf(player4PlayerPieceSelect.getValue().toURI().toURL())));
-                    playerPieceImageFiles[3] = player4PlayerPieceSelect.getValue();
+                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player4PlayerPieceSelect.getValue());
+                    player4PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
+                    playerPieceImageFiles[3] = playerPieceFile;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -252,16 +265,16 @@ public class NewGameController implements Initializable {
      */
     @FXML
     public void onPlayer1LogInButtonPressed(ActionEvent actionEvent) {
-        String username = (currentUserNames.contains(player1Username.getText())
+        String username = (isUserTryingToLogInTwice(player1Username.getText(), 0)
                 ? "" : player1Username.getText());
         String password = player1Password.getText();
         if (LoginHandler.login(username, password)) {
             player1LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
-            currentUserNames.add(username);
             player1PlayerPieceSelectionVBox.setDisable(false);
-            populateWithPlayerPieces(player1PlayerPieceSelect);
+            populateWithPlayerPieces(player1PlayerPieceSelect, player1LogInStatusLabel, username);
             usernames[0] = username;
         } else {
+            //check if the user accidentally double clicked... todo change to list from set
             player1LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
             isPlayerReady[0] = false;
         }
@@ -272,7 +285,8 @@ public class NewGameController implements Initializable {
         if (player1PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player1PlayerPieceSelect.getValue().toURI().toURL();
+                File playerPieceFile = new File("src/view/res/img/player_piece/" + player1PlayerPieceSelect.getValue());
+                playerPieceSelected = playerPieceFile.toURI().toURL();
             } catch (MalformedURLException e) {
                 player1PlayerPieceStatus.setText("Invalid path!");
             }
@@ -299,14 +313,13 @@ public class NewGameController implements Initializable {
      */
     @FXML
     public void onPlayer2LogInButtonPressed(ActionEvent actionEvent) {
-        String username = (currentUserNames.contains(player2Username.getText())
+        String username = (isUserTryingToLogInTwice(player2Username.getText(), 1)
                 ? "" : player2Username.getText());
         String password = player2Password.getText();
         if (LoginHandler.login(username, password)) {
             player2LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
-            currentUserNames.add(username);
             player2PlayerPieceSelectionVBox.setDisable(false);
-            populateWithPlayerPieces(player2PlayerPieceSelect);
+            populateWithPlayerPieces(player2PlayerPieceSelect, player2LogInStatusLabel, username);
             usernames[1] = username;
         } else {
             player2LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
@@ -319,7 +332,8 @@ public class NewGameController implements Initializable {
         if (player2PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player2PlayerPieceSelect.getValue().toURI().toURL();
+                File playerPieceFile = new File("src/view/res/img/player_piece/" + player2PlayerPieceSelect.getValue());
+                playerPieceSelected = playerPieceFile.toURI().toURL();
             } catch (MalformedURLException e) {
                 player2PlayerPieceStatus.setText("Invalid path!");
             }
@@ -346,14 +360,13 @@ public class NewGameController implements Initializable {
      */
     @FXML
     public void onPlayer3LogInButtonPressed(ActionEvent actionEvent) {
-        String username = (currentUserNames.contains(player3Username.getText())
+        String username = (isUserTryingToLogInTwice(player3Username.getText(), 2)
                 ? "" : player3Username.getText());
         String password = player3Password.getText();
         if (LoginHandler.login(username, password)) {
             player3LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
-            currentUserNames.add(username);
             player3PlayerPieceSelectionVBox.setDisable(false);
-            populateWithPlayerPieces(player3PlayerPieceSelect);
+            populateWithPlayerPieces(player3PlayerPieceSelect, player3LogInStatusLabel, username);
             usernames[2] = username;
         } else {
             player3LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
@@ -367,7 +380,8 @@ public class NewGameController implements Initializable {
         if (player3PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player3PlayerPieceSelect.getValue().toURI().toURL();
+                File playerPieceFile = new File("src/view/res/img/player_piece/" + player3PlayerPieceSelect.getValue());
+                playerPieceSelected = playerPieceFile.toURI().toURL();
             } catch (MalformedURLException e) {
                 player3PlayerPieceStatus.setText("Invalid path!");
             }
@@ -394,14 +408,13 @@ public class NewGameController implements Initializable {
      */
     @FXML
     public void onPlayer4LogInButtonPressed(ActionEvent actionEvent) {
-        String username = (currentUserNames.contains(player4Username.getText())
+        String username = (isUserTryingToLogInTwice(player4Username.getText(), 3)
                 ? "" : player4Username.getText());
         String password = player4Password.getText();
         if (LoginHandler.login(username, password)) {
             player4LogInStatusLabel.setText(LOG_IN_SUCCESS_STRING);
-            currentUserNames.add(username);
             player4PlayerPieceSelectionVBox.setDisable(false);
-            populateWithPlayerPieces(player4PlayerPieceSelect);
+            populateWithPlayerPieces(player4PlayerPieceSelect, player4LogInStatusLabel, username);
             usernames[3] = username;
         } else {
             player4LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
@@ -414,7 +427,8 @@ public class NewGameController implements Initializable {
         if (player4PlayerPieceSelect.getValue() != null) {
             URL playerPieceSelected = null;
             try {
-                playerPieceSelected = player4PlayerPieceSelect.getValue().toURI().toURL();
+                File playerPieceFile = new File("src/view/res/img/player_piece/" + player4PlayerPieceSelect.getValue());
+                playerPieceSelected = playerPieceFile.toURI().toURL();
             } catch (MalformedURLException e) {
                 player4PlayerPieceStatus.setText("Invalid path!");
             }
@@ -434,11 +448,13 @@ public class NewGameController implements Initializable {
     }
 
 
-    private void populateWithPlayerPieces(ChoiceBox<File> playerPieceSelect) {
-        Reader reader = new Reader();
-        File[] playerPieces = reader.readFileNames("src/view/res/img/player_piece");
-        LinkedList<File> playerPieceFiles = new LinkedList<>(Arrays.asList(playerPieces));
-        playerPieceSelect.setItems(FXCollections.observableList(playerPieceFiles));
+    private void populateWithPlayerPieces(ChoiceBox<String> playerPieceSelect, Label loginStatusLabel, String username) {
+        try {
+            ArrayList<String> purchasedPlayerPieces = PurchaseHandler.getPlayersPurchasedPlayerPieces(username);
+            playerPieceSelect.setItems(FXCollections.observableArrayList(purchasedPlayerPieces));
+        } catch (FileNotFoundException e) {
+            loginStatusLabel.setText("error finding player piece file.");
+        }
     }
 
     @FXML

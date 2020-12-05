@@ -79,8 +79,8 @@ public class PurchaseHandler {
         return newCoinAmount;
     }
 
-    public static List<String> getPlayersPurchasedPlayerPieces(String username) throws FileNotFoundException {
-        List<String> ownedPlayerPieces = new ArrayList<>();
+    public static ArrayList<String> getPlayersPurchasedPlayerPieces(String username) throws FileNotFoundException {
+        ArrayList<String> ownedPlayerPieces = new ArrayList<>();
 
         Scanner in = new Scanner(new File(USER_COINFILE_DIRECTORY));
         in.useDelimiter(DELIMITER);
