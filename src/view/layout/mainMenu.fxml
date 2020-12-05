@@ -23,9 +23,6 @@
                 <Button layoutX="283.0" layoutY="226.0" mnemonicParsing="false"
                         onAction="#onLeaderboardButtonClicked" prefHeight="40.0" prefWidth="250.0"
                         text="Leaderboards"/>
-                <Button layoutX="283.0" layoutY="248.0" mnemonicParsing="false"
-                        onAction="#onSettingsButtonClicked" prefHeight="40.0" prefWidth="250.0"
-                        text="Settings"/>
                 <Button layoutX="245.0" layoutY="399.0" mnemonicParsing="false"
                         onAction="#onRegisterButtonClicked" prefHeight="40.0" prefWidth="250.0"
                         text="Register"/>

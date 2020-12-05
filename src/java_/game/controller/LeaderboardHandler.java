@@ -69,9 +69,10 @@ public class LeaderboardHandler {
 
         try {
             updateLeaderboard(playerArray, 0, gameboardName);
-        } catch (Exception e) {
-
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+
 
     }
 
