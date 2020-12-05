@@ -378,17 +378,6 @@ public class GameBoard {
         return false;
     }
 
-    public void useActionTile(ActionTile actionTile, Position pos) {
-        if (actionTile.use() instanceof AreaEffect) {
-            applyEffect((AreaEffect) actionTile.use(), pos);
-        } else if (actionTile.use() instanceof PlayerEffect) {
-            Effect effect = actionTile.use();
-            if (effect.getEffectType() == EffectType.BACKTRACK) {
-
-            }
-        }
-    }
-
     public void applyEffect(AreaEffect effect, Position pos) throws IllegalStateException {
         int effectRadius = effect.getRadius();
         int diameter = effectRadius * 2;
@@ -414,15 +403,21 @@ public class GameBoard {
         }
     }
 
-    public void backtrack(int playerNum, int targetNumberOfBacktracks) throws IllegalStateException {
+    public Position backtrack(int playerNum, int targetNumberOfBacktracks) throws IllegalStateException {
+        System.out.println("RECURSION EY");
         if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks == 1) {
-            playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
+            Position previousPosition = playerPieces[playerNum].getPreviousPlayerPosition();
+            playerPiecePositions[playerNum] = previousPosition;
             playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
+            return previousPosition;
         } else if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks > 1) {
             playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
             playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
-            backtrack(playerNum, targetNumberOfBacktracks - 1);
+            Position output;
+            output = backtrack(playerNum, targetNumberOfBacktracks - 1);
+            return output;
         }
+        return null;
     }
 
     public boolean isBacktrackPossible(int playerNum) {
