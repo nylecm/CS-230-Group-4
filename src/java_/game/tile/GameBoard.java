@@ -99,7 +99,6 @@ public class GameBoard {
     }
 
     @Deprecated
-    //TODO Remove
     public void movePlayerPieceUp(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum() - 1, curPos.getColNum());
@@ -108,7 +107,6 @@ public class GameBoard {
     }
 
     @Deprecated
-    //TODO Remove
     public void movePlayerPieceRight(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() + 1);
@@ -117,35 +115,14 @@ public class GameBoard {
     }
 
     @Deprecated
-    //TODO Remove
     public void movePlayerPieceDown(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum() + 1, curPos.getColNum());
         playerPiecePositions[playerNumber] = newPos;
         playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
-
-        /*if (curPos.getRowNum() == nRows - 1) { // Check if pos below exists:
-            throw new IllegalStateException("Player cannot move down, from the bottom row!");
-        } else if (activeEffects.get(newPos) != null
-                && activeEffects.get(newPos).getEffectType() == EffectType.FIRE) { // Check if pos below is on fire:
-            throw new IllegalStateException("Player cannot move down, as tile below is on fire.");
-        }*/
-        // Check if pos below has common path:
-        /*FloorTile tileBelow = board[newPos.getRowNum()][newPos.getColNum()];
-        assert tileBelow != null;
-
-        int tileBelowPath = tileBelow.getPaths();
-        int bitmask = 8;
-
-        if ((tileBelowPath & bitmask) == 8) {
-            playerPiecePositions[playerNumber] = newPos;
-        } else {
-            throw new IllegalStateException("Player cannot move down, as their is no path to the tile below");
-        }*/
     }
 
     @Deprecated
-    //TODO Remove
     public void movePlayerPieceLeft(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() - 1);
@@ -231,16 +208,6 @@ public class GameBoard {
                 : new Position(pos.getRowNum(), pos.getColNum() - 1));
     }
 
-
-    /*@Deprecated
-    private Position switchPositionRightToLeft(Position pos) {
-        System.out.println(getEffectAt(pos));
-        if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionRightToLeft(nextPositionRightToLeft(pos));
-        } else {
-            return pos;
-        }
-    }*/
     private void shiftTilesRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
         for (int i = 0; i < nCols - 1; i++) {
@@ -274,16 +241,6 @@ public class GameBoard {
                 : new Position(pos.getRowNum() + 1, pos.getColNum()));
     }
 
-
-    /*@Deprecated
-    private Position switchPositionTopToBottom(Position pos) {
-        System.out.println(getEffectAt(pos));
-        if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionTopToBottom(nextPositionTopToBottom(pos));
-        } else {
-            return pos;
-        }
-    }*/
     private void shiftTilesTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
         for (int i = nRows - 1; i != 0; i--) {
@@ -318,16 +275,6 @@ public class GameBoard {
                 : new Position(pos.getRowNum() - 1, pos.getColNum()));
     }
 
-
-   /* @Deprecated
-    private Position switchPositionBottomToTop(Position pos) {
-        System.out.println(getEffectAt(pos));
-        if (getEffectAt(pos) != null && getEffectAt(pos).getEffectType() == EffectType.FIRE) {
-            return switchPositionBottomToTop(nextPositionBottomToTop(pos));
-        } else {
-            return pos;
-        }
-    }*/
     private void shiftTilesBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
         for (int i = 0; i < nRows - 1; i++) {
@@ -433,22 +380,6 @@ public class GameBoard {
                 effect.decrementRemainingDuration();
             }
         }
-
-//        if (activeEffects.keySet().size() != 0) {
-//
-//            Iterator<Position> iterator = activeEffects.keySet().iterator();
-//
-//            while (iterator.hasNext()) {
-//                Position position = iterator.next();
-//                if (activeEffects.get(position).getRemainingDuration() == 1) {
-//                    iterator.remove();
-//                    //System.out.println("removed"); //todo remove
-//                } else {
-//                    activeEffects.get(position).decrementRemainingDuration();
-//                    //System.out.println("dec"); //todo remove
-//                }
-//            }
-//        }
     }
 
     public AreaEffect getEffectAt(Position pos) {
