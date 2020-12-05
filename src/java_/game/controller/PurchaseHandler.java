@@ -53,9 +53,10 @@ public class PurchaseHandler {
         String currentLine = users.get(indexOfNeededLine);
         String[] parts = currentLine.split(DELIMITER);
 
-        String newRowData = parts[0] + DELIMITER + newCoinAmount + DELIMITER;
+        String newRowData = parts[0] + DELIMITER + newCoinAmount + DELIMITER +
+                parts[2] + DELIMITER + parts[3] + DELIMITER + (Integer.parseInt(parts[4]) + 1) + DELIMITER;
 
-        for (int i = 2; i < parts.length; i++) {
+        for (int i = 5; i < parts.length; i++) {
             newRowData = newRowData + parts[i] + DELIMITER;
         }
         newRowData = newRowData + newPlayerPiece + DELIMITER;
@@ -100,7 +101,7 @@ public class PurchaseHandler {
         Calendar calendar = Calendar.getInstance();
         String dateToday = yyyyddmm.format(calendar.getTime());
 
-        String userRecord = username + DELIMITER + 0 + DELIMITER + 0 + DELIMITER + dateToday + DELIMITER + 1 + DELIMITER + "dummy" +DELIMITER+"\n";
+        String userRecord = username + DELIMITER + 0 + DELIMITER + 0 + DELIMITER + dateToday + DELIMITER + 1 + DELIMITER + "dummy" + DELIMITER + "\n";
 
         byte[] userRecordBytes = userRecord.getBytes();
 
