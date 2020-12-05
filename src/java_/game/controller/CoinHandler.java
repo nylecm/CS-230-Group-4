@@ -28,20 +28,25 @@ public class CoinHandler {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
+
+
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
         //int nTurns = GameService.getInstance().getTurnCount(); todo uncomment
         int nTurns = 100; //todo remove
         int nPlayers = players.length;
         int effort = nTurns / nPlayers;
-        int winningCoins = (int) (effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
-        int losingCoins = (int) (effort * FACTOR * LOSING_MULTIPLIER);
+        int winningCoins = (int)(effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
+        int losingCoins = (int)(effort * FACTOR * LOSING_MULTIPLIER);
 
         File coinFile = new File(PLAYER_COINS_FILEPATH);
         Scanner in = new Scanner(coinFile);
         in.useDelimiter(DELIMITER);
         ArrayList<String> newFileLines = new ArrayList<>();
 
+        //Looping through every line in the file
         while (in.hasNextLine()) {
+
+            //Store each attribute of the file line.
             Scanner ln = new Scanner(in.nextLine());
             ln.useDelimiter(DELIMITER);
             String username = ln.next();
@@ -50,29 +55,36 @@ public class CoinHandler {
             String lastLoginDate = ln.next();
             int nPlayerPieces = ln.nextInt();
             String ownedPlayerPieces = "";
+
+            //Loop though all owned player pieces and store them
             while (ln.hasNext()) {
                 ownedPlayerPieces += ln.next() + DELIMITER;
             }
+
             for (int i = 0; i < players.length; i++) {
                 if (players[i].getUsername().equals(username) && i == winningPlayerIndex) {
-                    nCoins += winningCoins;
+                    nCoins += winningCoins; //If the player won give them the winning amount of coins
                 } else if (players[i].getUsername().equals(username) && i != winningPlayerIndex) {
-                    nCoins += losingCoins;
+                    nCoins += losingCoins; //If the player lost give them a losing amount of coins
                 }
             }
+            //After changes to number of coins (if there were any), store the new file line.
             newFileLines.add(username + DELIMITER + nCoins + DELIMITER + dailyStreak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + ownedPlayerPieces);
             ln.close();
         }
 
         in.close();
         //todo remove array list after fixing printWriter
+        //Write all the new file lines
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newFileLine : newFileLines) {
+        for (String newFileLine: newFileLines) {
             lineWriter.println(newFileLine);
         }
         lineWriter.flush();
         lineWriter.close();
     }
+
+
 
 
     public static void giveCoins(String username, int coins) throws FileNotFoundException {
@@ -83,6 +95,7 @@ public class CoinHandler {
 
         while (in.hasNextLine()) {
 
+            //Store all file line attributes
             Scanner ln = new Scanner(in.nextLine());
             ln.useDelimiter(DELIMITER);
             String fileUsername = ln.next();
@@ -91,20 +104,24 @@ public class CoinHandler {
             String lastLoginDate = ln.next();
             int nPlayerPieces = ln.nextInt();
             String playerPieces = "";
+            //Store all owned player pieces
             while (ln.hasNext()) {
                 playerPieces += ln.next() + DELIMITER;
             }
+            //Increase coins by specified amount
             if (fileUsername.equals(username)) {
                 nCoins += coins;
             }
 
+            //The new file line with updated coins is stored
             newFileLines.add(fileUsername + DELIMITER + nCoins + DELIMITER + streak + DELIMITER + lastLoginDate + DELIMITER + nPlayerPieces + DELIMITER + playerPieces);
             ln.close();
         }
         in.close();
 
+        //Write all new file lines
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newFileLine : newFileLines) {
+        for (String newFileLine: newFileLines) {
             lineWriter.println(newFileLine);
         }
         lineWriter.close();
@@ -117,9 +134,11 @@ public class CoinHandler {
         in.useDelimiter(DELIMITER);
         ArrayList<String> newFileLines = new ArrayList<>();
         while (in.hasNextLine()) {
+
             Scanner ln = new Scanner(in.nextLine());
             ln.useDelimiter(DELIMITER);
 
+            //Store all file line attributes
             String fileUsername = ln.next();
             int nCoins = ln.nextInt();
             int streak = ln.nextInt();
@@ -146,7 +165,7 @@ public class CoinHandler {
                 if (dayAfterLastLogin.equals(dateToday)) { // consecutive days logged in
                     streak += 1; //increase streak
                     nCoins += streakCoins(streak);
-                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)) { //Logged in two different days that are more than a day apart.
+                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)){ //Logged in two different days that are more than a day apart.
                     streak = 1; //reset streak
                     nCoins += streakCoins(streak);
                 }
@@ -159,7 +178,7 @@ public class CoinHandler {
         }
         in.close();
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newLine : newFileLines) {
+        for (String newLine: newFileLines) {
             lineWriter.println(newLine);
         }
         lineWriter.flush();
@@ -176,6 +195,9 @@ public class CoinHandler {
         }
         return streakValue;
     }
+
+
+
 
 
     public static void main(String[] args) throws FileNotFoundException, ParseException {
