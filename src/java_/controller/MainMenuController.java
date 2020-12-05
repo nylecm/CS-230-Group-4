@@ -122,18 +122,6 @@ public class MainMenuController implements Initializable {
     }
 
     /**
-     * Opens the settings screen.
-     * @param e When the settings button is clicked.
-     * @throws IOException If the setting file path is incorrect
-     */
-    @FXML
-    private void onSettingsButtonClicked(ActionEvent e) throws IOException {
-        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane newGame = FXMLLoader.load(getClass().getResource(SETTINGS_PATH));
-        currentStage.setScene(new Scene(newGame));
-    }
-
-    /**
      * Opens the register screen.
      * @param e When the register button is clicked.
      * @throws IOException If the register file path is incorrect
