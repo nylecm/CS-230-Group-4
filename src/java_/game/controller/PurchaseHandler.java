@@ -55,7 +55,7 @@ public class PurchaseHandler {
 
         for (int i = 5; i < parts.length; i++) {
             if (parts[i].equals(newPlayerPiece)) {
-                System.out.println("duplicate pp");
+                throw new IllegalArgumentException("Player piece already owned!");
             }
         }
 

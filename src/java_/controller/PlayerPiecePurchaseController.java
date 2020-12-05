@@ -1,5 +1,6 @@
 package java_.controller;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import java_.game.controller.PurchaseHandler;
 import java_.util.security.LoginHandler;
 import javafx.event.ActionEvent;
@@ -74,8 +75,14 @@ public class PlayerPiecePurchaseController {
     }
 
     @FXML
-    private void onBuyButtonClicked(ActionEvent e) throws IOException {
-        PurchaseHandler.buyPlayerPiece(usernameField.getText(), affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
+    private void onBuyButtonClicked(ActionEvent e) {
+        try {
+            PurchaseHandler.buyPlayerPiece(usernameField.getText(), affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        } catch (IllegalArgumentException ex2) {
+            System.out.println(ex2.getMessage()); //todo notify user of error
+        }
     }
 
     /*private String getChoice(ChoiceBox<String> affordablePlayerPieces) {

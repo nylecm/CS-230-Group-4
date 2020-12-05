@@ -9,7 +9,7 @@
     <center>
         <GridPane BorderPane.alignment="CENTER">
                  <ListView fx:id="preOwnedPieces" minWidth="150.0" prefHeight="494.0" prefWidth="317.0" GridPane.columnIndex="1" />
-            <VBox prefHeight="494.0" prefWidth="167.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="494.0" prefWidth="157.0" BorderPane.alignment="CENTER">
                 <BorderPane.margin>
                     <Insets />
                 </BorderPane.margin>
@@ -40,9 +40,10 @@
                                             <Font size="17.0" />
                                         </font>
                                     </Label>
+                           <Label fx:id="coinNumber" text="Label" />
                                 </children>
                             </HBox>
-                            <ChoiceBox fx:id="affordablePlayerPieces" />
+                            <ChoiceBox fx:id="affordablePlayerPieces" prefHeight="26.0" prefWidth="191.0" />
                             <HBox>
                                 <children>
                                     <Button mnemonicParsing="false" onAction="#onBuyButtonClicked" text="Buy" />
@@ -76,7 +77,7 @@
 
     </center>
    <top>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" text="Back" />
             <Label text="Player Piece Shop" />
