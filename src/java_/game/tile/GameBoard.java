@@ -3,6 +3,7 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
+import javafx.geometry.Pos;
 
 import java.util.*;
 
@@ -89,7 +90,6 @@ public class GameBoard {
         int currentPlayerNumber = GameService.getInstance().getCurrentPlayerNum();
         playerPieces[currentPlayerNumber].addPreviousPlayerPosition(playerPiecePositions[currentPlayerNumber]);
         playerPiecePositions[currentPlayerNumber] = new Position(newRow, newCol);
-        GameService.getInstance().setPlayerPieceMoved(true);
     }
 
     public void movePlayerPieceUp(int playerNumber) {
@@ -417,20 +417,29 @@ public class GameBoard {
     }
 
     public void refreshEffects() {//todo check if broken
-        if (activeEffects.keySet().size() != 0) {
-            Iterator<Position> iterator = activeEffects.keySet().iterator();
-
-            while (iterator.hasNext()) {
-                Position position = iterator.next();
-                if (activeEffects.get(position).getRemainingDuration() == 1) {
-                    iterator.remove();
-                    //System.out.println("removed"); //todo remove
-                } else {
-                    activeEffects.get(position).decrementRemainingDuration();
-                    //System.out.println("dec"); //todo remove
-                }
+        for (AreaEffect effect : activeEffects.values()) {
+            if (effect.getRemainingDuration() == 1) {
+                activeEffects.remove(effect);
+            } else {
+                effect.decrementRemainingDuration();
             }
         }
+
+//        if (activeEffects.keySet().size() != 0) {
+//
+//            Iterator<Position> iterator = activeEffects.keySet().iterator();
+//
+//            while (iterator.hasNext()) {
+//                Position position = iterator.next();
+//                if (activeEffects.get(position).getRemainingDuration() == 1) {
+//                    iterator.remove();
+//                    //System.out.println("removed"); //todo remove
+//                } else {
+//                    activeEffects.get(position).decrementRemainingDuration();
+//                    //System.out.println("dec"); //todo remove
+//                }
+//            }
+//        }
     }
 
     public AreaEffect getEffectAt(Position pos) {

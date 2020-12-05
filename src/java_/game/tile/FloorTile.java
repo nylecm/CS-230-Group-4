@@ -51,8 +51,6 @@ public class FloorTile extends Tile {
                 pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
                 break;
         }
-
-        System.out.println("EYY " + pathsBits);
     }
 
     // Creates a pre-rotated tile

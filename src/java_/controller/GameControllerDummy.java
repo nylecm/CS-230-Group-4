@@ -116,18 +116,18 @@ public class GameControllerDummy implements Initializable {
             }
         });
 
-        endTurnButton.setOnMouseClicked(event -> {
-            if (playerPieceCanMove() && !GameService.getInstance().getPlayerPieceMoved()) {
-                System.out.println("You have to move player piece!");
-                event.consume();
-            } else {
-                ImageView currentPlayerPiecePreview = (ImageView) playerQueue.getChildren().get(0);
-                playerQueue.getChildren().remove(0);
-                playerQueue.getChildren().add(currentPlayerPiecePreview);
-                gameService.nextTurn();
-                displayGameView(gameBoard);
-            }
-        });
+//        endTurnButton.setOnMouseClicked(event -> {
+//            if (playerPieceCanMove() && !GameService.getInstance().getPlayerPieceMoved()) {
+//                System.out.println("You have to move player piece!");
+//                event.consume();
+//            } else {
+//                ImageView currentPlayerPiecePreview = (ImageView) playerQueue.getChildren().get(0);
+//                playerQueue.getChildren().remove(0);
+//                playerQueue.getChildren().add(currentPlayerPiecePreview);
+//                gameService.nextTurn();
+//                displayGameView(gameBoard);
+//            }
+//        });
     }
 
 
@@ -774,22 +774,22 @@ public class GameControllerDummy implements Initializable {
             ImageView drawnActionTileDisplay = new ImageView(newActionTileImage);
             drawnActionTiles.getChildren().add(drawnActionTileDisplay);
 
-            drawnActionTileDisplay.setOnDragDetected(event -> {
-                if (!GameService.getInstance().getActionTilePlayed()) {
-                    Dragboard dragboard = drawnActionTileDisplay.startDragAndDrop(TransferMode.MOVE);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(actionTileImage);
-                    dragboard.setContent(content);
-                    event.consume();
-                } else {
-                    System.out.println("You can't use ActionTile anymore you idiot");
-                }
-            });
+//            drawnActionTileDisplay.setOnDragDetected(event -> {
+//                if (!GameService.getInstance().getActionTilePlayed()) {
+//                    Dragboard dragboard = drawnActionTileDisplay.startDragAndDrop(TransferMode.MOVE);
+//                    ClipboardContent content = new ClipboardContent();
+//                    content.putImage(actionTileImage);
+//                    dragboard.setContent(content);
+//                    event.consume();
+//                } else {
+//                    System.out.println("You can't use ActionTile anymore you idiot");
+//                }
+//            });
 
-            drawnActionTileDisplay.setOnDragDone(event -> {
-                drawnActionTiles.getChildren().remove(drawnActionTileDisplay);
-                GameService.getInstance().setActionTilePlayed(true);
-            });
+//            drawnActionTileDisplay.setOnDragDone(event -> {
+//                drawnActionTiles.getChildren().remove(drawnActionTileDisplay);
+//                GameService.getInstance().setActionTilePlayed(true);
+//            });
         }
     }
 
