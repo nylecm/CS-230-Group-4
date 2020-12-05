@@ -15,7 +15,8 @@ public class SilkBag {
     /**
      * Instantiates a new Silk bag, filling it with tiles.
      *
-     * @param newTiles the tiles that ought to be added, in random order.
+     * @param newTiles the tiles that ought to be added, they do not need to be
+     *                 in random order.
      */
     public SilkBag(List<Tile> newTiles) {
         Collections.shuffle(newTiles);
@@ -25,7 +26,7 @@ public class SilkBag {
     }
 
     /**
-     * Instantiates a new silk bag without filling it with tiles.
+     * Instantiates a new empty silk bag.
      */
     public SilkBag() {
     }
@@ -33,7 +34,7 @@ public class SilkBag {
     /**
      * Puts a tile into the silk bag.
      *
-     * @param t the tile to be put into the silk bag.
+     * @param t the tile type of the tile to be put into the silk bag.
      */
     public void put(TileType t) {
         tiles.add(t);
@@ -66,6 +67,11 @@ public class SilkBag {
         return tiles.isEmpty();
     }
 
+    /**
+     * Gets the size of the silk bag,
+     *
+     * @return the number of tiles in the silk bag.
+     */
     public int size() {
         return tiles.size();
     }
