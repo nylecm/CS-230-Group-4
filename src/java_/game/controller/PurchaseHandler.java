@@ -19,52 +19,33 @@ public class PurchaseHandler {
     public static int buyPlayerPiece(String username, String newPlayerPiece, int userAmountOfCoins) throws IOException {
         ArrayList<String> users = new ArrayList<>();
 
-        int newPlayerPiecePrice = 0;
-        Scanner in = new Scanner(new File(PLAYERPIECE_PRICE_DIRECTORY));
+        int piecePrice = 0;
+        File priceFile = new File(PLAYERPIECE_PRICE_DIRECTORY);
+        Scanner in = new Scanner(priceFile);
         in.useDelimiter(DELIMITER);
-        boolean isPlayerPiecePriceFound = false;
-
-        while (in.hasNextLine() && !isPlayerPiecePriceFound) {
-            newPlayerPiecePrice = in.nextInt();
+        while (in.hasNextLine()) {
+            in.next(); //todo
             String playerPiece = in.next();
             if (playerPiece.equals(newPlayerPiece)) {
-                isPlayerPiecePriceFound = true;
+                piecePrice = in.nextInt();
             }
-            /*if (in.hasNextLine()) {
+            if (in.hasNextLine()) {
                 in.nextLine();
-            }*/
+            }
         }
         in.close();
 
-        if (!isPlayerPiecePriceFound) {
-            throw new IllegalArgumentException("Player Piece with such name not Found.");
-        }
+        int newCoinAmount = userAmountOfCoins - piecePrice;
+        File userFile = new File(USER_COINFILE_DIRECTORY);
 
-        int newCoinAmount = userAmountOfCoins - newPlayerPiecePrice;
-        in = new Scanner(new File(USER_COINFILE_DIRECTORY));
+        in = new Scanner(userFile);
         in.useDelimiter(DELIMITER);
         int indexOfNeededLine = 0;
-
         while (in.hasNextLine()) {
             String tempUser = in.next();
             if (username.equals(tempUser)) {
                 indexOfNeededLine = users.size();
             }
-            in.next();
-            in.next();
-            in.next();
-            String numberOfPlayerPiecesStr = in.next();
-            int numberOfPlayerPieces = Integer.parseInt(numberOfPlayerPiecesStr);
-            HashSet<String> currentlyOwnedPlayerPieces = new HashSet<>();
-            for (int i = 0; i < numberOfPlayerPieces; i++) {
-                String playerPiece = in.next();
-                if (currentlyOwnedPlayerPieces.contains(playerPiece)) {
-
-                }
-                currentlyOwnedPlayerPieces.add(playerPiece);
-            }
-
-            //loop through each player piece to check for duplicates.
             users.add(tempUser + in.nextLine());
         }
         in.close();
@@ -104,12 +85,9 @@ public class PurchaseHandler {
         ArrayList<String> freePlayerPiecesNames = new ArrayList<>();
 
         while (in.hasNextLine()) {
-            String costStr = in.next();
-            if (costStr.equals("")) break;
-            costStr = costStr.replace("\n","");
-            costStr = costStr.replace("\r","");
-            System.out.println(costStr);
+            in.next();
             String playerPieceName = in.next();
+            String costStr = in.next();
             if (Integer.parseInt(costStr) == 0) {
                 freePlayerPiecesNames.add(playerPieceName);
             }
@@ -123,8 +101,7 @@ public class PurchaseHandler {
         Calendar calendar = Calendar.getInstance();
         String dateToday = yyyyddmm.format(calendar.getTime());
 
-        String userRecord = username + DELIMITER + 0 + DELIMITER + 1 + DELIMITER +
-                dateToday + DELIMITER + 0 + DELIMITER + "\n";
+        String userRecord = username + DELIMITER + 0 + DELIMITER + 1 + DELIMITER + dateToday + DELIMITER + 0 + DELIMITER + "\n";
 
         byte[] userRecordBytes = userRecord.getBytes();
 

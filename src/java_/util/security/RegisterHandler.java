@@ -1,5 +1,7 @@
 package java_.util.security;
 
+import java_.game.controller.PurchaseHandler;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,9 +10,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Set;
-
-import static java_.game.controller.PurchaseHandler.addNewPlayer;
-import static java_.game.controller.PurchaseHandler.buyAllFreePlayerPieces;
 
 /**
  * Handles the process of a user registering a new account in the game.
@@ -56,6 +55,8 @@ public class RegisterHandler {
 
         byte[] userRecordBytes = userRecord.getBytes();
         Files.write(Paths.get(USERS_FILE_PATH), userRecordBytes, StandardOpenOption.APPEND);
-        addNewPlayer(username, isUserFileEmpty);
+        PurchaseHandler ph = new PurchaseHandler();
+
+        ph.addNewPlayer(username, isUserFileEmpty);
     }
 }

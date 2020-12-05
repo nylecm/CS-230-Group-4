@@ -75,7 +75,8 @@ public class RegisterController implements Initializable {
             } catch (IOException e) {
                 registerStatusLabel.setText(FILE_NOT_FOUND_OR_ERROR_ACCESSING_IT_MSG);
             } catch (IllegalArgumentException e2) {
-                registerStatusLabel.setText(e2.getMessage());
+                System.out.println("bad");
+                //registerStatusLabel.setText(e2.getMessage());
             }
             this.username.setText("");
             this.email.setText("");

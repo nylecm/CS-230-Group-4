@@ -65,9 +65,7 @@ public class PlayerPiecePurchaseController {
                     if (tilePrice <= Integer.parseInt(coinNumber.getText())) {
                         affordablePlayerPieces.getItems().add(tileAvailable);
                     }
-                    if (in.hasNextLine()) {
-                        in.nextLine();
-                    }
+                    in.nextLine();
                 }
                 in.close();
             } else {
