@@ -1,3 +1,44 @@
-.anchor {
-    -fx-background-image: url('../res/img/gui/footer.png');
+.scroll-pane {
+    -fx-background-color: transparent;
 }
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.h-box {
+    -fx-background-color: blue;
+}
+
+#footer {
+    -fx-background-image: url("../res/img/gui/Footer.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 1080 307.5;
+    -fx-background-position: center center;
+}
+
+#rotateClockwiseButton {
+    -fx-background-image: url("../res/img/gui/rotateClockwise.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 25 25;
+    -fx-background-color: transparent;
+}
+
+#rotateAntiClockwiseButton {
+    -fx-background-image: url("../res/img/gui/rotateAnticlockwise.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 25 25;
+    -fx-background-color: transparent;
+}
+
+#endTurnButton {
+    -fx-background-image: url("../res/img/gui/endTurnButton.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 129 41;
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.45), 10, 0.1, 0, 2)
+}
+
+/*#drawnFloorTile {*/
+/*    -fx-image: url("../../fullFlat.png");*/
+/*}*/
