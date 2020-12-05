@@ -83,7 +83,13 @@ public class GameBoard {
         int sourceFloorTilePaths = sourceFloorTile.getPathsBits();
         int targetFloorTilePaths = targetFloorTile.getPathsBits();
 
-        return (sourceFloorTilePaths & sourceBitmask) == sourceBitmask && (targetFloorTilePaths & oppositeBitmask) == oppositeBitmask;
+        Position targetFloorTilePosition = new Position(targetRow, targetCol);
+//        boolean targetFloorTileOnFire = activeEffects.get(targetFloorTilePosition).getEffectType() == EffectType.FIRE;
+
+        //Making sure the move is only to the adjacent row/column
+        boolean isAdjacentFloorTile = (targetCol == sourceCol - 1 || targetCol == sourceCol + 1) || (targetRow == sourceRow - 1 || targetRow == sourceRow + 1);
+
+        return (sourceFloorTilePaths & sourceBitmask) == sourceBitmask && (targetFloorTilePaths & oppositeBitmask) == oppositeBitmask && isAdjacentFloorTile;
     }
 
     public void movePlayerPiece(int newRow, int newCol) {
@@ -92,6 +98,8 @@ public class GameBoard {
         playerPiecePositions[currentPlayerNumber] = new Position(newRow, newCol);
     }
 
+    @Deprecated
+    //TODO Remove
     public void movePlayerPieceUp(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum() - 1, curPos.getColNum());
@@ -99,6 +107,8 @@ public class GameBoard {
         playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
 
+    @Deprecated
+    //TODO Remove
     public void movePlayerPieceRight(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() + 1);
@@ -106,6 +116,8 @@ public class GameBoard {
         playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
 
+    @Deprecated
+    //TODO Remove
     public void movePlayerPieceDown(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum() + 1, curPos.getColNum());
@@ -132,12 +144,15 @@ public class GameBoard {
         }*/
     }
 
+    @Deprecated
+    //TODO Remove
     public void movePlayerPieceLeft(int playerNumber) {
         Position curPos = playerPiecePositions[playerNumber];
         Position newPos = new Position(curPos.getRowNum(), curPos.getColNum() - 1);
         playerPiecePositions[playerNumber] = newPos;
         playerPieces[playerNumber].addPreviousPlayerPosition(curPos);
     }
+
     public void insert(int colNum, int rowNum, FloorTile tile, int rotation)
             throws IllegalArgumentException {
         FloorTile pushedOffTile; // Tile being pushed off
@@ -363,17 +378,6 @@ public class GameBoard {
         return false;
     }
 
-    public void useActionTile(ActionTile actionTile, Position pos) {
-        if (actionTile.use() instanceof AreaEffect) {
-            applyEffect((AreaEffect) actionTile.use(), pos);
-        } else if (actionTile.use() instanceof PlayerEffect) {
-            Effect effect = actionTile.use();
-            if (effect.getEffectType() == EffectType.BACKTRACK) {
-
-            }
-        }
-    }
-
     public void applyEffect(AreaEffect effect, Position pos) throws IllegalStateException {
         int effectRadius = effect.getRadius();
         int diameter = effectRadius * 2;
@@ -399,15 +403,20 @@ public class GameBoard {
         }
     }
 
-    public void backtrack(int playerNum, int targetNumberOfBacktracks) throws IllegalStateException {
+    public Position backtrack(int playerNum, int targetNumberOfBacktracks) throws IllegalStateException {
         if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks == 1) {
-            playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
+            Position previousPosition = playerPieces[playerNum].getPreviousPlayerPosition();
+            playerPiecePositions[playerNum] = previousPosition;
             playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
+            return previousPosition;
         } else if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks > 1) {
             playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
             playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
-            backtrack(playerNum, targetNumberOfBacktracks - 1);
+            Position output;
+            output = backtrack(playerNum, targetNumberOfBacktracks - 1);
+            return output;
         }
+        return null;
     }
 
     public boolean isBacktrackPossible(int playerNum) {
@@ -464,6 +473,15 @@ public class GameBoard {
 
     public Position getPlayerPiecePosition(int playerNum) {
         return playerPiecePositions[playerNum];
+    }
+
+    public int getPlayerPieceIndexByPosition(Position position) {
+        for (int i = 0; i < playerPiecePositions.length; i++) {
+            if (playerPiecePositions[i].equals(position)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int getnRows() {
