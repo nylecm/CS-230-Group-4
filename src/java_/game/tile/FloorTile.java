@@ -3,9 +3,12 @@ package java_.game.tile;
 import java.util.EnumSet;
 
 /**
- * The type Floor tile.
+ * Represents a floor tile, which is a type of Tile that makes up the game board.
+ * A floor tile has paths in upto 4 directions, can be fixed, a winning tile, and
+ * it keeps track of how many times it has been rotated clockwise from its default
+ * position.
  *
- * @author mnabina, nylecm
+ * @author nylecm and bitmask improved by Matej Hlaky
  */
 public class FloorTile extends Tile {
     public final static EnumSet<TileType> FLOOR_TILE_TYPES =
@@ -16,18 +19,17 @@ public class FloorTile extends Tile {
     public static final int SOUTH_PATH_MASK = 0x2; //0010
     public static final int WEST_PATH_MASK = 0x1; //0001
 
-    private static final String šTILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
+    //private static final String TILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
 
-    private boolean isFixed;
+    private final boolean isFixed;
     private byte pathsBits;
     private boolean isGoalTile;
     private int rotation;
 
     /**
-     * Instantiates a new Floor tile.
+     * Instantiates a new Floor tile, of a set type.
      *
-     * @param type    the type name
-     * @param isFixed the is fixed
+     * @param type the TileType of the new floor tile (eg CORNER).
      */
     public FloorTile(TileType type) throws IllegalArgumentException {
         super(type, FLOOR_TILE_TYPES);
@@ -53,7 +55,14 @@ public class FloorTile extends Tile {
         }
     }
 
-    // Creates a pre-rotated tile
+    /**
+     * Instantiates a pre-rotated floor tile that can be fixed or not fixed.
+     *
+     * @param type           the TileType of the new floor tile (eg CORNER).
+     * @param isFixed        true if the tile the new tile ought to be fixed.
+     * @param rotationAmount number of clockwise rotations from default value
+     *                       that ought to be performed on the tile.
+     */
     public FloorTile(TileType type, boolean isFixed, int rotationAmount) {
         super(type, FLOOR_TILE_TYPES);
 
@@ -80,6 +89,11 @@ public class FloorTile extends Tile {
         rotate(rotationAmount);
     }
 
+    /**
+     * Rotates a tile's paths clockwise.
+     *
+     * @param rotationAmount the amount of times the tile ought to be rotated clockwise.
+     */
     public void rotate(int rotationAmount) {
         for (int i = 0; i < rotationAmount; i++) {
             pathsBits = (byte) (pathsBits << 3);
@@ -88,15 +102,14 @@ public class FloorTile extends Tile {
         rotation = rotationAmount % 4;
     }
 
-    @Override
-    public String toString() {
-        return "FloorTile{" +
-                "isFixed=" + isFixed +
-                ", pathsBits=" + pathsBits +
-                ", isGoalTile=" + isGoalTile +
-                ", rotation=" + rotation +
-                ", type=" + type +
-                '}';
+    /**
+     * Gets the tile's rotation.
+     *
+     * @return number of times the tile has been rotated clockwise from the
+     * default position.
+     */
+    public int getRotation() {
+        return rotation;
     }
 
     public byte getPathsBits() {
@@ -106,7 +119,7 @@ public class FloorTile extends Tile {
     /**
      * Is fixed boolean.
      *
-     * @return the boolean
+     * @return true if the floor tile is fixed.
      */
     public boolean isFixed() {
         return isFixed;
@@ -115,17 +128,25 @@ public class FloorTile extends Tile {
     /**
      * Is goal tile boolean.
      *
-     * @return the boolean
+     * @return true if the tile is a goal tile.
      */
     public boolean isGoalTile() {
         return isGoalTile;
     }
 
-    public int getRotation() {
-        return rotation;
-    }
-
-    public static void main(String[] args) {
-
+    /**
+     * Prints a string describing the tile.
+     *
+     * @return formatted string describing the tile.
+     */
+    @Override
+    public String toString() {
+        return "FloorTile{" +
+                "isFixed=" + isFixed +
+                ", pathsBits=" + pathsBits +
+                ", isGoalTile=" + isGoalTile +
+                ", rotation=" + rotation +
+                ", type=" + type +
+                '}';
     }
 }

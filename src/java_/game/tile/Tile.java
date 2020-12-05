@@ -3,7 +3,7 @@ package java_.game.tile;
 import java.util.EnumSet;
 
 /**
- * Represents a tile which is the main 'currency' of the game. It cannot be
+ * Represents a tile which are the building blocks of the game. It cannot be
  * instantiated. A tile is of a certain type, so it can be for example a floor
  * tile or a player tile.
  *
