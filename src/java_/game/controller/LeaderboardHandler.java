@@ -1,6 +1,6 @@
 package java_.game.controller;
 
-import java_.controller.Reader;
+import java_.util.Reader;
 import java_.game.player.Player;
 
 import java.io.File;

@@ -1,6 +1,5 @@
 package java_.game.controller;
 
-import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultElement;
 import java_.game.player.Player;
 
 import java.io.File;
@@ -12,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
+/**
+ * Handles the process of awarding coins to players.
+ */
 public class CoinHandler {
-
-
     //todo testing
-
     private static final double FACTOR = 0.2;
     private static final int WINNING_MULTIPLIER = 5;
     private static final int LOSING_MULTIPLIER = 1;
@@ -27,25 +26,22 @@ public class CoinHandler {
     private static final int DAILY_LOGIN_REWARD_CAP = 146;
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
-
-
-
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
-        //int nTurns = GameService.getInstance().getTurnCount(); todo uncomment
-        int nTurns = 100; //todo remove
+        int nTurns = GameService.getInstance().getTurnCount(); //todo uncomment
+        //int nTurns = 100; //testing only.
+
+        // Calculate number of coins that ought to be given out:
         int nPlayers = players.length;
         int effort = nTurns / nPlayers;
-        int winningCoins = (int)(effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
-        int losingCoins = (int)(effort * FACTOR * LOSING_MULTIPLIER);
+        int winningCoins = (int) (effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
+        int losingCoins = (int) (effort * FACTOR * LOSING_MULTIPLIER);
 
-        File coinFile = new File(PLAYER_COINS_FILEPATH);
-        Scanner in = new Scanner(coinFile);
+        // Gives player's their earned coins:
+        Scanner in = new Scanner(new File(PLAYER_COINS_FILEPATH));
         in.useDelimiter(DELIMITER);
         ArrayList<String> newFileLines = new ArrayList<>();
 
-        //Looping through every line in the file
         while (in.hasNextLine()) {
-
             //Store each attribute of the file line.
             Scanner ln = new Scanner(in.nextLine());
             ln.useDelimiter(DELIMITER);
@@ -76,15 +72,13 @@ public class CoinHandler {
         in.close();
         //todo remove array list after fixing printWriter
         //Write all the new file lines
-        PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newFileLine: newFileLines) {
+        PrintWriter lineWriter = new PrintWriter(new File(PLAYER_COINS_FILEPATH));
+        for (String newFileLine : newFileLines) {
             lineWriter.println(newFileLine);
         }
         lineWriter.flush();
         lineWriter.close();
     }
-
-
 
 
     public static void giveCoins(String username, int coins) throws FileNotFoundException {
@@ -121,7 +115,7 @@ public class CoinHandler {
 
         //Write all new file lines
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newFileLine: newFileLines) {
+        for (String newFileLine : newFileLines) {
             lineWriter.println(newFileLine);
         }
         lineWriter.close();
@@ -165,7 +159,7 @@ public class CoinHandler {
                 if (dayAfterLastLogin.equals(dateToday)) { // consecutive days logged in
                     streak += 1; //increase streak
                     nCoins += streakCoins(streak);
-                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)){ //Logged in two different days that are more than a day apart.
+                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)) { //Logged in two different days that are more than a day apart.
                     streak = 1; //reset streak
                     nCoins += streakCoins(streak);
                 }
@@ -178,7 +172,7 @@ public class CoinHandler {
         }
         in.close();
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newLine: newFileLines) {
+        for (String newLine : newFileLines) {
             lineWriter.println(newLine);
         }
         lineWriter.flush();
@@ -195,10 +189,6 @@ public class CoinHandler {
         }
         return streakValue;
     }
-
-
-
-
 
     public static void main(String[] args) throws FileNotFoundException, ParseException {
         /*
