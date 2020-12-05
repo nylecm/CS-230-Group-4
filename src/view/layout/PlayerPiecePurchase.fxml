@@ -1,82 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<?import java.net.URL?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="595.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="java_.controller.PlayerPiecePurchaseController"
-            fx:id="mainPane">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="360.0" minWidth="420.0" prefHeight="576.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.PlayerPiecePurchaseController">
     <center>
         <GridPane BorderPane.alignment="CENTER">
-            <ListView fx:id="preOwnedPieces" minWidth="150.0" prefHeight="494.0" prefWidth="317.0"
-                      GridPane.columnIndex="1"/>
+            <ListView fx:id="preOwnedPieces" minWidth="150.0" prefHeight="494.0" prefWidth="317.0" GridPane.columnIndex="2" />
             <VBox prefHeight="494.0" prefWidth="157.0" BorderPane.alignment="CENTER">
                 <BorderPane.margin>
-                    <Insets/>
+                    <Insets />
                 </BorderPane.margin>
                 <children>
                     <HBox>
                         <children>
                             <VBox>
                                 <children>
-                                    <TextField fx:id="usernameField" prefWidth="529.0"/>
-                                    <PasswordField fx:id="passwordField"/>
-                                    <Button mnemonicParsing="false" onAction="#onLoginButtonClicked"
-                                            text="Login"/>
-                                    <Label fx:id="loginStatus" text="Label"/>
+                                    <TextField fx:id="usernameField" prefWidth="529.0" />
+                                    <PasswordField fx:id="passwordField" />
+                                    <Button mnemonicParsing="false" onAction="#onLoginButtonClicked" text="Login" />
+                                    <Label fx:id="loginStatus" text="Label" />
                                 </children>
                             </VBox>
                         </children>
                         <opaqueInsets>
-                            <Insets/>
+                            <Insets />
                         </opaqueInsets>
                     </HBox>
                     <VBox>
                         <children>
-                            <Label text="Number of Coins"/>
-                            <Label fx:id="coinNumber" text="Label"/>
+                            <Label text="Number of Coins" />
+                            <Label fx:id="coinNumber" text="Label" />
                             <HBox>
                                 <VBox.margin>
-                                    <Insets/>
+                                    <Insets />
                                 </VBox.margin>
                                 <children>
                                     <Label text="Player pieces you can buy:">
                                         <font>
-                                            <Font size="17.0"/>
+                                            <Font size="17.0" />
                                         </font>
                                     </Label>
                                 </children>
                             </HBox>
-                            <ChoiceBox fx:id="affordablePlayerPieces" prefHeight="26.0"
-                                       prefWidth="191.0"/>
-                            <ImageView fx:id="playerPiecePreview" fitHeight="150.0" fitWidth="200.0"
-                                       pickOnBounds="true" preserveRatio="true"/>
+                            <ChoiceBox fx:id="affordablePlayerPieces" prefHeight="26.0" prefWidth="191.0" />
+                            <ImageView fx:id="playerPiecePreview" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                             <HBox>
                                 <children>
-                                    <Button mnemonicParsing="false" onAction="#onBuyButtonClicked"
-                                            text="Buy"/>
+                                    <Button mnemonicParsing="false" onAction="#onBuyButtonClicked" text="Buy" />
                                 </children>
                             </HBox>
                         </children>
                         <VBox.margin>
-                            <Insets/>
+                            <Insets />
                         </VBox.margin>
                     </VBox>
-                    <Label fx:id="purchaseStatus" text="Label"/>
+                    <Label fx:id="purchaseStatus" text="Label" />
                 </children>
             </VBox>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="300.0" minWidth="100.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" prefWidth="30.0" />
+                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="300.0" minWidth="150.0" prefWidth="200.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="250.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
 
@@ -84,8 +76,8 @@
     <top>
         <HBox prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Button mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back"/>
-                <Label text="Player Piece Shop"/>
+                <Button mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back" />
+                <Label text="Player Piece Shop" />
             </children>
         </HBox>
     </top>
@@ -93,6 +85,6 @@
 
     </bottom>
     <stylesheets>
-        <URL value="@player_piece_purchase.css"/>
+        <URL value="@player_piece_purchase.css" />
     </stylesheets>
 </BorderPane>
