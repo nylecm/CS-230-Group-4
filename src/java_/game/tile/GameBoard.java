@@ -404,7 +404,6 @@ public class GameBoard {
     }
 
     public Position backtrack(int playerNum, int targetNumberOfBacktracks) throws IllegalStateException {
-        System.out.println("RECURSION EY");
         if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks == 1) {
             Position previousPosition = playerPieces[playerNum].getPreviousPlayerPosition();
             playerPiecePositions[playerNum] = previousPosition;
@@ -474,6 +473,15 @@ public class GameBoard {
 
     public Position getPlayerPiecePosition(int playerNum) {
         return playerPiecePositions[playerNum];
+    }
+
+    public int getPlayerPieceIndexByPosition(Position position) {
+        for (int i = 0; i < playerPiecePositions.length; i++) {
+            if (playerPiecePositions[i].equals(position)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int getnRows() {

@@ -1021,24 +1021,20 @@ public class GameController implements Initializable {
         System.out.println(gameBoard.getPlayerPiecePosition(currentPlayerNum));
 
         boolean targetNotSelf = !playerPieceImageViewPosition.equals(gameBoard.getPlayerPiecePosition(currentPlayerNum));
-        System.out.println("Target not self: " + targetNotSelf);
 
         //TODO Check if used effect on target contain
 
         if (usedActionTile.use().getEffectType() == EffectType.BACKTRACK && targetNotSelf) {
             //TODO Bowser time
             System.out.println("Get ready for backtrack BABYYYYYYY!");
-            Position previousPosition = gameBoard.backtrack(gameService.getCurrentPlayerNum(), 2);
-            System.out.println("Returned " + previousPosition);
+            Position previousPosition = gameBoard.backtrack(gameBoard.getPlayerPieceIndexByPosition(playerPieceImageViewPosition), 2);
             targetPlayerPieceImageView.setLayoutX((previousPosition.getColNum() - 1) * TILE_WIDTH + TILE_WIDTH + 6);
             targetPlayerPieceImageView.setLayoutY((previousPosition.getRowNum() - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
-            System.out.println("#1");
             success = true;
         } else if (usedActionTile.use().getEffectType() == EffectType.DOUBLE_MOVE && !targetNotSelf) {
             System.out.println("DID I HEAR DOUBLE MOOOOOOOOVEEEEE?");
             useDoubleMoveActionTile();
             success = true;
-            System.out.println("#2");
         } else {
             System.out.println("Invalid combination of target and used ActionTile, what the fuck are you doing?");
         }
@@ -1046,7 +1042,6 @@ public class GameController implements Initializable {
         if (success) {
             //Remove from GUI
             playersActionTiles.getChildren().remove(actionTileImageView);
-            System.out.println("#3");
 
             //Remove from Player class
             gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().remove(usedActionTileIndex);
