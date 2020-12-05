@@ -200,8 +200,8 @@ public class CoinHandler {
         players[1] = player2;
         updateCoins(players, 0);
         */
-        //increaseDailyStreak("nylecm2");
-        giveCoins("nylecm1", 10);
+        increaseDailyStreak("nylecm2");
+        //giveCoins("nylecm1", 10);
         //System.out.println(streakCoins(1));
     }
 }
