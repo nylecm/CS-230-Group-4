@@ -1,13 +1,13 @@
 among_us.png`300`
 astronaut.png`10`
-baby_yoda.png`500
+baby_yoda.png`500`
 black_temp_pp.png`0`
 blue_temp_pp.png`0`
-car.png`250
-dog.png`250
+car.png`250`
+dog.png`250`
 dragon.png`100`
-elephant.png`100
-fall_guy.png`300
+elephant.png`100`
+fall_guy.png`300`
 football.png`40`
 ghost.png`200`
 liam.png`1000`
@@ -24,4 +24,4 @@ wheelbarrow`250`
 yellow_temp_pp.png`0`
 homer.png`10`
 alien_ufo_1.png`5`
-alien_ufo_2.png`5`
+alien_ufo_2.png`5

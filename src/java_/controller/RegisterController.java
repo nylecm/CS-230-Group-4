@@ -72,15 +72,15 @@ public class RegisterController implements Initializable {
             try {
                 RegisterHandler.register(username, email, password);
                 registerStatusLabel.setText(ACCOUNT_REGISTERED_MSG);
-                this.username.setText("");
-                this.email.setText("");
-                this.password.setText("");
-                this.passwordRepeat.setText("");
             } catch (IOException e) {
                 registerStatusLabel.setText(FILE_NOT_FOUND_OR_ERROR_ACCESSING_IT_MSG);
             } catch (IllegalArgumentException e2) {
-                registerStatusLabel.setText(DUPLICATE_USER_NAME_MSG);
+                registerStatusLabel.setText(e2.getMessage());
             }
+            this.username.setText("");
+            this.email.setText("");
+            this.password.setText("");
+            this.passwordRepeat.setText("");
         }
     }
 

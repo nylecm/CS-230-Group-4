@@ -33,8 +33,8 @@ public class CoinHandler {
         int nTurns = 100; //todo remove
         int nPlayers = players.length;
         int effort = nTurns / nPlayers;
-        int winningCoins = (int)(effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
-        int losingCoins = (int)(effort * FACTOR * LOSING_MULTIPLIER);
+        int winningCoins = (int) (effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
+        int losingCoins = (int) (effort * FACTOR * LOSING_MULTIPLIER);
 
         File coinFile = new File(PLAYER_COINS_FILEPATH);
         Scanner in = new Scanner(coinFile);
@@ -67,14 +67,12 @@ public class CoinHandler {
         in.close();
         //todo remove array list after fixing printWriter
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newFileLine: newFileLines) {
+        for (String newFileLine : newFileLines) {
             lineWriter.println(newFileLine);
         }
         lineWriter.flush();
         lineWriter.close();
     }
-
-
 
 
     public static void giveCoins(String username, int coins) throws FileNotFoundException {
@@ -106,7 +104,7 @@ public class CoinHandler {
         in.close();
 
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newFileLine: newFileLines) {
+        for (String newFileLine : newFileLines) {
             lineWriter.println(newFileLine);
         }
         lineWriter.close();
@@ -119,7 +117,6 @@ public class CoinHandler {
         in.useDelimiter(DELIMITER);
         ArrayList<String> newFileLines = new ArrayList<>();
         while (in.hasNextLine()) {
-
             Scanner ln = new Scanner(in.nextLine());
             ln.useDelimiter(DELIMITER);
 
@@ -132,8 +129,6 @@ public class CoinHandler {
             while (ln.hasNext()) {
                 playerPieces += ln.next() + DELIMITER;
             }
-
-
 
             //Calculating day after previous login date
             SimpleDateFormat yyyyddmm = new SimpleDateFormat(DATE_FORMAT);
@@ -151,7 +146,7 @@ public class CoinHandler {
                 if (dayAfterLastLogin.equals(dateToday)) { // consecutive days logged in
                     streak += 1; //increase streak
                     nCoins += streakCoins(streak);
-                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)){ //Logged in two different days that are more than a day apart.
+                } else if (!lastLoginDate.equals(dateToday) && !dayAfterLastLogin.equals(dateToday)) { //Logged in two different days that are more than a day apart.
                     streak = 1; //reset streak
                     nCoins += streakCoins(streak);
                 }
@@ -164,7 +159,7 @@ public class CoinHandler {
         }
         in.close();
         PrintWriter lineWriter = new PrintWriter(coinFile);
-        for (String newLine: newFileLines) {
+        for (String newLine : newFileLines) {
             lineWriter.println(newLine);
         }
         lineWriter.flush();
@@ -181,9 +176,6 @@ public class CoinHandler {
         }
         return streakValue;
     }
-
-
-
 
 
     public static void main(String[] args) throws FileNotFoundException, ParseException {

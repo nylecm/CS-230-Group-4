@@ -1,6 +1,7 @@
 package java_.controller;
 
 import java_.game.controller.PurchaseHandler;
+import java_.util.security.LoginHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,6 +17,9 @@ public class PlayerPiecePurchaseController {
     public static final String DELIMITER = "`";
 
     @FXML
+    private PasswordField passwordField;
+
+    @FXML
     private TextField usernameField;
 
     @FXML
@@ -27,55 +31,61 @@ public class PlayerPiecePurchaseController {
     @FXML
     private ChoiceBox<String> affordablePlayerPieces;
 
-    private Boolean userFound = false;
+    /*private Boolean isUserFound = false;
     private String username = "";
     private String userCoinAmount;
-    private int userNoCoins;
+    private int userNoCoins;*/
 
     @FXML
     private void onLoginButtonClicked(ActionEvent e) throws IOException {
-        //todo use log in handler
-
-        preOwnedPieces.getItems().clear();
-        username = usernameField.getText();
-        File userCoinFile = new File(USER_COIN_FILE_DIRECTORY);
-        Scanner coinFileScanner = new Scanner(userCoinFile);
-        coinFileScanner.useDelimiter(DELIMITER);
-        while (coinFileScanner.hasNextLine()) {
-            String tempUser = coinFileScanner.next();
-            if (tempUser.equals(username)) {
-                userCoinAmount = coinFileScanner.next();
-                userNoCoins = Integer.parseInt(userCoinAmount);
-                userFound = true;
-            }
-            coinFileScanner.nextLine();
-        }
-        coinFileScanner.close();
-        if (userFound) {
-            coinNumber.setText(userCoinAmount);
-            File priceFile = new File(PLAYER_PIECE_PRICE_DIRECTORY);
-            Scanner in = new Scanner(priceFile);
+        if (LoginHandler.login(usernameField.getText(), passwordField.getText())) {
+            preOwnedPieces.getItems().clear();
+            String targetUsername = usernameField.getText();
+            Scanner in = new Scanner(new File(USER_COIN_FILE_DIRECTORY));
             in.useDelimiter(DELIMITER);
-            while (in.hasNextLine()) {
-                String tileAvailable = in.next();
-                int tilePrice = in.nextInt();
-                if (tilePrice <= Integer.parseInt(userCoinAmount)) {
-                    affordablePlayerPieces.getItems().add(tileAvailable);
+            boolean isUserFound = false;
+
+            while (in.hasNextLine() && !isUserFound) {
+                String tempUser = in.next();
+                if (tempUser.equals(targetUsername)) {
+                    coinNumber.setText(in.next());
+                    isUserFound = true;
                 }
                 in.nextLine();
             }
             in.close();
+
+            if (isUserFound) {
+                in = new Scanner(new File(PLAYER_PIECE_PRICE_DIRECTORY));
+                in.useDelimiter(DELIMITER);
+
+                while (in.hasNextLine()) {
+                    String tileAvailable = in.next();
+                    int tilePrice = in.nextInt();
+                    if (tilePrice <= Integer.parseInt(coinNumber.getText())) {
+                        affordablePlayerPieces.getItems().add(tileAvailable);
+                    }
+                    if (in.hasNextLine()) {
+                        in.nextLine();
+                    }
+                }
+                in.close();
+            } else {
+                //todo notify user...
+            }
+        } else {
+            System.out.println("wp");
         }
     }
 
     @FXML
     private void onBuyButtonClicked(ActionEvent e) throws IOException {
-        PurchaseHandler.buyPlayerPiece(username, affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
+        PurchaseHandler.buyPlayerPiece(usernameField.getText(), affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
     }
 
-    private String getChoice(ChoiceBox<String> affordablePlayerPieces) {
+    /*private String getChoice(ChoiceBox<String> affordablePlayerPieces) {
         return affordablePlayerPieces.getValue();
-    }
+    }*/
 
     @FXML
     private void onOwnedPiecesButtonClicked(ActionEvent e) throws FileNotFoundException {
@@ -87,7 +97,7 @@ public class PlayerPiecePurchaseController {
         while (in.hasNextLine()) {
             String playerPiece = in.next();
             String[] parts = in.nextLine().split(DELIMITER);
-            if (playerPiece.equals(username)) {
+            if (playerPiece.equals(usernameField.getText())) {
                 for (int i = 5; i < parts.length; i++) {
                     list.add(parts[i]);
                 }

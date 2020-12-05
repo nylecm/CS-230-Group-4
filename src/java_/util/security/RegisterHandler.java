@@ -5,11 +5,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
+
+import static java_.game.controller.PurchaseHandler.addNewPlayer;
+import static java_.game.controller.PurchaseHandler.buyAllFreePlayerPieces;
 
 /**
  * Handles the process of a user registering a new account in the game.
  * The account details are stored in a file by the handler.
+ *
  * @author Hladky Matej original version, nylecm major overhaul.
  */
 public class RegisterHandler {
@@ -21,10 +27,11 @@ public class RegisterHandler {
 
     /**
      * Registers the new account by storing the user account data to a file.
+     *
      * @param username The username for the registered account.
-     * @param email The email for the registered account.
+     * @param email    The email for the registered account.
      * @param password The password for the registered account.
-     * @throws IOException If there is an error writing user details to the file.
+     * @throws IOException              If there is an error writing user details to the file.
      * @throws IllegalArgumentException If the user has entered a username that already exists for another account.
      */
     public static void register(String username, String email, String password) throws IOException, IllegalArgumentException {
@@ -49,9 +56,6 @@ public class RegisterHandler {
 
         byte[] userRecordBytes = userRecord.getBytes();
         Files.write(Paths.get(USERS_FILE_PATH), userRecordBytes, StandardOpenOption.APPEND);
-
-
-
-
+        addNewPlayer(username, isUserFileEmpty);
     }
 }
