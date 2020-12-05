@@ -60,16 +60,17 @@ public class PlayerPiecePurchaseController {
                 in.useDelimiter(DELIMITER);
 
                 while (in.hasNextLine()) {
-                    int tilePrice = in.nextInt();
+                    in.next();
                     String tileAvailable = in.next();
+                    int tilePrice = in.nextInt();
                     if (tilePrice <= Integer.parseInt(coinNumber.getText())) {
                         affordablePlayerPieces.getItems().add(tileAvailable);
                     }
-                    in.nextLine();
+                    //in.nextLine();
                 }
                 in.close();
             } else {
-                //todo notify user...
+                //todo notify user... refresh number of coins
             }
         } else {
             System.out.println("wp");

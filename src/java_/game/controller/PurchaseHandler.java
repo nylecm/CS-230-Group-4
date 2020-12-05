@@ -53,6 +53,12 @@ public class PurchaseHandler {
         String currentLine = users.get(indexOfNeededLine);
         String[] parts = currentLine.split(DELIMITER);
 
+        for (int i = 5; i < parts.length; i++) {
+            if (parts[i].equals(newPlayerPiece)) {
+                System.out.println("duplicate pp");
+            }
+        }
+
         String newRowData = parts[0] + DELIMITER + newCoinAmount + DELIMITER +
                 parts[2] + DELIMITER + parts[3] + DELIMITER + (Integer.parseInt(parts[4]) + 1) + DELIMITER;
 
