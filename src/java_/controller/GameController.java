@@ -244,7 +244,7 @@ public class GameController implements Initializable {
             setEdgeTileEventHandlers(edgeTileDisplayTop);
             setEdgeTileEventHandlers(edgeTileDisplayBottom);
 
-            if (GameService.getInstance().getGameBoard().isRowFixed(getItemCol(edgeTileDisplayTop)) || GameService.getInstance().getGameBoard().isRowFixed(getItemCol(edgeTileDisplayBottom))) {
+            if (gameBoard.isRowFixed(getItemRow(edgeTileDisplayTop)) || gameBoard.isColumnFixed(getItemCol(edgeTileDisplayBottom))) {
                 edgeTileDisplayTop.setVisible(false);
                 edgeTileDisplayBottom.setVisible(false);
             }
@@ -507,24 +507,34 @@ public class GameController implements Initializable {
     }
 
     private void setPlayerPieceEventHandlers(ImageView playerPieceImageView) {
+        //TODO Remove
+        playerPieceImageView.setOnMouseClicked(event -> {
+            System.out.println("Col: " + getItemCol(playerPieceImageView));
+            System.out.println("Row: " + getItemRow(playerPieceImageView));
+        });
+
         playerPieceImageView.setOnDragDetected(event -> {
-            ImageView source = (ImageView) event.getSource();
+            if (!floorTileInserted && drawnTile instanceof FloorTile) {
+                System.out.println("You have to insert FloorTile first!");
+            } else {
+                ImageView source = (ImageView) event.getSource();
 
-            if (numberOfMoves > 0 ) {
-                int currentPlayerNum = GameService.getInstance().getCurrentPlayerNum();
-                int sourcePlayerPieceCol = getItemCol(source);
-                int sourcePlayerPieceRow = getItemRow(source);
-                Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
+                if (numberOfMoves > 0 ) {
+                    int currentPlayerNum = gameService.getCurrentPlayerNum();
+                    int sourcePlayerPieceCol = getItemCol(source);
+                    int sourcePlayerPieceRow = getItemRow(source);
+                    Position draggedPlayerPiecePosition = new Position(sourcePlayerPieceRow, sourcePlayerPieceCol);
 
-                //Check if the Player is dragging theirs PlayerPiece
-                if (draggedPlayerPiecePosition.equals(gameService.getGameBoard().getPlayerPiecePosition(currentPlayerNum))) {
-                    Dragboard dragboard = playerPieceImageView.startDragAndDrop(TransferMode.MOVE);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(playerPieceImageView.getImage());
-                    dragboard.setContent(content);
-                    event.consume();
-                } else {
-                    System.out.println("You can't move someone else's PlayerPiece dumbass!");
+                    //Check if the Player is dragging theirs PlayerPiece
+                    if (draggedPlayerPiecePosition.equals(gameService.getGameBoard().getPlayerPiecePosition(currentPlayerNum))) {
+                        Dragboard dragboard = playerPieceImageView.startDragAndDrop(TransferMode.MOVE);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(playerPieceImageView.getImage());
+                        dragboard.setContent(content);
+                        event.consume();
+                    } else {
+                        System.out.println("You can't move someone else's PlayerPiece dumbass!");
+                    }
                 }
             }
         });
@@ -594,14 +604,18 @@ public class GameController implements Initializable {
         });
 
         actionTileImageView.setOnDragDetected(event -> {
-            if (!actionTilePlayed) {
-                Dragboard dragboard = actionTileImageView.startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(((ImageView) event.getSource()).getImage());
-                dragboard.setContent(content);
-                event.consume();
+            if (!floorTileInserted && drawnTile instanceof FloorTile) {
+                System.out.println("You have to insert FloorTile first!");
             } else {
-                System.out.println("You can't use ActionTile anymore you idiot");
+                if (!actionTilePlayed) {
+                    Dragboard dragboard = actionTileImageView.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(((ImageView) event.getSource()).getImage());
+                    dragboard.setContent(content);
+                    event.consume();
+                } else {
+                    System.out.println("You can't use ActionTile anymore you idiot");
+                }
             }
         });
     }
