@@ -4,7 +4,7 @@
 10`astronaut.png`
 500`baby_yoda.png`
 0`black_temp_pp.png`
-0``blue_temp_pp.png`
+0`blue_temp_pp.png`
 250`car.png`
 250`dog.png`
 100`dragon.png`
