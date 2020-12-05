@@ -3,7 +3,8 @@ package java_.game.tile;
 import java.util.EnumSet;
 
 /**
- * The type java.game.tile.Tile.
+ * Represents a tile which is the main 'currency' of the game. A tile is of
+ * a certain type todo
  *
  * @author mnabina, nylecm
  */

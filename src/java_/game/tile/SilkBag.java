@@ -1,8 +1,5 @@
 package java_.game.tile;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-import java_.util.generic_data_structures.Link;
-
 import java.util.*;
 
 /**
@@ -83,47 +80,5 @@ public class SilkBag {
     @Override
     public String toString() {
         return tiles.toString();
-    }
-
-    /**
-     * The entry point of application, for testing only. todo remove this.
-     *
-     * @param args the input arguments
-     */
-
-    public static void main(String[] args) {
-
-
-        SilkBag s = new SilkBag();
-
-        s.put(TileType.FIRE);
-        s.put(TileType.ICE);
-        s.put(TileType.BACKTRACK);
-        s.put(TileType.DOUBLE_MOVE);
-        s.put(TileType.STRAIGHT);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-
-        System.out.println(s.size());
-
-        System.out.println(s);
-
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-
-        System.out.println(s);
-
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-
-        System.out.println(s);
-        //s.take();
     }
 }

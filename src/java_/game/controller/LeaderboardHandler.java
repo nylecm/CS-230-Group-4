@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LeaderboardHandler {
-
     private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";
     private static final String DELIMITER = "`";
 
@@ -19,7 +18,7 @@ public class LeaderboardHandler {
         //String gameboardName = GameService.getInstance().getGameBoard().getName(); //todo un-comment
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(USER_STATS_FOLDER_DIRECTORY);
-        for (File file: fileNames) {
+        for (File file : fileNames) {
             boolean[] hasUserBeenFound = new boolean[players.length];
             if (file.getName().equals(gameboardName)) {
 
@@ -35,7 +34,7 @@ public class LeaderboardHandler {
                         if (players[i].getUsername().equals(currentPlayerStats[0]) && i == winningPlayerIndex) { //The current line contains the stats of the winning player of the game
                             currentPlayerStats[1] = String.valueOf(Integer.valueOf(currentPlayerStats[1]) + 1); //todo probably being stupid - it's 2am
                             hasUserBeenFound[i] = true;
-                        } else if (i != winningPlayerIndex && players[i].getUsername().equals(currentPlayerStats[0])){ //The current line stores the stats of someone who was in the game but lost.
+                        } else if (i != winningPlayerIndex && players[i].getUsername().equals(currentPlayerStats[0])) { //The current line stores the stats of someone who was in the game but lost.
                             currentPlayerStats[2] = String.valueOf(Integer.valueOf(currentPlayerStats[2]) + 1); //todo probably being stupid - it's 2am
                             hasUserBeenFound[i] = true;
                         }
@@ -56,19 +55,11 @@ public class LeaderboardHandler {
                         fileWriter.println(players[i].getUsername() + DELIMITER + "0" + DELIMITER + "1" + DELIMITER);
                     }
                 }
-
                 fileWriter.flush();
                 fileWriter.close();
-
-
-
-
             }
         }
     }
-
-
-
 
     public static void main(String[] args) {
         Player newPlayer = new Player("james", null);
