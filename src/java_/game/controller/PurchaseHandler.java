@@ -1,5 +1,6 @@
 package java_.game.controller;
 
+import com.sun.org.apache.bcel.internal.generic.DLOAD;
 import java_.util.generic_data_structures.Link;
 
 import java.io.*;
@@ -76,6 +77,36 @@ public class PurchaseHandler {
         writer.close();
 
         return newCoinAmount;
+    }
+
+    public static List<String> getPlayersPurchasedPlayerPieces(String username) throws FileNotFoundException {
+        List<String> ownedPlayerPieces = new ArrayList<>();
+
+        Scanner in = new Scanner(new File(USER_COINFILE_DIRECTORY));
+        in.useDelimiter(DELIMITER);
+        boolean targetUserFound = false;
+
+        while (in.hasNextLine() && !targetUserFound) {
+            String curUsername = in.next();
+            System.out.println(curUsername);
+            if (curUsername.equals(username)) {
+                in.next();
+                in.next();
+                in.next();
+                String numberOfPlayerPiecesOwnedStr = in.next();
+                int numberOfPlayerPiecesOwned = Integer.parseInt(numberOfPlayerPiecesOwnedStr);
+                for (int i = 0; i < numberOfPlayerPiecesOwned; i++) {
+                    ownedPlayerPieces.add(in.next());
+                }
+                targetUserFound = true;
+            } else {
+                if (in.hasNextLine()) {
+                    in.nextLine();
+                }
+            }
+        }
+        in.close();
+        return ownedPlayerPieces;
     }
 
     public static void buyAllFreePlayerPieces(String username) throws IOException {
