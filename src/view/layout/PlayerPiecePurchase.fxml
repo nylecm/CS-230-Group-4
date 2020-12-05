@@ -92,6 +92,12 @@
                 <Button mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back" />
                 <Label text="Player Piece Shop" />
             </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="15.0" left="15.0" top="15.0" />
+         </padding>
         </HBox>
     </top>
     <bottom>
