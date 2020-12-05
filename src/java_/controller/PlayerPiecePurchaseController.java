@@ -12,9 +12,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,7 +28,11 @@ public class PlayerPiecePurchaseController implements Initializable {
 
     private static final String USER_COIN_FILE_DIRECTORY = "data/user_coins.txt";
     private static final String PLAYER_PIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
     public static final String DELIMITER = "`";
+
+    @FXML
+    private BorderPane mainPane;
 
     @FXML
     private Label loginStatus;
@@ -149,6 +154,17 @@ public class PlayerPiecePurchaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        BackgroundImage backgroundImage = null;
+        try {
+            backgroundImage = new BackgroundImage(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL())),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(0, 0, false, false, false, true));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        mainPane.setBackground(new Background(backgroundImage));
+        mainPane.setMinWidth(614);
+
         affordablePlayerPieces.setOnAction(event -> {
             if (affordablePlayerPieces.getValue() != null) {
                 try {

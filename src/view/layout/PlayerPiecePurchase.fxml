@@ -11,7 +11,7 @@
             prefHeight="595.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="java_.controller.PlayerPiecePurchaseController"
-            fx:id="main_pane">
+            fx:id="mainPane">
     <center>
         <GridPane BorderPane.alignment="CENTER">
             <ListView fx:id="preOwnedPieces" minWidth="150.0" prefHeight="494.0" prefWidth="317.0"
