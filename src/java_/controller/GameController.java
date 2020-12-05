@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -490,17 +491,19 @@ public class GameController implements Initializable {
                 movePlayerPieceImageView(source, floorTileImageView);
 
             //ActionTileImageView dropped
-            } else if (playersActionTiles.getChildren().contains(source)){
+            } else if (playersActionTiles.getChildren().contains(source)) {
                 //TODO String not very sensible
-                if (getActionTileEffectType(source).equals("AreaEffect")) {
+                if (getActionTileEffectType(source).equals("AreaEffect") && effectCanBeUsed(source, getItemRow(floorTileImageView), getItemCol(floorTileImageView))) {
                     applyEffectImageView(source, floorTileImageView);
                     removeAreaEffectActionTile(source, getItemCol(floorTileImageView), getItemRow(floorTileImageView));
                     event.setDropCompleted(true);
-                //Is Player Effect ActionTile
                 } else {
-                    //TODO :---)
-                    System.out.println("You can't use Player Effect on a FloorTile, dickhead!");
+                    System.out.println("There are players you'd set on fire O_o");
                 }
+                //Is Player Effect ActionTile
+            } else {
+                //TODO :---)
+                System.out.println("You can't use Player Effect on a FloorTile, dickhead!");
             }
         });
 
@@ -971,10 +974,10 @@ public class GameController implements Initializable {
         double centerY = floorTileImageView.getLayoutY();
         double centerX = floorTileImageView.getLayoutX();
 
+        int usedActionTileIndex = playersActionTiles.getChildren().indexOf(effectImageView);
+        ActionTile usedActionTile = gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().get(usedActionTileIndex);
         for (int row = 0; row < area; row++) {
             for (int col = 0; col < area; col++) {
-                int usedActionTileIndex = playersActionTiles.getChildren().indexOf(effectImageView);
-                ActionTile usedActionTile = gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().get(usedActionTileIndex);
 
                 Image effectOverlayImage = new Image(getEffectTypeImage(usedActionTile.use().getEffectType()));
                 ImageView effectOverlayImageView = new ImageView(effectOverlayImage);
@@ -1051,6 +1054,26 @@ public class GameController implements Initializable {
 
     private void useDoubleMoveActionTile() {
         numberOfMoves += 1;
+    }
+
+    private boolean effectCanBeUsed(ImageView effectImageView, int centerRow, int centerCol) {
+        int usedActionTileIndex = playersActionTiles.getChildren().indexOf(effectImageView);
+        ActionTile usedActionTile = gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().get(usedActionTileIndex);
+
+        if (usedActionTile.use().getEffectType().equals(EffectType.FIRE)) {
+            //TODO extract
+            int area = 3;
+
+            for (int row = 0; row < area; row++) {
+                for (int col = 0; col < area; col++) {
+                    Position positionToCheck = new Position(centerRow + 1 - row, centerCol - 1 + col);
+                    if (gameBoard.getPlayerPieceIndexByPosition(positionToCheck) != -1) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private String getActionTileEffectType(ImageView actionTileImageView) {
