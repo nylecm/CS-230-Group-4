@@ -5,10 +5,15 @@ import java_.game.controller.PurchaseHandler;
 import java_.util.security.LoginHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -23,6 +28,12 @@ public class PlayerPiecePurchaseController implements Initializable {
     private static final String USER_COIN_FILE_DIRECTORY = "data/user_coins.txt";
     private static final String PLAYER_PIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
     public static final String DELIMITER = "`";
+
+    @FXML
+    private Label loginStatus;
+
+    @FXML
+    private Label purchaseStatus;
 
     @FXML
     private ImageView playerPiecePreview;
@@ -42,10 +53,16 @@ public class PlayerPiecePurchaseController implements Initializable {
     @FXML
     private ChoiceBox<String> affordablePlayerPieces;
 
+    private String currentUser;
+
     @FXML
     private void onLoginButtonClicked(ActionEvent e) throws IOException {
+        // Security check:
         if (LoginHandler.login(usernameField.getText(), passwordField.getText())) {
+            currentUser = usernameField.getText();
             preOwnedPieces.getItems().clear();
+            affordablePlayerPieces.getItems().clear();
+            playerPiecePreview.setImage(null);
             String targetUsername = usernameField.getText();
             Scanner in = new Scanner(new File(USER_COIN_FILE_DIRECTORY));
             in.useDelimiter(DELIMITER);
@@ -75,44 +92,59 @@ public class PlayerPiecePurchaseController implements Initializable {
                     //in.nextLine();
                 }
                 in.close();
+
+                try {
+                    showOwnedPlayerPieces();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
+                usernameField.setText("");
+                passwordField.setText("");
+                loginStatus.setText("You are logged in as: " + currentUser + ".");
             } else {
-                //todo notify user... refresh number of coins
+                loginStatus.setText("User coin record not found.");
             }
         } else {
-            System.out.println("wp");
+            loginStatus.setText("Wrong password entered.");
         }
     }
 
     @FXML
     private void onBuyButtonClicked(ActionEvent e) {
+        int newCoinBalance = 0;
         try {
-            PurchaseHandler.buyPlayerPiece(usernameField.getText(), affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (IllegalArgumentException ex2) {
-            System.out.println(ex2.getMessage()); //todo notify user of error
+            newCoinBalance = PurchaseHandler.buyPlayerPiece(currentUser, affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
+            coinNumber.setText(String.valueOf(newCoinBalance));
+            showOwnedPlayerPieces();
+        } catch (IOException | IllegalArgumentException ex) {
+            purchaseStatus.setText(ex.getMessage());
         }
     }
 
-    /*private String getChoice(ChoiceBox<String> affordablePlayerPieces) {
-        return affordablePlayerPieces.getValue();
-    }*/
-
-    @FXML
-    private void onOwnedPiecesButtonClicked(ActionEvent e) throws FileNotFoundException {
+    private void showOwnedPlayerPieces() throws FileNotFoundException {
         preOwnedPieces.getItems().clear();
         ArrayList<String> list = new ArrayList<>();
         File file = new File(USER_COIN_FILE_DIRECTORY);
-        Scanner in = new Scanner(file);
+        Scanner in = null;
+
+        in = new Scanner(file);
         in.useDelimiter(DELIMITER);
         while (in.hasNextLine()) {
             String playerPiece = in.next();
             String[] parts = in.nextLine().split(DELIMITER);
-            if (playerPiece.equals(usernameField.getText())) {
+            if (playerPiece.equals(currentUser)) {
                 list.addAll(Arrays.asList(parts).subList(5, parts.length));
             }
         }
         preOwnedPieces.getItems().addAll(list);
+        in.close();
+    }
+
+    @FXML
+    private void onBackButtonClicked(ActionEvent e) throws IOException {
+        Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        currentStage.setScene(new Scene(mainMenu));
     }
 
     @Override
@@ -120,7 +152,7 @@ public class PlayerPiecePurchaseController implements Initializable {
         affordablePlayerPieces.setOnAction(event -> {
             if (affordablePlayerPieces.getValue() != null) {
                 try {
-                    playerPiecePreview.setImage(new Image(String.valueOf(new File ("src/view/res/img/player_piece/" + affordablePlayerPieces.getValue()).toURI().toURL())));
+                    playerPiecePreview.setImage(new Image(String.valueOf(new File("src/view/res/img/player_piece/" + affordablePlayerPieces.getValue()).toURI().toURL())));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
