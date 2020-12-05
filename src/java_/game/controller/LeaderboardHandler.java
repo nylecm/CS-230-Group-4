@@ -42,7 +42,6 @@ public class LeaderboardHandler {
                     }
                     String newFileLine = currentPlayerStats[0] + DELIMITER + currentPlayerStats[1] + DELIMITER + currentPlayerStats[2] + DELIMITER;
                     newFileLines.add(newFileLine);
-
                 }
                 in.close();
                 PrintWriter fileWriter = new PrintWriter(gameboardFile);
@@ -56,8 +55,6 @@ public class LeaderboardHandler {
     }
 
     public static void main(String[] args) {
-
-
         Player newPlayer = new Player("samcox", null);
         Player newPlayer2 = new Player("bob101", null);
 
@@ -72,9 +69,5 @@ public class LeaderboardHandler {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
-
-
 }
