@@ -51,7 +51,7 @@ public class CustomiseProfileController {
     /**
      * Function that handles the processes that follow after button pressed for editing user details
      *
-     * @param event The action of the button being clicked
+     * @param e The action of the button being clicked
      */
     @FXML
     private void handleEditButtonAction(ActionEvent e) throws IOException { //fixme
