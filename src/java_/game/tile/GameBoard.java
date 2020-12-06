@@ -155,7 +155,11 @@ public class GameBoard {
 //        boolean targetFloorTileOnFire = activeEffects.get(targetFloorTilePosition).getEffectType() == EffectType.FIRE;
 
         //Making sure the move is only to the adjacent row/column
-        boolean isAdjacentFloorTile = (targetCol == sourceCol - 1 || targetCol == sourceCol + 1) || (targetRow == sourceRow - 1 || targetRow == sourceRow + 1);
+        boolean isAdjacentColFloorTile = (targetCol == sourceCol - 1 || targetCol == sourceCol + 1);
+        boolean isAdjacentRowFloorTile = (targetRow == sourceRow - 1 || targetRow == sourceRow + 1);
+
+        //Logical XOR
+        boolean isAdjacentFloorTile = (isAdjacentColFloorTile || isAdjacentRowFloorTile) && !(isAdjacentColFloorTile && isAdjacentRowFloorTile);
 
         return (sourceFloorTilePaths & sourceBitmask) == sourceBitmask && (targetFloorTilePaths & oppositeBitmask) == oppositeBitmask && isAdjacentFloorTile;
     }
@@ -698,7 +702,7 @@ public class GameBoard {
      */
     public int getPlayerPieceIndexByPosition(Position position) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
-            if (playerPiecePositions[i] == position) {
+            if (playerPiecePositions[i].equals(position)) {
                 return i;
             }
         }
