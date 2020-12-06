@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+/**
+ * GameBoardController handles the game board the game is played on including the inserting of tiles, applying action tile effects, movement of player pieces.
+ */
 public class GameBoardController implements Initializable {
 
     private static final int TILE_WIDTH = 80;
@@ -70,14 +73,27 @@ public class GameBoardController implements Initializable {
     @FXML
     private GameSidebarController gameSidebarController;
 
+    /**
+     * Sets the main game controller for the GameBoardController.
+     * @param gameMainController The gameMainController to be set.
+     */
     public void injectMainController(GameMainController gameMainController) {
         this.gameMainController = gameMainController;
     }
 
+    /**
+     * Sets the side bar controller for the GameBoardController.
+     * @param gameSidebarController The gameSideBarController to be set.
+     */
     public void injectSidebarController(GameSidebarController gameSidebarController) {
         this.gameSidebarController = gameSidebarController;
     }
 
+    /**
+     * Intialises the game board giving it a GameService, displaying tiles and player pieces.
+     * @param location //todo?
+     * @param resources //todo?
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gameSidebarController.injectBoardController(this);
@@ -93,6 +109,10 @@ public class GameBoardController implements Initializable {
         displayGameView(gameBoard);
     }
 
+    /**
+     * Displays the gameboard for the game and all its tiles, playerpieces and effects.
+     * @param gameBoard the gameboard to be displayed for the game.
+     */
     private void displayGameView(GameBoard gameBoard) {
         edgeTileGroup = new Group();
         tileGroup = new Group();
@@ -117,6 +137,9 @@ public class GameBoardController implements Initializable {
         gameBoardScrollPane.setContent(content);
     }
 
+    /**
+     * Displays the edges of the gameboard from which tiles are inserted from
+     */
     private void displayEdges() {
         ImageView edgeTileDisplayTop;
         ImageView edgeTileDisplayBottom;
@@ -169,6 +192,10 @@ public class GameBoardController implements Initializable {
         }
     }
 
+    /**
+     * Displays the floor tiles that make up the game board.
+     * @param gameBoard The game board that contains the floor tiles.
+     */
     private void displayFloorTiles(GameBoard gameBoard) {
         for (int row = 0; row < gameBoardView.getHeight(); row++) {
             for (int col = 0; col < gameBoardView.getWidth(); col++) {
@@ -186,6 +213,10 @@ public class GameBoardController implements Initializable {
         }
     }
 
+    /**
+     * Displays the player pieces of the game board.
+     * @param gameBoard The game board that contains the player pieces.
+     */
     private void displayPlayerPieces(GameBoard gameBoard) {
         Image leftTopImage = new Image("leftTop.png");
         ImageView leftTop = new ImageView(leftTopImage);
@@ -250,6 +281,9 @@ public class GameBoardController implements Initializable {
         }
     }
 
+    /**
+     * Sets the borders of effects on the gameboard.
+     */
     public void setEffectBorders() {
         Image leftTopImage = new Image("leftTop.png");
         ImageView leftTop = new ImageView(leftTopImage);
@@ -284,6 +318,10 @@ public class GameBoardController implements Initializable {
         effectGroup.getChildren().add(rightBottom);
     }
 
+    /**
+     * Sets the handlers for the edge tiles from which tiles are inserted from.
+     * @param edgeTileDisplay The display for the edge tiles used to insert floor tiles from.
+     */
     public void setEdgeTileEventHandlers(ImageView edgeTileDisplay) {
         edgeTileDisplay.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.ANY);
@@ -318,6 +356,11 @@ public class GameBoardController implements Initializable {
         });
     }
 
+    /**
+     * Slides a column of floor tiles in the game board. Moving each floor tile up or down by 1.
+     * @param col The column number of the position where the slide starts from.
+     * @param row the row number of the position where the slide starts from.
+     */
     private void slideColTemp(int col, int row) {
         ImageView floorTileDisplay = getFloorTileImageView(gameSidebarController.getDrawnFloorTile().getImage());
         floorTileDisplay.setRotate(gameSidebarController.getDrawnFloorTile().getRotate());
@@ -383,6 +426,11 @@ public class GameBoardController implements Initializable {
         tileGroup.getChildren().remove(lastTile.get(0));
     }
 
+    /**
+     * Slides a row of floor tiles in the game board. Each floor tile in the row will be moved either left or right by 1 position.
+     * @param row The row number of the position where the slide starts from.
+     * @param col The column number of the position where the slide starts from.
+     */
     private void slideRowTemp(int row, int col) {
         ImageView floorTileDisplay = getFloorTileImageView(gameSidebarController.getDrawnFloorTile().getImage());
         floorTileDisplay.setRotate(gameSidebarController.getDrawnFloorTile().getRotate());
@@ -449,6 +497,10 @@ public class GameBoardController implements Initializable {
         }
     }
 
+    /**
+     * Sets the floor tile event handler.
+     * @param floorTileDisplay The display of all floor tiles.
+     */
     public void setFloorTileEventHandlers(ImageView floorTileDisplay) {
         ColorAdjust highlight = new ColorAdjust();
 
@@ -550,6 +602,10 @@ public class GameBoardController implements Initializable {
         });
     }
 
+    /**
+     * Sets the effect event handler.
+     * @param effectDisplay The display for all effects in the game.
+     */
     public void setEffectEventHandlers(ImageView effectDisplay) {
         effectDisplay.setOnDragOver(event ->  {
             event.acceptTransferModes(TransferMode.ANY);
@@ -598,6 +654,11 @@ public class GameBoardController implements Initializable {
         });
     }
 
+    /**
+     * Returns the image view of a floor tile.
+     * @param floorTileImage The image of the floor tile.
+     * @return The image view of the image of the floor tile.
+     */
     private ImageView getFloorTileImageView(Image floorTileImage) {
         ImageView output = new ImageView(floorTileImage);
         output.setFitWidth(TILE_WIDTH);
@@ -605,14 +666,29 @@ public class GameBoardController implements Initializable {
         return output;
     }
 
+    /**
+     * Returns the column number of the position the tile is in.
+     * @param tileDisplay The display for the tile.
+     * @return The column number position of the tile.
+     */
     private int getTileCol(ImageView tileDisplay) {
         return (int) (tileDisplay.getLayoutX() / TILE_WIDTH);
     }
 
+    /**
+     * Returns the row number of the position the tile is in.
+     * @param tileDisplay The display for the tile.
+     * @return The row number position of the tile.
+     */
     private int getTileRow(ImageView tileDisplay) {
         return (int) (tileDisplay.getLayoutY() / TILE_HEIGHT);
     }
 
+    /**
+     * Returns the floor tile as a string containing its type.
+     * @param floorTile The floor tile to be returned as a string.
+     * @return The string containing the floor tile data.
+     */
     public String getFloorTileTypeImage(FloorTile floorTile) {
         TileType type = floorTile.getType();
         switch (type) {
