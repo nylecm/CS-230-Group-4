@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 /**
  * The type java.java_.Main.
  */
+@Deprecated
 public class Main extends Application {
     public void start(Stage primaryStage) {
         try {

@@ -61,6 +61,11 @@ public class RegisterController implements Initializable {
     private static final String FILE_NOT_FOUND_OR_ERROR_ACCESSING_IT_MSG = "Error, users file not found, or error accessing it!";
     public static final String DUPLICATE_USER_NAME_MSG = "Duplicate user name!";
 
+    /**
+     * Registers a user with the credentials they have entered on the interface.
+     *
+     * @param event The event of the register button being clicked.
+     */
     @FXML
     private void onRegisterButtonClicked(ActionEvent event) {
         String username = this.username.getText();
@@ -83,6 +88,16 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Validates the credentials the user has entered to register with.
+     * The username, password and email must match their retrospective patterns.
+     *
+     * @param username       The username the user is registering with.
+     * @param email          The email the user is registering with.
+     * @param password       The password the user is registering with.
+     * @param passwordRepeat The repeat of the password previously entered. Both should match.
+     * @return Returns true if the user has entered valid credentials to register with. It is false otherwise.
+     */
     private boolean validate(String username, String email, String password, String passwordRepeat) {
         if (!validateUsername(username)) {
             registerStatusLabel.setText(USERNAME_INVALID_MSG);
@@ -103,22 +118,53 @@ public class RegisterController implements Initializable {
         return true;
     }
 
+    /**
+     * Validates the username of the user, ensuring it matches the correct pattern.
+     *
+     * @param username The username to be validated.
+     * @return True if the username is valid.
+     */
     private boolean validateUsername(String username) {
         return username.matches(USERNAME_PATTERN);
     }
 
+    /**
+     * Validates the email of the user, ensuring it matches the correct pattern.
+     *
+     * @param email The email to be validated.
+     * @return True if the email is valid.
+     */
     private boolean validateEmail(String email) {
         return email.matches(EMAIL_PATTERN);
     }
 
+    /**
+     * Validates the password of the user, ensuring it matches the correct pattern.
+     *
+     * @param password The password to be validated.
+     * @return True if the password is valid.
+     */
     private boolean validatePassword(String password) {
         return password.matches(PASSWORD_PATTERN);
     }
 
+    /**
+     * Validates the repeated password of the user, ensuring it matches the original password entered
+     *
+     * @param repeatPassword The username to be validated.
+     * @param password       The original password entered by the user.
+     * @return True if the repeatPassword matches the original password entered.
+     */
     private boolean validateRepeatPassword(String password, String repeatPassword) {
         return password.equals(repeatPassword);
     }
 
+    /**
+     * Returns the user to the main meny
+     *
+     * @param e The action of the back button being clicked.
+     * @throws IOException If the main meny file path is incorrect.
+     */
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -126,6 +172,12 @@ public class RegisterController implements Initializable {
         currentStage.setScene(new Scene(mainMenu));
     }
 
+    /**
+     * Initialises the register interface, giving it a background and setting its size.
+     *
+     * @param location  The location (not used).
+     * @param resources The resources (not used).
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundImage backgroundImage = null;

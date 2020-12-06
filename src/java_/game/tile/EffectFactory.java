@@ -2,6 +2,11 @@ package java_.game.tile;
 
 import java_.game.controller.GameService;
 
+/**
+ *
+ *
+ * @author nylecm
+ */
 public class EffectFactory {
     private final static String TILE_NO_EFFECT_MESSAGE =
             "Tile has an effect that is not supported by the factory!";
@@ -21,12 +26,5 @@ public class EffectFactory {
             }
         }
         throw new IllegalArgumentException(TILE_NO_EFFECT_MESSAGE);
-    }
-
-    public static void main(String[] args) {
-        AreaEffect ae = (AreaEffect) getEffect(TileType.FIRE);
-        System.out.println(ae);
-        PlayerEffect pe = (PlayerEffect) getEffect(TileType.BACKTRACK);
-        System.out.println(pe);
     }
 }
