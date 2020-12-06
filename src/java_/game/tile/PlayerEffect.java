@@ -10,7 +10,8 @@ public class PlayerEffect extends Effect {
 
     /**
      * Initialises the player effect, giving it an effect type.
-     *  and a target player.
+     * and a target player.
+     *
      * @param effectType
      */
     public PlayerEffect(EffectType effectType) {
@@ -20,6 +21,7 @@ public class PlayerEffect extends Effect {
 
     /**
      * Returns the player that the effect is to be applied to.
+     *
      * @return The target player of the effect.
      */
     public Player getTarget() {
@@ -28,6 +30,7 @@ public class PlayerEffect extends Effect {
 
     /**
      * Sets the target player of the effect.
+     *
      * @param target
      */
     public void setTarget(Player target) {
@@ -36,6 +39,7 @@ public class PlayerEffect extends Effect {
 
     /**
      * Returns the player effect as a string storing the target player.
+     *
      * @return The string containing the player effect data.
      */
     @Override
