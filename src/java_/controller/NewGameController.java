@@ -162,7 +162,7 @@ public class NewGameController implements Initializable {
 
     private boolean isPlayerPieceBeingSelectedTwice(File playerPiece, int playerIndex) {
         for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
-            if (playerPieceImageFiles[i] != null && playerPieceImageFiles[i].equals(playerPieceImageFiles) && i != playerIndex) {
+            if (playerPieceImageFiles[i] != null && playerPieceImageFiles[i].equals(playerPiece) && i != playerIndex) {
                 System.out.println(i);  //todo remove
                 return true;
             }
