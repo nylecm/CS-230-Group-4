@@ -41,6 +41,11 @@ public class CustomiseProfileController {
     private static final String USERS_FILE_PATH = "users.txt";
 
 
+    /**
+     * Returns the user to main menu when the back button is clicked.
+     * @param e The action of the back button being clicked.
+     * @throws IOException If the main menu file path is incorrect.
+     */
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -49,9 +54,9 @@ public class CustomiseProfileController {
     }
 
     /**
-     * Function that handles the processes that follow after button pressed for editing user details
-     *
+     * Handles the processes that follow after button pressed for editing user details
      * @param e The action of the button being clicked
+     * @throws IOException If the customise profile file path is incorrect.
      */
     @FXML
     private void handleEditButtonAction(ActionEvent e) throws IOException { //fixme
@@ -61,8 +66,7 @@ public class CustomiseProfileController {
     }
 
     /**
-     * Function that handles processes following a data refresh.
-     *
+     * Handles processes following a data refresh.
      * @param event The action of the button being clicked.
      */
     @FXML
