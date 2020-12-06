@@ -482,7 +482,7 @@ public class NewGameController implements Initializable {
                 }
                 i++;
             }
-            GameService.getInstance().loadNewGame(players, (String) gameBoardSelect.getValue());
+            GameService.getInstance().loadNewGame(players, gameBoardSelect.getValue());
 
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/game.fxml"));

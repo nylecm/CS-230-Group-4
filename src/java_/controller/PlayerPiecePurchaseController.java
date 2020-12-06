@@ -125,6 +125,12 @@ public class PlayerPiecePurchaseController implements Initializable {
         }
     }
 
+    /**
+     * When clicked, buys the currently selected player piece, and refreshed
+     * coin count and the table of owned player pieces.
+     *
+     * @param e action event (not used)
+     */
     @FXML
     private void onBuyButtonClicked(ActionEvent e) {
         int newCoinBalance = 0;

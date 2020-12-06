@@ -132,6 +132,11 @@ public class GameService {
 
                 return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
                         floorTilesForGameBoard, nCols, nRows, boardName);
+            } else {
+                if (in.hasNextLine()) {
+                    in.nextLine();
+                    in.nextLine();
+                }
             }
         }
         throw new IllegalArgumentException(NO_LEVEL_WITH_SUCH_NAME_MSG);
