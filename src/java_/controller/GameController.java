@@ -485,7 +485,7 @@ public class GameController implements Initializable {
                 } else if (targetRow == -1 || targetRow == gameBoardView.getHeight()) {
                     slideColTemp(targetCol, targetRow);
                 }
-                //Update GameBoard                      //TODO Fix this?
+                //Update GameBoard
                 gameBoard.insert(targetCol, targetRow, (FloorTile) drawnTile, (int) (drawnFloorTile.getRotate() / 90));
                 //Remove drawn FloorTile image
                 drawnFloorTile.setImage(null);
