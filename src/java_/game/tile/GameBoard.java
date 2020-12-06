@@ -627,12 +627,12 @@ public class GameBoard {
      * @return new position of the player, or null if back track is not possible.
      */
     public Position backtrack(int playerNum, int targetNumberOfBacktracks) {
-        if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks == 1) {
+        if (targetNumberOfBacktracks == 1) {
             Position previousPosition = playerPieces[playerNum].getPreviousPlayerPosition();
             playerPiecePositions[playerNum] = previousPosition;
             playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
             return previousPosition;
-        } else if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks > 1) {
+        } else if (targetNumberOfBacktracks > 1) {
             playerPiecePositions[playerNum] = playerPieces[playerNum].getPreviousPlayerPosition();
             playerPieces[playerNum].getPreviousPlayerPiecePositions().pop();
             Position output;

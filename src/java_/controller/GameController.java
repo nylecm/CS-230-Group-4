@@ -599,8 +599,6 @@ public class GameController implements Initializable {
             if (!floorTileInserted && drawnTile instanceof FloorTile) {
                 displayError(FLOORTILE_NOT_INSERTED_MSG);
             } else {
-                ImageView source = (ImageView) event.getSource();
-
                 if (numberOfMoves > 0 ) {
                     int draggedPlayerPieceIndex = gameBoard.getPlayerByPlayerPieceImage(playerPieceImageView.getImage());
 
@@ -1147,19 +1145,13 @@ public class GameController implements Initializable {
         Player targetPlayerPieceOwner = gameService.getPlayerService().getPlayer(gameBoard.getPlayerByPlayerPieceImage(targetPlayerPieceImageView.getImage()));
         int playerPieceOwnerIndex = gameService.getPlayerService().getPlayerIndex(targetPlayerPieceOwner);
 
-        if (usedActionTile.use().getEffectType() == EffectType.BACKTRACK && targetNotSelf) {
+        if (usedActionTile.use().getEffectType() == EffectType.BACKTRACK && targetNotSelf && gameBoard.isBacktrackPossible(playerPieceOwnerIndex)) {
             Position previousPosition = gameBoard.backtrack(playerPieceOwnerIndex, 2);
-            if (previousPosition != null) {
-                setPlayerPieceImageViewPosition(targetPlayerPieceImageView, previousPosition.getRowNum(), previousPosition.getColNum());
-                success = true;
-            } else {
-                displayError(EFFECT_ALREADY_USED_ON_TARGET_MSG);
-            }
+            setPlayerPieceImageViewPosition(targetPlayerPieceImageView, previousPosition.getRowNum(), previousPosition.getColNum());
+            success = true;
         } else if (usedActionTile.use().getEffectType() == EffectType.DOUBLE_MOVE && !targetNotSelf) {
             useDoubleMoveActionTile();
             success = true;
-        } else {
-            displayError(INVALID_TARGET_MSG);
         }
 
         if (success) {
@@ -1171,6 +1163,8 @@ public class GameController implements Initializable {
             //Remove from Player class
             gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().remove(usedActionTileIndex);
             actionTilePlayed = true;
+        } else {
+            displayError(INVALID_TARGET_MSG);
         }
     }
 
