@@ -7,6 +7,7 @@ package java_.util.generic_data_structures;
  * @author nylecm
  * @param <E> the type parameter
  */
+@Deprecated
 public class Link<E> {
     private E data;
     private Link<E> next;

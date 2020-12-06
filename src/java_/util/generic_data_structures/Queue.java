@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
  * @param <T> the type parameter
  * @author nylecm
  */
+@Deprecated
 public class Queue<T> {
     /**
      * The front of the queue (item present for longest time).
