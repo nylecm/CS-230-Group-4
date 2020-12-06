@@ -26,6 +26,14 @@ public class CoinHandler {
     private static final int DAILY_LOGIN_REWARD_CAP = 146;
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
+    /**
+     * Updates the coins of players that participated in the game.
+     * The amount of coins is determined ((nTurns / nPlayers) * 0.2 * 5) for a winning player and
+     * ((nTurns / nPlayers) * 0.2 * 1) for a losing player.
+     * @param players The players that participated in the game.
+     * @param winningPlayerIndex The index of the player who won the game.
+     * @throws FileNotFoundException If the file containing the user coin details cannot be found.
+     */
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
         int nTurns = GameService.getInstance().getTurnCount(); //todo uncomment
         //int nTurns = 100; //testing only.
@@ -80,7 +88,12 @@ public class CoinHandler {
         lineWriter.close();
     }
 
-
+    /**
+     * Gives a player a specified amount of coins.
+     * @param username The username of the player who the coins are to be given to.
+     * @param coins The amount of coins to be given to the player.
+     * @throws FileNotFoundException If the file containing the user coin details cannot be found.
+     */
     public static void giveCoins(String username, int coins) throws FileNotFoundException {
         File coinFile = new File(PLAYER_COINS_FILEPATH);
         Scanner in = new Scanner(coinFile);
@@ -121,7 +134,12 @@ public class CoinHandler {
         lineWriter.close();
     }
 
-
+    /**
+     * Increases the daily streak of players if they have played the game two days in a row. Otherwise, resets their streak to 1.
+     * @param username The username of the player who has the daily streak.
+     * @throws FileNotFoundException If the file containing the user coin details cannot be found.
+     * @throws ParseException If the date today string cannot be parsed.
+     */
     public static void increaseDailyStreak(String username) throws FileNotFoundException, ParseException {
         File coinFile = new File(PLAYER_COINS_FILEPATH);
         Scanner in = new Scanner(coinFile);
@@ -181,6 +199,13 @@ public class CoinHandler {
 
     }
 
+    /**
+     * Determines the amount of coins a player should receive for their daily streak.
+     * The amount starts at 10 for a single day logged in.
+     * Every successive day, you add 10 and multiply by 1.2 to get the amount of coins received for the next successive day logged in.
+     * @param streak The number of successive days the user has logged in to play the game.
+     * @return The amount of coins to be given for the user's streak.
+     */
     private static int streakCoins(int streak) {
         int streakValue = 10;
         int i = 1;
@@ -189,19 +214,5 @@ public class CoinHandler {
             i++;
         }
         return streakValue;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException, ParseException {
-        /*
-        Player player1 = new Player("nylecm", null);
-        Player player2 = new Player("bob101", null);
-        Player[] players = new Player[2];
-        players[0] = player1;
-        players[1] = player2;
-        updateCoins(players, 0);
-        */
-        increaseDailyStreak("nylecm2");
-        //giveCoins("nylecm1", 10);
-        //System.out.println(streakCoins(1));
     }
 }
