@@ -11,14 +11,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -150,12 +148,22 @@ public class NewGameController implements Initializable {
     private final boolean[] isPlayerReady = new boolean[MAX_NUMBER_OF_PLAYERS];
     private final String[] usernames = new String[MAX_NUMBER_OF_PLAYERS];
 
-    private final Set<URL> currentlySelectedPlayerPieces = new HashSet<>();
+    //private final Set<URL> currentlySelectedPlayerPieces = new HashSet<>();
 
     private boolean isUserTryingToLogInTwice(String username, int playerIndex) {
         for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
             if (usernames[i] != null && usernames[i].equals(username) && i != playerIndex) {
-                System.out.println(i);
+                System.out.println(i); //todo remove
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isPlayerPieceBeingSelectedTwice(File playerPiece, int playerIndex) {
+        for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
+            if (playerPieceImageFiles[i] != null && playerPieceImageFiles[i].equals(playerPieceImageFiles) && i != playerIndex) {
+                System.out.println(i);  //todo remove
                 return true;
             }
         }
@@ -287,23 +295,19 @@ public class NewGameController implements Initializable {
     @FXML
     public void onPlayer1PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player1PlayerPieceSelect.getValue() != null) {
-            URL playerPieceSelected = null;
-            try {
-                File playerPieceFile = new File("src/view/res/img/player_piece/" + player1PlayerPieceSelect.getValue());
-                playerPieceSelected = playerPieceFile.toURI().toURL();
-            } catch (MalformedURLException e) {
-                player1PlayerPieceStatus.setText("Invalid path!");
-            }
-            if (currentlySelectedPlayerPieces.contains(playerPieceSelected)) {
+
+            File playerPieceFile = new File("src/view/res/img/player_piece/" + player1PlayerPieceSelect.getValue());
+            //URL playerPieceSelected = playerPieceFile.toURI().toURL();
+            if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 0)) {
                 player1PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[0] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageFiles);
-                currentlySelectedPlayerPieces.add(playerPieceSelected);
+                playerPieceImageFiles[0] = playerPieceFile;
                 player2SetUpVBox.setDisable(false);
-                player1PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
+                player1PlayerPieceStatus.setText(player1PlayerPieceSelect.getValue() + " has been selected!");
                 isPlayerReady[0] = true;
             }
+
         } else {
             player1PlayerPieceStatus.setText(NO_PLAYER_PIECE_SELECTED_MSG);
             isPlayerReady[0] = false;
@@ -334,23 +338,19 @@ public class NewGameController implements Initializable {
     @FXML
     public void onPlayer2PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player2PlayerPieceSelect.getValue() != null) {
-            URL playerPieceSelected = null;
-            try {
-                File playerPieceFile = new File("src/view/res/img/player_piece/" + player2PlayerPieceSelect.getValue());
-                playerPieceSelected = playerPieceFile.toURI().toURL();
-            } catch (MalformedURLException e) {
-                player2PlayerPieceStatus.setText("Invalid path!");
-            }
-            if (currentlySelectedPlayerPieces.contains(playerPieceSelected)) {
+
+            File playerPieceFile = new File("src/view/res/img/player_piece/" + player2PlayerPieceSelect.getValue());
+            //URL playerPieceSelected = playerPieceFile.toURI().toURL();
+            if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 1)) {
                 player2PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[1] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageFiles[1]);
-                currentlySelectedPlayerPieces.add(playerPieceSelected);
+                playerPieceImageFiles[1] = playerPieceFile;
                 player3SetUpVBox.setDisable(false);
-                player2PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
+                player2PlayerPieceStatus.setText(player2PlayerPieceSelect.getValue() + " has been selected!");
                 isPlayerReady[1] = true;
             }
+
         } else {
             player2PlayerPieceStatus.setText(NO_PLAYER_PIECE_SELECTED_MSG);
             isPlayerReady[1] = false;
@@ -382,23 +382,19 @@ public class NewGameController implements Initializable {
     @FXML
     public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player3PlayerPieceSelect.getValue() != null) {
-            URL playerPieceSelected = null;
-            try {
-                File playerPieceFile = new File("src/view/res/img/player_piece/" + player3PlayerPieceSelect.getValue());
-                playerPieceSelected = playerPieceFile.toURI().toURL();
-            } catch (MalformedURLException e) {
-                player3PlayerPieceStatus.setText("Invalid path!");
-            }
-            if (currentlySelectedPlayerPieces.contains(playerPieceSelected)) {
+
+            File playerPieceFile = new File("src/view/res/img/player_piece/" + player3PlayerPieceSelect.getValue());
+            //URL playerPieceSelected = playerPieceFile.toURI().toURL();
+            if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 2)) {
                 player3PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[2] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageFiles[2]);
-                currentlySelectedPlayerPieces.add(playerPieceSelected);
+                playerPieceImageFiles[2] = playerPieceFile;
                 player4SetUpVBox.setDisable(false);
-                player3PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
+                player3PlayerPieceStatus.setText(player3PlayerPieceSelect.getValue() + " has been selected!");
                 isPlayerReady[2] = true;
             }
+
         } else {
             player3PlayerPieceStatus.setText(NO_PLAYER_PIECE_SELECTED_MSG);
             isPlayerReady[2] = false;
@@ -429,22 +425,18 @@ public class NewGameController implements Initializable {
     @FXML
     public void onPlayer4PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player4PlayerPieceSelect.getValue() != null) {
-            URL playerPieceSelected = null;
-            try {
-                File playerPieceFile = new File("src/view/res/img/player_piece/" + player4PlayerPieceSelect.getValue());
-                playerPieceSelected = playerPieceFile.toURI().toURL();
-            } catch (MalformedURLException e) {
-                player4PlayerPieceStatus.setText("Invalid path!");
-            }
-            if (currentlySelectedPlayerPieces.contains(playerPieceSelected)) {
+
+            File playerPieceFile = new File("src/view/res/img/player_piece/" + player4PlayerPieceSelect.getValue());
+            //URL playerPieceSelected = playerPieceFile.toURI().toURL();
+            if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 3)) {
                 player4PlayerPieceStatus.setText("Same player piece selected twice.");
                 isPlayerReady[3] = false;
             } else {
-                currentlySelectedPlayerPieces.remove(playerPieceImageFiles[3]);
-                currentlySelectedPlayerPieces.add(playerPieceSelected);
-                player4PlayerPieceStatus.setText(playerPieceSelected + " has been selected!");
+                playerPieceImageFiles[3] = playerPieceFile;
+                player4PlayerPieceStatus.setText(player4PlayerPieceSelect.getValue() + " has been selected!");
                 isPlayerReady[3] = true;
             }
+
         } else {
             player4PlayerPieceStatus.setText(NO_PLAYER_PIECE_SELECTED_MSG);
             isPlayerReady[3] = false;
