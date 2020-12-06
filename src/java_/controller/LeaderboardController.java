@@ -53,22 +53,14 @@ public class LeaderboardController implements Initializable {
     private LeaderboardTable leaderboardTableOne;
     private Object Table;
 
-    //Un-comment if using file reader.
-    //@FXML ObservableList<Table> data = FXCollections.observableArrayList();
-
     /**
      * Initialises the LeaderboardController
      */
     public LeaderboardController() {
     }
 
-    //Reading data in manually
     @FXML
     ObservableList<LeaderboardTable> data = FXCollections.observableArrayList();
-
-    //todo add ability to see stats for all game boards.
-    //
-    //Reading data with file reader
 
     /**
      * Reads a file containing the stats of players that have played on that game board.
