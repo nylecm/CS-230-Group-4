@@ -12,13 +12,15 @@ public class PurchaseHandler {
     private static final String USER_COIN_FILE = "data/user_coins.txt";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String PLAYER_PIECE_PRICE_FILE = "data/player_piece_cost.txt";
-    public static final String PLAYER_PIECE_ALREADY_OWNED = "Player piece already owned!";
+    private static final String PLAYER_PIECE_ALREADY_OWNED = "Player piece already owned!";
+    private static final int FIRST_INDEX_WITH_PLAYER_PIECE = 5;
 
 
     /**
      * Purchases a new player piece for the specified player. Their coin balance is updated to reflect this purchase.
-     * @param username The username of th player making the purchase.
-     * @param newPlayerPiece The new player piece being purchased.
+     *
+     * @param username          The username of th player making the purchase.
+     * @param newPlayerPiece    The new player piece being purchased.
      * @param userAmountOfCoins The user's current coin balance
      * @return The updated coin balance of the user after the purchase has been made.
      * @throws IOException If the player piece the player is trying to buy is already owned by the player.
@@ -65,7 +67,7 @@ public class PurchaseHandler {
 
         //Loops through all owned player pieces of the player making the purchase.
         //Throws an error if they already own the piece they are trying to purchase.
-        for (int i = 5; i < parts.length; i++) {
+        for (int i = FIRST_INDEX_WITH_PLAYER_PIECE; i < parts.length; i++) {
             if (parts[i].equals(newPlayerPiece)) {
                 throw new IllegalArgumentException(PLAYER_PIECE_ALREADY_OWNED);
             }
@@ -75,7 +77,7 @@ public class PurchaseHandler {
         String newRowData = parts[0] + DELIMITER + newCoinAmount + DELIMITER +
                 parts[2] + DELIMITER + parts[3] + DELIMITER + (Integer.parseInt(parts[4]) + 1) + DELIMITER;
 
-        for (int i = 5; i < parts.length; i++) {
+        for (int i = FIRST_INDEX_WITH_PLAYER_PIECE; i < parts.length; i++) {
             newRowData = newRowData + parts[i] + DELIMITER;
         }
         //Adds the new purchased player piece to all owned player pieces.
@@ -95,6 +97,7 @@ public class PurchaseHandler {
 
     /**
      * Returns all owned player pieces for a specified player.
+     *
      * @param username The username of the player who the player pieces belong to.
      * @return The ArrayList of all player pieces owned by the user.
      * @throws FileNotFoundException If the user coin file containing the player pieces cannot be found.
@@ -132,6 +135,7 @@ public class PurchaseHandler {
 
     /**
      * Adds all free player pieces (player pieces with a coin cost of 0) to the player pieces owned by the player.
+     *
      * @param username The username of the player who is buying all the free player pieces.
      * @throws IOException If the free player piece is already owned by the player.
      */
@@ -144,6 +148,7 @@ public class PurchaseHandler {
 
     /**
      * Returns the names of all free player pieces
+     *
      * @return The ArrayList containing the names of all free player pieces.
      * @throws FileNotFoundException
      */
@@ -167,7 +172,8 @@ public class PurchaseHandler {
     /**
      * Adds a new player to the file containing all players and their owned player pieces.
      * The new player will be given all free playe pieces.
-     * @param username the username of the new player to be added to the file.
+     *
+     * @param username      the username of the new player to be added to the file.
      * @param isFirstPlayer True if the player is the first playr of the game.
      * @throws IOException If the player already exists.
      */
