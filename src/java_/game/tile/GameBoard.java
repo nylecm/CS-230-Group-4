@@ -612,6 +612,7 @@ public class GameBoard {
                 }
             }
         }
+        System.out.println("Duration will be: " + effect.getRemainingDuration());
     }
 
     /**

@@ -520,7 +520,6 @@ public class GameController implements Initializable {
                 }
                 //Update GameBoard
                 gameBoard.insert(targetCol, targetRow, (FloorTile) drawnTile, (int) (drawnFloorTile.getRotate() / 90));
-                System.out.println("Rotation: " + (int) (drawnFloorTile.getRotate() / 90));
                 //Remove drawn FloorTile image
                 drawnFloorTile.setImage(null);
 
@@ -890,7 +889,6 @@ public class GameController implements Initializable {
             if (playerPiece.getLayoutX() < 0) {
                 playerPiece.setLayoutX((gameBoardView.getWidth() - 1) * TILE_WIDTH + 6);
             }
-            System.out.println(gameBoardView.getWidth() * TILE_WIDTH);
             if (playerPiece.getLayoutX() > gameBoardView.getWidth() * TILE_WIDTH) {
                 playerPiece.setLayoutX(6);
             }
@@ -1057,9 +1055,6 @@ public class GameController implements Initializable {
             }
         }
 
-        System.out.println("Size: " + playerPiecesAtFloorTile.size());
-        System.out.println(playerPieceImageView);
-
         for (int i = 0; i < playerPiecesAtFloorTile.size(); i++) {
             playerPiecesAtFloorTile.get(i).setFitHeight(PLAYER_PIECE_HEIGHT / playerPiecesAtFloorTile.size() + 10);
             playerPiecesAtFloorTile.get(i).setFitWidth(PLAYER_PIECE_WIDTH / playerPiecesAtFloorTile.size() + 10);
@@ -1135,7 +1130,6 @@ public class GameController implements Initializable {
 
         //Sound
         if (usedActionTile.use().getEffectType() == EffectType.ICE) {
-            System.out.println("ICE");
             playSound(ICE_ACTION_TILE_SOUND);
             playVideo();
         }
@@ -1164,17 +1158,13 @@ public class GameController implements Initializable {
         int currentPlayerNum = gameService.getCurrentPlayerNum();
         Position playerPieceImageViewPosition = new Position(getItemRow(targetPlayerPieceImageView), getItemCol(targetPlayerPieceImageView));
 
-        System.out.println(playerPieceImageViewPosition);
-        System.out.println(gameBoard.getPlayerPiecePosition(currentPlayerNum));
-
         boolean targetNotSelf = !playerPieceImageViewPosition.equals(gameBoard.getPlayerPiecePosition(currentPlayerNum));
 
         //TODO Check if used effect on target contain
 
         if (usedActionTile.use().getEffectType() == EffectType.BACKTRACK && targetNotSelf) {
             Position previousPosition = gameBoard.backtrack(gameBoard.getPlayerPieceByImage(targetPlayerPieceImageView.getImage()), 2);
-            targetPlayerPieceImageView.setLayoutX((previousPosition.getColNum() - 1) * TILE_WIDTH + TILE_WIDTH + 6);
-            targetPlayerPieceImageView.setLayoutY((previousPosition.getRowNum() - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
+            setPlayerPieceImageViewPosition(targetPlayerPieceImageView, previousPosition.getRowNum(), previousPosition.getColNum());
             success = true;
         } else if (usedActionTile.use().getEffectType() == EffectType.DOUBLE_MOVE && !targetNotSelf) {
             useDoubleMoveActionTile();
@@ -1220,7 +1210,6 @@ public class GameController implements Initializable {
     private void playSound(String soundPath) {
         Media sound = new Media(new File(soundPath).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        System.out.println(sound);
         mediaPlayer.setVolume(0.5);
         mediaPlayer.play();
     }
