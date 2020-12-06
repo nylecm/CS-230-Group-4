@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 /**
  * Controller for a leaderboard that tracks player stats including number of wins and losses on each game board.
+ * @author Waleed Ashraf
  */
 public class LeaderboardController implements Initializable {
 
@@ -102,8 +103,8 @@ public class LeaderboardController implements Initializable {
     /**
      * Initialises the leaderboard interface, giving it a background and displaying all user stats.
      *
-     * @param location  the location (not used)
-     * @param resources the resources (not used)
+     * @param location  the location used to resolve paths or null if the location is not known. (not used)
+     * @param resources the resources used to localize object, or null if object was not localized. (not used)
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
