@@ -647,7 +647,8 @@ public class GameBoard {
     public boolean isBacktrackPossible(int playerNum) {
         return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) == null)
                 || ((getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null)
-                && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)));
+                && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)
+                && !GameService.getInstance().getPlayerService().containsEffect(GameService.getInstance().getPlayerService().getPlayer(playerNum), EffectType.BACKTRACK)));
     }
 
     /**
@@ -704,13 +705,13 @@ public class GameBoard {
     }
 
     /**
-     * Gets a PlayerPiece by given Image.
+     * Gets a Player index by given Player Piece Image.
      * @param image to compare by
      * @return index i if found, -1 if not found
      */
-    public int getPlayerPieceByImage(Image image) {
-        for (int i = 0; i < playerPieces.length; i++) {
-            if (playerPieces[i].getImage().equals(image)) {
+    public int getPlayerByPlayerPieceImage(Image image) {
+        for (int i = 0; i < GameService.getInstance().getPlayerService().getPlayers().length; i++) {
+            if (GameService.getInstance().getPlayerService().getPlayer(i).getPlayerPiece().getImage().equals(image)) {
                 return i;
             }
         }
