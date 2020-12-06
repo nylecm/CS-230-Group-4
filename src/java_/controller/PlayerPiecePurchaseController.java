@@ -72,53 +72,21 @@ public class PlayerPiecePurchaseController implements Initializable {
      * @throws IOException If the user coin file path is incorrect.
      */
     @FXML
-    private void onLoginButtonClicked(ActionEvent e) throws IOException {
+    private void onLoginButtonClicked(ActionEvent e) {
         // Security check:
         if (LoginHandler.login(usernameField.getText(), passwordField.getText())) {
-            currentUser = usernameField.getText();
             preOwnedPieces.getItems().clear();
-            affordablePlayerPieces.getItems().clear();
+            currentUser = usernameField.getText();
             playerPiecePreview.setImage(null);
-            String targetUsername = usernameField.getText();
-            Scanner in = new Scanner(new File(USER_COIN_FILE_DIRECTORY));
-            in.useDelimiter(DELIMITER);
-            boolean isUserFound = false;
-
-            while (in.hasNextLine() && !isUserFound) {
-                String tempUser = in.next();
-                if (tempUser.equals(targetUsername)) {
-                    coinNumber.setText(in.next());
-                    isUserFound = true;
+            try {
+                boolean isUserFound = findUserAndGetUserCoinAmount();
+                if (isUserFound) {
+                    updateAffordablePlayerPieces();
+                } else {
+                    loginStatus.setText("Invalid username.");
                 }
-                in.nextLine();
-            }
-            in.close();
-
-            if (isUserFound) {
-                in = new Scanner(new File(PLAYER_PIECE_PRICE_DIRECTORY));
-                in.useDelimiter(DELIMITER);
-
-                while (in.hasNextLine()) {
-                    in.next();
-                    String tileAvailable = in.next();
-                    int tilePrice = in.nextInt();
-                    if (tilePrice <= Integer.parseInt(coinNumber.getText())) {
-                        affordablePlayerPieces.getItems().add(tileAvailable);
-                    }
-                    //in.nextLine();
-                }
-                in.close();
-
-                try {
-                    showOwnedPlayerPieces();
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
-                }
-                usernameField.setText("");
-                passwordField.setText("");
-                loginStatus.setText("You are logged in as: " + currentUser + ".");
-            } else {
-                loginStatus.setText("User coin record not found.");
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
             }
         } else {
             loginStatus.setText("Wrong password entered.");
@@ -138,6 +106,7 @@ public class PlayerPiecePurchaseController implements Initializable {
             newCoinBalance = PurchaseHandler.buyPlayerPiece(currentUser, affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
             coinNumber.setText(String.valueOf(newCoinBalance));
             showOwnedPlayerPieces();
+            updateAffordablePlayerPieces();
         } catch (IOException | IllegalArgumentException ex) {
             purchaseStatus.setText(ex.getMessage());
         }
@@ -209,5 +178,51 @@ public class PlayerPiecePurchaseController implements Initializable {
                 }
             }
         });
+    }
+
+    private void updateAffordablePlayerPieces() throws FileNotFoundException {
+        affordablePlayerPieces.getItems().clear();
+        Scanner in = new Scanner(new File(PLAYER_PIECE_PRICE_DIRECTORY));
+        in.useDelimiter(DELIMITER);
+
+        while (in.hasNextLine()) {
+            in.next();
+            String tileAvailable = in.next();
+            int tilePrice = in.nextInt();
+            if (tilePrice <= Integer.parseInt(coinNumber.getText())) {
+                affordablePlayerPieces.getItems().add(tileAvailable);
+            }
+            //in.nextLine();
+        }
+        in.close();
+
+        try {
+            showOwnedPlayerPieces();
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
+        usernameField.setText("");
+        passwordField.setText("");
+        loginStatus.setText("You are logged in as: " + currentUser + ".");
+    }
+
+
+    private boolean findUserAndGetUserCoinAmount() throws FileNotFoundException {
+        affordablePlayerPieces.getItems().clear();
+        String targetUsername = usernameField.getText();
+        Scanner in = new Scanner(new File(USER_COIN_FILE_DIRECTORY));
+        in.useDelimiter(DELIMITER);
+        boolean isUserFound = false;
+
+        while (in.hasNextLine() && !isUserFound) {
+            String tempUser = in.next();
+            if (tempUser.equals(targetUsername)) {
+                coinNumber.setText(in.next());
+                isUserFound = true;
+            }
+            in.nextLine();
+        }
+        in.close();
+        return isUserFound;
     }
 }

@@ -64,3 +64,7 @@
     -fx-border-width: 0.2;
     -fx-border-color: WHITE;
 }
+
+.table-view .column-header-background, table-view .column-header .filler, .table-view .column-header-background .filler {
+    -fx-background-color: BLACK;
+}
