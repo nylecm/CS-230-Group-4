@@ -1,6 +1,7 @@
 package java_.controller;
 
 
+import com.sun.xml.internal.ws.api.FeatureConstructor;
 import java_.game.controller.GameService;
 import java_.game.player.Player;
 import java_.game.tile.*;
@@ -18,10 +19,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,12 +29,14 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class GameController implements Initializable {
     private Button endTurnButton;
 
     @FXML
-    private Label drawingLabel;
+    private ComboBox dropDownMenu;
 
     @FXML
     private Label infoBox;
@@ -114,6 +114,8 @@ public class GameController implements Initializable {
     private final String ERROR_SOUND = "src/view/res/sfx/error.mp3";
 
     private final String LOADING_SOUND = "src/view/res/sfx/load.mp3";
+
+    private final String ICE_ACTION_TILE_SOUND = "src/view/res/sfx/iceActionTileSound.mp3";
 
     private boolean actionTilePlayed; //TODO Move somewhere else?
 
@@ -168,6 +170,8 @@ public class GameController implements Initializable {
 
         //TODO Replace with isometric view
         displayGameView();
+
+        createDropDownMenu();
 
         //TODO Move somewhere else?
         drawnFloorTile.setOnDragDetected(event -> {
@@ -277,7 +281,7 @@ public class GameController implements Initializable {
             setEdgeTileEventHandlers(edgeTileDisplayTop);
             setEdgeTileEventHandlers(edgeTileDisplayBottom);
 
-            if (gameBoard.isRowFixed(getItemRow(edgeTileDisplayTop)) || gameBoard.isColumnFixed(getItemCol(edgeTileDisplayBottom))) {
+            if (gameBoard.isColumnFixed(getItemCol(edgeTileDisplayTop)) || gameBoard.isColumnFixed(getItemCol(edgeTileDisplayBottom))) {
                 edgeTileDisplayTop.setVisible(false);
                 edgeTileDisplayBottom.setVisible(false);
             }
@@ -299,7 +303,7 @@ public class GameController implements Initializable {
             setEdgeTileEventHandlers(edgeTileDisplayLeft);
             setEdgeTileEventHandlers(edgeTileDisplayRight);
 
-            if (GameService.getInstance().getGameBoard().isRowFixed(getItemRow(edgeTileDisplayLeft)) || GameService.getInstance().getGameBoard().isRowFixed(getItemRow(edgeTileDisplayRight))) {
+            if (gameBoard.isRowFixed(getItemRow(edgeTileDisplayLeft)) || gameBoard.isRowFixed(getItemRow(edgeTileDisplayRight))) {
                 edgeTileDisplayLeft.setVisible(false);
                 edgeTileDisplayRight.setVisible(false);
             }
@@ -422,7 +426,7 @@ public class GameController implements Initializable {
         //TODO Extract, make a loop ------------------------------------
     }
 
-    public void displayActionTiles() {
+    private void displayActionTiles() {
         for (ActionTile actionTile : gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles()) {
             Image actionTileImage = new Image(getActionTileTypeImage(actionTile));
             ImageView actionTileImageView = new ImageView(actionTileImage);
@@ -441,7 +445,7 @@ public class GameController implements Initializable {
         playersActionTilesHolder.getChildren().add(playersActionTiles);
     }
 
-    public void displayPlayerQueue() {
+    private void displayPlayerQueue() {
         double sizeCoefficient = 1.4;
         double opacityCoefficient = 1.0;
         for (Node playerPiecePreview : playerQueue.getChildren()) {
@@ -451,6 +455,35 @@ public class GameController implements Initializable {
             sizeCoefficient -= 0.3;
             opacityCoefficient -= 0.3;
         }
+    }
+
+    private void createDropDownMenu() {
+        dropDownMenu.getItems().addAll(
+                "Save",
+                "Save and Exit",
+                "Exit"
+        );
+
+        dropDownMenu.setOnAction(event -> {
+            if (dropDownMenu.getValue() == "Save") {
+                try {
+                    gameService.save(gameBoard.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (dropDownMenu.getValue() == "Save and Exit") {
+                try {
+                    gameService.save(gameBoard.getName());
+                    //TODO Change
+                    System.exit(0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //TODO Change
+                System.exit(0);
+            }
+        });
     }
 
     private void setEdgeTileEventHandlers(ImageView edgeTileImageView) {
@@ -487,6 +520,7 @@ public class GameController implements Initializable {
                 }
                 //Update GameBoard
                 gameBoard.insert(targetCol, targetRow, (FloorTile) drawnTile, (int) (drawnFloorTile.getRotate() / 90));
+                System.out.println("Rotation: " + (int) (drawnFloorTile.getRotate() / 90));
                 //Remove drawn FloorTile image
                 drawnFloorTile.setImage(null);
 
@@ -904,8 +938,10 @@ public class GameController implements Initializable {
            endTurnButton.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0.5, 0, 3)");
         });
 
-         if (playerPieceCanMove() && numberOfMoves > 0) {
-           displayError(PLAYERPIECE_NOT_MOVED_MSG);
+        if (drawnTile instanceof FloorTile && !floorTileInserted) {
+            displayError(FLOORTILE_NOT_INSERTED_MSG);
+        } else if (playerPieceCanMove() && numberOfMoves > 0) {
+            displayError(PLAYERPIECE_NOT_MOVED_MSG);
         } else {
             ImageView currentPlayerPiecePreview = (ImageView) playerQueue.getChildren().get(0);
             playerQueue.getChildren().remove(0);
@@ -914,8 +950,14 @@ public class GameController implements Initializable {
             actionTilePlayed = false;
             numberOfMoves = 1;
             floorTileInserted = false;
+            infoBox.setText(null);
             displayGameView();
         }
+    }
+
+    @FXML
+    private void onDropDownMenuClicked() {
+
     }
 
     private void displayError(String errorText) {
@@ -1019,10 +1061,46 @@ public class GameController implements Initializable {
         System.out.println(playerPieceImageView);
 
         for (int i = 0; i < playerPiecesAtFloorTile.size(); i++) {
-            playerPiecesAtFloorTile.get(i).setFitHeight(PLAYER_PIECE_HEIGHT / playerPiecesAtFloorTile.size() + 3);
-            playerPiecesAtFloorTile.get(i).setFitWidth(PLAYER_PIECE_WIDTH / playerPiecesAtFloorTile.size() + 3);
-            playerPiecesAtFloorTile.get(i).setLayoutX(targetCol * TILE_WIDTH + 12);
-            playerPiecesAtFloorTile.get(i).setLayoutY(targetRow * TILE_HEIGHT + 12);
+            playerPiecesAtFloorTile.get(i).setFitHeight(PLAYER_PIECE_HEIGHT / playerPiecesAtFloorTile.size() + 10);
+            playerPiecesAtFloorTile.get(i).setFitWidth(PLAYER_PIECE_WIDTH / playerPiecesAtFloorTile.size() + 10);
+//            playerPiecesAtFloorTile.get(i).setLayoutX(targetCol * TILE_WIDTH + 12);
+//            playerPiecesAtFloorTile.get(i).setLayoutY(targetRow * TILE_HEIGHT + 12);
+        }
+
+        //TODO Make loop, see above
+        if (playerPiecesAtFloorTile.size() == 4) {
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 15);
+            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 - 15);
+
+            playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
+            playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 - 15);
+
+            playerPiecesAtFloorTile.get(2).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 15);
+            playerPiecesAtFloorTile.get(2).setLayoutY(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
+
+            playerPiecesAtFloorTile.get(3).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
+            playerPiecesAtFloorTile.get(3).setLayoutY(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
+
+        } else if (playerPiecesAtFloorTile.size() == 3) {
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 20);
+            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
+
+            playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2);
+            playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
+
+            playerPiecesAtFloorTile.get(2).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 20);
+            playerPiecesAtFloorTile.get(2).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
+
+        } else if (playerPiecesAtFloorTile.size() == 2) {
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 15);
+            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
+
+            playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(1).getFitWidth()) / 2 + 15);
+            playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
+
+        } else if (playerPiecesAtFloorTile.size() == 1) {
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + 12);
+            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + 12);
         }
     }
 
@@ -1053,6 +1131,13 @@ public class GameController implements Initializable {
                 setEffectEventHandlers(effectOverlayImageView);
                 effectGroup.getChildren().add(effectOverlayImageView);
             }
+        }
+
+        //Sound
+        if (usedActionTile.use().getEffectType() == EffectType.ICE) {
+            System.out.println("ICE");
+            playSound(ICE_ACTION_TILE_SOUND);
+            playVideo();
         }
     }
 
@@ -1087,14 +1172,11 @@ public class GameController implements Initializable {
         //TODO Check if used effect on target contain
 
         if (usedActionTile.use().getEffectType() == EffectType.BACKTRACK && targetNotSelf) {
-            //TODO Bowser time
-            System.out.println("Get ready for backtrack BABYYYYYYY!");
             Position previousPosition = gameBoard.backtrack(gameBoard.getPlayerPieceByImage(targetPlayerPieceImageView.getImage()), 2);
             targetPlayerPieceImageView.setLayoutX((previousPosition.getColNum() - 1) * TILE_WIDTH + TILE_WIDTH + 6);
             targetPlayerPieceImageView.setLayoutY((previousPosition.getRowNum() - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
             success = true;
         } else if (usedActionTile.use().getEffectType() == EffectType.DOUBLE_MOVE && !targetNotSelf) {
-            System.out.println("DID I HEAR DOUBLE MOOOOOOOOVEEEEE?");
             useDoubleMoveActionTile();
             success = true;
         } else {
@@ -1138,8 +1220,18 @@ public class GameController implements Initializable {
     private void playSound(String soundPath) {
         Media sound = new Media(new File(soundPath).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        System.out.println(sound);
         mediaPlayer.setVolume(0.5);
         mediaPlayer.play();
+    }
+
+    private void playVideo() {
+        MediaPlayer player = new MediaPlayer( new Media(getClass().getResource("iceEffect.mp4").toExternalForm()));
+        MediaView mediaView = new MediaView(player);
+        background.getChildren().add(mediaView);
+        mediaView.toFront();
+
+        player.play();
     }
 
     private String getActionTileEffectType(ImageView actionTileImageView) {

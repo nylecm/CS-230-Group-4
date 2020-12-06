@@ -11,9 +11,9 @@ public class EffectFactory {
 
         if (ActionTile.ACTION_TILE_TYPES.contains(type)) {
             if (type == TileType.ICE) {
-                return new AreaEffect(EffectType.ICE, THREE_BY_THREE_EFFECT_RADIUS, GameService.getInstance().getCurrentPlayerNum());
+                return new AreaEffect(EffectType.ICE, THREE_BY_THREE_EFFECT_RADIUS, GameService.getInstance().getPlayerService().getPlayers().length);
             } else if (type == TileType.FIRE) {
-                return new AreaEffect(EffectType.FIRE, THREE_BY_THREE_EFFECT_RADIUS, GameService.getInstance().getCurrentPlayerNum());
+                return new AreaEffect(EffectType.FIRE, THREE_BY_THREE_EFFECT_RADIUS, GameService.getInstance().getPlayerService().getPlayers().length);
             } else if (type == TileType.BACKTRACK) {
                 return new PlayerEffect(EffectType.BACKTRACK); //todo get user input for target...
             } else if (type == TileType.DOUBLE_MOVE) {

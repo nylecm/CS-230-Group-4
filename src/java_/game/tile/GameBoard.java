@@ -3,7 +3,9 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
+import sun.util.resources.cldr.zh.CalendarData_zh_Hans_HK;
 
 import java.util.*;
 
@@ -140,7 +142,7 @@ public class GameBoard {
      * @return the boolean
      */
     public boolean validateMove(int sourceCol, int sourceRow, int targetCol, int targetRow, int sourceBitmask, int oppositeBitmask) {
-        if (activeEffects.containsKey(new Position(targetRow, targetCol))) {
+        if (activeEffects.containsKey(new Position(targetRow, targetCol)) && activeEffects.get(new Position(targetRow, targetCol)).getEffectType() == EffectType.ICE) {
             return false;
         }
         FloorTile sourceFloorTile = board[sourceRow][sourceCol];
@@ -240,6 +242,14 @@ public class GameBoard {
     public void insert(int colNum, int rowNum, FloorTile tile, int rotation)
             throws IllegalArgumentException {
         FloorTile pushedOffTile; // Tile being pushed off
+
+        if (rotation == -1) {
+            rotation = 3;
+        } else if (rotation == -2) {
+            rotation = 2;
+        } else if (rotation == -3) {
+            rotation = 1;
+        }
 
         if (colNum == -1 && !isRowFixed(rowNum)) { // Left to right horizontal shift.
             pushedOffTile = board[rowNum][nCols - 1];
@@ -598,7 +608,7 @@ public class GameBoard {
                     if (effect.effectType == EffectType.FIRE && playerPiecePos.contains(affectedPos)) {
                         throw new IllegalStateException(FIRE_EFFECT_WHERE_THERE_IS_A_PLAYER);
                     }
-                    activeEffects.put(affectedPos, effect);
+                    activeEffects.put(affectedPos, new AreaEffect(effect.getEffectType(), effectRadius, effect.getRemainingDuration()));
                 }
             }
         }
@@ -644,11 +654,14 @@ public class GameBoard {
      * removing it when it's due to be removed.
      */
     public void refreshEffects() {//todo check if broken
-        for (AreaEffect effect : activeEffects.values()) {
-            if (effect.getRemainingDuration() == 1) {
-                activeEffects.remove(effect);
+        Iterator<Map.Entry<Position, AreaEffect>> iterator = activeEffects.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<Position,AreaEffect> entry = iterator.next();
+            if (entry.getValue().getRemainingDuration() == 0) {
+                iterator.remove();
             } else {
-                effect.decrementRemainingDuration();
+                entry.getValue().decrementRemainingDuration();
             }
         }
     }
