@@ -26,7 +26,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 
-
+/**
+ * Controller for a leaderboard that tracks player stats including number of wins and losses on each game board.
+ */
 public class LeaderboardController implements Initializable {
 
     @FXML
@@ -52,6 +54,9 @@ public class LeaderboardController implements Initializable {
     //Un-comment if using file reader.
     //@FXML ObservableList<Table> data = FXCollections.observableArrayList();
 
+    /**
+     * Initialises the LeaderboardController
+     */
     public LeaderboardController() {
     }
 
@@ -62,6 +67,12 @@ public class LeaderboardController implements Initializable {
     //todo add ability to see stats for all game boards.
     //
     //Reading data with file reader
+
+    /**
+     * Reads a file containing the stats of players that have played on that game board.
+     * @param statFile The file of a specific game board containing the stats (number of wins and losses ) of each player that has played on that map.
+     * @throws FileNotFoundException If the stat file cannot be found.
+     */
     private void readStatFile(File statFile) throws FileNotFoundException {
         data.clear();
 
@@ -86,6 +97,11 @@ public class LeaderboardController implements Initializable {
         data.addAll(playerStats);
     }
 
+    /**
+     * Initialises the leaderboard interface, giving it a background and displaying all user stats.
+     * @param location //todo?
+     * @param resources //todo?
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundImage backgroundImage = null;
@@ -112,10 +128,19 @@ public class LeaderboardController implements Initializable {
         tableID.setItems(data);
     }
 
+    /**
+     * Adds the names of the files containing the players' stats.
+     * @param fileNames The names of the files to be added as stat file names.
+     */
     private void addGameBoardStatFileNames(File[] fileNames) {
         gameBoardSelect.setItems(FXCollections.observableArrayList(fileNames));
     }
 
+    /**
+     * Returns the user to the main menu
+     * @param e The event of the back button being clicked by the user.
+     * @throws IOException If the main menu file path is incorrect.
+     */
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -123,6 +148,10 @@ public class LeaderboardController implements Initializable {
         currentStage.setScene(new Scene(mainMenu));
     }
 
+    /**
+     * Displays the stats for all players of a specific game board.
+     * @param e The event of a player clicking on the button to view player stats for a particular game board.
+     */
     @FXML
     private void onViewStatsForGameBoardButton(ActionEvent e) {
         try {
@@ -132,6 +161,11 @@ public class LeaderboardController implements Initializable {
         }
     }
 
+    /**
+     * Displays all player stats (not for a specific game board)
+     * @param e The user clicked on the button to display all player stats.
+     * @throws IOException If the user stats file path is incorrect.
+     */
     @FXML
     private void onTotalStatsButtonClicked(ActionEvent e) throws IOException {
 
@@ -199,6 +233,12 @@ public class LeaderboardController implements Initializable {
         tableID.setItems(data);
 
     }
+
+    /**
+     * Returns a list of all files in a specified folder.
+     * @param folder The folder which contains the files that are to be returned.
+     * @return The ArrayList if all files in the folder.
+     */
     private ArrayList listOfFiles(final File folder) {
         ArrayList statFilesTemp = new ArrayList();
 
