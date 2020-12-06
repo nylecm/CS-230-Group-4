@@ -22,7 +22,6 @@ public class LeaderboardHandler {
      * @throws FileNotFoundException If the file containing user stats cannot be found.
      */
     public static void updateLeaderboard(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
-
         String gameboardName = GameService.getInstance().getGameBoard().getName();
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(USER_STATS_FOLDER_DIRECTORY);
@@ -72,27 +71,4 @@ public class LeaderboardHandler {
             }
         }
     }
-
-    /**
-     * Main method for testing only //todo remove
-     * @param args
-     */
-    /*
-    public static void main(String[] args) {
-        Player newPlayer = new Player("james", null);
-        Player newPlayer2 = new Player("roy", null);
-
-        Player[] playerArray = new Player[2];
-        playerArray[0] = newPlayer;
-        playerArray[1] = newPlayer2;
-
-        String gameboardName = "oberon_2.txt";
-
-        try {
-            updateLeaderboard(playerArray, 0);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-     */
 }
