@@ -1089,7 +1089,7 @@ public class GameController implements Initializable {
         if (usedActionTile.use().getEffectType() == EffectType.BACKTRACK && targetNotSelf) {
             //TODO Bowser time
             System.out.println("Get ready for backtrack BABYYYYYYY!");
-            Position previousPosition = gameBoard.backtrack(gameBoard.getPlayerPieceIndexByPosition(playerPieceImageViewPosition), 2);
+            Position previousPosition = gameBoard.backtrack(gameBoard.getPlayerPieceByImage(targetPlayerPieceImageView.getImage()), 2);
             targetPlayerPieceImageView.setLayoutX((previousPosition.getColNum() - 1) * TILE_WIDTH + TILE_WIDTH + 6);
             targetPlayerPieceImageView.setLayoutY((previousPosition.getRowNum() - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
             success = true;

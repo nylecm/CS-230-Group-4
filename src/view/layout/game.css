@@ -36,7 +36,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 129 41;
     -fx-background-color: transparent;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.45), 10, 0.1, 0, 2)
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0.5, 0, 3);
 }
 
 #infoBox {

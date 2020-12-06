@@ -3,6 +3,7 @@ package java_.game.tile;
 import java_.game.controller.GameService;
 import java_.game.player.PlayerPiece;
 import java_.util.Position;
+import javafx.scene.image.Image;
 
 import java.util.*;
 
@@ -682,6 +683,20 @@ public class GameBoard {
     public int getPlayerPieceIndexByPosition(Position position) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
             if (playerPiecePositions[i].equals(position)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Gets a PlayerPiece by given Image.
+     * @param image to compare by
+     * @return index i if found, -1 if not found
+     */
+    public int getPlayerPieceByImage(Image image) {
+        for (int i = 0; i < playerPieces.length; i++) {
+            if (playerPieces[i].getImage().equals(image)) {
                 return i;
             }
         }
