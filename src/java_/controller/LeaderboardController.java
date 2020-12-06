@@ -54,22 +54,15 @@ public class LeaderboardController implements Initializable {
     private LeaderboardTable leaderboardTableOne;
     private Object Table;
 
-    //Un-comment if using file reader.
-    //@FXML ObservableList<Table> data = FXCollections.observableArrayList();
-
     /**
      * Initialises the LeaderboardController
      */
     public LeaderboardController() {
     }
 
-    //Reading data in manually
     @FXML
     ObservableList<LeaderboardTable> data = FXCollections.observableArrayList();
 
-    //todo add ability to see stats for all game boards.
-    //
-    //Reading data with file reader
 
     /**
      * Reads a file containing the stats of players that have played on that game board.
@@ -84,7 +77,7 @@ public class LeaderboardController implements Initializable {
 
         Scanner in = new Scanner(statFile);
         in.useDelimiter("`");
-
+        //loops until end of text file and inserts data onto table being displayed on screen
         while (in.hasNextLine()) {
             String name = in.next();
             int wins = in.nextInt();
@@ -187,7 +180,7 @@ public class LeaderboardController implements Initializable {
         File folder = new File(USER_STATS_FOLDER_DIRECTORY);
         statFiles.addAll(listOfFiles(folder));
 
-        // Loops
+        // Loops through directory of all player game stats files and sums each players stats
         for (int i = 0; i < statFiles.size(); i++) {
             String dirStats = USER_STATS_FOLDER_DIRECTORY + "/" + statFiles.get(i);
             File file = new File(dirStats);
@@ -239,7 +232,7 @@ public class LeaderboardController implements Initializable {
             playerStats.add(new LeaderboardTable(name, wins, losses));
         }
         data.addAll(playerStats);
-        tableID.setItems(data);
+        tableID.setItems(data); //displays the summed stats
 
     }
 
@@ -249,8 +242,8 @@ public class LeaderboardController implements Initializable {
      * @param folder The folder which contains the files that are to be returned.
      * @return The ArrayList if all files in the folder.
      */
-    private ArrayList listOfFiles(final File folder) {
-        ArrayList statFilesTemp = new ArrayList();
+    private ArrayList<String> listOfFiles(final File folder) {
+        ArrayList<String> statFilesTemp = new ArrayList<>();
 
         for (final File fileEntry : folder.listFiles()) {
             statFilesTemp.add(fileEntry.getName());
