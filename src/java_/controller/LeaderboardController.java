@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 /**
  * Controller for a leaderboard that tracks player stats including number of wins and losses on each game board.
+ * @author Waleed Ashraf
  */
 public class LeaderboardController implements Initializable {
 
@@ -64,10 +65,6 @@ public class LeaderboardController implements Initializable {
     @FXML
     ObservableList<LeaderboardTable> data = FXCollections.observableArrayList();
 
-    //todo add ability to see stats for all game boards.
-    //
-    //Reading data with file reader
-
     /**
      * Reads a file containing the stats of players that have played on that game board.
      * @param statFile The file of a specific game board containing the stats (number of wins and losses ) of each player that has played on that map.
@@ -99,8 +96,8 @@ public class LeaderboardController implements Initializable {
 
     /**
      * Initialises the leaderboard interface, giving it a background and displaying all user stats.
-     * @param location //todo?
-     * @param resources //todo?
+     * @param location location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources resources used to localize the root object, or null if the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
