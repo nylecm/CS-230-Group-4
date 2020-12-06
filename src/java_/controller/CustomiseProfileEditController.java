@@ -15,6 +15,7 @@ import java.io.PrintWriter;
  * Class that controls the functions of CustomiseProfileEdit.fxml
  * @author Waleed Ashraf
  */
+@Deprecated
 public class CustomiseProfileEditController {
 
     private static final String USERS_FILE_PATH = "users.txt";

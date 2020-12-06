@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
  */
 public class RegisterController implements Initializable {
 
-
     @FXML
     private VBox mainBox;
 

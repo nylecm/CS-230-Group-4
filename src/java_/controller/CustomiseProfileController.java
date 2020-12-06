@@ -15,11 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+
 /**
  * Class that controls the functions of CustomiseProfile.fxml
  *
  * @author Waleed Ashraf
  */
+@Deprecated
 public class CustomiseProfileController {
 
     @FXML
