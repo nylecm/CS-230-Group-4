@@ -242,8 +242,8 @@ public class LeaderboardController implements Initializable {
      * @param folder The folder which contains the files that are to be returned.
      * @return The ArrayList if all files in the folder.
      */
-    private ArrayList listOfFiles(final File folder) {
-        ArrayList statFilesTemp = new ArrayList();
+    private ArrayList<String> listOfFiles(final File folder) {
+        ArrayList<String> statFilesTemp = new ArrayList<>();
 
         for (final File fileEntry : folder.listFiles()) {
             statFilesTemp.add(fileEntry.getName());
