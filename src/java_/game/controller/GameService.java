@@ -755,8 +755,10 @@ public class GameService {
         gs.gameBoard.movePlayerPieceDown(0);
         gs.gameBoard.movePlayerPieceDown(0);
 
+        /*
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
+         */
 
         gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED), 0);
 
@@ -809,7 +811,7 @@ public class GameService {
         gs.destroy();
 
         try {
-            gs.loadSavedInstance(new File("C:\\Users\\micha\\IdeaProjects\\CS-230-Group-4\\data\\saves\\faron_3.txt"));
+            gs.loadSavedInstance(new File("data/saves/save.txt"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

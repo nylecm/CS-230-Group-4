@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 /**
  * Controller for a leaderboard that tracks player stats including number of wins and losses on each game board.
+ *
  * @author Waleed Ashraf
  */
 public class LeaderboardController implements Initializable {
@@ -168,17 +169,16 @@ public class LeaderboardController implements Initializable {
      */
     @FXML
     private void onTotalStatsButtonClicked(ActionEvent e) throws IOException {
-
         List<LeaderboardTable> playerStats = new LinkedList<>();
-        ArrayList<Integer> playerWins = new ArrayList<Integer>();
-        ArrayList<Integer> playerLosses = new ArrayList<Integer>();
-        ArrayList<String> playerNames = new ArrayList<String>();
-        ArrayList<String> statFiles = new ArrayList<String>();
-        File folder = new File("data/user_stats");
+        ArrayList<Integer> playerWins = new ArrayList<>();
+        ArrayList<Integer> playerLosses = new ArrayList<>();
+        ArrayList<String> playerNames = new ArrayList<>();
+        ArrayList<String> statFiles = new ArrayList<>();
+        File folder = new File(USER_STATS_FOLDER_DIRECTORY);
         statFiles.addAll(listOfFiles(folder));
 
         for (int i = 0; i < statFiles.size(); i++) {
-            String dirStats = "data/user_stats/" + statFiles.get(i);
+            String dirStats = USER_STATS_FOLDER_DIRECTORY + "/" + statFiles.get(i);
             File file = new File(dirStats);
             try {
                 Scanner in = new Scanner(file);
@@ -210,12 +210,11 @@ public class LeaderboardController implements Initializable {
                     } catch (IndexOutOfBoundsException c) {
                         playerLosses.add(newLossCount);
                     }
-
                     a++;
                 }
                 in.close();
-            } catch (Exception b) {
-                b.printStackTrace();
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
 
         }
