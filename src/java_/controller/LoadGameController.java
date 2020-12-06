@@ -27,6 +27,9 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+/**
+ * The controller for the load game interface.
+ */
 public class LoadGameController implements Initializable {
     @FXML
     private Label loadGameStatusLabel;
@@ -54,6 +57,11 @@ public class LoadGameController implements Initializable {
 
     private final LinkedList<VBox> logInVBoxes = new LinkedList<>();
 
+    /**
+     * Initialises the load game interface, giving it a background, displaying available game saved that can be loaded.
+     * @param location The location used to initialise the load game interface.
+     * @param resources the resources used to initialise the load game interface.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundImage backgroundImage = null;
@@ -85,6 +93,12 @@ public class LoadGameController implements Initializable {
         });
     }
 
+    /**
+     * Reads a specific file to give player info on the players in that game save.
+     * This data includes usernames, player pieces, and passwords so the users can login to authorise themselves to play the game.
+     * @param file The file that contains the player data.
+     * @throws FileNotFoundException If the file containing the player data cannot be found.
+     */
     private void readFileForPlayerInfo(File file) throws FileNotFoundException {
         System.out.println(file);
         Scanner in = new Scanner(file);
@@ -117,6 +131,11 @@ public class LoadGameController implements Initializable {
         }
     }
 
+    /**
+     * Creates a form for password entry so the user can verify themselves and gain authorisation to play a loaded saved game.
+     * @param playerUsername The username of the player who the form is being generated for so they can enter their password.
+     * @param playerPiece The player piece of the player who needs to enter their credentials.
+     */
     private void createPasswordEntryForm(String playerUsername, Image playerPiece) {
         VBox userLogInBox = new VBox();
         Label usernameLabel = new Label(playerUsername);
@@ -131,16 +150,30 @@ public class LoadGameController implements Initializable {
         logInVBoxes.addLast(userLogInBox);
     }
 
+    /**
+     * Adds the names of save files to the interface so the user can select which save they want to load.
+     * @param fileNames The names of the files to be displayed on the interface
+     */
     private void addSaveFileNames(File[] fileNames) {
         loadGameSelect.setItems(FXCollections.observableArrayList(fileNames));
     }
 
+    /**
+     * Returns the user to the main menu.
+     * @param e The event that the user has clicked on the back button
+     * @throws IOException If the main menu file path is incorrect.
+     */
     public void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource(MAIN_MENU_PATH));
         currentStage.setScene(new Scene(mainMenu));
     }
 
+    /**
+     * Loads the saved game selected by the user.
+     * @param e The user clicks on the load game button
+     * @throws IOException If no save game is selected and the user attempts to load a game.
+     */
     public void onLoadGameButtonClicked(ActionEvent e) throws IOException {
         int numberOfIncorrectPasswordsEntered = 0;
 
