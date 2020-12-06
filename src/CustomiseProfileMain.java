@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 
+@Deprecated
 public class CustomiseProfileMain extends Application {
     public void start(Stage primaryStage) {
         try {

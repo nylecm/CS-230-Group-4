@@ -24,11 +24,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
+
 import java.util.ArrayList;
 
 /**
  * Controller for a leaderboard that tracks player stats including number of wins and losses on each game board.
- * @author Waleed Ashraf
  */
 public class LeaderboardController implements Initializable {
 
@@ -65,8 +65,13 @@ public class LeaderboardController implements Initializable {
     @FXML
     ObservableList<LeaderboardTable> data = FXCollections.observableArrayList();
 
+    //todo add ability to see stats for all game boards.
+    //
+    //Reading data with file reader
+
     /**
      * Reads a file containing the stats of players that have played on that game board.
+     *
      * @param statFile The file of a specific game board containing the stats (number of wins and losses ) of each player that has played on that map.
      * @throws FileNotFoundException If the stat file cannot be found.
      */
@@ -96,8 +101,9 @@ public class LeaderboardController implements Initializable {
 
     /**
      * Initialises the leaderboard interface, giving it a background and displaying all user stats.
-     * @param location location used to resolve relative paths for the root object, or null if the location is not known.
-     * @param resources resources used to localize the root object, or null if the root object was not localized.
+     *
+     * @param location  the location (not used)
+     * @param resources the resources (not used)
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -127,6 +133,7 @@ public class LeaderboardController implements Initializable {
 
     /**
      * Adds the names of the files containing the players' stats.
+     *
      * @param fileNames The names of the files to be added as stat file names.
      */
     private void addGameBoardStatFileNames(File[] fileNames) {
@@ -135,6 +142,7 @@ public class LeaderboardController implements Initializable {
 
     /**
      * Returns the user to the main menu
+     *
      * @param e The event of the back button being clicked by the user.
      * @throws IOException If the main menu file path is incorrect.
      */
@@ -147,6 +155,7 @@ public class LeaderboardController implements Initializable {
 
     /**
      * Displays the stats for all players of a specific game board.
+     *
      * @param e The event of a player clicking on the button to view player stats for a particular game board.
      */
     @FXML
@@ -160,6 +169,7 @@ public class LeaderboardController implements Initializable {
 
     /**
      * Displays all player stats (not for a specific game board)
+     *
      * @param e The user clicked on the button to display all player stats.
      * @throws IOException If the user stats file path is incorrect.
      */
@@ -174,7 +184,7 @@ public class LeaderboardController implements Initializable {
         File folder = new File("data/user_stats");
         statFiles.addAll(listOfFiles(folder));
 
-        for(int i = 0; i < statFiles.size(); i++) {
+        for (int i = 0; i < statFiles.size(); i++) {
             String dirStats = "data/user_stats/" + statFiles.get(i);
             File file = new File(dirStats);
             try {
@@ -215,7 +225,7 @@ public class LeaderboardController implements Initializable {
                 b.printStackTrace();
             }
 
-            }
+        }
 
         playerStats.clear();
         data.clear();
@@ -233,6 +243,7 @@ public class LeaderboardController implements Initializable {
 
     /**
      * Returns a list of all files in a specified folder.
+     *
      * @param folder The folder which contains the files that are to be returned.
      * @return The ArrayList if all files in the folder.
      */
@@ -240,8 +251,8 @@ public class LeaderboardController implements Initializable {
         ArrayList statFilesTemp = new ArrayList();
 
         for (final File fileEntry : folder.listFiles()) {
-                statFilesTemp.add(fileEntry.getName());
-            }
+            statFilesTemp.add(fileEntry.getName());
+        }
 
         return statFilesTemp;
     }

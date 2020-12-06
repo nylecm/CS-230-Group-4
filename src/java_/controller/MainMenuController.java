@@ -43,8 +43,9 @@ public class MainMenuController implements Initializable {
 
     /**
      * Initialises the main menu, setting its background and setting the message of the day.
-     * @param location
-     * @param resources
+     *
+     * @param location  The location (not used).
+     * @param resources The resources (not used).
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -69,6 +70,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the new game screen.
+     *
      * @param e When the newGame button is clicked.
      * @throws IOException If the new game file path is incorrect.
      */
@@ -82,6 +84,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the load game screen.
+     *
      * @param e When the loadGame button is clicked.
      * @throws IOException If the load game file path is incorrect.
      */
@@ -94,6 +97,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the customise profile screen.
+     *
      * @param e When the customise profile button is clicked.
      * @throws IOException If the customise profile file path is incorrect.
      */
@@ -106,6 +110,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the leaderboard screen.
+     *
      * @param e When the leaderboard button is clicked.
      * @throws IOException If the leaderboard file path is incorrect.
      */
@@ -118,6 +123,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the register screen.
+     *
      * @param e When the register button is clicked.
      * @throws IOException If the register file path is incorrect
      */
@@ -130,6 +136,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Quits the game. Closes all windows.
+     *
      * @param e When the quit button is clicked.
      */
     @FXML

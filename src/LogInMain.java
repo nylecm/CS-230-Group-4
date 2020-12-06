@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 /**
  * The type java.java_.Main.
  */
+@Deprecated
 public class LogInMain extends Application {
     private final static int WIDTH = 280;
     private final static int HEIGHT = 220 + 20; //todo discuss windows height problem...

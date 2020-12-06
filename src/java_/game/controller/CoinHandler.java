@@ -30,7 +30,8 @@ public class CoinHandler {
      * Updates the coins of players that participated in the game.
      * The amount of coins is determined ((nTurns / nPlayers) * 0.2 * 5) for a winning player and
      * ((nTurns / nPlayers) * 0.2 * 1) for a losing player.
-     * @param players The players that participated in the game.
+     *
+     * @param players            The players that participated in the game.
      * @param winningPlayerIndex The index of the player who won the game.
      * @throws FileNotFoundException If the file containing the user coin details cannot be found.
      */
@@ -90,8 +91,9 @@ public class CoinHandler {
 
     /**
      * Gives a player a specified amount of coins.
+     *
      * @param username The username of the player who the coins are to be given to.
-     * @param coins The amount of coins to be given to the player.
+     * @param coins    The amount of coins to be given to the player.
      * @throws FileNotFoundException If the file containing the user coin details cannot be found.
      */
     public static void giveCoins(String username, int coins) throws FileNotFoundException {
@@ -136,9 +138,10 @@ public class CoinHandler {
 
     /**
      * Increases the daily streak of players if they have played the game two days in a row. Otherwise, resets their streak to 1.
+     *
      * @param username The username of the player who has the daily streak.
      * @throws FileNotFoundException If the file containing the user coin details cannot be found.
-     * @throws ParseException If the date today string cannot be parsed.
+     * @throws ParseException        If the date today string cannot be parsed.
      */
     public static void increaseDailyStreak(String username) throws FileNotFoundException, ParseException {
         File coinFile = new File(PLAYER_COINS_FILEPATH);
@@ -203,6 +206,7 @@ public class CoinHandler {
      * Determines the amount of coins a player should receive for their daily streak.
      * The amount starts at 10 for a single day logged in.
      * Every successive day, you add 10 and multiply by 1.2 to get the amount of coins received for the next successive day logged in.
+     *
      * @param streak The number of successive days the user has logged in to play the game.
      * @return The amount of coins to be given for the user's streak.
      */
