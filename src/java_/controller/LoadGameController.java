@@ -45,7 +45,7 @@ public class LoadGameController implements Initializable {
 
     private static final String SAVES_FOLDER_DIRECTORY = "data\\saves";
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
-    private static final String GAME_PATH = "../../view/layout/gameDummy.fxml";
+    private static final String GAME_PATH = "../../view/layout/game.fxml";
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
     private static final String DELIMITER = "`";
 

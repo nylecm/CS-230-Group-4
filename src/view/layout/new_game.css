@@ -9,16 +9,16 @@
 
 .choice-box {
     -fx-text-fill: WHITE;
-    -fx-border-color: WHITE;
-    -fx-border-width: 2;
+    -fx-border-color: #136a99;
+    -fx-border-width: 1;
     -fx-background-color: BLACK;
     -fx-mark-color: #136a99;
 }
 
 .text-field {
     -fx-text-fill: WHITE;
-    -fx-border-color: WHITE;
-    -fx-border-width: 2;
+    -fx-border-color: #136a99;
+    -fx-border-width: 1;
     -fx-background-color: BLACK;
 }
 
@@ -34,14 +34,14 @@
 
 .password-field {
     -fx-text-fill: WHITE;
-    -fx-border-color: WHITE;
-    -fx-border-width: 2;
+    -fx-border-color: #136a99;
+    -fx-border-width: 1;
     -fx-background-color: BLACK;
 }
 
 .button {
     -fx-text-fill: WHITE;
-    -fx-border-color: WHITE;
-    -fx-border-width: 2;
+    -fx-border-color: #136a99;
+    -fx-border-width: 1;
     -fx-background-color: BLACK;
 }
