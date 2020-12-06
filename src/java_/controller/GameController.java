@@ -5,6 +5,7 @@ import java_.game.controller.GameService;
 import java_.game.player.Player;
 import java_.game.tile.*;
 import java_.util.Position;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -20,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,14 +29,19 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -52,6 +59,9 @@ public class GameController implements Initializable {
     private static final int PLAYER_PIECE_WIDTH = 28;
 
     private static final int PLAYER_PIECE_HEIGHT = 28;
+
+    @FXML
+    private AnchorPane background;
 
     @FXML
     private ScrollPane scrollPane;
@@ -81,13 +91,16 @@ public class GameController implements Initializable {
     private AnchorPane playersActionTilesHolder;
 
     @FXML
-    private HBox playerQueue;
+    private VBox playerQueue;
 
     @FXML
     private Button endTurnButton;
 
     @FXML
     private Label drawingLabel;
+
+    @FXML
+    private Label infoBox;
 
     @FXML
     private Image floorTileImage = new Image("fullFlat.png");
@@ -97,6 +110,10 @@ public class GameController implements Initializable {
 
     @FXML
     private Image actionTileImage = new Image("actionTile.png");
+
+    private final String ERROR_SOUND = "src/view/res/sfx/error.mp3";
+
+    private final String LOADING_SOUND = "src/view/res/sfx/load.mp3";
 
     private boolean actionTilePlayed; //TODO Move somewhere else?
 
@@ -113,6 +130,20 @@ public class GameController implements Initializable {
 
     @FXML
     private Group playersActionTiles;
+
+    private final String FLOORTILE_NOT_INSERTED_MSG = "ERROR!\nYOU HAVE TO INSERT FLOOR TILE FIRST!";
+
+    private final String CANT_SET_LOCATION_ON_FIRE_MSG = "ERROR!\nYOU CAN SET FIRE ON LOCATION WITH PLAYERS!";
+
+    private final String ACTIONTILE_ALREADY_USED_MSG = "ERROR!\nYOU CAN USE ONLY ONE ACTION TILE PER ROUND!";
+
+    private final String PLAYEREFFECT_USED_ON_FLOORTILE_MSG = "ERROR!\nYOU CAN'T USE PLAYER EFFECT ON A FLOOR TILE!";
+
+    private final String AREAEFFECT_USED_ON_PLAYER_MSG = "ERROR!\nYOU CAN'T USE AREA EFFECT ON A FLOOR PLAYER!";
+
+    private final String PLAYERPIECE_NOT_MOVED_MSG = "ERROR!\nYOU HAVE TO MOVE YOUR PLAYER PIECE!";
+
+    private final String INVALID_TARGET_MSG = "ERROR!\nTHAT IS NOT A VALID TARGET!";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -133,7 +164,7 @@ public class GameController implements Initializable {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mainBox.setBackground(new Background(backgroundFill));
+        background.setBackground(new Background(backgroundFill));
 
         //TODO Replace with isometric view
         displayGameView();
@@ -151,7 +182,7 @@ public class GameController implements Initializable {
     }
 
     private void displayGameView() {
-        System.out.println("Current Player Number: " + gameService.getCurrentPlayerNum());
+        animateBackground();
 
         edgeTileGroup = new Group();
         tileGroup = new Group();
@@ -177,11 +208,12 @@ public class GameController implements Initializable {
         //Build Player Queue
         if (playerQueue.getChildren().size() != gameService.getPlayerService().getPlayers().length) {
             for (int i = 0; i < gameService.getPlayerService().getPlayers().length; i++) {
-                Image playerPieceImage = GameService.getInstance().getPlayerService().getPlayer(i).getPlayerPiece().getImage();
+                Image playerPieceImage = gameService.getPlayerService().getPlayer(i).getPlayerPiece().getImage();
                 ImageView playerPiecePreview = new ImageView(playerPieceImage);
                 playerQueue.getChildren().add(playerPiecePreview);
             }
         }
+        displayPlayerQueue();
 
         drawTile();
 
@@ -345,8 +377,9 @@ public class GameController implements Initializable {
             ImageView playerPieceImageView = getPlayerPieceImageView(gameBoard.getPlayerPiece(i).getImage());
 
             //TODO Remove magical calculations
-            playerPieceImageView.setLayoutX((col - 1) * TILE_WIDTH + TILE_WIDTH + 6);
-            playerPieceImageView.setLayoutY((row - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
+            setPlayerPieceImageViewPosition(playerPieceImageView, row, col);
+//            playerPieceImageView.setLayoutX((col - 1) * TILE_WIDTH + TILE_WIDTH + 6);
+//            playerPieceImageView.setLayoutY((row - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
             playerPieceGroup.getChildren().add(playerPieceImageView);
 
             setPlayerPieceEventHandlers(playerPieceImageView);
@@ -394,8 +427,6 @@ public class GameController implements Initializable {
             Image actionTileImage = new Image(getActionTileTypeImage(actionTile));
             ImageView actionTileImageView = new ImageView(actionTileImage);
 
-            System.out.println(actionTileImageView.getImage().impl_getUrl());
-
             //TODO Remove
             actionTileImageView.setFitHeight(140);
             actionTileImageView.setFitWidth(114);
@@ -408,6 +439,18 @@ public class GameController implements Initializable {
         }
         playersActionTilesHolder.getChildren().clear();
         playersActionTilesHolder.getChildren().add(playersActionTiles);
+    }
+
+    public void displayPlayerQueue() {
+        double sizeCoefficient = 1.4;
+        double opacityCoefficient = 1.0;
+        for (Node playerPiecePreview : playerQueue.getChildren()) {
+            ((ImageView) playerPiecePreview).setFitHeight(((ImageView) playerPiecePreview).getImage().getHeight() * sizeCoefficient);
+            ((ImageView) playerPiecePreview).setFitWidth(((ImageView) playerPiecePreview).getImage().getWidth() * sizeCoefficient);
+            playerPiecePreview.setOpacity(opacityCoefficient);
+            sizeCoefficient -= 0.3;
+            opacityCoefficient -= 0.3;
+        }
     }
 
     private void setEdgeTileEventHandlers(ImageView edgeTileImageView) {
@@ -448,9 +491,6 @@ public class GameController implements Initializable {
                 drawnFloorTile.setImage(null);
 
                 floorTileInserted = true;
-
-                //TODO Reload gameBoardView?
-                //displayGameView(GameService.getInstance().getGameBoard());
             }
         });
     }
@@ -465,8 +505,6 @@ public class GameController implements Initializable {
 
             int tileCol = getItemCol(floorTileImageView);
             int tileRow = getItemRow(floorTileImageView);
-
-            System.out.println("Paths: " + GameService.getInstance().getGameBoard().getTileAt(tileRow, tileCol).getPathsBits());
         });
 
         floorTileImageView.setOnMouseEntered(event -> {
@@ -498,12 +536,11 @@ public class GameController implements Initializable {
                     removeAreaEffectActionTile(source, getItemCol(floorTileImageView), getItemRow(floorTileImageView));
                     event.setDropCompleted(true);
                 } else {
-                    System.out.println("There are players you'd set on fire O_o");
+                    displayError(CANT_SET_LOCATION_ON_FIRE_MSG);
                 }
                 //Is Player Effect ActionTile
             } else {
-                //TODO :---)
-                System.out.println("You can't use Player Effect on a FloorTile, dickhead!");
+                displayError(PLAYEREFFECT_USED_ON_FLOORTILE_MSG);
             }
         });
 
@@ -518,7 +555,7 @@ public class GameController implements Initializable {
 
         playerPieceImageView.setOnDragDetected(event -> {
             if (!floorTileInserted && drawnTile instanceof FloorTile) {
-                System.out.println("You have to insert FloorTile first!");
+                displayError(FLOORTILE_NOT_INSERTED_MSG);
             } else {
                 ImageView source = (ImageView) event.getSource();
 
@@ -535,8 +572,6 @@ public class GameController implements Initializable {
                         content.putImage(playerPieceImageView.getImage());
                         dragboard.setContent(content);
                         event.consume();
-                    } else {
-                        System.out.println("You can't move someone else's PlayerPiece dumbass!");
                     }
                 }
             }
@@ -555,8 +590,7 @@ public class GameController implements Initializable {
                     removePlayerEffectActionTile(source, playerPieceImageView);
                     event.setDropCompleted(true);
                 } else {
-                    //TODO :---)
-                    System.out.println("You can't use Area Effect on a Player, dickhead!");
+                    displayError(AREAEFFECT_USED_ON_PLAYER_MSG);
                 }
             }
         });
@@ -602,7 +636,7 @@ public class GameController implements Initializable {
 
         actionTileImageView.setOnDragDetected(event -> {
             if (!floorTileInserted && drawnTile instanceof FloorTile) {
-                System.out.println("You have to insert FloorTile first!");
+                displayError(FLOORTILE_NOT_INSERTED_MSG);
             } else {
                 if (!actionTilePlayed) {
                     Dragboard dragboard = actionTileImageView.startDragAndDrop(TransferMode.MOVE);
@@ -611,7 +645,7 @@ public class GameController implements Initializable {
                     dragboard.setContent(content);
                     event.consume();
                 } else {
-                    System.out.println("You can't use ActionTile anymore you idiot");
+                    displayError(ACTIONTILE_ALREADY_USED_MSG);
                 }
             }
         });
@@ -847,11 +881,7 @@ public class GameController implements Initializable {
         } else {
             //Add to Player class
             gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).addDrawnActionTile((ActionTile) drawnTile);
-            System.out.println("Added to " + gameService.getCurrentPlayerNum());
-            System.out.println("Number of cards then: " +  gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().size());
         }
-
-        drawingLabel.setText("You got " + drawnTile.getType());
     }
 
     @FXML
@@ -874,10 +904,8 @@ public class GameController implements Initializable {
            endTurnButton.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0.5, 0, 3)");
         });
 
-        if (drawnTile instanceof FloorTile && !floorTileInserted) {
-            System.out.println("You have to insert FloorTile!");
-        } else if (playerPieceCanMove() && numberOfMoves > 0) {
-            System.out.println("You have to move player piece!");
+         if (playerPieceCanMove() && numberOfMoves > 0) {
+           displayError(PLAYERPIECE_NOT_MOVED_MSG);
         } else {
             ImageView currentPlayerPiecePreview = (ImageView) playerQueue.getChildren().get(0);
             playerQueue.getChildren().remove(0);
@@ -888,6 +916,11 @@ public class GameController implements Initializable {
             floorTileInserted = false;
             displayGameView();
         }
+    }
+
+    private void displayError(String errorText) {
+        infoBox.setText(errorText);
+        playSound(ERROR_SOUND);
     }
 
     //TODO Loop/remake
@@ -926,12 +959,12 @@ public class GameController implements Initializable {
         return false;
     }
 
-    private void movePlayerPieceImageView(ImageView playerPieceImageView, ImageView targetFloorTile) {
+    private void movePlayerPieceImageView(ImageView playerPieceImageView, ImageView targetFloorTileImageView) {
         int sourceFloorTileCol = getItemCol(playerPieceImageView);
         int sourceFloorTileRow = getItemRow(playerPieceImageView);
 
-        int targetFloorTileCol = getItemCol(targetFloorTile);
-        int targetFloorTileRow = getItemRow(targetFloorTile);
+        int targetFloorTileCol = getItemCol(targetFloorTileImageView);
+        int targetFloorTileRow = getItemRow(targetFloorTileImageView);
 
         int sourceFloorTileMask;
         int oppositeFloorTileMask;
@@ -953,17 +986,43 @@ public class GameController implements Initializable {
 
         //Make a move if it's a valid move
         if (gameBoard.validateMove(sourceFloorTileCol, sourceFloorTileRow, targetFloorTileCol, targetFloorTileRow, sourceFloorTileMask, oppositeFloorTileMask)) {
-            //TODO Remove magical numbers
-            playerPieceImageView.setLayoutX(targetFloorTile.getLayoutX() + 6);
-            playerPieceImageView.setLayoutY(targetFloorTile.getLayoutY() + 6);
+            setPlayerPieceImageViewPosition(playerPieceImageView, getItemRow(targetFloorTileImageView), getItemCol(targetFloorTileImageView));
+
+            //Fix if left a FloorTile with multiple PlayerPieces
+            setPlayerPieceImageViewPosition(null, sourceFloorTileRow, sourceFloorTileCol);
+
             gameBoard.movePlayerPiece(targetFloorTileRow, targetFloorTileCol);
             numberOfMoves--;
+
 
             //Check for win
             //TODO Implement
             if (gameBoard.getTileAt(targetFloorTileRow, targetFloorTileCol).getType() == TileType.GOAL) {
                 System.exit(0);
             }
+        }
+    }
+
+    private void setPlayerPieceImageViewPosition(ImageView playerPieceImageView, int targetRow, int targetCol) {
+        List<ImageView> playerPiecesAtFloorTile = new ArrayList<>();
+        if (playerPieceImageView != null) {
+            playerPiecesAtFloorTile.add(playerPieceImageView);
+        }
+        for (int i = 0; i < playerPieceGroup.getChildren().size(); i++) {
+            ImageView playerPiece = (ImageView) playerPieceGroup.getChildren().get(i);
+            if (getItemRow(playerPiece) == targetRow && getItemCol(playerPiece) == targetCol) {
+                playerPiecesAtFloorTile.add(playerPiece);
+            }
+        }
+
+        System.out.println("Size: " + playerPiecesAtFloorTile.size());
+        System.out.println(playerPieceImageView);
+
+        for (int i = 0; i < playerPiecesAtFloorTile.size(); i++) {
+            playerPiecesAtFloorTile.get(i).setFitHeight(PLAYER_PIECE_HEIGHT / playerPiecesAtFloorTile.size() + 3);
+            playerPiecesAtFloorTile.get(i).setFitWidth(PLAYER_PIECE_WIDTH / playerPiecesAtFloorTile.size() + 3);
+            playerPiecesAtFloorTile.get(i).setLayoutX(targetCol * TILE_WIDTH + 12);
+            playerPiecesAtFloorTile.get(i).setLayoutY(targetRow * TILE_HEIGHT + 12);
         }
     }
 
@@ -1039,7 +1098,7 @@ public class GameController implements Initializable {
             useDoubleMoveActionTile();
             success = true;
         } else {
-            System.out.println("Invalid combination of target and used ActionTile, what the fuck are you doing?");
+            displayError(INVALID_TARGET_MSG);
         }
 
         if (success) {
@@ -1074,6 +1133,13 @@ public class GameController implements Initializable {
             }
         }
         return true;
+    }
+
+    private void playSound(String soundPath) {
+        Media sound = new Media(new File(soundPath).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(0.5);
+        mediaPlayer.play();
     }
 
     private String getActionTileEffectType(ImageView actionTileImageView) {
@@ -1143,5 +1209,42 @@ public class GameController implements Initializable {
                 return "iceOverlay.png";
         }
         return null;
+    }
+
+    private void animateBackground() {
+        Random rand = new Random();
+
+        int chance = rand.nextInt(2);
+
+        if (chance == 1) {
+            double sizeCoefficient = rand.nextDouble();
+
+            int positionOffset = rand.nextInt(800 - 10) + 10;
+
+            int wait = rand.nextInt(15000);
+
+            Timeline timeline = new Timeline();
+            timeline.setCycleCount(1);
+            Image cometImage = new Image("view/res/img/comet.png");
+            ImageView comet = new ImageView(cometImage);
+            comet.setFitHeight(comet.getFitHeight() * sizeCoefficient);
+            comet.setFitWidth(comet.getFitWidth() * sizeCoefficient);
+            comet.setLayoutX(1500 + positionOffset);
+            comet.setLayoutY(-200 - positionOffset);
+            comet.setRotate(comet.getRotate() + 15);
+            DoubleProperty propertyX = comet.layoutXProperty();
+            DoubleProperty propertyY = comet.layoutYProperty();
+            background.getChildren().add(comet);
+            comet.toBack();
+            timeline.getKeyFrames().addAll(
+                    new KeyFrame(new Duration(0), new KeyValue(propertyX, 1800 - positionOffset)),
+                    new KeyFrame(new Duration(0), new KeyValue(propertyY, -200 - positionOffset)),
+                    new KeyFrame(new Duration(wait), new KeyValue(propertyX, 1800 - positionOffset)),
+                    new KeyFrame(new Duration(wait), new KeyValue(propertyY, -200 - positionOffset)),
+                    new KeyFrame(new Duration(wait + 1000), new KeyValue(propertyX, - positionOffset)),
+                    new KeyFrame(new Duration(wait + 1000), new KeyValue(propertyY, 864 - positionOffset))
+            );
+            timeline.play();
+        }
     }
 }
