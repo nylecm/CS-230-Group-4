@@ -1,8 +1,5 @@
 package java_.game.controller;
 
-import com.sun.org.apache.bcel.internal.generic.DLOAD;
-import java_.util.generic_data_structures.Link;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,9 +9,10 @@ import java.util.*;
 
 public class PurchaseHandler {
     public static final String DELIMITER = "`";
-    private static final String USER_COINFILE_DIRECTORY = "data/user_coins.txt";
+    private static final String USER_COIN_FILE = "data/user_coins.txt";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String PLAYERPIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
+    private static final String PLAYER_PIECE_PRICE_FILE = "data/player_piece_cost.txt";
+    public static final String PLAYER_PIECE_ALREADY_OWNED = "Player piece already owned!";
 
 
     /**
@@ -29,12 +27,12 @@ public class PurchaseHandler {
         ArrayList<String> users = new ArrayList<>();
 
         int piecePrice = 0;
-        File priceFile = new File(PLAYERPIECE_PRICE_DIRECTORY);
+        File priceFile = new File(PLAYER_PIECE_PRICE_FILE);
         Scanner in = new Scanner(priceFile);
         in.useDelimiter(DELIMITER);
         //Loops through file until it finds the player piece player piece the player wants to buy and stores its price.
         while (in.hasNextLine()) {
-            in.next(); //todo
+            in.next();
             String playerPiece = in.next();
             if (playerPiece.equals(newPlayerPiece)) {
                 piecePrice = in.nextInt();
@@ -46,7 +44,7 @@ public class PurchaseHandler {
         in.close();
 
         int newCoinAmount = userAmountOfCoins - piecePrice; //New balance after transaction
-        File userFile = new File(USER_COINFILE_DIRECTORY);
+        File userFile = new File(USER_COIN_FILE);
         in = new Scanner(userFile);
         in.useDelimiter(DELIMITER);
 
@@ -69,7 +67,7 @@ public class PurchaseHandler {
         //Throws an error if they already own the piece they are trying to purchase.
         for (int i = 5; i < parts.length; i++) {
             if (parts[i].equals(newPlayerPiece)) {
-                throw new IllegalArgumentException("Player piece already owned!");
+                throw new IllegalArgumentException(PLAYER_PIECE_ALREADY_OWNED);
             }
         }
 
@@ -86,7 +84,7 @@ public class PurchaseHandler {
         users.add(newRowData);
 
         //Writes the updated line to the file.
-        FileWriter writer = new FileWriter(USER_COINFILE_DIRECTORY);
+        FileWriter writer = new FileWriter(USER_COIN_FILE);
         for (String user : users) {
             writer.write(user + System.lineSeparator());
         }
@@ -104,7 +102,7 @@ public class PurchaseHandler {
     public static ArrayList<String> getPlayersPurchasedPlayerPieces(String username) throws FileNotFoundException {
         ArrayList<String> ownedPlayerPieces = new ArrayList<>();
 
-        Scanner in = new Scanner(new File(USER_COINFILE_DIRECTORY));
+        Scanner in = new Scanner(new File(USER_COIN_FILE));
         in.useDelimiter(DELIMITER);
         boolean targetUserFound = false;
 
@@ -150,7 +148,7 @@ public class PurchaseHandler {
      * @throws FileNotFoundException
      */
     private static ArrayList<String> getFreePlayerPiecesNames() throws FileNotFoundException {
-        Scanner in = new Scanner(new File(PLAYERPIECE_PRICE_DIRECTORY));
+        Scanner in = new Scanner(new File(PLAYER_PIECE_PRICE_FILE));
         in.useDelimiter(DELIMITER);
         ArrayList<String> freePlayerPiecesNames = new ArrayList<>();
 
@@ -182,7 +180,7 @@ public class PurchaseHandler {
 
         byte[] userRecordBytes = userRecord.getBytes();
 
-        Files.write(Paths.get(USER_COINFILE_DIRECTORY), userRecordBytes, StandardOpenOption.APPEND);
+        Files.write(Paths.get(USER_COIN_FILE), userRecordBytes, StandardOpenOption.APPEND);
         buyAllFreePlayerPieces(username);
     }
 }
