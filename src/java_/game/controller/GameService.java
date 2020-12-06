@@ -24,7 +24,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author nylecm, apapted by Matej Haldky
  */
 public class GameService {
-    public static final String PLAYER_PIECE_PATH_START = "src\\";
     private static GameService instance = null;
     private GameController controller;
 
@@ -34,6 +33,7 @@ public class GameService {
     private int turnCount;
     private boolean isWin;
 
+    private static final String PLAYER_PIECE_PATH_START = "src\\";
     private static final String DELIMITER = "`";
     private static final String FILE_WORD_SPACER = "_";
     private static final String DATA_FILE_EXTENSION = ".txt";
@@ -45,7 +45,8 @@ public class GameService {
     public static final String TOO_MANY_FILES_WITH_SAME_NAME_MSG =
             "Too many files with same name!";
 
-    private static final int MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME = 256;
+    private static final int MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME = Integer.MAX_VALUE;
+    private static final int MAX_ROTATION_BOUND = 4;
 
     /**
      * Initialises GameService, remaking the playerService belonging to it.
@@ -208,7 +209,7 @@ public class GameService {
         FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles];
 
         for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
-            int rotationAmount = ThreadLocalRandom.current().nextInt(0, 4);
+            int rotationAmount = ThreadLocalRandom.current().nextInt(0, MAX_ROTATION_BOUND);
             FloorTile newFloorTile = floorTiles.get(0);
             newFloorTile.rotate(rotationAmount);
             floorTilesForGameBoard[i] = newFloorTile;
@@ -435,8 +436,7 @@ public class GameService {
     public void save(String saveFileName) throws IOException { //todo
         File gameSaveFile = createFile(saveFileName);
 
-        PrintWriter out = null;
-        out = new PrintWriter(gameSaveFile);
+        PrintWriter out = new PrintWriter(gameSaveFile);
 
         writeGameInstanceDetails(out);
         writePlayerPiecePositionDetails(out);
@@ -533,14 +533,14 @@ public class GameService {
      * @param out      The writer which writes the GameBoard instance details to a file.
      * @param nPlayers //todo?
      */
-    private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) { //todo nPlayers not used?
+    private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) { //todo....
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
                 out.print(gameBoard.getTileAt(i, j).getType());
                 out.print(DELIMITER);
                 out.print(gameBoard.getTileAt(i, j).isFixed());
                 out.print(DELIMITER);
-                out.print(gameBoard.getTileAt(i, j).getRotation()); //todo check Matej's method
+                out.print(gameBoard.getTileAt(i, j).getRotation());
                 out.print(DELIMITER);
             }
         }
@@ -621,15 +621,42 @@ public class GameService {
         out.print('\n');
     }
 
-  /*  public void gameplayLoop() { // todo gameplay loop...
-        while (!isWin) {
-            playerService.playerTurn(playerService.getPlayer(turnCount
-                    % playerService.getPlayers().length)); // todo improve player service
-            System.out.println("Have fun!");
-            gameBoard.refreshEffects();
-            turnCount++;
+    /**
+     * A bundle containing floor tiles and their corresponding GameBoard positions (row and column number).
+     */
+    private static class FloorTilePositionBundle {
+        private final FloorTile[] floorTiles;
+        private final Position[] positions;
+
+        /**
+         * Initialises the FloorTilePositionBundle, storing floor tiles and their corresponding positions.
+         *
+         * @param floorTiles The floor tiles to be stored in the FloorTilePositionBundle.
+         * @param positions  The positions of the floor tiles to be stored in the FloorTilePositionBundle.
+         */
+        public FloorTilePositionBundle(FloorTile[] floorTiles, Position[] positions) {
+            this.floorTiles = floorTiles;
+            this.positions = positions;
         }
-    }*/
+
+        /**
+         * Returns all floor tiles in the bundle
+         *
+         * @return The array containing all floor tiles in the bundle.
+         */
+        public FloorTile[] getFloorTiles() {
+            return floorTiles;
+        }
+
+        /**
+         * Returns all positions of floor tiles in the bundle.
+         *
+         * @return The array containing all positions of floor tiles in the bundle.
+         */
+        public Position[] getPositions() {
+            return positions;
+        }
+    }
 
     /**
      * Returns the PlayerService belonging to the GameService.
@@ -695,12 +722,12 @@ public class GameService {
     public SilkBag getSilkBag() {
         return silkBag;
     }
-
-    /**
-     * The entry point of application, for testing only. todo remove this.
+    /*
+     *//* DEBUG ONLY
+     * The entry point of application, for testing only.
      *
      * @param args the input arguments
-     */
+     *//*
     public static void main(String[] args) throws FileNotFoundException, MalformedURLException {
         JFXPanel jfxPanel = new JFXPanel(); //suppresses strange error...
 
@@ -741,7 +768,7 @@ public class GameService {
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
 
         try {
-            gs.save("faron");
+            gs.save("save");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -755,10 +782,10 @@ public class GameService {
         gs.gameBoard.movePlayerPieceDown(0);
         gs.gameBoard.movePlayerPieceDown(0);
 
-        /*
+        *//*
         gs.playerService.applyBackTrackEffect(0);
         System.out.println(gs.gameBoard.getPlayerPiecePosition(0));
-         */
+         *//*
 
         gs.gameBoard.insert(-1, 0, new FloorTile(TileType.T_SHAPED), 0);
 
@@ -815,42 +842,5 @@ public class GameService {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * A bundle containing floor tiles and their corresponding GameBoard positions (row and column number).
-     */
-    private static class FloorTilePositionBundle {
-        private final FloorTile[] floorTiles;
-        private final Position[] positions;
-
-        /**
-         * Initialises the FloorTilePositionBundle, storing floor tiles and their corresponding positions.
-         *
-         * @param floorTiles The floor tiles to be stored in the FloorTilePositionBundle.
-         * @param positions  The positions of the floor tiles to be stored in the FloorTilePositionBundle.
-         */
-        public FloorTilePositionBundle(FloorTile[] floorTiles, Position[] positions) {
-            this.floorTiles = floorTiles;
-            this.positions = positions;
-        }
-
-        /**
-         * Returns all floor tiles in the bundle
-         *
-         * @return The array containing all floor tiles in the bundle.
-         */
-        public FloorTile[] getFloorTiles() {
-            return floorTiles;
-        }
-
-        /**
-         * Returns all positions of floor tiles in the bundle.
-         *
-         * @return The array containing all positions of floor tiles in the bundle.
-         */
-        public Position[] getPositions() {
-            return positions;
-        }
-    }
+    }*/
 }
