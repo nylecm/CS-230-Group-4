@@ -142,7 +142,7 @@ public class GameBoard {
      * @return the boolean
      */
     public boolean validateMove(int sourceCol, int sourceRow, int targetCol, int targetRow, int sourceBitmask, int oppositeBitmask) {
-        if (activeEffects.containsKey(new Position(targetRow, targetCol)) && activeEffects.get(new Position(targetRow, targetCol)).getEffectType() == EffectType.ICE) {
+        if (activeEffects.containsKey(new Position(targetRow, targetCol)) && activeEffects.get(new Position(targetRow, targetCol)).getEffectType() == EffectType.FIRE) {
             return false;
         }
         FloorTile sourceFloorTile = board[sourceRow][sourceCol];
@@ -155,7 +155,11 @@ public class GameBoard {
 //        boolean targetFloorTileOnFire = activeEffects.get(targetFloorTilePosition).getEffectType() == EffectType.FIRE;
 
         //Making sure the move is only to the adjacent row/column
-        boolean isAdjacentFloorTile = (targetCol == sourceCol - 1 || targetCol == sourceCol + 1) || (targetRow == sourceRow - 1 || targetRow == sourceRow + 1);
+        boolean isAdjacentColFloorTile = (targetCol == sourceCol - 1 || targetCol == sourceCol + 1);
+        boolean isAdjacentRowFloorTile = (targetRow == sourceRow - 1 || targetRow == sourceRow + 1);
+
+        //Logical XOR
+        boolean isAdjacentFloorTile = (isAdjacentColFloorTile || isAdjacentRowFloorTile) && !(isAdjacentColFloorTile && isAdjacentRowFloorTile);
 
         return (sourceFloorTilePaths & sourceBitmask) == sourceBitmask && (targetFloorTilePaths & oppositeBitmask) == oppositeBitmask && isAdjacentFloorTile;
     }
@@ -647,7 +651,9 @@ public class GameBoard {
     public boolean isBacktrackPossible(int playerNum) {
         return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) == null)
                 || ((getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null)
-                && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)));
+                && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)
+                && !GameService.getInstance().getPlayerService().containsEffect(GameService.getInstance()
+                    .getPlayerService().getPlayer(playerNum), EffectType.BACKTRACK)));
     }
 
     /**
@@ -658,7 +664,7 @@ public class GameBoard {
         Iterator<Map.Entry<Position, AreaEffect>> iterator = activeEffects.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry<Position, AreaEffect> entry = iterator.next();
+            Map.Entry<Position,AreaEffect> entry = iterator.next();
             if (entry.getValue().getRemainingDuration() == 0) {
                 iterator.remove();
             } else {
@@ -704,14 +710,13 @@ public class GameBoard {
     }
 
     /**
-     * Gets a PlayerPiece by given Image.
-     *
+     * Gets a Player index by given Player Piece Image.
      * @param image to compare by
      * @return index i if found, -1 if not found
      */
-    public int getPlayerPieceByImage(Image image) {
-        for (int i = 0; i < playerPieces.length; i++) {
-            if (playerPieces[i].getImage().equals(image)) {
+    public int getPlayerByPlayerPieceImage(Image image) {
+        for (int i = 0; i < GameService.getInstance().getPlayerService().getPlayers().length; i++) {
+            if (GameService.getInstance().getPlayerService().getPlayer(i).getPlayerPiece().getImage().equals(image)) {
                 return i;
             }
         }
