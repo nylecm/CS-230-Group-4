@@ -658,7 +658,7 @@ public class GameBoard {
         Iterator<Map.Entry<Position, AreaEffect>> iterator = activeEffects.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry<Position,AreaEffect> entry = iterator.next();
+            Map.Entry<Position, AreaEffect> entry = iterator.next();
             if (entry.getValue().getRemainingDuration() == 0) {
                 iterator.remove();
             } else {
@@ -705,6 +705,7 @@ public class GameBoard {
 
     /**
      * Gets a PlayerPiece by given Image.
+     *
      * @param image to compare by
      * @return index i if found, -1 if not found
      */
