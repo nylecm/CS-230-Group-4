@@ -422,7 +422,7 @@ public class GameService {
     /**
      * Moves the game onto the next turn, incrementing the turn count and decrementing the durations of all effects.
      */
-    public void nextTurn() { // todo gameplay loop...
+    public void nextTurn() {
         gameBoard.refreshEffects();
         turnCount++;
     }
