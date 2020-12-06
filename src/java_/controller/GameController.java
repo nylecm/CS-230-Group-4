@@ -535,9 +535,7 @@ public class GameController implements Initializable {
         floorTileImageView.setOnMouseClicked(event -> {
             System.out.println("Col: " + getItemCol(floorTileImageView));
             System.out.println("Row: " + getItemRow(floorTileImageView));
-
-            int tileCol = getItemCol(floorTileImageView);
-            int tileRow = getItemRow(floorTileImageView);
+            System.out.println("Paths: " + gameBoard.getTileAt(getItemRow(floorTileImageView), getItemCol(floorTileImageView)).getPathsBits());
         });
 
         floorTileImageView.setOnMouseEntered(event -> {
@@ -949,6 +947,7 @@ public class GameController implements Initializable {
             numberOfMoves = 1;
             floorTileInserted = false;
             infoBox.setText(null);
+            drawnFloorTile.setRotate(0);
             displayGameView();
         }
     }
@@ -1050,7 +1049,7 @@ public class GameController implements Initializable {
         }
         for (int i = 0; i < playerPieceGroup.getChildren().size(); i++) {
             ImageView playerPiece = (ImageView) playerPieceGroup.getChildren().get(i);
-            if (getItemRow(playerPiece) == targetRow && getItemCol(playerPiece) == targetCol) {
+            if (getItemRow(playerPiece) == targetRow && getItemCol(playerPiece) == targetCol && !playerPiecesAtFloorTile.contains(playerPiece)) {
                 playerPiecesAtFloorTile.add(playerPiece);
             }
         }
