@@ -150,6 +150,14 @@ public class NewGameController implements Initializable {
 
     //private final Set<URL> currentlySelectedPlayerPieces = new HashSet<>();
 
+    /**
+     * Determines if the same player is attempting to log in more than once to be more than one of the players in the
+     * game which should not be allowed.
+     *
+     * @param username    The username of the user that is checked to see if they are trying to log in twice.
+     * @param playerIndex The index of the user that is checked to see if they are trying to log in twice.
+     * @return True if the user is trying to log in more than once, Otherwise, returns false.
+     */
     private boolean isUserTryingToLogInTwice(String username, int playerIndex) {
         for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
             if (usernames[i] != null && usernames[i].equals(username) && i != playerIndex) {
@@ -160,6 +168,14 @@ public class NewGameController implements Initializable {
         return false;
     }
 
+    /**
+     * Determines if the same player piece is being used more than once.
+     * This should not be allowed as it would be hard to differentiate between players in the game.
+     *
+     * @param playerPiece The player piece that is checked to see if it is being selected twice.
+     * @param playerIndex The player index that a player piece belongs to that is being checked.
+     * @return
+     */
     private boolean isPlayerPieceBeingSelectedTwice(File playerPiece, int playerIndex) {
         for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
             if (playerPieceImageFiles[i] != null && playerPieceImageFiles[i].equals(playerPiece) && i != playerIndex) {
@@ -171,10 +187,10 @@ public class NewGameController implements Initializable {
     }
 
     /**
-     * Initialises the NewGame screen, giving it background, a list of available gameboards, allows PlayerPiece selection and Players to log in.
+     * Initialises the NewGame screen, giving it background, a list of available game boards, allows PlayerPiece selection and Players to log in.
      *
-     * @param location
-     * @param resources
+     * @param location  The location (not used).
+     * @param resources The resources (not used).
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -292,6 +308,11 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Displays the player piece for player 1 after they have confirmed their choice.
+     *
+     * @param actionEvent The action of the button being clicked.
+     */
     @FXML
     public void onPlayer1PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player1PlayerPieceSelect.getValue() != null) {
@@ -335,6 +356,11 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Displays the player piece for player 2 after they have confirmed their choice.
+     *
+     * @param actionEvent The action of the button being clicked.
+     */
     @FXML
     public void onPlayer2PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player2PlayerPieceSelect.getValue() != null) {
@@ -378,7 +404,11 @@ public class NewGameController implements Initializable {
         }
     }
 
-
+    /**
+     * Displays the player piece for player 3 after they have confirmed their choice.
+     *
+     * @param actionEvent The action of the button being clicked.
+     */
     @FXML
     public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player3PlayerPieceSelect.getValue() != null) {
@@ -422,6 +452,11 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Displays the player piece for player 4 after they have confirmed their choice.
+     *
+     * @param actionEvent The action of the button being clicked.
+     */
     @FXML
     public void onPlayer4PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player4PlayerPieceSelect.getValue() != null) {
@@ -444,6 +479,13 @@ public class NewGameController implements Initializable {
     }
 
 
+    /**
+     * Populates the choice box with all player pieces available to the player / all purchased player pieces by that player.
+     *
+     * @param playerPieceSelect The choice box that is to contain the player pieces available for selection.
+     * @param loginStatusLabel  The label to show that the player has correctly logged in.
+     * @param username          The username of the player whose owned player pieces are to be displayed.
+     */
     private void populateWithPlayerPieces(ChoiceBox<String> playerPieceSelect, Label loginStatusLabel, String username) {
         try {
             ArrayList<String> purchasedPlayerPieces = PurchaseHandler.getPlayersPurchasedPlayerPieces(username);
@@ -453,6 +495,12 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Loads a new game with the players and player pieces on the new game interface.
+     *
+     * @param e The event of the start game button being clicked.
+     * @throws IOException If the player piece image file path is incorrect.
+     */
     @FXML
     private void onStartGameButtonClicked(ActionEvent e) throws IOException {
         // Make player array...
@@ -487,6 +535,12 @@ public class NewGameController implements Initializable {
         }
     }
 
+    /**
+     * Returns the user to the main menu.
+     *
+     * @param e The action of the back button being clicked.
+     * @throws IOException If the main menu file path is incorrect.
+     */
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
