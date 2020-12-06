@@ -24,7 +24,8 @@ public class PlayerPiece {
 
     /**
      * Instantiates a PlayerPiece giving it an image.
-     * @param imageFilePath The file path for the image which is to be set for the PlayerPiece.
+     *
+     * @param imageFile The file for the image which is to be set for the PlayerPiece.
      */
     public PlayerPiece(File imageFile) throws MalformedURLException {
         previousPlayerPiecePositions = new Stack<>();
@@ -39,6 +40,7 @@ public class PlayerPiece {
 
     /**
      * Returns the image representing PlayerPiece.
+     *
      * @return The image which represents the PlayerPiece graphically.
      */
     public Image getImage() {
@@ -52,7 +54,8 @@ public class PlayerPiece {
 
     /**
      * Sets an image to represent the PlayerPiece.
-     * @param imageFilePath The file path for the image which is to be set for the PlayerPiece.
+     *
+     * @param imageFile The file for the image which is to be set for the PlayerPiece.
      */
     public void setImage(File imageFile) throws MalformedURLException {
         this.imageFile = imageFile;
@@ -61,6 +64,7 @@ public class PlayerPiece {
 
     /**
      * Returns the gameboard position history of the PlayerPiece.
+     *
      * @return All positions on the gameboard which have been previously visited by the PlayerPiece.
      */
     public Stack<Position> getPreviousPlayerPiecePositions() {
@@ -69,6 +73,7 @@ public class PlayerPiece {
 
     /**
      * Adds a new position to the PlayerPiece position history.
+     *
      * @param newPreviousPosition The position to be added to the PlayerPiece position history.
      */
     public void addPreviousPlayerPosition(Position newPreviousPosition) {
@@ -77,6 +82,7 @@ public class PlayerPiece {
 
     /**
      * Returns the position of the gameboard visited by the PlayerPiece prior to the one it is currently in.
+     *
      * @return The previous position of the PlayerPiece.
      */
     public Position getPreviousPlayerPosition() {
