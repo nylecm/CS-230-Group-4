@@ -8,6 +8,7 @@ public abstract class Effect {
 
     /**
      * Initialises the Effect, giving it an effect type.
+     *
      * @param effectType The type of the effect.
      */
     public Effect(EffectType effectType) {
@@ -16,6 +17,7 @@ public abstract class Effect {
 
     /**
      * Returns the effect as a string containing the effect type.
+     *
      * @return The string containing effect data.
      */
     @Override
@@ -27,6 +29,7 @@ public abstract class Effect {
 
     /**
      * Returns the type of the effect.
+     *
      * @return The effect type of the effect.
      */
     public EffectType getEffectType() {
