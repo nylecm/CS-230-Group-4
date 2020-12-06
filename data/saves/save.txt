@@ -1,4 +1,0 @@
-1`oberon_1`5`4`0`
-9`false`true`FIRE`3`1`9`false`true`FIRE`3`1`14`false`false`9`false`false`9`false`true`FIRE`3`1`15`true`true`FIRE`3`1`14`true`false`9`false`false`14`false`true`FIRE`3`1`14`false`true`FIRE`3`1`14`false`false`14`false`false`14`false`false`14`false`false`14`false`false`14`false`false`9`false`false`14`false`false`12`false`false`12`false`false`
-straight`t_shaped`t_shaped`t_shaped`t_shaped`fire`ice`double_move`backtrack`ice`ice`backtrack`t_shaped`corner`
-dd`0`0`0`

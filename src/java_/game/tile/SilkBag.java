@@ -1,8 +1,6 @@
 package java_.game.tile;
 
-import java_.util.generic_data_structures.Queue;
-
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * A silk bag holds tiles of arbitrary type. Tiles can be put into the silk bag,
@@ -12,33 +10,34 @@ import java.util.NoSuchElementException;
  * @author nylecm, paired with ashrw0
  */
 public class SilkBag {
-    private final Queue<TileType> tiles = new Queue<>();
+    private final Queue<TileType> tiles = new LinkedList<>();
 
     /**
      * Instantiates a new Silk bag, filling it with tiles.
      *
-     * @param newTiles the tiles that ought to be added, in random order.
+     * @param newTiles the tiles that ought to be added, they do not need to be
+     *                 in random order.
      */
-    public SilkBag(Tile[] newTiles) {
+    public SilkBag(List<Tile> newTiles) {
+        Collections.shuffle(newTiles);
         for (Tile tile : newTiles) {
-            tiles.enqueue(tile.getType());
+            tiles.add(tile.getType());
         }
     }
 
+    /**
+     * Instantiates a new empty silk bag.
+     */
     public SilkBag() {
     }
 
-   /* *//**
+    /**
      * Puts a tile into the silk bag.
      *
-     * @param t the tile to be put into the silk bag.
-     *//*
-    public void put(Tile t) {
-        tiles.enqueue(t.getType());
-    }*/
-
+     * @param t the tile type of the tile to be put into the silk bag.
+     */
     public void put(TileType t) {
-        tiles.enqueue(t);
+        tiles.add(t);
     }
 
     /**
@@ -51,60 +50,41 @@ public class SilkBag {
         TileType tileType = tiles.peek();
 
         if (FloorTile.FLOOR_TILE_TYPES.contains(tileType)) {
-            tiles.dequeue();
-            return new FloorTile(tileType, false);
+            tiles.remove();
+            return new FloorTile(tileType);
         } else {
-            tiles.dequeue();
+            tiles.remove();
             return new ActionTile(tileType);
         }
     }
 
+    /**
+     * Checks if silk bag is empty.
+     *
+     * @return true if the silk bag is empty.
+     */
     public boolean isEmpty() {
         return tiles.isEmpty();
     }
 
-    @Override
-    public String toString() {
-        return tiles.toString();
+    /**
+     * Gets the size of the silk bag,
+     *
+     * @return the number of tiles in the silk bag.
+     */
+    public int size() {
+        return tiles.size();
     }
 
     /**
-     * The entry point of application, for testing only. todo remove this.
+     * Prints the contents of the silk bag.
      *
-     * @param args the input arguments
+     * @return a string that lists the tiles in the silk bag ordered from the
+     * the next item that will be taken out to the last item that will be taken
+     * out.
      */
-    public static void main(String[] args) {
-        Tile[] ts = {new ActionTile(TileType.FIRE)};
-
-        SilkBag s = new SilkBag(ts);
-
-        s.put(TileType.FIRE);
-        s.put(TileType.ICE);
-        s.put(TileType.BACKTRACK);
-        s.put(TileType.DOUBLE_MOVE);
-        s.put(TileType.STRAIGHT);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-
-        System.out.println(s);
-
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-
-        System.out.println(s);
-
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-
-        System.out.println(s);
-        //s.take();
+    @Override
+    public String toString() {
+        return tiles.toString();
     }
 }

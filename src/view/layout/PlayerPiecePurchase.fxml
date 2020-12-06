@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="360.0" minWidth="420.0" prefHeight="576.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.PlayerPiecePurchaseController">
+    <center>
+        <GridPane BorderPane.alignment="CENTER">
+            <ListView fx:id="preOwnedPieces" minWidth="150.0" prefHeight="494.0" prefWidth="317.0" GridPane.columnIndex="2" />
+            <VBox prefHeight="494.0" prefWidth="157.0" BorderPane.alignment="CENTER">
+                <BorderPane.margin>
+                    <Insets />
+                </BorderPane.margin>
+                <children>
+                    <HBox>
+                        <children>
+                            <VBox spacing="10.0">
+                                <children>
+                                    <TextField fx:id="usernameField" prefWidth="529.0" />
+                                    <PasswordField fx:id="passwordField" />
+                                    <Button mnemonicParsing="false" onAction="#onLoginButtonClicked" text="Login" />
+                                    <Label fx:id="loginStatus" text="Label" />
+                                </children>
+                        <HBox.margin>
+                           <Insets left="15.0" />
+                        </HBox.margin>
+                            </VBox>
+                        </children>
+                        <opaqueInsets>
+                            <Insets />
+                        </opaqueInsets>
+                    </HBox>
+                    <VBox spacing="10.0">
+                        <children>
+                            <Label text="Number of Coins" />
+                            <Label fx:id="coinNumber" text="Label" />
+                            <HBox>
+                                <VBox.margin>
+                                    <Insets />
+                                </VBox.margin>
+                                <children>
+                                    <Label text="Player pieces you can buy:">
+                                        <font>
+                                            <Font size="17.0" />
+                                        </font>
+                                    </Label>
+                                </children>
+                            </HBox>
+                            <ChoiceBox fx:id="affordablePlayerPieces" prefHeight="26.0" prefWidth="191.0" />
+                            <ImageView fx:id="playerPiecePreview" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                            <HBox>
+                                <children>
+                                    <Button mnemonicParsing="false" onAction="#onBuyButtonClicked" text="Buy" />
+                                </children>
+                            </HBox>
+                        </children>
+                        <VBox.margin>
+                            <Insets left="15.0" />
+                        </VBox.margin>
+                    </VBox>
+                    <Label fx:id="purchaseStatus" text="Label" />
+                </children>
+            </VBox>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="300.0" minWidth="100.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" prefWidth="30.0" />
+                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="300.0" minWidth="150.0" prefWidth="200.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="250.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+
+    </center>
+    <top>
+        <HBox prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER_LEFT">
+            <children>
+                <Button mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back" />
+                <Label text="Player Piece Shop" />
+            </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="15.0" left="15.0" top="15.0" />
+         </padding>
+        </HBox>
+    </top>
+    <bottom>
+
+    </bottom>
+    <stylesheets>
+        <URL value="@player_piece_purchase.css" />
+    </stylesheets>
+</BorderPane>

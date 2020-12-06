@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 
 import java.util.Properties;
 
+@Deprecated
 public class PasswordRecoveryController {
 
     @FXML

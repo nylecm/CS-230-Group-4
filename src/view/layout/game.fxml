@@ -1,43 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.GameController">
-   <top>
-      <AnchorPane prefHeight="59.0" prefWidth="780.0" style="-fx-background-color: blue;" BorderPane.alignment="CENTER">
+<GridPane fx:id="mainBox" maxHeight="864.0" maxWidth="1080.0" minHeight="864.0" minWidth="1080.0" prefHeight="864.0" prefWidth="1080.0" stylesheets="@game.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java_.controller.GameController">
+  <rowConstraints>
+    <RowConstraints maxHeight="380.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="574.0" minHeight="10.0" prefHeight="525.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="323.0" minHeight="0.0" prefHeight="299.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <HBox fx:id="playerQueue" alignment="CENTER" prefHeight="70.0" prefWidth="720.0" GridPane.columnIndex="1" />
+      <ScrollPane fx:id="scrollPane" prefHeight="436.0" prefWidth="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <GridPane fx:id="footer" prefHeight="300.0" prefWidth="1218.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="377.0" minWidth="10.0" prefWidth="280.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="504.0" minWidth="10.0" prefWidth="504.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="10.0" prefWidth="281.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints fx:id="footer" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <Label fx:id="positionLabel" layoutX="119.0" layoutY="16.0" prefHeight="28.0" prefWidth="539.0" text="Tile Position:" textFill="WHITE">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Label>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="drawnFloorTile" fitHeight="109.0" fitWidth="131.0" layoutX="84.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="drawingLabel" />
+                  <HBox alignment="BOTTOM_CENTER" layoutX="31.0" layoutY="240.0" prefHeight="32.0" prefWidth="189.0" spacing="90.0">
+                     <children>
+                        <Button fx:id="rotateClockwiseButton" mnemonicParsing="false" onAction="#onRotateClockwiseButtonClicked" prefHeight="30.0" prefWidth="30.0" />
+                        <Button fx:id="rotateAntiClockwiseButton" mnemonicParsing="false" onAction="#onRotateAntiClockwiseButtonClicked" prefHeight="30.0" prefWidth="30.0" />
+                     </children>
+                     <padding>
+                        <Insets left="37.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="284.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Drawn Action Tiles:" textAlignment="CENTER" />
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <HBox fillHeight="false" layoutX="20.0" layoutY="54.0" prefHeight="127.0" prefWidth="300.0">
+                           <cursor>
+                              <Cursor fx:constant="OPEN_HAND" />
+                           </cursor>
+                           <children>
+                              <AnchorPane fx:id="playersActionTilesHolder" prefHeight="127.0" prefWidth="313.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+            <Pane prefHeight="300.0" prefWidth="235.0" GridPane.columnIndex="2">
+               <children>
+                  <Button fx:id="endTurnButton" layoutX="78.0" layoutY="218.0" mnemonicParsing="false" onAction="#onEndTurnButtonClicked" prefHeight="51.0" prefWidth="127.0" />
+               </children>
+            </Pane>
          </children>
-         <padding>
-            <Insets right="15.0" />
-         </padding></AnchorPane>
-   </top>
-   <center>
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" pannable="true" prefHeight="417.0" prefWidth="75.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER" />
-   </center>
-   <bottom>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="drawPlayerPieceButton" mnemonicParsing="false" onAction="#onDrawPlayerPieceButtonClicked" text="Draw Player Piece" />
-            <ImageView fx:id="floorTile" fitHeight="57.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../fullFlat.png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
-   </bottom>
-</BorderPane>
+      </GridPane>
+   </children>
+</GridPane>

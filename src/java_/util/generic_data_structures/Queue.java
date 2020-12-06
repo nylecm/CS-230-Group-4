@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
  * @param <T> the type parameter
  * @author nylecm
  */
+@Deprecated
 public class Queue<T> {
     /**
      * The front of the queue (item present for longest time).
@@ -81,6 +82,13 @@ public class Queue<T> {
         return (head == null) && (tail == null);
     }
 
+    /**
+     * Prints the contents of the queue.
+     *
+     * @return the contents of the queue to string ordered from the first item
+     * in line to the last (newest) item in line.
+     */
+    @Override
     public String toString() {
         String returnString = "{";
 

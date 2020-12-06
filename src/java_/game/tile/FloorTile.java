@@ -1,143 +1,125 @@
 package java_.game.tile;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 
 /**
- * The type Floor tile.
+ * Represents a floor tile, which is a type of Tile that makes up the game board.
+ * A floor tile has paths in upto 4 directions, can be fixed, a winning tile, and
+ * it keeps track of how many times it has been rotated clockwise from its default
+ * position.
  *
- * @author mnabina, nylecm
+ * @author nylecm and bitmask improved by Matej Hlaky
  */
 public class FloorTile extends Tile {
     public final static EnumSet<TileType> FLOOR_TILE_TYPES =
             EnumSet.of(TileType.STRAIGHT, TileType.CORNER, TileType.T_SHAPED, TileType.GOAL);
 
-    private final static int[] GOAL_TILE_ROTATIONS = {15}; // NESW
-    private final static int[] STRAIGHT_TILE_PATHS = {10, 5}; // NS, WE
-    // rotation = 0  1  2  3
-    private final static int[] CORNER_TILE_PATHS = {12, 6, 3, 9}; // NE, SE, SW, NW
-    private final static int[] T_SHAPED_TILE_PATHS = {14, 7, 11, 13}; // NES, ESW, SWN, WNE
+    public static final int NORTH_PATH_MASK = 0x8; //1000
+    public static final int EAST_PATH_MASK = 0x4; //0100
+    public static final int SOUTH_PATH_MASK = 0x2; //0010
+    public static final int WEST_PATH_MASK = 0x1; //0001
+
+    //private static final String TILE_TYPE_INVALID_MSG = "Invalid tile type entered.";
 
     private final boolean isFixed;
-    private int paths;
-    private int[] availablePaths;
-    private final boolean isGoalTile;
+    private byte pathsBits;
+    private boolean isGoalTile;
+    private int rotation;
 
     /**
-     * Instantiates a new Floor tile.
+     * Instantiates a new Floor tile, of a set type.
      *
-     * @param type    the type name
-     * @param isFixed the is fixed
+     * @param type the TileType of the new floor tile (eg CORNER).
      */
-    public FloorTile(TileType type, boolean isFixed) throws IllegalArgumentException {
+    public FloorTile(TileType type) throws IllegalArgumentException {
         super(type, FLOOR_TILE_TYPES);
-
-        this.isFixed = isFixed;
+        isFixed = false;
 
         switch (type) {
             case STRAIGHT:
-                availablePaths = STRAIGHT_TILE_PATHS;
-                paths = availablePaths[0];
                 isGoalTile = false;
+                pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
                 break;
             case CORNER:
-                availablePaths = CORNER_TILE_PATHS;
-                paths = availablePaths[0];
                 isGoalTile = false;
+                pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
                 break;
             case T_SHAPED:
-                availablePaths = T_SHAPED_TILE_PATHS;
-                paths = availablePaths[0];
                 isGoalTile = false;
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
                 break;
             case GOAL:
                 isGoalTile = true;
-                availablePaths = GOAL_TILE_ROTATIONS;
-                paths = availablePaths[0];
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
                 break;
-            default:
-                throw new IllegalArgumentException("Invalid tile type entered.");
-        }
-    }
-
-    // Creates a pre-rotated tile (for fixed tiles)
-    public FloorTile(TileType type, boolean isFixed, boolean isGoalTile, int rotationAmount) { //todo consider restricting this method for fixed tiles only...
-        super(type, FLOOR_TILE_TYPES);
-
-        this.isFixed = isFixed;
-        this.isGoalTile = isGoalTile;
-
-        switch (type) {
-            case STRAIGHT:
-                availablePaths = STRAIGHT_TILE_PATHS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
-                break;
-            case CORNER:
-                availablePaths = CORNER_TILE_PATHS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
-                break;
-            case T_SHAPED:
-                availablePaths = T_SHAPED_TILE_PATHS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
-                break;
-            case GOAL:
-                availablePaths = GOAL_TILE_ROTATIONS;
-                paths = availablePaths[rotationAmount % availablePaths.length];
-                break;
-        }
-    }
-
-    public void rotateClockwise() {
-        int currentPathIndex = -1;
-
-        for (int i = 0; i < availablePaths.length; i++) {
-            if (availablePaths[i] == paths) {
-                currentPathIndex = i;
-            }
-        }
-
-        if (currentPathIndex == availablePaths.length - 1) {
-            paths = availablePaths[0];
-        } else {
-            paths = availablePaths[currentPathIndex + 1];
-        }
-    }
-
-    public void rotateClockwise(int rotationAmount) {
-        for (int i = 0; i < rotationAmount; i++) {
-            rotateClockwise();
-        }
-    }
-
-    public void rotateAntiClockwise() {
-        int currentPathIndex = -1;
-
-        for (int i = 0; i < availablePaths.length; i++) {
-            if (availablePaths[i] == paths) {
-                currentPathIndex = i;
-            }
-        }
-
-        if (currentPathIndex == 0) {
-            paths = availablePaths[availablePaths.length - 1];
-        } else {
-            paths = availablePaths[currentPathIndex - 1];
         }
     }
 
     /**
-     * Gets paths.
+     * Instantiates a pre-rotated floor tile that can be fixed or not fixed.
      *
-     * @return the paths
+     * @param type           the TileType of the new floor tile (eg CORNER).
+     * @param isFixed        true if the tile the new tile ought to be fixed.
+     * @param rotationAmount number of clockwise rotations from default value
+     *                       that ought to be performed on the tile.
      */
-    public int getPaths() {
-        return paths;
+    public FloorTile(TileType type, boolean isFixed, int rotationAmount) {
+        super(type, FLOOR_TILE_TYPES);
+
+        this.isFixed = isFixed;
+
+        switch (type) {
+            case STRAIGHT:
+                isGoalTile = false;
+                pathsBits = WEST_PATH_MASK + EAST_PATH_MASK;
+                break;
+            case CORNER:
+                isGoalTile = false;
+                pathsBits = NORTH_PATH_MASK + WEST_PATH_MASK;
+                break;
+            case T_SHAPED:
+                isGoalTile = false;
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + EAST_PATH_MASK;
+                break;
+            case GOAL:
+                isGoalTile = true;
+                pathsBits = WEST_PATH_MASK + SOUTH_PATH_MASK + NORTH_PATH_MASK + EAST_PATH_MASK;
+                break;
+        }
+        rotate(rotationAmount);
+    }
+
+    /**
+     * Rotates a tile's paths clockwise.
+     *
+     * @param rotationAmount the amount of times the tile ought to be rotated clockwise.
+     */
+    public void rotate(int rotationAmount) {
+        for (int i = 0; i < rotationAmount; i++) {
+            pathsBits = (byte) (pathsBits << 3);
+            pathsBits = (byte) (((pathsBits & 0xf0) >> 4) + (pathsBits & 0xf));
+        }
+        rotation = rotationAmount % 4;
+    }
+
+    /**
+     * Gets the tile's rotation.
+     *
+     * @return number of times the tile has been rotated clockwise from the
+     * default position.
+     */
+    public int getRotation() {
+        return rotation;
+    }
+
+    public byte getPathsBits() {
+        return pathsBits;
     }
 
     /**
      * Is fixed boolean.
      *
-     * @return the boolean
+     * @return true if the floor tile is fixed.
      */
     public boolean isFixed() {
         return isFixed;
@@ -146,62 +128,25 @@ public class FloorTile extends Tile {
     /**
      * Is goal tile boolean.
      *
-     * @return the boolean
+     * @return true if the tile is a goal tile.
      */
     public boolean isGoalTile() {
         return isGoalTile;
     }
 
+    /**
+     * Prints a string describing the tile.
+     *
+     * @return formatted string describing the tile.
+     */
     @Override
     public String toString() {
-        return "game.tile.FloorTile{" +
+        return "FloorTile{" +
                 "isFixed=" + isFixed +
-                ", paths=" + paths +
-                ", availablePaths=" + Arrays.toString(availablePaths) +
+                ", pathsBits=" + pathsBits +
                 ", isGoalTile=" + isGoalTile +
+                ", rotation=" + rotation +
+                ", type=" + type +
                 '}';
-    }
-
-    public static void main(String[] args) {
-        FloorTile t1 = new FloorTile(TileType.STRAIGHT, false);
-        System.out.println(t1);
-        t1.rotateClockwise();
-        System.out.println(t1);
-        t1.rotateAntiClockwise();
-        System.out.println(t1);
-
-        System.out.println();
-
-        FloorTile t2 = new FloorTile(TileType.T_SHAPED, false);
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-        t2.rotateClockwise();
-        System.out.println(t2);
-
-        System.out.println();
-
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-        t2.rotateAntiClockwise();
-        System.out.println(t2);
-
-        System.out.println();
-
-        FloorTile t3 = new FloorTile(TileType.GOAL, false);
-        System.out.println(t3);
-        t3.rotateClockwise();
-        System.out.println(t3);
-        t3.rotateAntiClockwise();
-        System.out.println(t3);
     }
 }

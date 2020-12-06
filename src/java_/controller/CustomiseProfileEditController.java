@@ -15,7 +15,11 @@ import java.io.PrintWriter;
  * Class that controls the functions of CustomiseProfileEdit.fxml
  * @author Waleed Ashraf
  */
+@Deprecated
 public class CustomiseProfileEditController {
+
+    private static final String USERS_FILE_PATH = "users.txt";
+    private static final String CUSTOMISE_PROFILE_PATH = "../../view/layout/CustomiseProfile.fxml";
 
     @FXML private VBox rootPane;
     @FXML private TextField nameField;
@@ -32,7 +36,7 @@ public class CustomiseProfileEditController {
         String email = emailField.getText();
         int coins = Integer.parseInt(coinsField.getText());
 
-        File file = new File("users.txt");
+        File file = new File(USERS_FILE_PATH);
         FileWriter fw = new FileWriter(file);
         PrintWriter pw = new PrintWriter(fw);
 
@@ -42,7 +46,7 @@ public class CustomiseProfileEditController {
 
         pw.close();
 
-        VBox pane = (VBox) FXMLLoader.load(getClass().getResource("../../view/layout/CustomiseProfile.fxml")); //loads new pane(VBox in this case) onto current scene
+        VBox pane = (VBox) FXMLLoader.load(getClass().getResource(CUSTOMISE_PROFILE_PATH)); //loads new pane(VBox in this case) onto current scene
         rootPane.getChildren().setAll(pane);
     }
 }

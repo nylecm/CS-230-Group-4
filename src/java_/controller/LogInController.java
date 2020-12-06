@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+@Deprecated
 public class LogInController {
 
     @FXML
@@ -38,11 +39,11 @@ public class LogInController {
         Pane register = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/register.fxml"));
         currentStage.setScene(new Scene(register));
     }
-
+/*
     @FXML
     private void onRegisterButtonScrolled(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         Pane register = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/register.fxml"));
         currentStage.setScene(new Scene(register));
-    }
+    }*/
 }

@@ -3,12 +3,25 @@ package java_.game.player;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Table {
-    private final SimpleStringProperty rName;
+/**
+ * Models the data which is presented by the leaderboard table. Has columns for
+ * username, and their number of wins and losses.
+ *
+ * @author Waleed Ashraf
+ */
+public class LeaderboardTable {
+    private final SimpleStringProperty rName; // Rows of the table
     private final SimpleIntegerProperty rWins;
     private final SimpleIntegerProperty rLosses;
 
-    public Table(String name, int wins, int losses) {
+    /**
+     * Instantiates a new leaderboard table .
+     *
+     * @param name
+     * @param wins
+     * @param losses
+     */
+    public LeaderboardTable(String name, int wins, int losses) {
         this.rName = new SimpleStringProperty(name);
         this.rWins = new SimpleIntegerProperty(wins);
         this.rLosses = new SimpleIntegerProperty(losses);
