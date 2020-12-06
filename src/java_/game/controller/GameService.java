@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Game service is responsible for loading new & saved games from file, saving
@@ -193,7 +194,8 @@ public class GameService {
     }
 
     /**
-     * Returns the array of FloorTiles used to fill the GameBoard of the GameService.
+     * Returns the array of randomly rotated FloorTiles used to fill the
+     * GameBoard of the GameService.
      *
      * @param nRows       Number of rows in GameBoard
      * @param nCols       Number of columns in GameBoard.
@@ -206,7 +208,10 @@ public class GameService {
         FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles];
 
         for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
-            floorTilesForGameBoard[i] = floorTiles.get(0);
+            int rotationAmount = ThreadLocalRandom.current().nextInt(0, 4);
+            FloorTile newFloorTile = floorTiles.get(0);
+            newFloorTile.rotate(rotationAmount);
+            floorTilesForGameBoard[i] = newFloorTile;
             floorTiles.remove(0);
         }
         return floorTilesForGameBoard;
