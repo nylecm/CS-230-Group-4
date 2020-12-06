@@ -180,6 +180,10 @@ public class PlayerPiecePurchaseController implements Initializable {
         });
     }
 
+    /**
+     * Updates the player pieces that are available for purchase by the player with their new balance.
+     * @throws FileNotFoundException if the player piece price file cannot be found.
+     */
     private void updateAffordablePlayerPieces() throws FileNotFoundException {
         affordablePlayerPieces.getItems().clear();
         Scanner in = new Scanner(new File(PLAYER_PIECE_PRICE_DIRECTORY));
@@ -207,6 +211,11 @@ public class PlayerPiecePurchaseController implements Initializable {
     }
 
 
+    /**
+     * Returns the username and coin balance for that user as specified in the username field.
+     * @return The target username and coin balance.
+     * @throws FileNotFoundException If the user coin file cannot be found.
+     */
     private boolean findUserAndGetUserCoinAmount() throws FileNotFoundException {
         affordablePlayerPieces.getItems().clear();
         String targetUsername = usernameField.getText();
