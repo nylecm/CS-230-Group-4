@@ -68,8 +68,8 @@ public class PlayerPiecePurchaseController implements Initializable {
      * displays player pieces the user, and displays player pieces owned by given
      * player. If log in attempt is unsuccessful, notifies user.
      *
-     * @param e the e
-     * @throws IOException the io exception
+     * @param e The action of the login button being clicked.
+     * @throws IOException If the user coin file path is incorrect.
      */
     @FXML
     private void onLoginButtonClicked(ActionEvent e) throws IOException {
