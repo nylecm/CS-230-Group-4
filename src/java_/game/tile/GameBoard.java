@@ -224,11 +224,11 @@ public class GameBoard {
 
     /**
      * Inserts a new tile to the edge of the game board to be slid.
-     *
+     * <p>
      * Usage: for left to right slide colNum -1
-     *        for right to left slide colNum nCols
-     *        for top to bottom slide rowNum -1
-     *        for bottom to top slide rowNum nRows
+     * for right to left slide colNum nCols
+     * for top to bottom slide rowNum -1
+     * for bottom to top slide rowNum nRows
      *
      * @param colNum   the column num where the new tile is being inserted.
      * @param rowNum   the row num where the new tile is being inserted.
@@ -276,7 +276,7 @@ public class GameBoard {
      * Shifts player pieces left to right, or to the start of the row if the
      * player piece is at the end prior to the insertion.
      *
-     * @param rowNum the row num
+     * @param rowNum the row num where the player pieces are bing shifted.
      */
     private void shiftPlayerPiecesLeftToRight(int rowNum) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
@@ -289,10 +289,11 @@ public class GameBoard {
     }
 
     /**
-     * Next position left to right position.
+     * Gets the next position of a player piece that is being shifted from left
+     * to right.
      *
-     * @param pos the pos
-     * @return the position
+     * @param pos the pos of the player piece.
+     * @return the new position of the player piece.
      */
     private Position nextPositionLeftToRight(Position pos) {
         return (pos.getColNum() == nCols - 1
@@ -301,12 +302,13 @@ public class GameBoard {
     }
 
     /**
-     * Shift tiles left to right.
+     * Shift tiles right to left, placing leftmost tile into the silk bag, and
+     * shifting all effects.
      *
-     * @param colNum   the col num
-     * @param rowNum   the row num
-     * @param tile     the tile
-     * @param rotation the rotation
+     * @param colNum   the column num where the new tile is being inserted.
+     * @param rowNum   the row num where the new tile is being inserted.
+     * @param tile     the tile that is being inserted.
+     * @param rotation the rotation of the tile that is being inserted.
      */
     private void shiftTilesLeftToRight(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
@@ -322,12 +324,12 @@ public class GameBoard {
     }
 
     /**
-     * Shift right to left.
+     * Initiates a right to left shift of both player pieces and tiles.
      *
-     * @param colNum   the col num
-     * @param rowNum   the row num
-     * @param tile     the tile
-     * @param rotation the rotation
+     * @param colNum   the column num where the new tile is being inserted.
+     * @param rowNum   the row num where the new tile is being inserted.
+     * @param tile     the tile that is being inserted.
+     * @param rotation the rotation of the tile that is being inserted.
      */
     private void shiftRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
         shiftTilesRightToLeft(colNum, rowNum, tile, rotation);
@@ -335,9 +337,10 @@ public class GameBoard {
     }
 
     /**
-     * Shift player pieces right to left.
+     * Shifts player pieces right to left, or to the end of the row if the
+     * player piece is at the end prior to the insertion.
      *
-     * @param rowNum the row num
+     * @param rowNum the row num where the player pieces are bing shifted.
      */
     private void shiftPlayerPiecesRightToLeft(int rowNum) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
@@ -350,10 +353,11 @@ public class GameBoard {
     }
 
     /**
-     * Next position right to left position.
+     * Gets the next position of a player piece that is being shifted from left
+     * to right.
      *
-     * @param pos the pos
-     * @return the position
+     * @param pos the pos of the player piece.
+     * @return the new position of the player piece.
      */
     private Position nextPositionRightToLeft(Position pos) {
         return (pos.getColNum() == 0
@@ -362,12 +366,13 @@ public class GameBoard {
     }
 
     /**
-     * Shift tiles right to left.
+     * Shift tiles right to left, placing rightmost tile into the silk bag, and
+     * shifting all effects.
      *
-     * @param colNum   the col num
-     * @param rowNum   the row num
-     * @param tile     the tile
-     * @param rotation the rotation
+     * @param colNum   the column num where the new tile is being inserted.
+     * @param rowNum   the row num where the new tile is being inserted.
+     * @param tile     the tile that is being inserted.
+     * @param rotation the rotation of the tile that is being inserted.
      */
     private void shiftTilesRightToLeft(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
@@ -382,12 +387,12 @@ public class GameBoard {
     }
 
     /**
-     * Shift top to bottom.
+     * Initiates a top to bottom shift of both player pieces and tiles.
      *
-     * @param colNum   the col num
-     * @param rowNum   the row num
-     * @param tile     the tile
-     * @param rotation the rotation
+     * @param colNum   the column num where the new tile is being inserted.
+     * @param rowNum   the row num where the new tile is being inserted.
+     * @param tile     the tile that is being inserted.
+     * @param rotation the rotation of the tile that is being inserted.
      */
     private void shiftTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
         shiftTilesTopToBottom(colNum, rowNum, tile, rotation);
@@ -395,9 +400,10 @@ public class GameBoard {
     }
 
     /**
-     * Shift player pieces top to bottom.
+     * Shifts player pieces top to bottom, or to the top of the column if the
+     * player piece is at the bottom prior to the insertion.
      *
-     * @param colNum the col num
+     * @param colNum the column num where the player pieces are bing shifted.
      */
     private void shiftPlayerPiecesTopToBottom(int colNum) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
@@ -410,10 +416,11 @@ public class GameBoard {
     }
 
     /**
-     * Next position top to bottom position.
+     * Gets the next position of a player piece that is being shifted from top
+     * to bottom.
      *
-     * @param pos the pos
-     * @return the position
+     * @param pos the pos of the player piece.
+     * @return the new position of the player piece.
      */
     private Position nextPositionTopToBottom(Position pos) {
         return (pos.getRowNum() == nRows - 1
@@ -422,12 +429,13 @@ public class GameBoard {
     }
 
     /**
-     * Shift tiles top to bottom.
+     * Shift tiles top to bottom, placing lowest tile into the silk bag, and
+     * shifting all effects.
      *
-     * @param colNum   the col num
-     * @param rowNum   the row num
-     * @param tile     the tile
-     * @param rotation the rotation
+     * @param colNum   the column num where the new tile is being inserted.
+     * @param rowNum   the row num where the new tile is being inserted.
+     * @param tile     the tile that is being inserted.
+     * @param rotation the rotation of the tile that is being inserted.
      */
     private void shiftTilesTopToBottom(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
@@ -442,23 +450,23 @@ public class GameBoard {
     }
 
     /**
-     * Shift bottom to top.
+     * Initiates a bottom to top shift of both player pieces and tiles.
      *
-     * @param colNum   the col num
-     * @param rowNum   the row num
-     * @param tile     the tile
-     * @param rotation the rotation
+     * @param colNum   the column num where the new tile is being inserted.
+     * @param rowNum   the row num where the new tile is being inserted.
+     * @param tile     the tile that is being inserted.
+     * @param rotation the rotation of the tile that is being inserted.
      */
     private void shiftBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
-        //Shift Player Piece:
         shiftTilesBottomToTop(colNum, rowNum, tile, rotation);
         shiftPlayerPiecesBottomToTop(colNum);
     }
 
     /**
-     * Shift player pieces bottom to top.
+     * Shifts player pieces bottom to top, or to the bottom of the column if the
+     * player piece is at the top prior to the insertion.
      *
-     * @param colNum the col num
+     * @param colNum the column num where the player pieces are bing shifted.
      */
     private void shiftPlayerPiecesBottomToTop(int colNum) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
@@ -471,10 +479,11 @@ public class GameBoard {
     }
 
     /**
-     * Next position bottom to top position.
+     * Gets the next position of a player piece that is being shifted from bottom
+     * to top.
      *
-     * @param pos the pos
-     * @return the position
+     * @param pos the pos of the player piece.
+     * @return the new position of the player piece.
      */
     private Position nextPositionBottomToTop(Position pos) {
         return (pos.getRowNum() == 0
@@ -483,12 +492,13 @@ public class GameBoard {
     }
 
     /**
-     * Shift tiles bottom to top.
+     * Shift tiles bottom to top, placing the highest tile into the silk bag, and
+     * shifting all effects.
      *
-     * @param colNum   the col num
-     * @param rowNum   the row num
-     * @param tile     the tile
-     * @param rotation the rotation
+     * @param colNum   the column num where the new tile is being inserted.
+     * @param rowNum   the row num where the new tile is being inserted.
+     * @param tile     the tile that is being inserted.
+     * @param rotation the rotation of the tile that is being inserted.
      */
     private void shiftTilesBottomToTop(int colNum, int rowNum, FloorTile tile, int rotation) {
         tile.rotate(rotation);
@@ -503,19 +513,20 @@ public class GameBoard {
     }
 
     /**
-     * Is row fixed boolean.
+     * Checks if a row is fixed.
      *
-     * @param rowNum the row num
-     * @return the boolean
+     * @param row the index of the row to check from 0 or number of rows - 1,
+     *            where 0 is the top row.
+     * @return true if the row is fixed.
      */
-    public boolean isRowFixed(int rowNum) {
-        if (rowNum == -1) {
-            rowNum += 1;
-        } else if (rowNum == nRows) {
-            rowNum -= 1;
+    public boolean isRowFixed(int row) {
+        if (row == -1) {
+            row += 1;
+        } else if (row == nRows) {
+            row -= 1;
         }
         for (int x = 0; x < nCols; x++) {
-            if (isTileFixed(rowNum, x)) { //Check for frozen etc.
+            if (isTileFixed(row, x)) { //Check for frozen etc.
                 return true;
             }
         }
@@ -523,19 +534,20 @@ public class GameBoard {
     }
 
     /**
-     * Is column fixed boolean.
+     * Checks if a column is fixed.
      *
-     * @param colNum the col num
-     * @return the boolean
+     * @param col the index of the column to check from 0 or number of rows - 1,
+     *            the 0 is the leftmost column.
+     * @return true if the column is fixed.
      */
-    public boolean isColumnFixed(int colNum) {
-        if (colNum == -1) {
-            colNum += 1;
-        } else if (colNum == nCols) {
-            colNum -= 1;
+    public boolean isColumnFixed(int col) {
+        if (col == -1) {
+            col += 1;
+        } else if (col == nCols) {
+            col -= 1;
         }
         for (int y = 0; y < nRows; y++) {
-            if (isTileFixed(y, colNum)) {
+            if (isTileFixed(y, col)) {
                 return true;
             }
         }
@@ -543,28 +555,28 @@ public class GameBoard {
     }
 
     /**
-     * Is tile fixed boolean.
+     * Checks if a tile at given position is fixed.
      *
-     * @param row the row
-     * @param col the col
-     * @return the boolean
+     * @param row the index of the row to check from 0 or number of rows - 1,
+     *            where 0 is the top row.
+     * @param col the index of the column to check from 0 or number of rows - 1,
+     *            the 0 is the leftmost column.     * @return the boolean
+     * @return true if the tile at the given position is fixed.
      */
     private boolean isTileFixed(int row, int col) {
         if (board[row][col].isFixed()) {
             return true;
-        } else if (activeEffects.get(new Position(row, col)) != null &&
-                activeEffects.get(new Position(row, col)).getEffectType() == EffectType.ICE) {
-            return true;
-        }
-        return false;
+        } else return activeEffects.get(new Position(row, col)) != null &&
+                activeEffects.get(new Position(row, col)).getEffectType() == EffectType.ICE;
     }
 
     /**
-     * Apply effect.
+     * Applies an area effect to a given position.
      *
-     * @param effect the effect
-     * @param pos    the pos
-     * @throws IllegalStateException the illegal state exception
+     * @param effect the area effect to apply.
+     * @param pos    the position to the apply the area effect at.
+     * @throws IllegalStateException when user attempts to light a player piece
+     *                               on fire.
      */
     public void applyEffect(AreaEffect effect, Position pos) throws IllegalStateException {
         int effectRadius = effect.getRadius();
@@ -592,14 +604,13 @@ public class GameBoard {
     }
 
     /**
-     * Backtrack position.
+     * Backtracks a player, undoing a set amount of their moves.
      *
-     * @param playerNum                the player num
-     * @param targetNumberOfBacktracks the target number of backtracks
-     * @return the position
-     * @throws IllegalStateException the illegal state exception
+     * @param playerNum                the the number of a player where 0 is first player.
+     * @param targetNumberOfBacktracks the target number of backtracks (moves to be undone).
+     * @return new position of the player, or null if back track is not possible.
      */
-    public Position backtrack(int playerNum, int targetNumberOfBacktracks) throws IllegalStateException {
+    public Position backtrack(int playerNum, int targetNumberOfBacktracks) {
         if (isBacktrackPossible(playerNum) && targetNumberOfBacktracks == 1) {
             Position previousPosition = playerPieces[playerNum].getPreviousPlayerPosition();
             playerPiecePositions[playerNum] = previousPosition;
@@ -616,10 +627,10 @@ public class GameBoard {
     }
 
     /**
-     * Is backtrack possible boolean.
+     * Checks if back track is impossible (previous tile is on fire).
      *
-     * @param playerNum the player num
-     * @return the boolean
+     * @param playerNum the player number where 0 is the first player.
+     * @return true if a backtrack is possible (ie. the player's previous tile is on fire.)
      */
     public boolean isBacktrackPossible(int playerNum) {
         return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) == null)
@@ -628,7 +639,8 @@ public class GameBoard {
     }
 
     /**
-     * Refresh effects.
+     * Refreshes the duration of all active area effects, reducing it by 1, or
+     * removing it when it's due to be removed.
      */
     public void refreshEffects() {//todo check if broken
         for (AreaEffect effect : activeEffects.values()) {
@@ -641,41 +653,21 @@ public class GameBoard {
     }
 
     /**
-     * Gets effect at.
+     * Gets the area effect at a given position.
      *
-     * @param pos the pos
-     * @return the effect at
+     * @param pos the position where to get the area effect at.
+     * @return the area effect at the given position.
      */
     public AreaEffect getEffectAt(Position pos) {
         return activeEffects.get(pos);
     }
 
     /**
-     * To string string.
+     * Gets player piece position of set player.
      *
-     * @return the string
-     */
-    public String toString() {
-        String boardString = "";
-        for (int j = 0; j < nRows; j++) {
-            String row = "";
-            for (int i = 0; i < nCols; i++) {
-                if (board[j][i] == null) {
-                    row = row + "Empty ";
-                } else {
-                    row = row + board[j][i].getType() + " ";
-                }
-            }
-            boardString = boardString + row + "\n";
-        }
-        return boardString;
-    }
-
-    /**
-     * Gets player piece position.
-     *
-     * @param playerNum the player num
-     * @return the player piece position
+     * @param playerNum the player num where 0 is the first player, of whose
+     *                  player piece to return.
+     * @return position of the given player's player piece.
      */
     public Position getPlayerPiecePosition(int playerNum) {
         return playerPiecePositions[playerNum];
@@ -697,25 +689,25 @@ public class GameBoard {
     }
 
     /**
-     * Gets rows.
+     * Gets the number of rows (height).
      *
-     * @return the rows
+     * @return the number of rows (height)
      */
     public int getnRows() {
         return nRows;
     }
 
     /**
-     * Gets cols.
+     * Gets the number of columns (height).
      *
-     * @return the cols
+     * @return the number of columns (height)
      */
     public int getnCols() {
         return nCols;
     }
 
     /**
-     * Gets name.
+     * Gets the name of the game.
      *
      * @return the name
      */
@@ -724,51 +716,74 @@ public class GameBoard {
     }
 
     /**
-     * Gets player piece.
+     * Gets ith player piece.
      *
-     * @param i the
-     * @return the player piece
+     * @param playerNum the number of player player to get, where 0 corresponds
+     *                  to the first player.
+     * @return the player piece of that player.
      */
-    public PlayerPiece getPlayerPiece(int i) {
-        return playerPieces[i];
+    public PlayerPiece getPlayerPiece(int playerNum) {
+        return playerPieces[playerNum];
     }
 
     /**
-     * Gets num of player pieces.
+     * Gets number of player pieces in the game, which is the number of players.
      *
-     * @return the num of player pieces
+     * @return the number of player pieces
      */
     public int getNumOfPlayerPieces() {
         return playerPiecePositions.length;
     }
 
     /**
-     * Gets positions with active effects.
+     * Gets all positions with active effects.
      *
-     * @return the positions with active effects
+     * @return a set of positions with active effects
      */
     public Set<Position> getPositionsWithActiveEffects() {
         return activeEffects.keySet();
     }
 
     /**
-     * Gets tile at.
+     * Gets the tile at a given position.
      *
-     * @param row the row
-     * @param col the col
-     * @return the tile at
+     * @param row the row of the tile to be returned.
+     * @param col the column of the tile to be returned.
+     * @return the tile at the given position.
      */
     public FloorTile getTileAt(int row, int col) {
         return board[row][col];
     }
 
     /**
-     * Gets active effects.
+     * DO NOT USE!
+     * Gets all active effects. FIXME REMOVE
      *
      * @return the active effects
      */
     @Deprecated
     public HashMap<Position, AreaEffect> getActiveEffects() {
         return activeEffects;
+    }
+
+    /**
+     * Returns a string displaying the grid of tiles.
+     *
+     * @return the types of all tiles on the grid displayed row-by-row.
+     */
+    public String toString() {
+        String boardString = "";
+        for (int j = 0; j < nRows; j++) {
+            String row = "";
+            for (int i = 0; i < nCols; i++) {
+                if (board[j][i] == null) {
+                    row = row + "Empty ";
+                } else {
+                    row = row + board[j][i].getType() + " ";
+                }
+            }
+            boardString = boardString + row + "\n";
+        }
+        return boardString;
     }
 }
