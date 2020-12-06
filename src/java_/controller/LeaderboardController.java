@@ -162,10 +162,12 @@ public class LeaderboardController implements Initializable {
      */
     @FXML
     private void onViewStatsForGameBoardButton(ActionEvent e) {
-        try {
-            readStatFile(new File(String.valueOf(gameBoardSelect.getValue())));
-        } catch (FileNotFoundException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
+        if (gameBoardSelect.getValue() != null) {
+            try {
+                readStatFile(new File(String.valueOf(gameBoardSelect.getValue())));
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
         }
     }
 
@@ -185,46 +187,46 @@ public class LeaderboardController implements Initializable {
         File folder = new File(USER_STATS_FOLDER_DIRECTORY);
         statFiles.addAll(listOfFiles(folder));
 
+        // Loops
         for (int i = 0; i < statFiles.size(); i++) {
             String dirStats = USER_STATS_FOLDER_DIRECTORY + "/" + statFiles.get(i);
             File file = new File(dirStats);
-            try {
-                Scanner in = new Scanner(file);
-                in.useDelimiter("`");
-                int a = 0;
-                while (in.hasNextLine()) {
-                    String newName = in.next();
-                    int newWinCount = in.nextInt();
-                    int newLossCount = in.nextInt();
 
-                    try {
-                        playerNames.get(a);
-                    } catch (IndexOutOfBoundsException c) {
-                        playerNames.add(newName);
-                    }
+            Scanner in = new Scanner(file);
+            in.useDelimiter("`");
+            int a = 0;
+            while (in.hasNext()) {
+                String newName = in.next();
 
-                    try {
-                        int tempWins = playerWins.get(a);
-                        tempWins = tempWins + newWinCount;
-                        playerWins.set(a, tempWins);
-                    } catch (IndexOutOfBoundsException c) {
-                        playerWins.add(newWinCount);
-                    }
+                String newWinCountStr = in.next();
+                int newWinCount = Integer.parseInt(newWinCountStr);
+                String newLossCountStr = in.next();
+                int newLossCount = Integer.parseInt(newLossCountStr);
 
-                    try {
-                        int tempLosses = playerLosses.get(a);
-                        tempLosses = tempLosses + newLossCount;
-                        playerLosses.set(a, tempLosses);
-                    } catch (IndexOutOfBoundsException c) {
-                        playerLosses.add(newLossCount);
-                    }
-                    a++;
+                try {
+                    playerNames.get(a);
+                } catch (IndexOutOfBoundsException c) {
+                    playerNames.add(newName);
                 }
-                in.close();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
 
+                try {
+                    int tempWins = playerWins.get(a);
+                    tempWins = tempWins + newWinCount;
+                    playerWins.set(a, tempWins);
+                } catch (IndexOutOfBoundsException c) {
+                    playerWins.add(newWinCount);
+                }
+
+                try {
+                    int tempLosses = playerLosses.get(a);
+                    tempLosses = tempLosses + newLossCount;
+                    playerLosses.set(a, tempLosses);
+                } catch (IndexOutOfBoundsException c) {
+                    playerLosses.add(newLossCount);
+                }
+                a++;
+            }
+            in.close();
         }
 
         playerStats.clear();
