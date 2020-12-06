@@ -142,7 +142,7 @@ public class GameBoard {
      * @return the boolean
      */
     public boolean validateMove(int sourceCol, int sourceRow, int targetCol, int targetRow, int sourceBitmask, int oppositeBitmask) {
-        if (activeEffects.containsKey(new Position(targetRow, targetCol)) && activeEffects.get(new Position(targetRow, targetCol)).getEffectType() == EffectType.ICE) {
+        if (activeEffects.containsKey(new Position(targetRow, targetCol)) && activeEffects.get(new Position(targetRow, targetCol)).getEffectType() == EffectType.FIRE) {
             return false;
         }
         FloorTile sourceFloorTile = board[sourceRow][sourceCol];
@@ -648,7 +648,8 @@ public class GameBoard {
         return (getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) == null)
                 || ((getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()) != null)
                 && (!getEffectAt(playerPieces[playerNum].getPreviousPlayerPiecePositions().peek()).getEffectType().equals(EffectType.FIRE)
-                && !GameService.getInstance().getPlayerService().containsEffect(GameService.getInstance().getPlayerService().getPlayer(playerNum), EffectType.BACKTRACK)));
+                && !GameService.getInstance().getPlayerService().containsEffect(GameService.getInstance()
+                    .getPlayerService().getPlayer(playerNum), EffectType.BACKTRACK)));
     }
 
     /**
@@ -697,7 +698,7 @@ public class GameBoard {
      */
     public int getPlayerPieceIndexByPosition(Position position) {
         for (int i = 0; i < playerPiecePositions.length; i++) {
-            if (playerPiecePositions[i].equals(position)) {
+            if (playerPiecePositions[i] == position) {
                 return i;
             }
         }
