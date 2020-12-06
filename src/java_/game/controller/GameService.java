@@ -14,7 +14,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Game service is responsible for loading new & saved games from file, saving
+ * games, and handling turns. It also has references to the player service,
+ * the game board, and silk bag, and storing the turn count.
+ *
+ * @author nylecm, apapted by Matej Haldky
+ */
 public class GameService {
     public static final String PLAYER_PIECE_PATH_START = "src\\";
     private static GameService instance = null;
@@ -39,6 +47,9 @@ public class GameService {
 
     private static final int MAX_NUM_OF_SAVE_FILES_WITH_SAME_NAME = 256;
 
+    /**
+     * Initialises GameService, remaking the playerService belonging to it.
+     */
     private GameService() {
         playerService = PlayerService.getInstance().remake();
     }
@@ -78,6 +89,16 @@ public class GameService {
         playerService.setGameService(this);
     }
 
+    /**
+     * Reads and returns a specified GameBoard with PlayerPieces in their starting positions.
+     *
+     * @param boardName    The name of the board to be returned
+     * @param nPlayers     The number of player pieces on the board.
+     * @param in           The GameBoard file scanner
+     * @param playerPieces The player pieces on the board.
+     * @return The specified GameBoard.
+     * @throws IllegalArgumentException
+     */
     private GameBoard readSelectGameBoard(String boardName, int nPlayers, Scanner in,
                                           PlayerPiece[] playerPieces) throws IllegalArgumentException {
         while (in.hasNextLine()) {
@@ -112,11 +133,22 @@ public class GameService {
 
                 return new GameBoard(playerPieces, playerPiecePositions, fixedTiles, fixedTilePositions,
                         floorTilesForGameBoard, nCols, nRows, boardName);
+            } else {
+                if (in.hasNextLine()) {
+                    in.nextLine();
+                    in.nextLine();
+                }
             }
         }
         throw new IllegalArgumentException(NO_LEVEL_WITH_SUCH_NAME_MSG);
     }
 
+    /**
+     * Reads and returns fixed tiles and their positions on a GameBoard.
+     *
+     * @param in The scanner that reads the fix tiles and locations.
+     * @return The bundle containing the fixed tiles and their corresponding positions.
+     */
     private FloorTilePositionBundle readFixedTiles(Scanner in) {
         int nFixedTiles = in.nextInt();
         FloorTile[] fixedTiles = new FloorTile[nFixedTiles];
@@ -136,6 +168,12 @@ public class GameService {
         return new FloorTilePositionBundle(fixedTiles, fixedTilePositions);
     }
 
+    /**
+     * Reads and returns all floor tiles to stored in the GameBoard of the GameService.
+     *
+     * @param in The scanner that reads all the floor tiles.
+     * @return The ArrayList containing all floor tiles to be stored.
+     */
     private ArrayList<FloorTile> readFloorTiles(Scanner in) {
         ArrayList<FloorTile> floorTiles = new ArrayList<>();
 
@@ -155,17 +193,37 @@ public class GameService {
         return floorTiles;
     }
 
+    /**
+     * Returns the array of randomly rotated FloorTiles used to fill the
+     * GameBoard of the GameService.
+     *
+     * @param nRows       Number of rows in GameBoard
+     * @param nCols       Number of columns in GameBoard.
+     * @param nFixedTiles Number of fixed tiles in the GameBoard.
+     * @param floorTiles  ArrayList containing all floor tiles to be used in GameBoard.
+     * @return The array containing all floor tiles to be used by the GameBoard.
+     */
     private FloorTile[] getFloorTilesForGameBoard
-            (int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
+    (int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
         FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles];
 
         for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
-            floorTilesForGameBoard[i] = floorTiles.get(0);
+            int rotationAmount = ThreadLocalRandom.current().nextInt(0, 4);
+            FloorTile newFloorTile = floorTiles.get(0);
+            newFloorTile.rotate(rotationAmount);
+            floorTilesForGameBoard[i] = newFloorTile;
             floorTiles.remove(0);
         }
         return floorTilesForGameBoard;
     }
 
+
+    /**
+     * Reads action tiles from a file
+     *
+     * @param in The scanner which reads the action tiles from the file.
+     * @return ArrayList of action tiles from the file.
+     */
     private ArrayList<ActionTile> readActionTiles(Scanner in) {
         ArrayList<ActionTile> actionTiles = new ArrayList<>();
 
@@ -181,6 +239,11 @@ public class GameService {
         return actionTiles;
     }
 
+    /**
+     * @param nPlayers The number of players.
+     * @param in       The scanner which reads PlayerPiece positions from a file.
+     * @return Array of PlayerPiece positions.
+     */
     private Position[] readPlayerPiecePositions(int nPlayers, Scanner in) {
         Position[] positions = new Position[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
@@ -191,6 +254,13 @@ public class GameService {
         return positions;
     }
 
+    /**
+     * Loads a saved instance of GameService.
+     *
+     * @param f The file used to load the instance of GameService.
+     * @throws FileNotFoundException If the specified file cannot be found
+     * @throws MalformedURLException //todo
+     */
     public void loadSavedInstance(File f) throws FileNotFoundException, MalformedURLException {
         remake();
 
@@ -221,6 +291,13 @@ public class GameService {
         in.close();
     }
 
+    /**
+     * Returns all saved player positions on a GameBoard.
+     *
+     * @param in       The scanner that reads saved player positions from a file.
+     * @param nPlayers The number of players with saved positions.
+     * @return The array containing all saved player positions.
+     */
     private Position[] getSavedPlayerPositions(Scanner in, int nPlayers) {
         Position[] playerPositions = new Position[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
@@ -232,6 +309,14 @@ public class GameService {
         return playerPositions;
     }
 
+    /**
+     * Returns all saved PlayerPieces containing PlayerPiece images.
+     *
+     * @param in       The scanner that reads the PlayerPieces from a file.
+     * @param nPlayers The number of players with the PlayerPieces.
+     * @return The array of PlayerPieces with PlayerPiece images.
+     * @throws MalformedURLException //todo
+     */
     private PlayerPiece[] getSavedPlayerPieceImages(Scanner in, int nPlayers) throws MalformedURLException {
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
@@ -242,6 +327,14 @@ public class GameService {
         return playerPieces;
     }
 
+    /**
+     * Returns all players from a saved instance.
+     *
+     * @param in           The scanner used to read the Players from a file.
+     * @param nPlayers     The number of players in the saved instance.
+     * @param playerPieces The PlayerPieces of the players in the saved instance.
+     * @return The array containing all saved players from the instance.
+     */
     private Player[] getSavedInstancePlayers(Scanner in, int nPlayers, PlayerPiece[] playerPieces) {
         Player[] players = new Player[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
@@ -268,6 +361,14 @@ public class GameService {
         return players;
     }
 
+    /**
+     * Returns floor tiles saved in a file.
+     *
+     * @param in    The scanner which reads the floor tiles from the file.
+     * @param nRows Thee number of rows of floor tiles.
+     * @param nCols The number of columns of floor tiles.
+     * @return The array of floor tiles from the saved file.
+     */
     private FloorTile[] getSavedFloorTiles(Scanner in, int nRows, int nCols) {
         FloorTile[] floorTilesForGameBoard = new FloorTile[nRows * nCols];
         for (int i = 0; i < nRows * nCols; i++) {
@@ -281,6 +382,11 @@ public class GameService {
         return floorTilesForGameBoard;
     }
 
+    /**
+     * Reads tiles from a file and puts them in a silk bag.
+     *
+     * @param in The scanner which reads the tiles for the silk bag.
+     */
     private void readSavedSilkBag(Scanner in) {
         silkBag = new SilkBag();
         String silkBagSizeStr = in.next();
@@ -292,6 +398,11 @@ public class GameService {
         in.nextLine();
     }
 
+    /**
+     * Reads area effects of a saved instance.
+     *
+     * @param in The scanner which reads the area effects from a file.
+     */
     private void readSavedInstanceAreaEffects(Scanner in) {
         while (in.hasNext()) {
             int effectRow = in.nextInt();
@@ -307,6 +418,9 @@ public class GameService {
         in.close();
     }
 
+    /**
+     * Moves the game onto the next turn, incrementing the turn count and decrementing the durations of all effects.
+     */
     public void nextTurn() { // todo gameplay loop...
         gameBoard.refreshEffects();
         turnCount++;
@@ -336,6 +450,11 @@ public class GameService {
         out.close();
     }
 
+    /**
+     * Writes PlayerPiece positions (row and column number) to a file.
+     *
+     * @param out The writer which writes the PlayerPiece positions to the file.
+     */
     private void writePlayerPiecePositionDetails(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
             out.print(gameBoard.getPlayerPiecePosition(i).getRowNum());
@@ -346,6 +465,11 @@ public class GameService {
         out.print('\n');
     }
 
+    /**
+     * Writes PlayerPiece details to a file including image file locations.
+     *
+     * @param out The writer which writes the PlayerPiece details to the file.
+     */
     private void writePlayerPieceDetails(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
             out.print(PLAYER_PIECE_PATH_START + gameBoard.getPlayerPiece(i).getImageFile());
@@ -354,6 +478,13 @@ public class GameService {
         out.print('\n');
     }
 
+    /**
+     * Creates and returns a file with a specified name
+     *
+     * @param fileName The name of the file to be created.
+     * @return The newly created file.
+     * @throws IOException If there are too many file names with the same name.
+     */
     private File createFile(String fileName) throws IOException {
         File gameSaveFile = new File
                 (SAVE_GAME_FILE_PATH + fileName + DATA_FILE_EXTENSION);
@@ -377,6 +508,11 @@ public class GameService {
         return gameSaveFile;
     }
 
+    /**
+     * Writes game instance details to a file, including number of players, name, number of rows and columns.
+     *
+     * @param out The writer which writes the game instance details to a file.
+     */
     private void writeGameInstanceDetails(PrintWriter out) {
         out.print(playerService.getPlayers().length); // Number of players
         out.print(DELIMITER);
@@ -391,7 +527,13 @@ public class GameService {
         out.print('\n');
     }
 
-    private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) {
+    /**
+     * Writes GameBoard instance details to a file including tiles and their types, fixed tile positions and tile rotations.
+     *
+     * @param out      The writer which writes the GameBoard instance details to a file.
+     * @param nPlayers //todo?
+     */
+    private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) { //todo nPlayers not used?
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
                 out.print(gameBoard.getTileAt(i, j).getType());
@@ -405,6 +547,11 @@ public class GameService {
         out.print('\n');
     }
 
+    /**
+     * Writes area effect details to a file, such as their positions, remaining durations and types.
+     *
+     * @param out The writer which writes the area effect details to a file.
+     */
     private void writeAreaEffectDetails(PrintWriter out) {
         Set<Position> activeEffectPositions = gameBoard.getPositionsWithActiveEffects();
 
@@ -420,6 +567,11 @@ public class GameService {
         }
     }
 
+    /**
+     * Writes silk bag instance details to a file such as size and all tiles contained within.
+     *
+     * @param out The writer which writes the silk bag instance details.
+     */
     private void writeSilkBagInstanceDetails(PrintWriter out) {
         out.print(silkBag.size());
         out.print(DELIMITER);
@@ -430,12 +582,24 @@ public class GameService {
         out.print('\n');
     }
 
+    /**
+     * Writes player instance details to a file for all players in the game.
+     *
+     * @param out The writer which writes all player details to a file.
+     */
     private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
             writePlayerInstanceDetails(out, i);
         }
     }
 
+    /**
+     * Writes Player instance details to a file including username, number of drawn action tiles, all action tile types previously drawn,
+     * number of previously applied effects and the types of all previously applied effects.
+     *
+     * @param out The writer which writes the player details to a file.
+     * @param i   The index of the player whose details are to be written.
+     */
     private void writePlayerInstanceDetails(PrintWriter out, int i) {
         out.print(playerService.getPlayer(i).getUsername());
         out.print(DELIMITER);
@@ -651,19 +815,38 @@ public class GameService {
         }
     }
 
+    /**
+     * A bundle containing floor tiles and their corresponding GameBoard positions (row and column number).
+     */
     private static class FloorTilePositionBundle {
         private final FloorTile[] floorTiles;
         private final Position[] positions;
 
+        /**
+         * Initialises the FloorTilePositionBundle, storing floor tiles and their corresponding positions.
+         *
+         * @param floorTiles The floor tiles to be stored in the FloorTilePositionBundle.
+         * @param positions  The positions of the floor tiles to be stored in the FloorTilePositionBundle.
+         */
         public FloorTilePositionBundle(FloorTile[] floorTiles, Position[] positions) {
             this.floorTiles = floorTiles;
             this.positions = positions;
         }
 
+        /**
+         * Returns all floor tiles in the bundle
+         *
+         * @return The array containing all floor tiles in the bundle.
+         */
         public FloorTile[] getFloorTiles() {
             return floorTiles;
         }
 
+        /**
+         * Returns all positions of floor tiles in the bundle.
+         *
+         * @return The array containing all positions of floor tiles in the bundle.
+         */
         public Position[] getPositions() {
             return positions;
         }

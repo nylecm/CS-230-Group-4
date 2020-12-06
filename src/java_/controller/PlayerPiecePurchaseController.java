@@ -1,6 +1,5 @@
 package java_.controller;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import java_.game.controller.PurchaseHandler;
 import java_.util.security.LoginHandler;
 import javafx.event.ActionEvent;
@@ -15,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,12 +22,12 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+/**
+ * Controls the player piece purchase window.
+ *
+ * @author Waleed Ashraf, edited by nylecm.
+ */
 public class PlayerPiecePurchaseController implements Initializable {
-
-    private static final String USER_COIN_FILE_DIRECTORY = "data/user_coins.txt";
-    private static final String PLAYER_PIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
-    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
-    public static final String DELIMITER = "`";
 
     @FXML
     private BorderPane mainPane;
@@ -58,8 +56,21 @@ public class PlayerPiecePurchaseController implements Initializable {
     @FXML
     private ChoiceBox<String> affordablePlayerPieces;
 
+    private static final String USER_COIN_FILE_DIRECTORY = "data/user_coins.txt";
+    private static final String PLAYER_PIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
+    public static final String DELIMITER = "`";
     private String currentUser;
 
+    /**
+     * Logs the player into the store when correct user credentials are entered,
+     * when the login button is clicked. Sets the number of coins the player has,
+     * displays player pieces the user, and displays player pieces owned by given
+     * player. If log in attempt is unsuccessful, notifies user.
+     *
+     * @param e the e
+     * @throws IOException the io exception
+     */
     @FXML
     private void onLoginButtonClicked(ActionEvent e) throws IOException {
         // Security check:
@@ -114,6 +125,12 @@ public class PlayerPiecePurchaseController implements Initializable {
         }
     }
 
+    /**
+     * When clicked, buys the currently selected player piece, and refreshed
+     * coin count and the table of owned player pieces.
+     *
+     * @param e action event (not used)
+     */
     @FXML
     private void onBuyButtonClicked(ActionEvent e) {
         int newCoinBalance = 0;
@@ -126,6 +143,11 @@ public class PlayerPiecePurchaseController implements Initializable {
         }
     }
 
+    /**
+     * Shows player pieces owned by currently logged in player.
+     *
+     * @throws FileNotFoundException the file not found exception
+     */
     private void showOwnedPlayerPieces() throws FileNotFoundException {
         preOwnedPieces.getItems().clear();
         ArrayList<String> list = new ArrayList<>();
@@ -145,6 +167,12 @@ public class PlayerPiecePurchaseController implements Initializable {
         in.close();
     }
 
+    /**
+     * Goes back to the main menu when the back button is clicked.
+     *
+     * @param e the event
+     * @throws IOException the io exception, if main menu is not found (unlikely)
+     */
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -152,6 +180,13 @@ public class PlayerPiecePurchaseController implements Initializable {
         currentStage.setScene(new Scene(mainMenu));
     }
 
+    /**
+     * Initialises the form, setting background image, and setting up onAction
+     * events.
+     *
+     * @param location  the location (not used)
+     * @param resources the resources (not used)
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundImage backgroundImage = null;

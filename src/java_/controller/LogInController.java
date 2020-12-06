@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+@Deprecated
 public class LogInController {
 
     @FXML

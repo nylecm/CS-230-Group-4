@@ -1,5 +1,9 @@
 package java_.game.tile;
 
+/**
+ * Represents all possible tile types.
+ * @author nylecm
+ */
 public enum TileType {
     STRAIGHT {
         @Override

@@ -5,7 +5,7 @@ import java_.game.player.Player;
 public class PlayerEffect extends Effect {
     private Player target;
 
-    public PlayerEffect(EffectType effectType, Player target) {
+    public PlayerEffect(EffectType effectType) {
         super(effectType);
         this.target = target;
     }

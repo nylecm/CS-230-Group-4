@@ -42,33 +42,28 @@ public class MainMenuController implements Initializable {
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
     /**
-     * Sets the message of the day in the main menu.
-     * @throws IOException If the message of the day cannot be retrieved.
-     */
-    private void setMessageOfTheDay() throws IOException {
-        messageOfTheDay.setText(MessageOfTheDayService.getMessage());
-    }
-
-    /**
      * Initialises the main menu, setting its background and setting the message of the day.
      * @param location
      * @param resources
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        BackgroundFill backgroundFill = null;
+        BackgroundImage backgroundImage = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern
-                    (new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundImage = new BackgroundImage(new Image(String.valueOf
+                    (new File(URANUS_BACKGROUND_PATH).toURI().toURL())), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize
+                    (0, 0, false, false, false, true));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mainBox.setBackground(new Background(backgroundFill));
+        mainBox.setBackground(new Background(backgroundImage));
+        mainBox.setMinWidth(614);
 
         try {
-            setMessageOfTheDay();
+            messageOfTheDay.setText(MessageOfTheDayService.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            messageOfTheDay.setText("Unable to get the message of the day.");
         }
     }
 

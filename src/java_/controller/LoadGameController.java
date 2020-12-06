@@ -58,9 +58,10 @@ public class LoadGameController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundImage backgroundImage = null;
         try {
-            backgroundImage = new BackgroundImage(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL())),
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                    new BackgroundSize(0, 0, false, false, false, true));
+            backgroundImage = new BackgroundImage(new Image(String.valueOf
+                    (new File(URANUS_BACKGROUND_PATH).toURI().toURL())), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize
+                    (0, 0, false, false, false, true));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -172,9 +173,6 @@ public class LoadGameController implements Initializable {
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             Pane game = (Pane) FXMLLoader.load(getClass().getResource(GAME_PATH));
             currentStage.setScene(new Scene(game));
-        } else {
-            //loadGameStatusLabel.setText("Wrong Password for player: " + i);
-            //Handle incorrect password
         }
     }
 }

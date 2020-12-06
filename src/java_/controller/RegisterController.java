@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
  */
 public class RegisterController implements Initializable {
 
-
     @FXML
     private VBox mainBox;
 
@@ -52,9 +51,9 @@ public class RegisterController implements Initializable {
 
     private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
     private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple? xxx@xxx.xxxx
-    private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //Might be broken
+    private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //todo test - Might be broken
 
-    private static final String USERNAME_INVALID_MSG = "Username invalid!"; //TODO MAKE MESSAGES MORE USEFUL
+    private static final String USERNAME_INVALID_MSG = "Username invalid!";
     private static final String EMAIL_INVALID_MSG = "Email invalid!";
     private static final String PASSWORD_INVALID_MSG = "Password invalid!";
     private static final String PASSWORD_NO_MATCH_MSG = "Passwords don't match!";
@@ -75,8 +74,7 @@ public class RegisterController implements Initializable {
             } catch (IOException e) {
                 registerStatusLabel.setText(FILE_NOT_FOUND_OR_ERROR_ACCESSING_IT_MSG);
             } catch (IllegalArgumentException e2) {
-                System.out.println("bad");
-                //registerStatusLabel.setText(e2.getMessage());
+                registerStatusLabel.setText(e2.getMessage());
             }
             this.username.setText("");
             this.email.setText("");
@@ -130,12 +128,16 @@ public class RegisterController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        BackgroundFill backgroundFill = null;
+        BackgroundImage backgroundImage = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundImage = new BackgroundImage(new Image(String.valueOf
+                    (new File(URANUS_BACKGROUND_PATH).toURI().toURL())), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize
+                    (0, 0, false, false, false, true));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mainBox.setBackground(new Background(backgroundFill));
+        mainBox.setBackground(new Background(backgroundImage));
+        mainBox.setMinWidth(614);
     }
 }

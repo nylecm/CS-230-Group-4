@@ -1,8 +1,5 @@
 package java_.game.tile;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-import java_.util.generic_data_structures.Link;
-
 import java.util.*;
 
 /**
@@ -18,7 +15,8 @@ public class SilkBag {
     /**
      * Instantiates a new Silk bag, filling it with tiles.
      *
-     * @param newTiles the tiles that ought to be added, in random order.
+     * @param newTiles the tiles that ought to be added, they do not need to be
+     *                 in random order.
      */
     public SilkBag(List<Tile> newTiles) {
         Collections.shuffle(newTiles);
@@ -28,7 +26,7 @@ public class SilkBag {
     }
 
     /**
-     * Instantiates a new silk bag without filling it with tiles.
+     * Instantiates a new empty silk bag.
      */
     public SilkBag() {
     }
@@ -36,7 +34,7 @@ public class SilkBag {
     /**
      * Puts a tile into the silk bag.
      *
-     * @param t the tile to be put into the silk bag.
+     * @param t the tile type of the tile to be put into the silk bag.
      */
     public void put(TileType t) {
         tiles.add(t);
@@ -69,6 +67,11 @@ public class SilkBag {
         return tiles.isEmpty();
     }
 
+    /**
+     * Gets the size of the silk bag,
+     *
+     * @return the number of tiles in the silk bag.
+     */
     public int size() {
         return tiles.size();
     }
@@ -83,47 +86,5 @@ public class SilkBag {
     @Override
     public String toString() {
         return tiles.toString();
-    }
-
-    /**
-     * The entry point of application, for testing only. todo remove this.
-     *
-     * @param args the input arguments
-     */
-
-    public static void main(String[] args) {
-
-
-        SilkBag s = new SilkBag();
-
-        s.put(TileType.FIRE);
-        s.put(TileType.ICE);
-        s.put(TileType.BACKTRACK);
-        s.put(TileType.DOUBLE_MOVE);
-        s.put(TileType.STRAIGHT);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-        s.put(TileType.FIRE);
-
-        System.out.println(s.size());
-
-        System.out.println(s);
-
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-
-        System.out.println(s);
-
-        s.take();
-        s.take();
-        s.take();
-        s.take();
-
-        System.out.println(s);
-        //s.take();
     }
 }

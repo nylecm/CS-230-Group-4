@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class GameControllerDummy implements Initializable {
 
     private static final int TILE_WIDTH = 80;
