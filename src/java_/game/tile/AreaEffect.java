@@ -11,9 +11,10 @@ public class AreaEffect extends Effect {
 
     /**
      * Initialises the AreaEffect giving it an effect type, a radius and a duration.
+     *
      * @param effectType The type of the area effect.
-     * @param radius The radius of the area effect. 0 indicates it affects only 1 tile.
-     * @param duration The duration of the area effect.
+     * @param radius     The radius of the area effect. 0 indicates it affects only 1 tile.
+     * @param duration   The duration of the area effect.
      */
     public AreaEffect(EffectType effectType, int radius, int duration) {
         super(effectType);
@@ -23,6 +24,7 @@ public class AreaEffect extends Effect {
 
     /**
      * Returns the radius of the area effect.
+     *
      * @return The radius of the area effect.
      */
     public int getRadius() {
@@ -31,6 +33,7 @@ public class AreaEffect extends Effect {
 
     /**
      * Sets the radius of the area effect.
+     *
      * @param radius The radius to be set for the area effect.
      */
     public void setRadius(int radius) {
@@ -39,6 +42,7 @@ public class AreaEffect extends Effect {
 
     /**
      * Returns the remaining duration of the area effect.
+     *
      * @return The remaining duration of the area effect.
      */
     public int getRemainingDuration() {
@@ -47,6 +51,7 @@ public class AreaEffect extends Effect {
 
     /**
      * Sets the remaining duration of the area effect.
+     *
      * @param remainingDuration The remaining duration of the area effect.
      */
     public void setRemainingDuration(int remainingDuration) {
@@ -62,6 +67,7 @@ public class AreaEffect extends Effect {
 
     /**
      * Returns the area effect as a string including the radius, remaining duration and effect type.
+     *
      * @return The string containing area effect data.
      */
     @Override
