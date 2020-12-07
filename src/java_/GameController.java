@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -489,13 +490,19 @@ public class GameController implements Initializable {
      * FloorTiles from the Gameboard class
      */
     private void displayFloorTiles() {
+        ColorAdjust highlight = new ColorAdjust();
         for (int row = 0; row < gameBoardView.getHeight(); row++) {
             for (int col = 0; col < gameBoardView.getWidth(); col++) {
-                Image floorTileImage = new Image(getFloorTileTypeImage(gameBoard.getTileAt(row, col)));
+                FloorTile floorTile = gameBoard.getTileAt(row, col);
+                Image floorTileImage = new Image(getFloorTileTypeImage(floorTile));
                 ImageView floorTileImageView = getTileImageView(floorTileImage);
                 floorTileImageView.setLayoutX(col * TILE_WIDTH);
                 floorTileImageView.setLayoutY(row * TILE_HEIGHT);
                 floorTileImageView.setRotate(gameBoard.getTileAt(row, col).getRotation() * 90);
+                if (floorTile.isFixed()) {
+                    highlight.setSaturation(0.5);
+                    floorTileImageView.setEffect(highlight);
+                }
                 setFloorTileEventHandlers(floorTileImageView);
                 tileGroup.getChildren().add(floorTileImageView);
             }
@@ -732,6 +739,7 @@ public class GameController implements Initializable {
      */
     private void setFloorTileEventHandlers(ImageView floorTileImageView) {
         ColorAdjust highlight = new ColorAdjust();
+        Effect previousEffect = floorTileImageView.getEffect();
 
         floorTileImageView.setOnMouseEntered(event -> {
             highlight.setBrightness(FLOOR_TILE_HIGHLIGHT);
@@ -739,8 +747,7 @@ public class GameController implements Initializable {
         });
 
         floorTileImageView.setOnMouseExited(event -> { ;
-            highlight.setBrightness(0);
-            floorTileImageView.setEffect(highlight);
+            floorTileImageView.setEffect(previousEffect);
         });
 
         floorTileImageView.setOnDragOver(event ->  {
