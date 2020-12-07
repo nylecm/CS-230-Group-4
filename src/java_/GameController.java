@@ -224,23 +224,30 @@ public class GameController implements Initializable {
      * The width of the FloorTile displayed on the
      * screen.
      */
-    private static final int TILE_WIDTH = 70;
+    private static int TILE_WIDTH = 70;
 
     /**
      * The height of the FloorTile displayed on the
      * screen.
      */
-    private  static final int TILE_HEIGHT = 70;
+    private static int TILE_HEIGHT = 70;
 
     /**
      * The width of the Player Piece displayed on the screen.
      */
-    private static final int PLAYER_PIECE_WIDTH = 28;
+    private static int PLAYER_PIECE_WIDTH = 28;
 
     /**
      * The height of the Player Piece displayed on the screen.
      */
-    private static final int PLAYER_PIECE_HEIGHT = 28;
+    private static int PLAYER_PIECE_HEIGHT = 28;
+
+    /**
+     * The default value for size coefficient used when
+     * creating the Game Board View to make sure it fits
+     * in the window.
+     */
+    private static final int DYNAMIC_RESIZING_COEFFICIENT = 5;
 
     /**
      * The width any drawn Action Tile.
@@ -323,6 +330,12 @@ public class GameController implements Initializable {
         gameBoard = gameService.getGameBoard();
 
         gameBoardView = new Dimension2D(gameBoard.getnCols(), gameBoard.getnRows());
+
+        TILE_HEIGHT = (int) (DYNAMIC_RESIZING_COEFFICIENT * TILE_HEIGHT / gameBoardView.getHeight());
+        TILE_WIDTH = (int) (DYNAMIC_RESIZING_COEFFICIENT * TILE_WIDTH / gameBoardView.getHeight());
+
+        PLAYER_PIECE_HEIGHT = (int) (DYNAMIC_RESIZING_COEFFICIENT * PLAYER_PIECE_HEIGHT / gameBoardView.getHeight() - gameBoardView.getHeight());
+        PLAYER_PIECE_WIDTH = (int) (DYNAMIC_RESIZING_COEFFICIENT * PLAYER_PIECE_WIDTH / gameBoardView.getHeight() - gameBoardView.getHeight());
 
         //Sets the default values
         actionTilePlayed = false;
@@ -1272,38 +1285,38 @@ public class GameController implements Initializable {
 
         //TODO Make loop, see above
         if (playerPiecesAtFloorTile.size() == 4) {
-            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 15);
-            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 - 15);
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - PLAYER_PIECE_WIDTH / 2);
+            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 - PLAYER_PIECE_HEIGHT / 2);
 
-            playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
-            playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 - 15);
+            playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + PLAYER_PIECE_WIDTH / 2);
+            playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 - PLAYER_PIECE_HEIGHT / 2);
 
-            playerPiecesAtFloorTile.get(2).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 15);
-            playerPiecesAtFloorTile.get(2).setLayoutY(targetRow * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 + 15);
+            playerPiecesAtFloorTile.get(2).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - PLAYER_PIECE_WIDTH / 2);
+            playerPiecesAtFloorTile.get(2).setLayoutY(targetRow * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 + PLAYER_PIECE_HEIGHT / 2);
 
-            playerPiecesAtFloorTile.get(3).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
-            playerPiecesAtFloorTile.get(3).setLayoutY(targetRow * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 + 15);
+            playerPiecesAtFloorTile.get(3).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + PLAYER_PIECE_WIDTH / 2);
+            playerPiecesAtFloorTile.get(3).setLayoutY(targetRow * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 + PLAYER_PIECE_HEIGHT / 2);
 
         } else if (playerPiecesAtFloorTile.size() == 3) {
-            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 20);
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - PLAYER_PIECE_WIDTH / 1.2);
             playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
 
             playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2);
             playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
 
-            playerPiecesAtFloorTile.get(2).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 20);
+            playerPiecesAtFloorTile.get(2).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + PLAYER_PIECE_WIDTH / 1.2);
             playerPiecesAtFloorTile.get(2).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
 
         } else if (playerPiecesAtFloorTile.size() == 2) {
-            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 15);
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - PLAYER_PIECE_WIDTH / 2);
             playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
 
-            playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(1).getFitWidth()) / 2 + 15);
+            playerPiecesAtFloorTile.get(1).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + PLAYER_PIECE_WIDTH / 2);
             playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
 
         } else if (playerPiecesAtFloorTile.size() == 1) {
-            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + 12);
-            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + 12);
+            playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (playerPiecesAtFloorTile.get(0).getFitWidth()) / 2);
+            playerPiecesAtFloorTile.get(0).setLayoutY(targetRow * TILE_HEIGHT + (playerPiecesAtFloorTile.get(0).getFitHeight()) / 2);
         }
     }
 

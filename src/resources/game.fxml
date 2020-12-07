@@ -27,15 +27,15 @@
          <children>
             <GridPane fx:id="footer" prefHeight="300.0" prefWidth="1218.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="379.0" minWidth="10.0" prefWidth="379.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="504.0" minWidth="10.0" prefWidth="372.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="10.0" prefWidth="328.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="379.0" minWidth="10.0" prefWidth="343.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="504.0" minWidth="10.0" prefWidth="411.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="10.0" prefWidth="326.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                  <AnchorPane prefHeight="299.0" prefWidth="345.0">
                      <children>
                         <ImageView fx:id="drawnFloorTile" fitHeight="109.0" fitWidth="131.0" layoutX="85.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true" />
                         <HBox alignment="BOTTOM_CENTER" layoutX="31.0" layoutY="240.0" prefHeight="32.0" prefWidth="189.0" spacing="90.0">
@@ -47,10 +47,10 @@
                               <Insets left="37.0" />
                            </padding>
                         </HBox>
-                        <VBox fx:id="radarHolder" alignment="CENTER" layoutX="254.0" layoutY="53.0" prefHeight="109.0" prefWidth="100.0" />
+                        <VBox fx:id="radarHolder" alignment="CENTER" layoutX="266.0" layoutY="53.0" prefHeight="109.0" prefWidth="100.0" />
                      </children>
                   </AnchorPane>
-                  <VBox alignment="BOTTOM_CENTER" prefHeight="299.0" prefWidth="427.0" GridPane.columnIndex="1">
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="299.0" prefWidth="385.0" GridPane.columnIndex="1">
                      <children>
                         <Pane prefHeight="200.0" prefWidth="426.0">
                            <children>
@@ -59,7 +59,7 @@
                                     <Cursor fx:constant="OPEN_HAND" />
                                  </cursor>
                                  <children>
-                                    <AnchorPane fx:id="playersActionTilesHolder" prefHeight="127.0" prefWidth="313.0" />
+                                    <AnchorPane fx:id="playersActionTilesHolder" prefHeight="127.0" prefWidth="348.0" />
                                  </children>
                               </HBox>
                            </children>
