@@ -1,0 +1,65 @@
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.h-box {
+    -fx-background-color: blue;
+}
+
+#footer {
+    -fx-background-image: url("Footer.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 1080 307.5;
+    -fx-background-position: center center;
+}
+
+#rotateClockwiseButton {
+    -fx-background-image: url("rotateClockwise.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 25 25;
+    -fx-background-color: transparent;
+}
+
+#rotateAntiClockwiseButton {
+    -fx-background-image: url("rotateAnticlockwise.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 25 25;
+    -fx-background-color: transparent;
+}
+
+#endTurnButton {
+    -fx-background-image: url("endTurnButton.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 129 41;
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0.5, 0, 3);
+}
+
+#infoBox {
+    -fx-background-color: transparent;
+    -fx-fill: white;
+}
+
+.label .viewport {
+    -fx-background-color: transparent;
+}
+
+.label .content {
+    -fx-background-color: transparent;
+}
+
+#dropDownMenu {
+    -fx-background-color: transparent;
+    -fx-background-image: url("dropDownMenu.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 35 22;
+}
+
+.combo-box .arrow-button {
+    -fx-opacity: 0.0;
+    -fx-cursor: text;
+}

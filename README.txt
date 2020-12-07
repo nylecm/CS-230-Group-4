@@ -3,7 +3,7 @@ Ravensburger's Labyrinth.
 
 ## Instructions
 
-Compile the entire project & run class MainMenuMain.java
+Compile the entire project & run class java.MainMenuMain.java
 
 This should open the main menu.
 
