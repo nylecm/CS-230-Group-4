@@ -1,22 +1,17 @@
 package java_.controller;
 
 
-import com.sun.xml.internal.ws.api.FeatureConstructor;
 import java_.game.controller.GameService;
-import java_.game.player.Player;
 import java_.game.tile.*;
 import java_.util.Position;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -31,8 +26,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.ImagePattern;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -43,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GameController implements Initializable {
@@ -513,10 +505,10 @@ public class GameController implements Initializable {
 
                 //Left or Right edge
                 if (targetCol == -1 || targetCol == gameBoardView.getWidth()) {
-                    slideRowTemp(targetRow, targetCol);
+                    slideRow(targetRow, targetCol);
                 //Top or Bottom edge
                 } else if (targetRow == -1 || targetRow == gameBoardView.getHeight()) {
-                    slideColTemp(targetCol, targetRow);
+                    slideCol(targetCol, targetRow);
                 }
                 //Update GameBoard
                 gameBoard.insert(targetCol, targetRow, (FloorTile) drawnTile, (int) (drawnFloorTile.getRotate() / 90));
@@ -684,7 +676,7 @@ public class GameController implements Initializable {
         });
     }
 
-    private void slideColTemp(int col, int row) {
+    private void slideCol(int col, int row) {
         ImageView floorTileImageView = getTileImageView(drawnFloorTile.getImage());
         floorTileImageView.setRotate(drawnFloorTile.getRotate());
         floorTileImageView.setLayoutX(col * TILE_WIDTH);
@@ -763,68 +755,7 @@ public class GameController implements Initializable {
         tileGroup.getChildren().remove(lastTile.get(0));
     }
 
-    //TODO To be hopefully implemented
-    private void slideCol(int col, int row) {
-        ImageView floorTileDisplay = getTileImageView(floorTileImage);
-        floorTileDisplay.setLayoutX(col * TILE_WIDTH);
-        floorTileDisplay.setLayoutY(row * TILE_HEIGHT);
-        tileGroup.getChildren().add(floorTileDisplay);
-
-        List<Node> floorTilesToMove;
-        List<Node> playerPiecesToMove;
-
-        floorTilesToMove = tileGroup.getChildren()
-                .stream()
-                .filter(t -> getItemCol((ImageView) t) == col)
-                .collect(Collectors.toList());
-
-        playerPiecesToMove = playerPieceGroup.getChildren()
-                .stream()
-                .filter(t -> getItemCol((ImageView) t) == col)
-                .collect(Collectors.toList());
-
-        List<Node> lastTile = null;
-
-        tileGroup.getChildren().remove(lastTile.get(0));
-
-        double startPosition;
-        double endPosition;
-        Timeline timeline = new Timeline();
-        timeline.setCycleCount(1);
-
-        for (Node floorTile : floorTilesToMove) {
-            DoubleProperty property = floorTile.translateYProperty();
-            if (row < col) {
-                startPosition = row;
-                endPosition = startPosition + TILE_HEIGHT;
-                lastTile = tileGroup.getChildren()
-                        .stream()
-                        .filter(t -> getItemCol((ImageView) t) == col &&
-                                getItemRow((ImageView) t) == gameBoardView.getHeight())
-                        .collect(Collectors.toList());
-            } else {
-                startPosition = row;
-                endPosition = startPosition - TILE_HEIGHT;
-                lastTile = tileGroup.getChildren()
-                        .stream()
-                        .filter(t -> getItemCol((ImageView) t) == col &&
-                                getItemRow((ImageView) t) == -1)
-                        .collect(Collectors.toList());
-            }
-            timeline.getKeyFrames().addAll(
-                    new KeyFrame(new Duration(0), new KeyValue(property, startPosition)),
-                    new KeyFrame(new Duration(1000), new KeyValue(property, endPosition))
-            );
-        }
-        timeline.play();
-        Node pushedOfTile = lastTile.get(0);
-
-        timeline.setOnFinished(event -> {
-            tileGroup.getChildren().remove(pushedOfTile);
-        });
-    }
-
-    private void slideRowTemp(int row, int col) {
+    private void slideRow(int row, int col) {
         ImageView floorTileImageView = getTileImageView(drawnFloorTile.getImage());
         floorTileImageView.setRotate(drawnFloorTile.getRotate());
         floorTileImageView.setLayoutX(col * TILE_WIDTH);
