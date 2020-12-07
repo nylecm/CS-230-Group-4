@@ -727,8 +727,8 @@ public class GameController implements Initializable {
         edgeTileImageView.setOnDragDropped(event -> {
             ImageView source = (ImageView) event.getGestureSource();
 
-            //Accept only FloorTiles
-            if (source == drawnFloorTile) {
+            //Accept only FloorTiles and allow only "visible" Edge Tiles
+            if (source == drawnFloorTile && edgeTileImageView.getOpacity() >= 1) {
                 int targetCol = getItemCol(edgeTileImageView);
                 int targetRow = getItemRow(edgeTileImageView);
 
