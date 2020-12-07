@@ -65,21 +65,30 @@ public class GameController implements Initializable {
     private GameBoard gameBoard;
 
     /**
-     * A width of the FloorTile displayed on the
+     * The width of the FloorTile displayed on the
      * screen.
      */
     private static final int TILE_WIDTH = 70;
 
     /**
-     * A height of the FloorTile displayed on the
+     * The height of the FloorTile displayed on the
      * screen.
      */
     private  static final int TILE_HEIGHT = 70;
 
+    /**
+     * The width of the Player Piece displayed on the screen.
+     */
     private static final int PLAYER_PIECE_WIDTH = 28;
 
+    /**
+     * The height of the Player Piece displayed on the screen.
+     */
     private static final int PLAYER_PIECE_HEIGHT = 28;
 
+    /**
+     * The main pane holding
+     */
     @FXML
     private AnchorPane background;
 
