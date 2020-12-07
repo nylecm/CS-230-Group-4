@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class LeaderboardHandler {
     private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";
     private static final String DELIMITER = "`";
+    private static final String FILE_EXTENSION_STRING = ".txt";
 
     /**
      * Updates the leaderboard with the players that participated in a game.
@@ -22,14 +23,14 @@ public class LeaderboardHandler {
      * @throws FileNotFoundException If the file containing user stats cannot be found.
      */
     public static void updateLeaderboard(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
-        String gameboardName = GameService.getInstance().getGameBoard().getName();
+        String gameboardName = GameService.getInstance().getGameBoard().getName() + FILE_EXTENSION_STRING;
+        System.out.println(gameboardName);
         Reader r = new Reader();
         File[] fileNames = r.readFileNames(USER_STATS_FOLDER_DIRECTORY);
         //Loops through every game board file containing user stats
         for (File file : fileNames) {
             boolean[] hasUserBeenFound = new boolean[players.length]; //Keeps track of if the users in the game already have a file line representing their stats
             if (file.getName().equals(gameboardName)) {
-
                 File gameboardFile = new File(USER_STATS_FOLDER_DIRECTORY + "/" + gameboardName);
                 Scanner in = new Scanner(gameboardFile);
 
