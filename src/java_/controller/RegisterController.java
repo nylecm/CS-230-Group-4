@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 
 /**
  * Register controller handles users registering their accounts. This includes their username, email and password.
+ *
+ * @author nylecm
  */
 public class RegisterController implements Initializable {
 

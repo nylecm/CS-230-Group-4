@@ -32,6 +32,8 @@ import java.util.Scanner;
 
 /**
  * The controller for the load game interface.
+ *
+ * @author nylecm
  */
 public class LoadGameController implements Initializable {
     @FXML
