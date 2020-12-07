@@ -952,7 +952,7 @@ public class GameController implements Initializable {
             }
         }
 
-        //TODO THIS IS A VERY BAD CODE, SCAAARY
+        //TODO Don't iterate using X streams
         List<Node> lastTile;
         if (row < col) {
             lastTile = tileGroup.getChildren()
@@ -1013,7 +1013,7 @@ public class GameController implements Initializable {
 
         }
 
-        //TODO THIS IS A VERY BAD CODE, SCAAARY
+        //TODO Don't iterate using X streams
         List<Node> lastTile;
         if (col < row) {
             lastTile = tileGroup.getChildren()
