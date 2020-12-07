@@ -190,6 +190,5 @@ public class RegisterController implements Initializable {
             e.printStackTrace();
         }
         mainBox.setBackground(new Background(backgroundImage));
-        mainBox.setMinWidth(614);
     }
 }
