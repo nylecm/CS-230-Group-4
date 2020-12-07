@@ -10,7 +10,6 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 
 public class PasswordEncoder {
-    //todo mateo javadoc
     private static final String HASHING_ALGORITHM = "PBKDF2WithHmacSHA1";
     private static final String PASSWORD_ENCODER_SPLITTER = "/";
     private static final int SALT_BYTES = 16;
