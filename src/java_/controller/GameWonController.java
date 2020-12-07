@@ -8,21 +8,27 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GameWonController implements Initializable {
 
-
     @FXML
     private Label playerWhoWon;
 
+    @FXML
+    private VBox mainPane;
+
     private static final String WON_MSG = " won!";
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
+    private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
     public void onBackToMainMenuButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -32,6 +38,18 @@ public class GameWonController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        BackgroundImage backgroundImage = null;
+        try {
+            backgroundImage = new BackgroundImage(new Image(String.valueOf
+                    (new File(URANUS_BACKGROUND_PATH).toURI().toURL())), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize
+                    (0, 0, false, false, false, true));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        mainPane.setBackground(new Background(backgroundImage));
+        mainPane.setMinWidth(614);
+
         int playerNumber = GameService.getInstance().getCurrentPlayerNum();
         playerWhoWon.setText(GameService.getInstance().getPlayerService().getPlayer(playerNumber).getUsername() + WON_MSG);
     }
