@@ -41,7 +41,7 @@ public class LeaderboardController implements Initializable {
     @FXML
     private TableColumn<LeaderboardTable, Integer> losses;
     @FXML
-    private ChoiceBox gameBoardSelect;
+    private ChoiceBox<File> gameBoardSelect;
 
     private static final String MAIN_MENU_PATH = "/resources/mainMenu.fxml";
     private static final String USER_STATS_FOLDER_DIRECTORY = "data/user_stats";

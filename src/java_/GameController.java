@@ -148,7 +148,7 @@ public class GameController implements Initializable {
      * and exiting the current game.
      */
     @FXML
-    private ComboBox dropDownMenu;
+    private ComboBox<String> dropDownMenu;
 
     /**
      * Displays any error messages related
