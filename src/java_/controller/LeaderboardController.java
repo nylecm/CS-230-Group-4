@@ -190,7 +190,6 @@ public class LeaderboardController implements Initializable {
             int a = 0;
             while (in.hasNext()) {
                 String newName = in.next();
-
                 String newWinCountStr = in.next();
                 int newWinCount = Integer.parseInt(newWinCountStr);
                 String newLossCountStr = in.next();
@@ -218,6 +217,7 @@ public class LeaderboardController implements Initializable {
                     playerLosses.add(newLossCount);
                 }
                 a++;
+                in.nextLine();
             }
             in.close();
         }
