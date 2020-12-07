@@ -1,7 +1,7 @@
-nylecm`10`4`
+nylecm`10`10`
 girion`8`3`
 samcox`4`2`
 bob101`0`15`
 bishwo`0`1`
-nylecm1`0`1`
-nylecm2`1`0`
+nylecm1`0`7`
+nylecm2`7`0`
