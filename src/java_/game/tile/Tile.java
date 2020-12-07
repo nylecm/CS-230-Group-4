@@ -19,7 +19,7 @@ public abstract class Tile {
      * to ensure that the given tile is of a valid type for its classes' allowed
      * types.
      *
-     * @param type the TileType of the new instance.
+     * @param type         the TileType of the new instance.
      * @param typesAllowed a set of allowed TileType enums, for that subclass.
      */
     public Tile(TileType type, EnumSet<TileType> typesAllowed) {

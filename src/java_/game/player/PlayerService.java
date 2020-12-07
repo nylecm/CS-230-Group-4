@@ -44,19 +44,6 @@ public class PlayerService {
     }
 
     /**
-     * Draws a tile from the silkbag that can be used by the Player that has drawn it, it can be a floor tile or action tile.
-     * @param p The player that draws the tile.
-     * @return The tile that has been drawn by the Player.
-     */
-    public Tile playerTurn(Player p) { //todo never used - why?
-        Tile drawnTile = GameService.getInstance().getSilkBag().take();
-        if (drawnTile instanceof ActionTile) {
-            p.addDrawnActionTile((ActionTile) drawnTile);
-        }
-        return drawnTile;
-    }
-
-    /**
      * Applies the back track effect to a Player with the specified index.
      * @param playerNum the index identifying the Player that the backtrack effect is to be applied to.
      * @throws IllegalStateException If there has been an attempt to apply a backtrack effect to a Player that has previously had the effect applied to them.
@@ -88,7 +75,7 @@ public class PlayerService {
      * @param e The effect that is to be checked if it has been applied to the player.
      * @return True if the effect has been applied to the player, false otherwise.
      */
-    public boolean containsEffect(Player p, Effect e) {
+    public boolean containsEffect(Player p, EffectType e) {
         return p.getPreviousAppliedEffect().contains(e);
     }
 
@@ -135,6 +122,20 @@ public class PlayerService {
      */
     public Player getPlayer(int i) {
         return players[i]; // Potentially i - 1
+    }
+
+    /**
+     * Returns a player index by given player reference
+     * @param player The player to search for
+     * @return index if found, -1 if not found
+     */
+    public int getPlayerIndex(Player player) {
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] == player) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

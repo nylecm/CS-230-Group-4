@@ -286,7 +286,7 @@ public class GameService {
         FloorTile[] floorTilesForGameBoard = getSavedFloorTiles(in, nRows, nCols);
 
         gameBoard = new GameBoard(playerPieces, playerPositions, floorTilesForGameBoard, nCols, nRows, gameBoardName);
-        PlayerService.getInstance().setPlayers(players);
+        //PlayerService.getInstance().setPlayers(players);
         readSavedSilkBag(in);
         readSavedInstanceAreaEffects(in);
         in.close();
@@ -321,7 +321,7 @@ public class GameService {
     private PlayerPiece[] getSavedPlayerPieceImages(Scanner in, int nPlayers) throws MalformedURLException {
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-            File playerPieceImageFile = new File(in.next()); //todo find a less hacky way
+            File playerPieceImageFile = new File(in.next());
             playerPieces[i] = new PlayerPiece(playerPieceImageFile);
         }
         in.nextLine();
@@ -343,20 +343,23 @@ public class GameService {
             players[i] = new Player(username, playerPieces[i]);
 
             int numberOfDrawnActionTiles = in.nextInt();
-            TileType[] drawnActionTiles = new TileType[numberOfDrawnActionTiles];
 
-            for (int j = 0; j < numberOfDrawnActionTiles; j++) {
-                drawnActionTiles[i] = TileType.valueOf(in.next().toUpperCase());
+            if (numberOfDrawnActionTiles > 0) {
+                TileType[] drawnActionTiles = new TileType[numberOfDrawnActionTiles];
+                for (int j = 0; j < numberOfDrawnActionTiles; j++) {
+                    drawnActionTiles[j] = TileType.valueOf(in.next().toUpperCase());
+                }
+                players[i].addDrawnActionTiles(drawnActionTiles);
             }
-            players[i].addDrawnActionTiles(drawnActionTiles);
-
             int numberOfPreviouslyAppliedEffects = in.nextInt();
-            EffectType[] previouslyAppliedEffects = new EffectType[numberOfPreviouslyAppliedEffects];
 
-            for (int j = 0; j < numberOfDrawnActionTiles; j++) {
-                previouslyAppliedEffects[i] = EffectType.valueOf(in.next().toUpperCase());
+            if (numberOfPreviouslyAppliedEffects > 0) {
+                EffectType[] previouslyAppliedEffects = new EffectType[numberOfPreviouslyAppliedEffects];
+                for (int j = 0; j < numberOfPreviouslyAppliedEffects; j++) {
+                    previouslyAppliedEffects[j] = EffectType.valueOf(in.next().toUpperCase());
+                }
+                players[i].addPreviouslyAppliedEffects(previouslyAppliedEffects);
             }
-            players[i].addPreviouslyAppliedEffects(previouslyAppliedEffects);
             in.nextLine();
         }
         return players;
@@ -472,7 +475,7 @@ public class GameService {
      */
     private void writePlayerPieceDetails(PrintWriter out) {
         for (int i = 0; i < playerService.getPlayers().length; i++) {
-            out.print(PLAYER_PIECE_PATH_START + gameBoard.getPlayerPiece(i).getImageFile());
+            out.print(gameBoard.getPlayerPiece(i).getImageFile());
             out.print(DELIMITER);
         }
         out.print('\n');
@@ -501,7 +504,6 @@ public class GameService {
                         FILE_WORD_SPACER + filesWithSameName + DATA_FILE_EXTENSION);
             }
         }
-
         if (!isFileCreated) {
             throw new IllegalArgumentException(TOO_MANY_FILES_WITH_SAME_NAME_MSG);
         }
@@ -588,6 +590,7 @@ public class GameService {
      * @param out The writer which writes all player details to a file.
      */
     private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
+        System.out.println(playerService.getPlayers().length); //fixme
         for (int i = 0; i < playerService.getPlayers().length; i++) {
             writePlayerInstanceDetails(out, i);
         }

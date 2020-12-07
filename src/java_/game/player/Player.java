@@ -108,6 +108,7 @@ public class Player {
      */
     public void addDrawnActionTiles(TileType[] drawnActionTilesToBeAdded) {
         for (TileType tile : drawnActionTilesToBeAdded) {
+            System.out.println(tile);
             drawnActionTiles.add(new ActionTile(tile));
         }
     }
