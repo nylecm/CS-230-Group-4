@@ -1,5 +1,6 @@
 package java_.controller;
 
+import java_.game.controller.CoinHandler;
 import java_.game.controller.GameService;
 import java_.game.controller.PurchaseHandler;
 import java_.game.player.Player;
@@ -24,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -496,7 +498,8 @@ public class NewGameController implements Initializable {
     }
 
     /**
-     * Loads a new game with the players and player pieces on the new game interface.
+     * Loads a new game with the players and player pieces on the new game interface,
+     * updates daily streak.
      *
      * @param e The event of the start game button being clicked.
      * @throws IOException If the player piece image file path is incorrect.
@@ -521,6 +524,11 @@ public class NewGameController implements Initializable {
                 if (isPlayerReady[i]) {
                     players[nPlayersCreated] = new Player(usernames[i],
                             new PlayerPiece(playerPieceImageFiles[i])); //todo test
+                    try {
+                        CoinHandler.increaseDailyStreak(usernames[i]);
+                    } catch (ParseException parseException) {
+                        parseException.printStackTrace();
+                    }
                     nPlayersCreated++;
                 }
                 i++;
