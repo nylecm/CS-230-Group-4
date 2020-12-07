@@ -15,7 +15,7 @@ import java.util.Scanner;
  * Handles the process of awarding coins to players.
  */
 public class CoinHandler {
-    //todo testing
+
     private static final double FACTOR = 0.2;
     private static final int WINNING_MULTIPLIER = 5;
     private static final int LOSING_MULTIPLIER = 1;

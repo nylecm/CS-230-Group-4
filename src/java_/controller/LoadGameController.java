@@ -1,6 +1,8 @@
 package java_.controller;
 
+import java_.game.controller.CoinHandler;
 import java_.game.controller.GameService;
+import java_.game.player.Player;
 import java_.util.Reader;
 import java_.util.security.LoginHandler;
 import javafx.collections.FXCollections;
@@ -23,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -201,12 +204,17 @@ public class LoadGameController implements Initializable {
         if (numberOfIncorrectPasswordsEntered < 1) {
             try {
                 GameService.getInstance().loadSavedInstance(loadGameSelect.getValue());
+                for (Player player : GameService.getInstance().getPlayerService().getPlayers()) {
+                    CoinHandler.increaseDailyStreak(player.getUsername());
+                }
             } catch (FileNotFoundException ex) {
                 loadGameStatusLabel.setText(GAME_SAVE_FILE_NOT_FOUND_MSG);
                 ex.printStackTrace();
             } catch (MalformedURLException ex) {
                 loadGameStatusLabel.setText(PLAYER_PIECE_URL_ERROR_MSG);
                 ex.printStackTrace();
+            } catch (ParseException parseException) {
+                parseException.printStackTrace();
             }
 
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
