@@ -65,6 +65,162 @@ public class GameController implements Initializable {
     private GameBoard gameBoard;
 
     /**
+     * The main pane holding all other Nodes. Holds the
+     * background image and displays the background
+     * animation.
+     */
+    @FXML
+    private AnchorPane background;
+
+    /**
+     * Displays the whole Game Board view.
+     */
+    @FXML
+    private ScrollPane scrollPane;
+
+    /**
+     * Represents the content of the Game Board in layers of
+     * Edge Tiles, Floor Tiles, Effect Overlays and Player Pieces.
+     */
+    @FXML
+    private StackPane content;
+
+    /**
+     * Represents the size of the Game Board.
+     */
+    @FXML
+    private Dimension2D gameBoardView;
+
+    /**
+     * Represents the empty border tiles for FloorTile insertion.
+     */
+    @FXML
+    private Group edgeTileGroup;
+
+    /**
+     * Holds all of the FloorTiles displayed on the Game Board.
+     */
+    @FXML
+    private Group tileGroup;
+
+    /**
+     * Holds all of the Player Pieces displayed on
+     * the Game Board.
+      */
+    @FXML
+    private Group playerPieceGroup;
+
+    /**
+     * Holds the effect textures/overlays applied to
+     * individual Floor Tiles.
+     */
+    @FXML
+    private Group effectGroup;
+
+    /**
+     * Holds the image of drawn FloorTile
+     * that the player inserts.
+     */
+    @FXML
+    private ImageView drawnFloorTile;
+
+    /**
+     * Holds Player's drawn Action Tiles.
+     */
+    @FXML
+    private AnchorPane playersActionTilesHolder;
+
+    /**
+     * Represents the action tiles player has drawn.
+     */
+    @FXML
+    private Group playersActionTiles;
+
+    /**
+     * Shows the order of the players to
+     * take turns.
+     */
+    @FXML
+    private VBox playerQueue;
+
+    /** A button to end the current player's
+     * turn.
+     */
+    @FXML
+    private Button endTurnButton;
+
+    /**
+     * Represents a menu for saving
+     * and exiting the current game.
+     */
+    @FXML
+    private ComboBox dropDownMenu;
+
+    /**
+     * Displays any error messages related
+     * to thge gameplay.
+     */
+    @FXML
+    private Label infoBox;
+
+    /**
+     * Represents the actual Tile object player has drawn.
+     */
+    private Tile drawnTile;
+
+    /**
+     * Message displayed when Player has drawn a Floor Tile and hasn't inserted it.
+     */
+    private final String FLOORTILE_NOT_INSERTED_MSG = "ERROR!\nYOU HAVE TO INSERT FLOOR TILE FIRST!";
+
+    /**
+     * Message displayed when Player tries to use Fire Action Tile on a location with players.
+     */
+    private final String CANT_SET_LOCATION_ON_FIRE_MSG = "ERROR!\nYOU CAN SET FIRE ON LOCATION WITH PLAYERS!";
+
+    /**
+     * Message displayed when Player already used an Action Tile during current turn.
+     */
+    private final String ACTIONTILE_ALREADY_USED_MSG = "ERROR!\nYOU CAN USE ONLY ONE ACTION TILE PER ROUND!";
+
+    /**
+     * Message displayed when Player uses a Player Effect Action Tile on a Floor Tile
+     */
+    private final String PLAYEREFFECT_USED_ON_FLOORTILE_MSG = "ERROR!\nYOU CAN'T USE PLAYER EFFECT ON A FLOOR TILE!";
+
+    /**
+     * Message displayed when Player uses an Area Effect
+     */
+    private final String AREAEFFECT_USED_ON_PLAYER_MSG = "ERROR!\nYOU CAN'T USE AREA EFFECT ACTION TILE ON A PLAYER!";
+
+    /**
+     * Message displayed when Player hasn't moved their Player Piece and a move is possible.
+     */
+    private final String PLAYERPIECE_NOT_MOVED_MSG = "ERROR!\nYOU HAVE TO MOVE YOUR PLAYER PIECE!";
+
+    /**
+     * Message displayed when an Action Tile can't be used on a target.
+     */
+    private final String INVALID_TARGET_MSG = "ERROR!\nTHAT IS NOT A VALID TARGET!";
+
+    /**
+     * Sound played together with any error message
+     * related to the gameplay.
+     */
+    private final String ERROR_SOUND = "src/view/res/sfx/error.mp3";
+
+    /**
+     * Is set to the corners of the Game Board View to solve
+     * any centering issues.
+     */
+    private final Image CORNER_PLACEHOLDER = new Image("/view/res/img/gui/cornerPlaceholder.png");
+
+    /**
+     * The image for edge tiles for insertion.
+     */
+    private final Image EDGE_TILE = new Image("/view/res/img/gui/edgeTile.png");
+
+    /**
      * The width of the FloorTile displayed on the
      * screen.
      */
@@ -87,97 +243,42 @@ public class GameController implements Initializable {
     private static final int PLAYER_PIECE_HEIGHT = 28;
 
     /**
-     * The main pane holding
+     * The width any drawn Action Tile.
      */
-    @FXML
-    private AnchorPane background;
+    private static final int ACTION_TILE_WIDTH = 114;
 
-    @FXML
-    private ScrollPane scrollPane;
+    /**
+     * The height any drawn Action Tile.
+     */
+    private static final int ACTION_TILE_HEIGHT = 145;
 
-    @FXML
-    private StackPane content;
+    /**
+     * Represents the default number of available moves
+     * for each turn.
+     */
+    private static final int DEFAULT_NUMBER_OF_MOVES = 1;
 
-    @FXML
-    private Dimension2D gameBoardView;
+    /**
+     * True if Action Tile was played during the current turn.
+     */
+    private boolean actionTilePlayed;
 
-    @FXML
-    private Group edgeTileGroup;
+    /**
+     * Represents the number of available moves for the current turns
+     * (used for Double Move as well).
+     */
+    private int numberOfMoves;
 
-    @FXML
-    private Group tileGroup;
-
-    @FXML
-    private Group playerPieceGroup;
-
-    @FXML
-    private Group effectGroup;
-
-    @FXML
-    private ImageView drawnFloorTile;
-
-    @FXML
-    private AnchorPane playersActionTilesHolder;
-
-    @FXML
-    private VBox playerQueue;
-
-    @FXML
-    private Button endTurnButton;
-
-    @FXML
-    private ComboBox dropDownMenu;
-
-    @FXML
-    private Label infoBox;
-
-    @FXML
-    private Image floorTileImage = new Image("fullFlat.png");
-
-    @FXML
-    private Image edgeTileImage = new Image("emptyFlat.png");
-
-    @FXML
-    private Image actionTileImage = new Image("actionTile.png");
-
-    private final String ERROR_SOUND = "src/view/res/sfx/error.mp3";
-
-    private final String LOADING_SOUND = "src/view/res/sfx/load.mp3";
-
-    private final String ICE_ACTION_TILE_SOUND = "src/view/res/sfx/iceActionTileSound.mp3";
-
-    private boolean actionTilePlayed; //TODO Move somewhere else?
-
-    private int numberOfMoves; //TODO Move somewhere else?
-
+    /**
+     * Checks whether player has inserted a Floor Tile.
+     */
     private boolean floorTileInserted;
 
-    //TODO Remove all below / Move somewhere else
-
-    private Tile drawnTile;
-
-    @FXML
-    private GridPane mainBox;
-
-    @FXML
-    private Group playersActionTiles;
-
-    private final String FLOORTILE_NOT_INSERTED_MSG = "ERROR!\nYOU HAVE TO INSERT FLOOR TILE FIRST!";
-
-    private final String CANT_SET_LOCATION_ON_FIRE_MSG = "ERROR!\nYOU CAN SET FIRE ON LOCATION WITH PLAYERS!";
-
-    private final String ACTIONTILE_ALREADY_USED_MSG = "ERROR!\nYOU CAN USE ONLY ONE ACTION TILE PER ROUND!";
-
-    private final String PLAYEREFFECT_USED_ON_FLOORTILE_MSG = "ERROR!\nYOU CAN'T USE PLAYER EFFECT ON A FLOOR TILE!";
-
-    private final String AREAEFFECT_USED_ON_PLAYER_MSG = "ERROR!\nYOU CAN'T USE AREA EFFECT ACTION TILE ON A PLAYER!";
-
-    private final String PLAYERPIECE_NOT_MOVED_MSG = "ERROR!\nYOU HAVE TO MOVE YOUR PLAYER PIECE!";
-
-    private final String INVALID_TARGET_MSG = "ERROR!\nTHAT IS NOT A VALID TARGET!";
-
-    private final String EFFECT_ALREADY_USED_ON_TARGET_MSG = "ERROR!\nYOU CAN'T USE THIS EFFECT ON THIS TARGET ANYMORE!";
-
+    /**
+     * Creates the game window and sets all things needed using other methods.
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gameService = GameService.getInstance();
@@ -186,11 +287,12 @@ public class GameController implements Initializable {
 
         gameBoardView = new Dimension2D(gameBoard.getnCols(), gameBoard.getnRows());
 
+        //Sets the default values
         actionTilePlayed = false;
-        numberOfMoves = 1;
+        numberOfMoves = DEFAULT_NUMBER_OF_MOVES;
         floorTileInserted = false;
 
-        //TODO Move somewhere else...
+        //TODO Move somewhere else
         BackgroundFill backgroundFill = null;
         try {
             backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File("src/view/res/img/oberon_from_discord.png").toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
@@ -204,7 +306,7 @@ public class GameController implements Initializable {
 
         createDropDownMenu();
 
-        //TODO Move somewhere else?
+        //Handler for dragging the drawn FloorTile and inserting it
         drawnFloorTile.setOnDragDetected(event -> {
             if ( drawnFloorTile.getImage() != null) {
                 Dragboard dragboard = drawnFloorTile.startDragAndDrop(TransferMode.MOVE);
@@ -215,6 +317,9 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Displays the main Game Board View
+     */
     private void displayGameView() {
         animateBackground();
 
@@ -232,7 +337,6 @@ public class GameController implements Initializable {
         displayPlayerPieces();
 
         //View GameBoard
-//        content = new StackPane();
         content = new StackPane();
         content.getChildren().addAll(tileGroup, effectGroup, edgeTileGroup, playerPieceGroup);
         scrollPane.setFitToHeight(true);
@@ -254,6 +358,11 @@ public class GameController implements Initializable {
         displayActionTiles();
     }
 
+    /**
+     * Creates the isometric view of the Game Board.
+     * Not functional.
+     * @param gameBoard
+     */
     //TODO Isometric view (don't use)
     private void displayGameBoardIsometric(FloorTile[][] gameBoard) {
         edgeTileGroup = new Group();
@@ -287,6 +396,9 @@ public class GameController implements Initializable {
         scrollPane.setContent(content);
     }
 
+    /**
+     * Displays the edges for insertion.
+     */
     //TODO Remake, loop
     private void displayEdges() {
         ImageView edgeTileDisplayTop;
@@ -294,9 +406,10 @@ public class GameController implements Initializable {
         ImageView edgeTileDisplayLeft;
         ImageView edgeTileDisplayRight;
 
+        //Sets the top and bottom edges
         for (int i = 0; i < gameBoardView.getWidth(); i++) {
-            edgeTileDisplayTop = getTileImageView(edgeTileImage);
-            edgeTileDisplayBottom = getTileImageView(edgeTileImage);
+            edgeTileDisplayTop = getTileImageView(EDGE_TILE);
+            edgeTileDisplayBottom = getTileImageView(EDGE_TILE);
 
             edgeTileDisplayTop.setLayoutY(- TILE_HEIGHT);
             edgeTileDisplayTop.setLayoutX(i * TILE_WIDTH);
@@ -318,8 +431,8 @@ public class GameController implements Initializable {
         }
 
         for (int i = 0; i < gameBoardView.getHeight(); i++) {
-            edgeTileDisplayLeft = getTileImageView(edgeTileImage);
-            edgeTileDisplayRight = getTileImageView(edgeTileImage);
+            edgeTileDisplayLeft = getTileImageView(EDGE_TILE);
+            edgeTileDisplayRight = getTileImageView(EDGE_TILE);
 
             edgeTileDisplayLeft.setLayoutY(i * TILE_HEIGHT);
             edgeTileDisplayLeft.setLayoutX(- TILE_WIDTH);
@@ -340,23 +453,28 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Creates the actual GameBoard by reading the
+     * FloorTiles from the Gameboard class
+     */
     private void displayFloorTiles() {
         for (int row = 0; row < gameBoardView.getHeight(); row++) {
             for (int col = 0; col < gameBoardView.getWidth(); col++) {
-
                 Image floorTileImage = new Image(getFloorTileTypeImage(gameBoard.getTileAt(row, col)));
                 ImageView floorTileImageView = getTileImageView(floorTileImage);
                 floorTileImageView.setLayoutX(col * TILE_WIDTH);
                 floorTileImageView.setLayoutY(row * TILE_HEIGHT);
                 floorTileImageView.setRotate(gameBoard.getTileAt(row, col).getRotation() * 90);
-
                 setFloorTileEventHandlers(floorTileImageView);
-
                 tileGroup.getChildren().add(floorTileImageView);
             }
         }
     }
 
+    /**
+     * Displays any effect overlays above the Floor Tiles by
+     * reading the Active Effects in the Gameboard class
+     */
     private void displayEffects() {
         for (Position position : gameBoard.getPositionsWithActiveEffects()) {
             AreaEffect effect = gameBoard.getEffectAt(position);
@@ -365,39 +483,39 @@ public class GameController implements Initializable {
             effectImageView.setLayoutX(position.getColNum() * TILE_WIDTH);
             effectImageView.setLayoutY(position.getRowNum() * TILE_HEIGHT);
             setEffectEventHandlers(effectImageView);
-
             effectGroup.getChildren().add(effectImageView);
         }
     }
 
+    /**
+     * Display the Player Pieces on their correct position
+     * by reading the positions in the Gameboard class.
+     */
     private void displayPlayerPieces() {
+        //Sets the corner images to solve any centering issues
         //TODO Extract, make a loop ------------------------------
-        Image leftTopImage = new Image("leftTop.png");
-        ImageView leftTop = new ImageView(leftTopImage);
+        ImageView leftTop = new ImageView(CORNER_PLACEHOLDER);
         leftTop.setFitWidth(TILE_WIDTH);
         leftTop.setFitHeight(TILE_HEIGHT);
         leftTop.setLayoutX(- TILE_WIDTH);
         leftTop.setLayoutY(- TILE_HEIGHT);
         playerPieceGroup.getChildren().add(leftTop);
 
-        Image rightTopImage = new Image("rightTop.png");
-        ImageView rightTop = new ImageView(rightTopImage);
+        ImageView rightTop = new ImageView(CORNER_PLACEHOLDER);
         rightTop.setFitWidth(TILE_WIDTH);
         rightTop.setFitHeight(TILE_HEIGHT);
         rightTop.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
         rightTop.setLayoutY(- TILE_HEIGHT);
         playerPieceGroup.getChildren().add(rightTop);
 
-        Image leftBottomImage = new Image("leftBottom.png");
-        ImageView leftBottom = new ImageView(leftBottomImage);
+        ImageView leftBottom = new ImageView(CORNER_PLACEHOLDER);
         leftBottom.setFitWidth(TILE_WIDTH);
         leftBottom.setFitHeight(TILE_HEIGHT);
         leftBottom.setLayoutX(- TILE_WIDTH);
         leftBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
         playerPieceGroup.getChildren().add(leftBottom);
 
-        Image rightBottomImage = new Image("rightBottom.png");
-        ImageView rightBottom = new ImageView(rightBottomImage);
+        ImageView rightBottom = new ImageView(CORNER_PLACEHOLDER);
         rightBottom.setFitWidth(TILE_WIDTH);
         rightBottom.setFitHeight(TILE_HEIGHT);
         rightBottom.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
@@ -405,50 +523,45 @@ public class GameController implements Initializable {
         playerPieceGroup.getChildren().add(rightBottom);
         //TODO Extract, make a loop ------------------------------------
 
+        //Reads the game board and puts the Player Pieces on the Game Board
         for (int i = 0; i < gameBoard.getNumOfPlayerPieces(); i++) {
             int row = gameBoard.getPlayerPiecePosition(i).getRowNum();
             int col = gameBoard.getPlayerPiecePosition(i).getColNum();
-
             ImageView playerPieceImageView = getPlayerPieceImageView(gameBoard.getPlayerPiece(i).getImage());
-
-            //TODO Remove magical calculations
             setPlayerPieceImageViewPosition(playerPieceImageView, row, col);
-//            playerPieceImageView.setLayoutX((col - 1) * TILE_WIDTH + TILE_WIDTH + 6);
-//            playerPieceImageView.setLayoutY((row - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
             playerPieceGroup.getChildren().add(playerPieceImageView);
-
             setPlayerPieceEventHandlers(playerPieceImageView);
         }
     }
 
+    /**
+     * Sets the invisible corners of the Game Board
+     * to solve any centering issues for effect overlays.
+     */
     private void setEffectBorders() {
         //TODO Extract, make a loop ------------------------------------
-        Image leftTopImage = new Image("fullFlat.png");
-        ImageView leftTop = new ImageView(leftTopImage);
+        ImageView leftTop = new ImageView(CORNER_PLACEHOLDER);
         leftTop.setFitWidth(TILE_WIDTH);
         leftTop.setFitHeight(TILE_HEIGHT);
         leftTop.setLayoutX(- TILE_WIDTH);
         leftTop.setLayoutY(- TILE_HEIGHT);
         effectGroup.getChildren().add(leftTop);
 
-        Image rightTopImage = new Image("fullFlat.png");
-        ImageView rightTop = new ImageView(rightTopImage);
+        ImageView rightTop = new ImageView(CORNER_PLACEHOLDER);
         rightTop.setFitWidth(TILE_WIDTH);
         rightTop.setFitHeight(TILE_HEIGHT);
         rightTop.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
         rightTop.setLayoutY(- TILE_HEIGHT);
         effectGroup.getChildren().add(rightTop);
 
-        Image leftBottomImage = new Image("fullFlat.png");
-        ImageView leftBottom = new ImageView(leftBottomImage);
+        ImageView leftBottom = new ImageView(CORNER_PLACEHOLDER);
         leftBottom.setFitWidth(TILE_WIDTH);
         leftBottom.setFitHeight(TILE_HEIGHT);
         leftBottom.setLayoutX(- TILE_WIDTH);
         leftBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
         effectGroup.getChildren().add(leftBottom);
 
-        Image rightBottomImage = new Image("fullFlat.png");
-        ImageView rightBottom = new ImageView(rightBottomImage);
+        ImageView rightBottom = new ImageView(CORNER_PLACEHOLDER);
         rightBottom.setFitWidth(TILE_WIDTH);
         rightBottom.setFitHeight(TILE_HEIGHT);
         rightBottom.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
@@ -457,19 +570,19 @@ public class GameController implements Initializable {
         //TODO Extract, make a loop ------------------------------------
     }
 
+    /**
+     * Loads the current player's drawn Action Tiles
+     */
     private void displayActionTiles() {
         for (ActionTile actionTile : gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles()) {
             Image actionTileImage = new Image(getActionTileTypeImage(actionTile));
             ImageView actionTileImageView = new ImageView(actionTileImage);
-
-            //TODO Remove
-            actionTileImageView.setFitHeight(140);
-            actionTileImageView.setFitWidth(114);
-
+            actionTileImageView.setFitHeight(ACTION_TILE_HEIGHT);
+            actionTileImageView.setFitWidth(ACTION_TILE_WIDTH);
             setActionTileEventHandlers(actionTileImageView);
 
             //Add to GUI
-            actionTileImageView.setX(playersActionTiles.getChildren().size() * 50);
+//            actionTileImageView.setX(playersActionTiles.getChildren().size() * 50);
             playersActionTiles.getChildren().add(actionTileImageView);
         }
         playersActionTilesHolder.getChildren().clear();
