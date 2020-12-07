@@ -516,11 +516,11 @@ public class GameController implements Initializable {
                 int targetCol = getItemCol(edgeTileImageView);
                 int targetRow = getItemRow(edgeTileImageView);
 
-
                 //Left or Right edge
                 if (targetCol == -1 || targetCol == gameBoardView.getWidth()) {
                     slideRowTemp(targetRow, targetCol);
-                //Top or Bottom edge
+
+                    //Top or Bottom edge
                 } else if (targetRow == -1 || targetRow == gameBoardView.getHeight()) {
                     slideColTemp(targetCol, targetRow);
                 }
@@ -627,7 +627,6 @@ public class GameController implements Initializable {
                 //TODO String not very sensible
                 if (getActionTileEffectType(source).equals("PlayerEffect")) {
                     removePlayerEffectActionTile(source, playerPieceImageView);
-                    event.setDropCompleted(true);
                 } else {
                     displayError(AREAEFFECT_USED_ON_PLAYER_MSG);
                 }
@@ -726,6 +725,7 @@ public class GameController implements Initializable {
             }
         }
 
+        List<Node> playerPiecesOutOfBounds = new ArrayList<>();
         for (Node playerPiece : playerPiecesToMove) {
             if (row < col) {
                 playerPiece.setLayoutY(playerPiece.getLayoutY() + TILE_HEIGHT);
@@ -735,12 +735,15 @@ public class GameController implements Initializable {
 
             //Return back if yeeted out
             if (playerPiece.getLayoutY() < 0) {
-                setPlayerPieceImageViewPosition((ImageView) playerPiece, (int) (gameBoardView.getHeight() - 1), getItemCol((ImageView) playerPiece));
+                playerPiece.setLayoutY((gameBoardView.getHeight() - 1) * TILE_HEIGHT );
+                playerPiecesOutOfBounds.add(playerPiece);
             }
             if (playerPiece.getLayoutY() > gameBoardView.getHeight() * TILE_HEIGHT) {
-                setPlayerPieceImageViewPosition((ImageView) playerPiece, 0, getItemCol((ImageView) playerPiece));
+                playerPiece.setLayoutY(0);
+                playerPiecesOutOfBounds.add(playerPiece);
             }
         }
+        setPlayerPieceImageViewPosition((ImageView) playerPiecesOutOfBounds.get(0), getItemRow((ImageView) playerPiecesOutOfBounds.get(0)), getItemCol((ImageView) playerPiecesOutOfBounds.get(0)));
 
         for (Node tileWithEffect : effectsToMove) {
             if (row < col) {
@@ -842,6 +845,7 @@ public class GameController implements Initializable {
 
         tileGroup.getChildren().remove(lastTile.get(0));
 
+        List<Node> playerPiecesOutOfBounds = new ArrayList<>();
         for (Node playerPiece : playerPiecesToMove) {
             if (col < row) {
                 playerPiece.setLayoutX(playerPiece.getLayoutX() + TILE_WIDTH);
@@ -850,12 +854,15 @@ public class GameController implements Initializable {
             }
             //Return back if yeeted out
             if (playerPiece.getLayoutX() < 0) {
-                setPlayerPieceImageViewPosition((ImageView) playerPiece, getItemRow((ImageView) playerPiece), (int) (gameBoardView.getWidth() - 1));
+                playerPiece.setLayoutX((gameBoardView.getWidth() - 1) * TILE_HEIGHT);
+                playerPiecesOutOfBounds.add(playerPiece);
             }
             if (playerPiece.getLayoutX() > gameBoardView.getWidth() * TILE_WIDTH) {
-                setPlayerPieceImageViewPosition((ImageView) playerPiece, getItemRow((ImageView) playerPiece), 0);
+                playerPiece.setLayoutX(0);
+                playerPiecesOutOfBounds.add(playerPiece);
             }
         }
+        setPlayerPieceImageViewPosition((ImageView) playerPiecesOutOfBounds.get(0), getItemRow((ImageView) playerPiecesOutOfBounds.get(0)), getItemCol((ImageView) playerPiecesOutOfBounds.get(0)));
 
         for (Node tileWithEffect : effectsToMove) {
             if (col < row) {
@@ -1058,10 +1065,10 @@ public class GameController implements Initializable {
             playerPiecesAtFloorTile.get(1).setLayoutY(targetRow * TILE_HEIGHT + (TILE_HEIGHT - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 - 15);
 
             playerPiecesAtFloorTile.get(2).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 15);
-            playerPiecesAtFloorTile.get(2).setLayoutY(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
+            playerPiecesAtFloorTile.get(2).setLayoutY(targetRow * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 + 15);
 
             playerPiecesAtFloorTile.get(3).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
-            playerPiecesAtFloorTile.get(3).setLayoutY(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 + 15);
+            playerPiecesAtFloorTile.get(3).setLayoutY(targetRow * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitHeight()) / 2 + 15);
 
         } else if (playerPiecesAtFloorTile.size() == 3) {
             playerPiecesAtFloorTile.get(0).setLayoutX(targetCol * TILE_WIDTH + (TILE_WIDTH - playerPiecesAtFloorTile.get(0).getFitWidth()) / 2 - 20);
@@ -1197,15 +1204,6 @@ public class GameController implements Initializable {
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.setVolume(0.5);
         mediaPlayer.play();
-    }
-
-    private void playVideo() {
-        MediaPlayer player = new MediaPlayer( new Media(getClass().getResource("iceEffect.mp4").toExternalForm()));
-        MediaView mediaView = new MediaView(player);
-        background.getChildren().add(mediaView);
-        mediaView.toFront();
-
-        player.play();
     }
 
     private String getActionTileEffectType(ImageView actionTileImageView) {
