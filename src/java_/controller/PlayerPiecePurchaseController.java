@@ -59,6 +59,12 @@ public class PlayerPiecePurchaseController implements Initializable {
     private static final String USER_COIN_FILE_DIRECTORY = "data/user_coins.txt";
     private static final String PLAYER_PIECE_PRICE_DIRECTORY = "data/player_piece_cost.txt";
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
+    private static final String INVALID_USERNAME = "Invalid username.";
+    private static final String WRONG_PASSWORD_ENTERED = "Wrong password or username entered.";
+    private static final String MAIN_MENU_FXML = "../../view/layout/mainMenu.fxml";
+    private static final String PLAYER_PIECE_DIR = "src/view/res/img/player_piece/";
+    private static final String YOU_ARE_LOGGED_IN_AS = "You are logged in as: ";
+    private static final String FULL_STOP = ".";
     public static final String DELIMITER = "`";
     private String currentUser;
 
@@ -83,13 +89,16 @@ public class PlayerPiecePurchaseController implements Initializable {
                 if (isUserFound) {
                     updateAffordablePlayerPieces();
                 } else {
-                    loginStatus.setText("Invalid username.");
+                    loginStatus.setText(INVALID_USERNAME);
                 }
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
         } else {
-            loginStatus.setText("Wrong password entered.");
+            loginStatus.setText(WRONG_PASSWORD_ENTERED);
+            coinNumber.setText("");
+            affordablePlayerPieces.getItems().clear();
+            preOwnedPieces.getItems().clear();
         }
     }
 
@@ -101,14 +110,16 @@ public class PlayerPiecePurchaseController implements Initializable {
      */
     @FXML
     private void onBuyButtonClicked(ActionEvent e) {
-        int newCoinBalance = 0;
-        try {
-            newCoinBalance = PurchaseHandler.buyPlayerPiece(currentUser, affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
-            coinNumber.setText(String.valueOf(newCoinBalance));
-            showOwnedPlayerPieces();
-            updateAffordablePlayerPieces();
-        } catch (IOException | IllegalArgumentException ex) {
-            purchaseStatus.setText(ex.getMessage());
+        if (affordablePlayerPieces.getValue() != null) {
+            int newCoinBalance = Integer.parseInt(coinNumber.getText());
+            try {
+                newCoinBalance = PurchaseHandler.buyPlayerPiece(currentUser, affordablePlayerPieces.getValue(), Integer.parseInt(coinNumber.getText()));
+                coinNumber.setText(String.valueOf(newCoinBalance));
+                showOwnedPlayerPieces();
+                updateAffordablePlayerPieces();
+            } catch (IOException | IllegalArgumentException ex) {
+                purchaseStatus.setText(ex.getMessage());
+            }
         }
     }
 
@@ -145,7 +156,7 @@ public class PlayerPiecePurchaseController implements Initializable {
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource(MAIN_MENU_FXML));
         currentStage.setScene(new Scene(mainMenu));
     }
 
@@ -172,7 +183,7 @@ public class PlayerPiecePurchaseController implements Initializable {
         affordablePlayerPieces.setOnAction(event -> {
             if (affordablePlayerPieces.getValue() != null) {
                 try {
-                    playerPiecePreview.setImage(new Image(String.valueOf(new File("src/view/res/img/player_piece/" + affordablePlayerPieces.getValue()).toURI().toURL())));
+                    playerPiecePreview.setImage(new Image(String.valueOf(new File(PLAYER_PIECE_DIR + affordablePlayerPieces.getValue()).toURI().toURL())));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -208,7 +219,7 @@ public class PlayerPiecePurchaseController implements Initializable {
         }
         usernameField.setText("");
         passwordField.setText("");
-        loginStatus.setText("You are logged in as: " + currentUser + ".");
+        loginStatus.setText(YOU_ARE_LOGGED_IN_AS + currentUser + FULL_STOP);
     }
 
 

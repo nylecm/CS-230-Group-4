@@ -131,15 +131,15 @@ public class GameBoard {
     }
 
     /**
-     * Validate move boolean. FIXME MATEO NEEDS TO JAVA DOC THIS!!!!!!!!!!!!
+     * Validates a move
      *
-     * @param sourceCol       the source col
+     * @param sourceCol       the source col (starting position for the move)
      * @param sourceRow       the source row
-     * @param targetCol       the target col
+     * @param targetCol       the target col (target position for the move)
      * @param targetRow       the target row
      * @param sourceBitmask   the source bitmask
      * @param oppositeBitmask the opposite bitmask
-     * @return the boolean
+     * @return true if the move can be made.
      */
     public boolean validateMove(int sourceCol, int sourceRow, int targetCol, int targetRow, int sourceBitmask, int oppositeBitmask) {
         if (activeEffects.containsKey(new Position(targetRow, targetCol)) && activeEffects.get(new Position(targetRow, targetCol)).getEffectType() == EffectType.FIRE) {
@@ -660,7 +660,7 @@ public class GameBoard {
      * Refreshes the duration of all active area effects, reducing it by 1, or
      * removing it when it's due to be removed.
      */
-    public void refreshEffects() {//todo check if broken
+    public void refreshEffects() {
         Iterator<Map.Entry<Position, AreaEffect>> iterator = activeEffects.entrySet().iterator();
 
         while (iterator.hasNext()) {
@@ -792,7 +792,7 @@ public class GameBoard {
 
     /**
      * DO NOT USE!
-     * Gets all active effects. FIXME REMOVE
+     * Gets all active effects.
      *
      * @return the active effects
      */

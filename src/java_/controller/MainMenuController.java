@@ -24,6 +24,8 @@ import java.util.ResourceBundle;
 
 /**
  * The controller for the main menu interface.
+ *
+ * @author Sam Cox
  */
 public class MainMenuController implements Initializable {
 

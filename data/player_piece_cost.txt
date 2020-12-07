@@ -1,8 +1,7 @@
-1`baby_yoda.png`500`
 1`black_temp_pp.jpg`0`
 1`blue_temp_pp.jpg`0`
 1`red_temp_pp.jpg`0`
 1`yellow_temp_pp.jpg`0`
-1`homer.png`10`
+1`homer.png`20`
 1`alien_ufo_1.png`5`
 1`alien_ufo_2.png`5

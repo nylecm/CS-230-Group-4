@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 
 /**
  * Register controller handles users registering their accounts. This includes their username, email and password.
+ *
+ * @author nylecm
  */
 public class RegisterController implements Initializable {
 
@@ -50,7 +52,7 @@ public class RegisterController implements Initializable {
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
     private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
-    private static final String EMAIL_PATTERN = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+    private static final String EMAIL_PATTERN = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
 
     private static final String USERNAME_INVALID_MSG = "Username invalid!";

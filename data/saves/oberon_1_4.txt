@@ -1,0 +1,7 @@
+2`oberon_1`5`4`8`
+2`3`3`0`
+src\view\res\img\player_piece\yellow_temp_pp.jpg`src\view\res\img\player_piece\red_temp_pp.jpg`
+nylecm`3`double_move`ice`fire`0`
+nylecm1`2`backtrack`ice`0`
+straight`false`3`straight`false`1`straight`false`2`corner`false`1`straight`false`1`goal`true`0`t_shaped`true`1`t_shaped`false`3`corner`false`0`corner`false`0`t_shaped`false`1`t_shaped`false`3`t_shaped`false`2`t_shaped`false`2`t_shaped`false`0`t_shaped`false`1`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`2`
+7`ice`backtrack`t_shaped`t_shaped`straight`t_shaped`t_shaped`

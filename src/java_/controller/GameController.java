@@ -65,110 +65,257 @@ public class GameController implements Initializable {
     private GameBoard gameBoard;
 
     /**
-     * A width of the FloorTile displayed on the
+     * The main pane holding all other Nodes. Holds the
+     * background image and displays the background
+     * animation.
+     */
+    @FXML
+    private AnchorPane background;
+
+    /**
+     * Displays the whole Game Board view.
+     */
+    @FXML
+    private ScrollPane scrollPane;
+
+    /**
+     * Represents the content of the Game Board in layers of
+     * Edge Tiles, Floor Tiles, Effect Overlays and Player Pieces.
+     */
+    @FXML
+    private StackPane content;
+
+    /**
+     * Represents the size of the Game Board.
+     */
+    @FXML
+    private Dimension2D gameBoardView;
+
+    /**
+     * Represents the empty border tiles for FloorTile insertion.
+     */
+    @FXML
+    private Group edgeTileGroup;
+
+    /**
+     * Holds all of the FloorTiles displayed on the Game Board.
+     */
+    @FXML
+    private Group tileGroup;
+
+    /**
+     * Holds all of the Player Pieces displayed on
+     * the Game Board.
+      */
+    @FXML
+    private Group playerPieceGroup;
+
+    /**
+     * Holds the effect textures/overlays applied to
+     * individual Floor Tiles.
+     */
+    @FXML
+    private Group effectGroup;
+
+    /**
+     * Holds the image of drawn FloorTile
+     * that the player inserts.
+     */
+    @FXML
+    private ImageView drawnFloorTile;
+
+    /**
+     * Holds Player's drawn Action Tiles.
+     */
+    @FXML
+    private AnchorPane playersActionTilesHolder;
+
+    /**
+     * Represents the action tiles player has drawn.
+     */
+    @FXML
+    private Group playersActionTiles;
+
+    /**
+     * Shows the order of the players to
+     * take turns.
+     */
+    @FXML
+    private VBox playerQueue;
+
+    /** A button to end the current player's
+     * turn.
+     */
+    @FXML
+    private Button endTurnButton;
+
+    /**
+     * Represents a menu for saving
+     * and exiting the current game.
+     */
+    @FXML
+    private ComboBox dropDownMenu;
+
+    /**
+     * Displays any error messages related
+     * to thge gameplay.
+     */
+    @FXML
+    private Label infoBox;
+
+    /**
+     * Represents the actual Tile object player has drawn.
+     */
+    private Tile drawnTile;
+
+    /**
+     * Message displayed when Player has drawn a Floor Tile and hasn't inserted it.
+     */
+    private final String FLOORTILE_NOT_INSERTED_MSG = "ERROR!\nYOU HAVE TO INSERT FLOOR TILE FIRST!";
+
+    /**
+     * Message displayed when Player tries to use Fire Action Tile on a location with players.
+     */
+    private final String CANT_SET_LOCATION_ON_FIRE_MSG = "ERROR!\nYOU CAN SET FIRE ON LOCATION WITH PLAYERS!";
+
+    /**
+     * Message displayed when Player already used an Action Tile during current turn.
+     */
+    private final String ACTIONTILE_ALREADY_USED_MSG = "ERROR!\nYOU CAN USE ONLY ONE ACTION TILE PER ROUND!";
+
+    /**
+     * Message displayed when Player uses a Player Effect Action Tile on a Floor Tile
+     */
+    private final String PLAYEREFFECT_USED_ON_FLOORTILE_MSG = "ERROR!\nYOU CAN'T USE PLAYER EFFECT ON A FLOOR TILE!";
+
+    /**
+     * Message displayed when Player uses an Area Effect
+     */
+    private final String AREAEFFECT_USED_ON_PLAYER_MSG = "ERROR!\nYOU CAN'T USE AREA EFFECT ACTION TILE ON A PLAYER!";
+
+    /**
+     * Message displayed when Player hasn't moved their Player Piece and a move is possible.
+     */
+    private final String PLAYERPIECE_NOT_MOVED_MSG = "ERROR!\nYOU HAVE TO MOVE YOUR PLAYER PIECE!";
+
+    /**
+     * Message displayed when an Action Tile can't be used on a target.
+     */
+    private final String INVALID_TARGET_MSG = "ERROR!\nTHAT IS NOT A VALID TARGET!";
+
+    /**
+     * Sound played together with any error message
+     * related to the gameplay.
+     */
+    private final String ERROR_SOUND = "src/view/res/sfx/error.mp3";
+
+    /**
+     * Is set to the corners of the Game Board View to solve
+     * any centering issues.
+     */
+    private final Image CORNER_PLACEHOLDER = new Image("/view/res/img/gui/cornerPlaceholder.png");
+
+    /**
+     * The image for edge tiles for insertion.
+     */
+    private final Image EDGE_TILE = new Image("/view/res/img/gui/edgeTile.png");
+
+    /**
+     * The width of the FloorTile displayed on the
      * screen.
      */
     private static final int TILE_WIDTH = 70;
 
     /**
-     * A height of the FloorTile displayed on the
+     * The height of the FloorTile displayed on the
      * screen.
      */
     private  static final int TILE_HEIGHT = 70;
 
+    /**
+     * The width of the Player Piece displayed on the screen.
+     */
     private static final int PLAYER_PIECE_WIDTH = 28;
 
+    /**
+     * The height of the Player Piece displayed on the screen.
+     */
     private static final int PLAYER_PIECE_HEIGHT = 28;
 
-    @FXML
-    private AnchorPane background;
+    /**
+     * The width any drawn Action Tile.
+     */
+    private static final int ACTION_TILE_WIDTH = 114;
 
-    @FXML
-    private ScrollPane scrollPane;
+    /**
+     * The height any drawn Action Tile.
+     */
+    private static final int ACTION_TILE_HEIGHT = 145;
 
-    @FXML
-    private StackPane content;
+    /**
+     * The X-axis spacing between action tiles
+     */
+    private static final int ACTION_TILE_OFFSET = 50;
 
-    @FXML
-    private Dimension2D gameBoardView;
+    /**
+     * Represents the default number of available moves
+     * for each turn.
+     */
+    private static final int DEFAULT_NUMBER_OF_MOVES = 1;
 
-    @FXML
-    private Group edgeTileGroup;
+    /**
+     * The starting value for the size of the current player
+     * in the player queue.
+     */
+    private static final double PLAYER_QUEUE_SIZE_DEFAULT_VALUE = 1.4;
 
-    @FXML
-    private Group tileGroup;
+    /**
+     * The starting value for the opacity of the current player
+     * in the player queue.
+     */
+    private static final double PLAYER_QUEUE_OPACITY_DEFAULT_VALUE = 1.0;
 
-    @FXML
-    private Group playerPieceGroup;
+    /**
+     * How much the size between each player piece differs in the player queue.
+     */
+    private static final double PLAYER_QUEUE_SIZE_STEP = 0.3;
 
-    @FXML
-    private Group effectGroup;
+    /**
+     * How much the opacity between each player piece differs in the player queue.
+     */
+    private static final double PLAYER_QUEUE_OPACITY_STEP = 0.3;
 
-    @FXML
-    private ImageView drawnFloorTile;
+    /**
+     * The brightness adjustment when hovered over edge tiles.
+     */
+    private static final double EDGE_TILE_HIGHLIGHT = -0.2;
 
-    @FXML
-    private AnchorPane playersActionTilesHolder;
+    /**
+     * The brightness adjustment when hovered over floor tiles.
+     */
+    private static final double FLOOR_TILE_HIGHLIGHT = 0.2;
 
-    @FXML
-    private VBox playerQueue;
+    /**
+     * True if Action Tile was played during the current turn.
+     */
+    private boolean actionTilePlayed;
 
-    @FXML
-    private Button endTurnButton;
+    /**
+     * Represents the number of available moves for the current turns
+     * (used for Double Move as well).
+     */
+    private int numberOfMoves;
 
-    @FXML
-    private ComboBox dropDownMenu;
-
-    @FXML
-    private Label infoBox;
-
-    @FXML
-    private Image floorTileImage = new Image("fullFlat.png");
-
-    @FXML
-    private Image edgeTileImage = new Image("emptyFlat.png");
-
-    @FXML
-    private Image actionTileImage = new Image("actionTile.png");
-
-    private final String ERROR_SOUND = "src/view/res/sfx/error.mp3";
-
-    private final String LOADING_SOUND = "src/view/res/sfx/load.mp3";
-
-    private final String ICE_ACTION_TILE_SOUND = "src/view/res/sfx/iceActionTileSound.mp3";
-
-    private boolean actionTilePlayed; //TODO Move somewhere else?
-
-    private int numberOfMoves; //TODO Move somewhere else?
-
+    /**
+     * Checks whether player has inserted a Floor Tile.
+     */
     private boolean floorTileInserted;
 
-    //TODO Remove all below / Move somewhere else
-
-    private Tile drawnTile;
-
-    @FXML
-    private GridPane mainBox;
-
-    @FXML
-    private Group playersActionTiles;
-
-    private final String FLOORTILE_NOT_INSERTED_MSG = "ERROR!\nYOU HAVE TO INSERT FLOOR TILE FIRST!";
-
-    private final String CANT_SET_LOCATION_ON_FIRE_MSG = "ERROR!\nYOU CAN SET FIRE ON LOCATION WITH PLAYERS!";
-
-    private final String ACTIONTILE_ALREADY_USED_MSG = "ERROR!\nYOU CAN USE ONLY ONE ACTION TILE PER ROUND!";
-
-    private final String PLAYEREFFECT_USED_ON_FLOORTILE_MSG = "ERROR!\nYOU CAN'T USE PLAYER EFFECT ON A FLOOR TILE!";
-
-    private final String AREAEFFECT_USED_ON_PLAYER_MSG = "ERROR!\nYOU CAN'T USE AREA EFFECT ACTION TILE ON A PLAYER!";
-
-    private final String PLAYERPIECE_NOT_MOVED_MSG = "ERROR!\nYOU HAVE TO MOVE YOUR PLAYER PIECE!";
-
-    private final String INVALID_TARGET_MSG = "ERROR!\nTHAT IS NOT A VALID TARGET!";
-
-    private final String EFFECT_ALREADY_USED_ON_TARGET_MSG = "ERROR!\nYOU CAN'T USE THIS EFFECT ON THIS TARGET ANYMORE!";
-
+    /**
+     * Creates the game window and sets all things needed using other methods.
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gameService = GameService.getInstance();
@@ -177,11 +324,12 @@ public class GameController implements Initializable {
 
         gameBoardView = new Dimension2D(gameBoard.getnCols(), gameBoard.getnRows());
 
+        //Sets the default values
         actionTilePlayed = false;
-        numberOfMoves = 1;
+        numberOfMoves = DEFAULT_NUMBER_OF_MOVES;
         floorTileInserted = false;
 
-        //TODO Move somewhere else...
+        //TODO Move somewhere else
         BackgroundFill backgroundFill = null;
         try {
             backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File("src/view/res/img/oberon_from_discord.png").toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
@@ -195,7 +343,7 @@ public class GameController implements Initializable {
 
         createDropDownMenu();
 
-        //TODO Move somewhere else?
+        //Handler for dragging the drawn FloorTile and inserting it
         drawnFloorTile.setOnDragDetected(event -> {
             if ( drawnFloorTile.getImage() != null) {
                 Dragboard dragboard = drawnFloorTile.startDragAndDrop(TransferMode.MOVE);
@@ -206,6 +354,9 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Displays the main Game Board View
+     */
     private void displayGameView() {
         animateBackground();
 
@@ -223,7 +374,6 @@ public class GameController implements Initializable {
         displayPlayerPieces();
 
         //View GameBoard
-//        content = new StackPane();
         content = new StackPane();
         content.getChildren().addAll(tileGroup, effectGroup, edgeTileGroup, playerPieceGroup);
         scrollPane.setFitToHeight(true);
@@ -245,6 +395,11 @@ public class GameController implements Initializable {
         displayActionTiles();
     }
 
+    /**
+     * Creates the isometric view of the Game Board.
+     * Not functional.
+     * @param gameBoard
+     */
     //TODO Isometric view (don't use)
     private void displayGameBoardIsometric(FloorTile[][] gameBoard) {
         edgeTileGroup = new Group();
@@ -278,6 +433,9 @@ public class GameController implements Initializable {
         scrollPane.setContent(content);
     }
 
+    /**
+     * Displays the edges for insertion.
+     */
     //TODO Remake, loop
     private void displayEdges() {
         ImageView edgeTileDisplayTop;
@@ -285,9 +443,10 @@ public class GameController implements Initializable {
         ImageView edgeTileDisplayLeft;
         ImageView edgeTileDisplayRight;
 
+        //Sets the top and bottom edges
         for (int i = 0; i < gameBoardView.getWidth(); i++) {
-            edgeTileDisplayTop = getTileImageView(edgeTileImage);
-            edgeTileDisplayBottom = getTileImageView(edgeTileImage);
+            edgeTileDisplayTop = getTileImageView(EDGE_TILE);
+            edgeTileDisplayBottom = getTileImageView(EDGE_TILE);
 
             edgeTileDisplayTop.setLayoutY(- TILE_HEIGHT);
             edgeTileDisplayTop.setLayoutX(i * TILE_WIDTH);
@@ -309,8 +468,8 @@ public class GameController implements Initializable {
         }
 
         for (int i = 0; i < gameBoardView.getHeight(); i++) {
-            edgeTileDisplayLeft = getTileImageView(edgeTileImage);
-            edgeTileDisplayRight = getTileImageView(edgeTileImage);
+            edgeTileDisplayLeft = getTileImageView(EDGE_TILE);
+            edgeTileDisplayRight = getTileImageView(EDGE_TILE);
 
             edgeTileDisplayLeft.setLayoutY(i * TILE_HEIGHT);
             edgeTileDisplayLeft.setLayoutX(- TILE_WIDTH);
@@ -331,23 +490,28 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Creates the actual GameBoard by reading the
+     * FloorTiles from the Gameboard class
+     */
     private void displayFloorTiles() {
         for (int row = 0; row < gameBoardView.getHeight(); row++) {
             for (int col = 0; col < gameBoardView.getWidth(); col++) {
-
                 Image floorTileImage = new Image(getFloorTileTypeImage(gameBoard.getTileAt(row, col)));
                 ImageView floorTileImageView = getTileImageView(floorTileImage);
                 floorTileImageView.setLayoutX(col * TILE_WIDTH);
                 floorTileImageView.setLayoutY(row * TILE_HEIGHT);
                 floorTileImageView.setRotate(gameBoard.getTileAt(row, col).getRotation() * 90);
-
                 setFloorTileEventHandlers(floorTileImageView);
-
                 tileGroup.getChildren().add(floorTileImageView);
             }
         }
     }
 
+    /**
+     * Displays any effect overlays above the Floor Tiles by
+     * reading the Active Effects in the Gameboard class
+     */
     private void displayEffects() {
         for (Position position : gameBoard.getPositionsWithActiveEffects()) {
             AreaEffect effect = gameBoard.getEffectAt(position);
@@ -356,39 +520,39 @@ public class GameController implements Initializable {
             effectImageView.setLayoutX(position.getColNum() * TILE_WIDTH);
             effectImageView.setLayoutY(position.getRowNum() * TILE_HEIGHT);
             setEffectEventHandlers(effectImageView);
-
             effectGroup.getChildren().add(effectImageView);
         }
     }
 
+    /**
+     * Display the Player Pieces on their correct position
+     * by reading the positions in the Gameboard class.
+     */
     private void displayPlayerPieces() {
+        //Sets the corner images to solve any centering issues
         //TODO Extract, make a loop ------------------------------
-        Image leftTopImage = new Image("leftTop.png");
-        ImageView leftTop = new ImageView(leftTopImage);
+        ImageView leftTop = new ImageView(CORNER_PLACEHOLDER);
         leftTop.setFitWidth(TILE_WIDTH);
         leftTop.setFitHeight(TILE_HEIGHT);
         leftTop.setLayoutX(- TILE_WIDTH);
         leftTop.setLayoutY(- TILE_HEIGHT);
         playerPieceGroup.getChildren().add(leftTop);
 
-        Image rightTopImage = new Image("rightTop.png");
-        ImageView rightTop = new ImageView(rightTopImage);
+        ImageView rightTop = new ImageView(CORNER_PLACEHOLDER);
         rightTop.setFitWidth(TILE_WIDTH);
         rightTop.setFitHeight(TILE_HEIGHT);
         rightTop.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
         rightTop.setLayoutY(- TILE_HEIGHT);
         playerPieceGroup.getChildren().add(rightTop);
 
-        Image leftBottomImage = new Image("leftBottom.png");
-        ImageView leftBottom = new ImageView(leftBottomImage);
+        ImageView leftBottom = new ImageView(CORNER_PLACEHOLDER);
         leftBottom.setFitWidth(TILE_WIDTH);
         leftBottom.setFitHeight(TILE_HEIGHT);
         leftBottom.setLayoutX(- TILE_WIDTH);
         leftBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
         playerPieceGroup.getChildren().add(leftBottom);
 
-        Image rightBottomImage = new Image("rightBottom.png");
-        ImageView rightBottom = new ImageView(rightBottomImage);
+        ImageView rightBottom = new ImageView(CORNER_PLACEHOLDER);
         rightBottom.setFitWidth(TILE_WIDTH);
         rightBottom.setFitHeight(TILE_HEIGHT);
         rightBottom.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
@@ -396,50 +560,45 @@ public class GameController implements Initializable {
         playerPieceGroup.getChildren().add(rightBottom);
         //TODO Extract, make a loop ------------------------------------
 
+        //Reads the game board and puts the Player Pieces on the Game Board
         for (int i = 0; i < gameBoard.getNumOfPlayerPieces(); i++) {
             int row = gameBoard.getPlayerPiecePosition(i).getRowNum();
             int col = gameBoard.getPlayerPiecePosition(i).getColNum();
-
             ImageView playerPieceImageView = getPlayerPieceImageView(gameBoard.getPlayerPiece(i).getImage());
-
-            //TODO Remove magical calculations
             setPlayerPieceImageViewPosition(playerPieceImageView, row, col);
-//            playerPieceImageView.setLayoutX((col - 1) * TILE_WIDTH + TILE_WIDTH + 6);
-//            playerPieceImageView.setLayoutY((row - 1) * TILE_HEIGHT + TILE_HEIGHT + 6);
             playerPieceGroup.getChildren().add(playerPieceImageView);
-
             setPlayerPieceEventHandlers(playerPieceImageView);
         }
     }
 
+    /**
+     * Sets the invisible corners of the Game Board
+     * to solve any centering issues for effect overlays.
+     */
     private void setEffectBorders() {
         //TODO Extract, make a loop ------------------------------------
-        Image leftTopImage = new Image("fullFlat.png");
-        ImageView leftTop = new ImageView(leftTopImage);
+        ImageView leftTop = new ImageView(CORNER_PLACEHOLDER);
         leftTop.setFitWidth(TILE_WIDTH);
         leftTop.setFitHeight(TILE_HEIGHT);
         leftTop.setLayoutX(- TILE_WIDTH);
         leftTop.setLayoutY(- TILE_HEIGHT);
         effectGroup.getChildren().add(leftTop);
 
-        Image rightTopImage = new Image("fullFlat.png");
-        ImageView rightTop = new ImageView(rightTopImage);
+        ImageView rightTop = new ImageView(CORNER_PLACEHOLDER);
         rightTop.setFitWidth(TILE_WIDTH);
         rightTop.setFitHeight(TILE_HEIGHT);
         rightTop.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
         rightTop.setLayoutY(- TILE_HEIGHT);
         effectGroup.getChildren().add(rightTop);
 
-        Image leftBottomImage = new Image("fullFlat.png");
-        ImageView leftBottom = new ImageView(leftBottomImage);
+        ImageView leftBottom = new ImageView(CORNER_PLACEHOLDER);
         leftBottom.setFitWidth(TILE_WIDTH);
         leftBottom.setFitHeight(TILE_HEIGHT);
         leftBottom.setLayoutX(- TILE_WIDTH);
         leftBottom.setLayoutY(gameBoardView.getHeight() * TILE_HEIGHT);
         effectGroup.getChildren().add(leftBottom);
 
-        Image rightBottomImage = new Image("fullFlat.png");
-        ImageView rightBottom = new ImageView(rightBottomImage);
+        ImageView rightBottom = new ImageView(CORNER_PLACEHOLDER);
         rightBottom.setFitWidth(TILE_WIDTH);
         rightBottom.setFitHeight(TILE_HEIGHT);
         rightBottom.setLayoutX(gameBoardView.getWidth() * TILE_WIDTH);
@@ -448,37 +607,46 @@ public class GameController implements Initializable {
         //TODO Extract, make a loop ------------------------------------
     }
 
+    /**
+     * Loads the current player's drawn Action Tiles
+     */
     private void displayActionTiles() {
         for (ActionTile actionTile : gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles()) {
             Image actionTileImage = new Image(getActionTileTypeImage(actionTile));
             ImageView actionTileImageView = new ImageView(actionTileImage);
-
-            //TODO Remove
-            actionTileImageView.setFitHeight(140);
-            actionTileImageView.setFitWidth(114);
-
+            actionTileImageView.setFitHeight(ACTION_TILE_HEIGHT);
+            actionTileImageView.setFitWidth(ACTION_TILE_WIDTH);
             setActionTileEventHandlers(actionTileImageView);
 
             //Add to GUI
-            actionTileImageView.setX(playersActionTiles.getChildren().size() * 50);
+            actionTileImageView.setX(playersActionTiles.getChildren().size() * ACTION_TILE_OFFSET);
             playersActionTiles.getChildren().add(actionTileImageView);
         }
+        //Delete current Action Tiles
         playersActionTilesHolder.getChildren().clear();
         playersActionTilesHolder.getChildren().add(playersActionTiles);
     }
 
+    /**
+     * Display the Player Queue
+     * (turn order).
+     */
     private void displayPlayerQueue() {
-        double sizeCoefficient = 1.4;
-        double opacityCoefficient = 1.0;
+        double sizeCoefficient = PLAYER_QUEUE_SIZE_DEFAULT_VALUE;
+        double opacityCoefficient = PLAYER_QUEUE_OPACITY_DEFAULT_VALUE;
         for (Node playerPiecePreview : playerQueue.getChildren()) {
             ((ImageView) playerPiecePreview).setFitHeight(((ImageView) playerPiecePreview).getImage().getHeight() * sizeCoefficient);
             ((ImageView) playerPiecePreview).setFitWidth(((ImageView) playerPiecePreview).getImage().getWidth() * sizeCoefficient);
             playerPiecePreview.setOpacity(opacityCoefficient);
-            sizeCoefficient -= 0.3;
-            opacityCoefficient -= 0.3;
+            sizeCoefficient -= PLAYER_QUEUE_SIZE_STEP;
+            opacityCoefficient -= PLAYER_QUEUE_OPACITY_STEP;
         }
     }
 
+    /**
+     * Creates a drop down menu for Saving and
+     * Exiting the game.
+     */
     private void createDropDownMenu() {
         dropDownMenu.getItems().addAll(
                 "Save",
@@ -508,11 +676,15 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Sets all of the event handlers for every edge tile.
+     * @param edgeTileImageView - the edge tile
+     */
     private void setEdgeTileEventHandlers(ImageView edgeTileImageView) {
         ColorAdjust highlight = new ColorAdjust();
 
         edgeTileImageView.setOnMouseEntered(event -> {
-            highlight.setBrightness(-0.2);
+            highlight.setBrightness(EDGE_TILE_HIGHLIGHT);
             edgeTileImageView.setEffect(highlight);
         });
 
@@ -554,18 +726,15 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Sets all of the event handlers for every floor tile.
+     * @param floorTileImageView - the floor tile
+     */
     private void setFloorTileEventHandlers(ImageView floorTileImageView) {
         ColorAdjust highlight = new ColorAdjust();
 
-        //TODO Remove
-        floorTileImageView.setOnMouseClicked(event -> {
-            System.out.println("Col: " + getItemCol(floorTileImageView));
-            System.out.println("Row: " + getItemRow(floorTileImageView));
-            System.out.println("Paths: " + gameBoard.getTileAt(getItemRow(floorTileImageView), getItemCol(floorTileImageView)).getPathsBits());
-        });
-
         floorTileImageView.setOnMouseEntered(event -> {
-            highlight.setBrightness(0.2);
+            highlight.setBrightness(FLOOR_TILE_HIGHLIGHT);
             floorTileImageView.setEffect(highlight);
         });
 
@@ -605,13 +774,11 @@ public class GameController implements Initializable {
 
     }
 
+    /**
+     * Sets all of the event handlers for every player piece.
+     * @param playerPieceImageView - the player piece
+     */
     private void setPlayerPieceEventHandlers(ImageView playerPieceImageView) {
-        //TODO Remove
-        playerPieceImageView.setOnMouseClicked(event -> {
-            System.out.println("Col: " + getItemCol(playerPieceImageView));
-            System.out.println("Row: " + getItemRow(playerPieceImageView));
-        });
-
         playerPieceImageView.setOnDragDetected(event -> {
             if (!floorTileInserted && drawnTile instanceof FloorTile) {
                 displayError(FLOORTILE_NOT_INSERTED_MSG);
@@ -651,6 +818,10 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Sets all of the event handlers for every effect overlay.
+     * @param effectImageView - the effect overlay.
+     */
     private void setEffectEventHandlers(ImageView effectImageView) {
         effectImageView.setOnDragOver(event ->  {
             event.acceptTransferModes(TransferMode.ANY);
@@ -677,6 +848,10 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Sets all of the event handlers for every drawn action tile.
+     * @param actionTileImageView - the action tile.
+     */
     private void setActionTileEventHandlers(ImageView actionTileImageView) {
 
         actionTileImageView.setOnMouseEntered(event -> {
@@ -706,6 +881,11 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Slides all elements in the given column after insertion
+     * @param col - the column
+     * @param row - row the floor tile was inserted in (bottom/top)
+     */
     private void slideColTemp(int col, int row) {
         ImageView floorTileImageView = getTileImageView(drawnFloorTile.getImage());
         floorTileImageView.setRotate(drawnFloorTile.getRotate());
@@ -772,7 +952,7 @@ public class GameController implements Initializable {
             }
         }
 
-        //TODO THIS IS A VERY BAD CODE, SCAAARY
+        //TODO Don't iterate using X streams
         List<Node> lastTile;
         if (row < col) {
             lastTile = tileGroup.getChildren()
@@ -789,26 +969,13 @@ public class GameController implements Initializable {
         }
 
         tileGroup.getChildren().remove(lastTile.get(0));
-
-//        if (!effectGroup.getChildren().isEmpty()) {
-//            List<Node> lastEffectTile = null;
-//            if (row < col) {
-//                lastEffectTile = effectGroup.getChildren()
-//                        .stream()
-//                        .filter(t -> getItemCol((ImageView) t) == col &&
-//                                getItemRow((ImageView) t) == gameBoardView.getHeight())
-//                        .collect(Collectors.toList());
-//            } else {
-//                lastEffectTile = effectGroup.getChildren()
-//                        .stream()
-//                        .filter(t -> getItemCol((ImageView) t) == col &&
-//                                getItemRow((ImageView) t) == -1)
-//                        .collect(Collectors.toList());
-//            }
-//            effectGroup.getChildren().remove(lastEffectTile.get(0));
-//        }
     }
 
+    /**
+     * Slides all elements in the given row after insertion
+     * @param row - the row
+     * @param col - row the floor tile was inserted in (left/right)
+     */
     private void slideRowTemp(int row, int col) {
         ImageView floorTileImageView = getTileImageView(drawnFloorTile.getImage());
         floorTileImageView.setRotate(drawnFloorTile.getRotate());
@@ -846,7 +1013,7 @@ public class GameController implements Initializable {
 
         }
 
-        //TODO THIS IS A VERY BAD CODE, SCAAARY
+        //TODO Don't iterate using X streams
         List<Node> lastTile;
         if (col < row) {
             lastTile = tileGroup.getChildren()
@@ -892,26 +1059,11 @@ public class GameController implements Initializable {
                 tileWithEffect.setLayoutX(tileWithEffect.getLayoutX() - TILE_WIDTH);
             }
         }
-
-//        if (!effectGroup.getChildren().isEmpty()) {
-//            List<Node> lastEffectTile;
-//            if (col < row) {
-//                lastEffectTile = effectGroup.getChildren()
-//                        .stream()
-//                        .filter(t -> getItemRow((ImageView) t) == row &&
-//                                getItemCol((ImageView) t) == gameBoardView.getWidth())
-//                        .collect(Collectors.toList());
-//            } else {
-//                lastEffectTile = effectGroup.getChildren()
-//                        .stream()
-//                        .filter(t -> getItemRow((ImageView) t) == row &&
-//                                getItemCol((ImageView) t) == -1)
-//                        .collect(Collectors.toList());
-//            }
-//            effectGroup.getChildren().remove(lastEffectTile.get(0));
-//        }
     }
 
+    /**
+     * Draws a tile from the silk bag.
+     */
     @FXML
     private void drawTile() {
         drawnTile = gameService.getSilkBag().take();
@@ -925,16 +1077,27 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Event handler for rotating the drawn floor tile
+     * in a clockwise direction.
+     */
     @FXML
     public void onRotateClockwiseButtonClicked() {
         drawnFloorTile.setRotate(drawnFloorTile.getRotate() + 90);
     }
 
+    /**
+     * Event handler for rotating the drawn floor tile
+     * in a anticlockwise direction.
+     */
     @FXML
     public void onRotateAntiClockwiseButtonClicked() {
         drawnFloorTile.setRotate(drawnFloorTile.getRotate() - 90);
     }
 
+    /**
+     * Event handler for ending the turn (if possible).
+     */
     @FXML
     private void onEndTurnButtonClicked() {
         endTurnButton.setOnMousePressed(event -> {
@@ -955,16 +1118,11 @@ public class GameController implements Initializable {
             playerQueue.getChildren().add(currentPlayerPiecePreview);
             gameService.nextTurn();
             actionTilePlayed = false;
-            numberOfMoves = 1;
+            numberOfMoves = DEFAULT_NUMBER_OF_MOVES;
             floorTileInserted = false;
             infoBox.setText(null);
             displayGameView();
         }
-    }
-
-    @FXML
-    private void onDropDownMenuClicked() {
-
     }
 
     private void displayError(String errorText) {
@@ -972,6 +1130,12 @@ public class GameController implements Initializable {
         playSound(ERROR_SOUND);
     }
 
+    /**
+     * Checks whether a player piece can move, in other words,
+     * if there is a possible move the player can make.
+     * @return true if there is a possible move,
+     * false otherwise.
+     */
     //TODO Loop/remake
     private boolean playerPieceCanMove() {
         int currentPlayerNum = gameService.getCurrentPlayerNum();
@@ -1008,6 +1172,12 @@ public class GameController implements Initializable {
         return false;
     }
 
+    /**
+     * Moves the player piece in the GUI and checks for win.
+     * @param playerPieceImageView - the player piece to move
+     * @param targetFloorTileImageView - the target floor tile
+     * @param event - the source event handler
+     */
     private void movePlayerPieceImageView(ImageView playerPieceImageView, ImageView targetFloorTileImageView, Event event) {
         int sourceFloorTileCol = getItemCol(playerPieceImageView);
         int sourceFloorTileRow = getItemRow(playerPieceImageView);
@@ -1045,7 +1215,6 @@ public class GameController implements Initializable {
 
 
             //Check for win
-            //TODO Implement
             if (gameBoard.getTileAt(targetFloorTileRow, targetFloorTileCol).getType() == TileType.GOAL) {
                 try {
                     LeaderboardHandler.updateLeaderboard(gameService.getPlayerService().getPlayers(), gameBoard.getPlayerByPlayerPieceImage(playerPieceImageView.getImage()));
@@ -1054,12 +1223,20 @@ public class GameController implements Initializable {
                     Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/GameWon.fxml"));
                     currentStage.setScene(new Scene(game));
                 } catch (Exception e) {
-                    System.out.println("ey");
+                    e.printStackTrace();
                 }
             }
         }
     }
 
+    /**
+     * Sets player piece position within a floor tile and
+     * fixes the positioning for more player pieces on the
+     * same floor tile.
+     * @param playerPieceImageView - the checked player piece
+     * @param targetRow - the row of the target floor tile
+     * @param targetCol - the column of the target floor tile
+     */
     private void setPlayerPieceImageViewPosition(ImageView playerPieceImageView, int targetRow, int targetCol) {
         List<ImageView> playerPiecesAtFloorTile = new ArrayList<>();
         if (playerPieceImageView != null) {
@@ -1116,6 +1293,11 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Displays an effect overlay.
+     * @param effectImageView - the effect overlay to display
+     * @param floorTileImageView - the target floor tile
+     */
     private void applyEffectImageView(ImageView effectImageView, ImageView floorTileImageView) {
         //TODO Get from corresponding class
         int area = 3;
@@ -1147,6 +1329,12 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Removes an area effect overlay from the GUI and the GameBoard class.
+     * @param actionTileImageView - the action tile used
+     * @param col - the target's column
+     * @param row - the target's row
+     */
     private void removeAreaEffectActionTile(ImageView actionTileImageView, int col, int row) {
         int usedActionTileIndex = playersActionTiles.getChildren().indexOf(actionTileImageView);
 
@@ -1161,6 +1349,11 @@ public class GameController implements Initializable {
         gameBoard.applyEffect((AreaEffect) usedActionTile.use(), new Position(row, col));
     }
 
+    /**
+     * Removes a player effect overlay from the GUI and the GameBoard class.
+     * @param actionTileImageView - the action tile used
+     * @param targetPlayerPieceImageView - the target player piece
+     */
     private void removePlayerEffectActionTile(ImageView actionTileImageView, ImageView targetPlayerPieceImageView) {
         boolean success = false;
 
@@ -1198,10 +1391,22 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Increases the number of available moves after using
+     * the Double Move Action Tile.
+     */
     private void useDoubleMoveActionTile() {
         numberOfMoves += 1;
     }
 
+    /**
+     * Checkes whether player can use an Area Effect Action Tile
+     * @param effectImageView - the used effect
+     * @param centerRow - the center floor tile row
+     * @param centerCol - the center floor tile column
+     * @return true if the effect can be used,
+     * false otherwise
+     */
     private boolean effectCanBeUsed(ImageView effectImageView, int centerRow, int centerCol) {
         int usedActionTileIndex = playersActionTiles.getChildren().indexOf(effectImageView);
         ActionTile usedActionTile = gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().get(usedActionTileIndex);
@@ -1222,6 +1427,10 @@ public class GameController implements Initializable {
         return true;
     }
 
+    /**
+     * Plays a given sound.
+     * @param soundPath - the URL to the sound file
+     */
     private void playSound(String soundPath) {
         Media sound = new Media(new File(soundPath).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
@@ -1229,12 +1438,24 @@ public class GameController implements Initializable {
         mediaPlayer.play();
     }
 
+    /**
+     * Returns the type of an Action Tile.
+     * @param actionTileImageView - the action tile
+     * @return "AreaEffect" for an Area Effect,
+     * "PlayerEffect for a Player Effect.
+     */
     private String getActionTileEffectType(ImageView actionTileImageView) {
         int usedActionTileIndex = playersActionTiles.getChildren().indexOf(actionTileImageView);
         ActionTile usedActionTile = gameService.getPlayerService().getPlayer(gameService.getCurrentPlayerNum()).getDrawnActionTiles().get(usedActionTileIndex);
         return usedActionTile.use() instanceof  AreaEffect ? "AreaEffect" : "PlayerEffect";
     }
 
+    /**
+     * Returns a constructed ImageView from a
+     * tile image.
+     * @param tileImage - the image
+     * @return the constructed ImageView
+     */
     private ImageView getTileImageView(Image tileImage) {
         ImageView tileImageView = new ImageView(tileImage);
         tileImageView.setFitWidth(TILE_WIDTH);
@@ -1242,6 +1463,12 @@ public class GameController implements Initializable {
         return tileImageView;
     }
 
+    /**
+     * Returns a constructed ImageView from a
+     * player piece image.
+     * @param playerPieceImage - the image
+     * @return the constructed ImageView
+     */
     private ImageView getPlayerPieceImageView(Image playerPieceImage) {
         //TODO Remove magical numbers
         ImageView playerPieceImageView = new ImageView(playerPieceImage);
@@ -1250,14 +1477,29 @@ public class GameController implements Initializable {
         return playerPieceImageView;
     }
 
+    /**
+     * Returns the column of an element on the Game Board.
+     * @param tileImageView - the element
+     * @return the column of the element
+     */
     private int getItemCol(ImageView tileImageView) {
         return (int) (tileImageView.getLayoutX() / TILE_WIDTH);
     }
 
+    /**
+     * Returns the row of an element on the Game Board.
+     * @param tileImageView - the element
+     * @return the row of the element
+     */
     private int getItemRow(ImageView tileImageView) {
         return (int) (tileImageView.getLayoutY() / TILE_HEIGHT);
     }
 
+    /**
+     * Returns the image path for a given FloorTile
+     * @param floorTile - the floor tile
+     * @return the image path, null if not found
+     */
     private String getFloorTileTypeImage(FloorTile floorTile) {
         TileType type = floorTile.getType();
         switch (type) {
@@ -1273,6 +1515,11 @@ public class GameController implements Initializable {
         return null;
     }
 
+    /**
+     * Returns the image path for a given ActionTile
+     * @param actionTile - the action tile
+     * @return the image path, null if not found
+     */
     private String getActionTileTypeImage(ActionTile actionTile) {
         TileType type = actionTile.getType();
         switch (type) {
@@ -1288,6 +1535,11 @@ public class GameController implements Initializable {
         return null;
     }
 
+    /**
+     * Returns the image path for a given EffectType
+     * @param type - the effect type
+     * @return the image path, null if not found
+     */
     private String getEffectTypeImage(EffectType type) {
         switch (type) {
             case FIRE:
@@ -1298,6 +1550,11 @@ public class GameController implements Initializable {
         return null;
     }
 
+
+    /**
+     * Creates a random animation in the background.
+     */
+    //TODO Turn into constants
     private void animateBackground() {
         Random rand = new Random();
 

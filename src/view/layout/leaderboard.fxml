@@ -12,7 +12,7 @@
 
 <?import java.net.URL?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="576.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/11.0.1"
+            prefHeight="576.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.202"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="java_.controller.LeaderboardController" styleClass="main_pane"
             fx:id="mainBox">

@@ -30,6 +30,8 @@ import java.util.*;
 
 /**
  * Controls the new game user interface for creating a new game with up to four players and on a game board of the user's choice.
+ *
+ * @author nylecm
  */
 public class NewGameController implements Initializable {
 
@@ -142,6 +144,14 @@ public class NewGameController implements Initializable {
     private final static String LOG_IN_FAILURE_STRING = "Invalid/Duplicate Credentials!";
     private final static String NO_PLAYER_PIECE_SELECTED_MSG = "Player Piece Not Selected!";
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
+    private static final String IMG_PLAYER_PIECE_DIR = "src/view/res/img/player_piece/";
+    private static final String PIECE_SELECTED_TWICE = "Same player piece selected twice.";
+    private static final String HAS_BEEN_SELECTED = " has been selected!";
+    private static final String ERROR_FINDING_PLAYER_PIECE_FILE = "Error finding player piece file.";
+    private static final String ENSURE_MIN_2_PLAYERS_ARE_LOGGED_IN_WITH_CONFIRMED_PLAYER_PIECES =
+            "Ensure min. 2 players are logged in, with confirmed player pieces.";
+    private static final String LAYOUT_GAME_FXML = "../../view/layout/game.fxml";
+    private static final String VIEW_LAYOUT_MAIN_MENU_FXML = "../../view/layout/mainMenu.fxml";
     private final static int MIN_NUMBER_OF_PLAYERS = 2;
     private final static int MAX_NUMBER_OF_PLAYERS = 4;
 
@@ -149,8 +159,6 @@ public class NewGameController implements Initializable {
 
     private final boolean[] isPlayerReady = new boolean[MAX_NUMBER_OF_PLAYERS];
     private final String[] usernames = new String[MAX_NUMBER_OF_PLAYERS];
-
-    //private final Set<URL> currentlySelectedPlayerPieces = new HashSet<>();
 
     /**
      * Determines if the same player is attempting to log in more than once to be more than one of the players in the
@@ -163,7 +171,6 @@ public class NewGameController implements Initializable {
     private boolean isUserTryingToLogInTwice(String username, int playerIndex) {
         for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
             if (usernames[i] != null && usernames[i].equals(username) && i != playerIndex) {
-                System.out.println(i); //todo remove
                 return true;
             }
         }
@@ -181,7 +188,6 @@ public class NewGameController implements Initializable {
     private boolean isPlayerPieceBeingSelectedTwice(File playerPiece, int playerIndex) {
         for (int i = 0; i < MAX_NUMBER_OF_PLAYERS; i++) {
             if (playerPieceImageFiles[i] != null && playerPieceImageFiles[i].equals(playerPiece) && i != playerIndex) {
-                System.out.println(i);  //todo remove
                 return true;
             }
         }
@@ -233,7 +239,7 @@ public class NewGameController implements Initializable {
         player1PlayerPieceSelect.setOnAction(event -> {
             if (player1PlayerPieceSelect.getValue() != null) {
                 try {
-                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player1PlayerPieceSelect.getValue());
+                    File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player1PlayerPieceSelect.getValue());
                     player1PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
                     playerPieceImageFiles[0] = playerPieceFile;
                 } catch (MalformedURLException e) {
@@ -245,7 +251,7 @@ public class NewGameController implements Initializable {
         player2PlayerPieceSelect.setOnAction(event -> {
             if (player2PlayerPieceSelect.getValue() != null) {
                 try {
-                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player2PlayerPieceSelect.getValue());
+                    File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player2PlayerPieceSelect.getValue());
                     player2PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
                     playerPieceImageFiles[1] = playerPieceFile;
                 } catch (MalformedURLException e) {
@@ -257,7 +263,7 @@ public class NewGameController implements Initializable {
         player3PlayerPieceSelect.setOnAction(event -> {
             if (player3PlayerPieceSelect.getValue() != null) {
                 try {
-                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player3PlayerPieceSelect.getValue());
+                    File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player3PlayerPieceSelect.getValue());
                     player3PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
                     playerPieceImageFiles[2] = playerPieceFile;
                 } catch (MalformedURLException e) {
@@ -269,7 +275,7 @@ public class NewGameController implements Initializable {
         player4PlayerPieceSelect.setOnAction(event -> {
             if (player4PlayerPieceSelect.getValue() != null) {
                 try {
-                    File playerPieceFile = new File("src/view/res/img/player_piece/" + player4PlayerPieceSelect.getValue());
+                    File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player4PlayerPieceSelect.getValue());
                     player4PlayerPieceImage.setImage(new Image(String.valueOf(playerPieceFile.toURI().toURL())));
                     playerPieceImageFiles[3] = playerPieceFile;
                 } catch (MalformedURLException e) {
@@ -304,7 +310,6 @@ public class NewGameController implements Initializable {
             populateWithPlayerPieces(player1PlayerPieceSelect, player1LogInStatusLabel, username);
             usernames[0] = username;
         } else {
-            //check if the user accidentally double clicked... todo change to list from set
             player1LogInStatusLabel.setText(LOG_IN_FAILURE_STRING);
             isPlayerReady[0] = false;
         }
@@ -319,15 +324,15 @@ public class NewGameController implements Initializable {
     public void onPlayer1PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player1PlayerPieceSelect.getValue() != null) {
 
-            File playerPieceFile = new File("src/view/res/img/player_piece/" + player1PlayerPieceSelect.getValue());
+            File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player1PlayerPieceSelect.getValue());
             //URL playerPieceSelected = playerPieceFile.toURI().toURL();
             if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 0)) {
-                player1PlayerPieceStatus.setText("Same player piece selected twice.");
+                player1PlayerPieceStatus.setText(PIECE_SELECTED_TWICE);
                 isPlayerReady[0] = false;
             } else {
                 playerPieceImageFiles[0] = playerPieceFile;
                 player2SetUpVBox.setDisable(false);
-                player1PlayerPieceStatus.setText(player1PlayerPieceSelect.getValue() + " has been selected!");
+                player1PlayerPieceStatus.setText(player1PlayerPieceSelect.getValue() + HAS_BEEN_SELECTED);
                 isPlayerReady[0] = true;
             }
 
@@ -367,15 +372,15 @@ public class NewGameController implements Initializable {
     public void onPlayer2PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player2PlayerPieceSelect.getValue() != null) {
 
-            File playerPieceFile = new File("src/view/res/img/player_piece/" + player2PlayerPieceSelect.getValue());
+            File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player2PlayerPieceSelect.getValue());
             //URL playerPieceSelected = playerPieceFile.toURI().toURL();
             if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 1)) {
-                player2PlayerPieceStatus.setText("Same player piece selected twice.");
+                player2PlayerPieceStatus.setText(PIECE_SELECTED_TWICE);
                 isPlayerReady[1] = false;
             } else {
                 playerPieceImageFiles[1] = playerPieceFile;
                 player3SetUpVBox.setDisable(false);
-                player2PlayerPieceStatus.setText(player2PlayerPieceSelect.getValue() + " has been selected!");
+                player2PlayerPieceStatus.setText(player2PlayerPieceSelect.getValue() + HAS_BEEN_SELECTED);
                 isPlayerReady[1] = true;
             }
 
@@ -415,15 +420,15 @@ public class NewGameController implements Initializable {
     public void onPlayer3PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player3PlayerPieceSelect.getValue() != null) {
 
-            File playerPieceFile = new File("src/view/res/img/player_piece/" + player3PlayerPieceSelect.getValue());
+            File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player3PlayerPieceSelect.getValue());
             //URL playerPieceSelected = playerPieceFile.toURI().toURL();
             if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 2)) {
-                player3PlayerPieceStatus.setText("Same player piece selected twice.");
+                player3PlayerPieceStatus.setText(PIECE_SELECTED_TWICE);
                 isPlayerReady[2] = false;
             } else {
                 playerPieceImageFiles[2] = playerPieceFile;
                 player4SetUpVBox.setDisable(false);
-                player3PlayerPieceStatus.setText(player3PlayerPieceSelect.getValue() + " has been selected!");
+                player3PlayerPieceStatus.setText(player3PlayerPieceSelect.getValue() + HAS_BEEN_SELECTED);
                 isPlayerReady[2] = true;
             }
 
@@ -463,14 +468,14 @@ public class NewGameController implements Initializable {
     public void onPlayer4PlayerPieceConfirmClicked(ActionEvent actionEvent) {
         if (player4PlayerPieceSelect.getValue() != null) {
 
-            File playerPieceFile = new File("src/view/res/img/player_piece/" + player4PlayerPieceSelect.getValue());
+            File playerPieceFile = new File(IMG_PLAYER_PIECE_DIR + player4PlayerPieceSelect.getValue());
             //URL playerPieceSelected = playerPieceFile.toURI().toURL();
             if (isPlayerPieceBeingSelectedTwice(playerPieceFile, 3)) {
-                player4PlayerPieceStatus.setText("Same player piece selected twice.");
+                player4PlayerPieceStatus.setText(PIECE_SELECTED_TWICE);
                 isPlayerReady[3] = false;
             } else {
                 playerPieceImageFiles[3] = playerPieceFile;
-                player4PlayerPieceStatus.setText(player4PlayerPieceSelect.getValue() + " has been selected!");
+                player4PlayerPieceStatus.setText(player4PlayerPieceSelect.getValue() + HAS_BEEN_SELECTED);
                 isPlayerReady[3] = true;
             }
 
@@ -493,7 +498,7 @@ public class NewGameController implements Initializable {
             ArrayList<String> purchasedPlayerPieces = PurchaseHandler.getPlayersPurchasedPlayerPieces(username);
             playerPieceSelect.setItems(FXCollections.observableArrayList(purchasedPlayerPieces));
         } catch (FileNotFoundException e) {
-            loginStatusLabel.setText("error finding player piece file.");
+            loginStatusLabel.setText(ERROR_FINDING_PLAYER_PIECE_FILE);
         }
     }
 
@@ -506,7 +511,6 @@ public class NewGameController implements Initializable {
      */
     @FXML
     private void onStartGameButtonClicked(ActionEvent e) throws IOException {
-        // Make player array...
         int nPlayers = 0;
 
         nPlayers = (isPlayerReady[0] ? nPlayers + 1 : nPlayers);
@@ -523,7 +527,7 @@ public class NewGameController implements Initializable {
             while (nPlayersCreated < nPlayers) {
                 if (isPlayerReady[i]) {
                     players[nPlayersCreated] = new Player(usernames[i],
-                            new PlayerPiece(playerPieceImageFiles[i])); //todo test
+                            new PlayerPiece(playerPieceImageFiles[i]));
                     try {
                         CoinHandler.increaseDailyStreak(usernames[i]);
                     } catch (ParseException parseException) {
@@ -536,10 +540,10 @@ public class NewGameController implements Initializable {
             GameService.getInstance().loadNewGame(players, gameBoardSelect.getValue());
 
             Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/game.fxml"));
+            Pane game = (Pane) FXMLLoader.load(getClass().getResource(LAYOUT_GAME_FXML));
             currentStage.setScene(new Scene(game));
         } else {
-            startGameStatusLabel.setText("Ensure min. 2 players are logged in, with confirmed player pieces.");
+            startGameStatusLabel.setText(ENSURE_MIN_2_PLAYERS_ARE_LOGGED_IN_WITH_CONFIRMED_PLAYER_PIECES);
         }
     }
 
@@ -552,7 +556,7 @@ public class NewGameController implements Initializable {
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/mainMenu.fxml"));
+        Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource(VIEW_LAYOUT_MAIN_MENU_FXML));
         currentStage.setScene(new Scene(mainMenu));
     }
 }

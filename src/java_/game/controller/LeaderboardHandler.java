@@ -42,10 +42,10 @@ public class LeaderboardHandler {
                     String[] currentPlayerStats = in.nextLine().split(DELIMITER);
                     for (int i = 0; i < players.length; i++) {
                         if (players[i].getUsername().equals(currentPlayerStats[0]) && i == winningPlayerIndex) { //The current line contains the stats of the winning player of the game
-                            currentPlayerStats[1] = String.valueOf(Integer.valueOf(currentPlayerStats[1]) + 1); //todo probably being stupid - it's 2am
+                            currentPlayerStats[1] = String.valueOf(Integer.valueOf(currentPlayerStats[1]) + 1);
                             hasUserBeenFound[i] = true;
                         } else if (i != winningPlayerIndex && players[i].getUsername().equals(currentPlayerStats[0])) { //The current line stores the stats of someone who was in the game but lost.
-                            currentPlayerStats[2] = String.valueOf(Integer.valueOf(currentPlayerStats[2]) + 1); //todo probably being stupid - it's 2am
+                            currentPlayerStats[2] = String.valueOf(Integer.valueOf(currentPlayerStats[2]) + 1);
                             hasUserBeenFound[i] = true;
                         }
                     }
@@ -55,7 +55,7 @@ public class LeaderboardHandler {
                 in.close();
                 //Prints all the updated file lines to the file
                 PrintWriter fileWriter = new PrintWriter(gameboardFile);
-                for (String line : newFileLines) { //todo
+                for (String line : newFileLines) {
                     fileWriter.println(line);
                 }
 
