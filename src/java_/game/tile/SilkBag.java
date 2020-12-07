@@ -7,7 +7,7 @@ import java.util.*;
  * a random tile can be taken out of a silk bag, and a random floor tile can be
  * taken out of the silk bag.
  *
- * @author nylecm, paired with ashrw0
+ * @author nylecm, paired with ashrw0, help from Matej Hladky
  */
 public class SilkBag {
     private final Queue<TileType> tiles = new LinkedList<>();
