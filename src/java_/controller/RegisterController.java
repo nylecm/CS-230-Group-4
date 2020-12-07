@@ -50,8 +50,8 @@ public class RegisterController implements Initializable {
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
     private static final String USERNAME_PATTERN = "^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
-    private static final String EMAIL_PATTERN = "^\\S+@\\S+$"; //Too simple? xxx@xxx.xxxx
-    private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"; //todo test - Might be broken
+    private static final String EMAIL_PATTERN = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+    private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
 
     private static final String USERNAME_INVALID_MSG = "Username invalid!";
     private static final String EMAIL_INVALID_MSG = "Email invalid!";
@@ -61,6 +61,11 @@ public class RegisterController implements Initializable {
     private static final String FILE_NOT_FOUND_OR_ERROR_ACCESSING_IT_MSG = "Error, users file not found, or error accessing it!";
     public static final String DUPLICATE_USER_NAME_MSG = "Duplicate user name!";
 
+    /**
+     * Registers a user with the credentials they have entered on the interface.
+     *
+     * @param event The event of the register button being clicked.
+     */
     @FXML
     private void onRegisterButtonClicked(ActionEvent event) {
         String username = this.username.getText();
@@ -83,6 +88,16 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Validates the credentials the user has entered to register with.
+     * The username, password and email must match their retrospective patterns.
+     *
+     * @param username       The username the user is registering with.
+     * @param email          The email the user is registering with.
+     * @param password       The password the user is registering with.
+     * @param passwordRepeat The repeat of the password previously entered. Both should match.
+     * @return Returns true if the user has entered valid credentials to register with. It is false otherwise.
+     */
     private boolean validate(String username, String email, String password, String passwordRepeat) {
         if (!validateUsername(username)) {
             registerStatusLabel.setText(USERNAME_INVALID_MSG);
@@ -103,22 +118,53 @@ public class RegisterController implements Initializable {
         return true;
     }
 
+    /**
+     * Validates the username of the user, ensuring it matches the correct pattern.
+     *
+     * @param username The username to be validated.
+     * @return True if the username is valid.
+     */
     private boolean validateUsername(String username) {
         return username.matches(USERNAME_PATTERN);
     }
 
+    /**
+     * Validates the email of the user, ensuring it matches the correct pattern.
+     *
+     * @param email The email to be validated.
+     * @return True if the email is valid.
+     */
     private boolean validateEmail(String email) {
         return email.matches(EMAIL_PATTERN);
     }
 
+    /**
+     * Validates the password of the user, ensuring it matches the correct pattern.
+     *
+     * @param password The password to be validated.
+     * @return True if the password is valid.
+     */
     private boolean validatePassword(String password) {
         return password.matches(PASSWORD_PATTERN);
     }
 
+    /**
+     * Validates the repeated password of the user, ensuring it matches the original password entered
+     *
+     * @param repeatPassword The username to be validated.
+     * @param password       The original password entered by the user.
+     * @return True if the repeatPassword matches the original password entered.
+     */
     private boolean validateRepeatPassword(String password, String repeatPassword) {
         return password.equals(repeatPassword);
     }
 
+    /**
+     * Returns the user to the main meny
+     *
+     * @param e The action of the back button being clicked.
+     * @throws IOException If the main meny file path is incorrect.
+     */
     @FXML
     private void onBackButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -126,14 +172,23 @@ public class RegisterController implements Initializable {
         currentStage.setScene(new Scene(mainMenu));
     }
 
+    /**
+     * Initialises the register interface, giving it a background and setting its size.
+     *
+     * @param location  The location (not used).
+     * @param resources The resources (not used).
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        BackgroundFill backgroundFill = null;
+        BackgroundImage backgroundImage = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundImage = new BackgroundImage(new Image(String.valueOf
+                    (new File(URANUS_BACKGROUND_PATH).toURI().toURL())), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize
+                    (0, 0, false, false, false, true));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mainBox.setBackground(new Background(backgroundFill));
+        mainBox.setBackground(new Background(backgroundImage));
     }
 }

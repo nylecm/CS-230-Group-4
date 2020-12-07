@@ -22,7 +22,8 @@ public class Player {
 
     /**
      * Instantiates the Player, giving them a username and playerPiece.
-     * @param username The username to be used to identify the Player.
+     *
+     * @param username    The username to be used to identify the Player.
      * @param playerPiece The PlayerPiece to be used to represent the Player in the game.
      */
     public Player(String username, PlayerPiece playerPiece) {
@@ -33,6 +34,7 @@ public class Player {
     /**
      * Adds a new effect type to already known effect types of effects
      * that have been previously applied to the Player.
+     *
      * @param e The effect type of the new effect that has been applied to the Player.
      */
     public void addPreviouslyAppliedEffect(EffectType e) {
@@ -41,6 +43,7 @@ public class Player {
 
     /**
      * Adds a new action tile to already drawn action tiles.
+     *
      * @param actionTile The action tile which has been drawn.
      */
     public void addDrawnActionTile(ActionTile actionTile) {
@@ -49,6 +52,7 @@ public class Player {
 
     /**
      * Returns the username which identifies the Player.
+     *
      * @return The username of the Player.
      */
     public String getUsername() {
@@ -57,6 +61,7 @@ public class Player {
 
     /**
      * Returns the PlayerPiece which represents the Player in the game.
+     *
      * @return The PlayerPiece belonging to the Player.
      */
     public PlayerPiece getPlayerPiece() {
@@ -65,6 +70,7 @@ public class Player {
 
     /**
      * Returns all effect types of effects that have been previously applied to the Player.
+     *
      * @return All previously applied effect types.
      */
     public Set<EffectType> getPreviousAppliedEffect() {
@@ -73,6 +79,7 @@ public class Player {
 
     /**
      * Returns all action tiles which have been drawn by the Player.
+     *
      * @return All previously drawn action tiles.
      */
     public List<ActionTile> getDrawnActionTiles() {
@@ -81,6 +88,7 @@ public class Player {
 
     /**
      * Returns Player data such as username, playerPiece, previouslyAppliedEffects and drawnActionTiles.
+     *
      * @return Player data as a string.
      */
     @Override
@@ -93,12 +101,23 @@ public class Player {
                 '}';
     }
 
+    /**
+     * Adds additional drawn action tiles to known drawn action tiles.
+     *
+     * @param drawnActionTilesToBeAdded The new drawn action tiles to be added.
+     */
     public void addDrawnActionTiles(TileType[] drawnActionTilesToBeAdded) {
-        for (TileType tile: drawnActionTilesToBeAdded) {
+        for (TileType tile : drawnActionTilesToBeAdded) {
+            System.out.println(tile);
             drawnActionTiles.add(new ActionTile(tile));
         }
     }
 
+    /**
+     * Adds multiple effects to known previously applied effects.
+     *
+     * @param previouslyAppliedActionTiles The effects to be added to the previously applied effects.
+     */
     public void addPreviouslyAppliedEffects(EffectType[] previouslyAppliedActionTiles) {
         previousAppliedEffect.addAll(Arrays.asList(previouslyAppliedActionTiles));
     }

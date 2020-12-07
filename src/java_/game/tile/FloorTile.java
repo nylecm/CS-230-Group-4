@@ -8,7 +8,7 @@ import java.util.EnumSet;
  * it keeps track of how many times it has been rotated clockwise from its default
  * position.
  *
- * @author nylecm and bitmask improved by Matej Hlaky
+ * @author nylecm and bitmask improved by Matej Hladky
  */
 public class FloorTile extends Tile {
     public final static EnumSet<TileType> FLOOR_TILE_TYPES =

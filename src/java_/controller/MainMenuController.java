@@ -42,38 +42,35 @@ public class MainMenuController implements Initializable {
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
     /**
-     * Sets the message of the day in the main menu.
-     * @throws IOException If the message of the day cannot be retrieved.
-     */
-    private void setMessageOfTheDay() throws IOException {
-        messageOfTheDay.setText(MessageOfTheDayService.getMessage());
-    }
-
-    /**
      * Initialises the main menu, setting its background and setting the message of the day.
-     * @param location
-     * @param resources
+     *
+     * @param location  The location (not used).
+     * @param resources The resources (not used).
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        BackgroundFill backgroundFill = null;
+        BackgroundImage backgroundImage = null;
         try {
-            backgroundFill = new BackgroundFill(new ImagePattern
-                    (new Image(String.valueOf(new File(URANUS_BACKGROUND_PATH).toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+            backgroundImage = new BackgroundImage(new Image(String.valueOf
+                    (new File(URANUS_BACKGROUND_PATH).toURI().toURL())), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize
+                    (0, 0, false, false, false, true));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mainBox.setBackground(new Background(backgroundFill));
+        mainBox.setBackground(new Background(backgroundImage));
+        mainBox.setMinWidth(614);
 
         try {
-            setMessageOfTheDay();
+            messageOfTheDay.setText(MessageOfTheDayService.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            messageOfTheDay.setText("Unable to get the message of the day.");
         }
     }
 
     /**
      * Opens the new game screen.
+     *
      * @param e When the newGame button is clicked.
      * @throws IOException If the new game file path is incorrect.
      */
@@ -87,6 +84,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the load game screen.
+     *
      * @param e When the loadGame button is clicked.
      * @throws IOException If the load game file path is incorrect.
      */
@@ -99,6 +97,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the customise profile screen.
+     *
      * @param e When the customise profile button is clicked.
      * @throws IOException If the customise profile file path is incorrect.
      */
@@ -111,6 +110,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the leaderboard screen.
+     *
      * @param e When the leaderboard button is clicked.
      * @throws IOException If the leaderboard file path is incorrect.
      */
@@ -123,6 +123,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Opens the register screen.
+     *
      * @param e When the register button is clicked.
      * @throws IOException If the register file path is incorrect
      */
@@ -135,6 +136,7 @@ public class MainMenuController implements Initializable {
 
     /**
      * Quits the game. Closes all windows.
+     *
      * @param e When the quit button is clicked.
      */
     @FXML
