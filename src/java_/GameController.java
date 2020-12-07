@@ -649,6 +649,7 @@ public class GameController implements Initializable {
         );
 
         dropDownMenu.setOnAction(event -> {
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             if (dropDownMenu.getValue() == "Save") {
                 try {
                     gameService.save(gameBoard.getName());
@@ -658,14 +659,19 @@ public class GameController implements Initializable {
             } else if (dropDownMenu.getValue() == "Save and Exit") {
                 try {
                     gameService.save(gameBoard.getName());
-                    //TODO Change
-                    System.exit(0);
+                    Pane game = (Pane) FXMLLoader.load(getClass().getResource("/resources/mainMenu.fxml"));
+                    currentStage.setScene(new Scene(game));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
-                //TODO Change
-                System.exit(0);
+                Pane game = null;
+                try {
+                    game = (Pane) FXMLLoader.load(getClass().getResource("/resources/mainMenu.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                currentStage.setScene(new Scene(game));
             }
         });
     }
@@ -1214,7 +1220,7 @@ public class GameController implements Initializable {
                     LeaderboardHandler.updateLeaderboard(gameService.getPlayerService().getPlayers(), gameBoard.getPlayerByPlayerPieceImage(playerPieceImageView.getImage()));
                     CoinHandler.updateCoins(gameService.getPlayerService().getPlayers(), gameBoard.getPlayerByPlayerPieceImage(playerPieceImageView.getImage()));
                     Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/GameWon.fxml"));
+                    Pane game = (Pane) FXMLLoader.load(getClass().getResource("/resources/GameWon.fxml"));
                     currentStage.setScene(new Scene(game));
                 } catch (Exception e) {
                     e.printStackTrace();

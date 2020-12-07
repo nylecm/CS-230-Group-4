@@ -29,7 +29,7 @@ public class GameWonController implements Initializable {
     private VBox mainPane;
 
     private static final String WON_MSG = " won!";
-    private static final String MAIN_MENU_PATH = "src/resources/mainMenu.fxml";
+    private static final String MAIN_MENU_PATH = "/resources/mainMenu.fxml";
     private static final String URANUS_BACKGROUND_PATH = "src/resources/space_uranus.png";
 
     /**
