@@ -64,12 +64,6 @@
     -fx-cursor: text;
 }
 
-#background {
-    -fx-background-image: url("../res/img/oberon_from_discord.png");
-    -fx-background-repeat: stretch;
-    -fx-background-size: 1080 864;
-}
-
 /*#drawnFloorTile {*/
 /*    -fx-image: url("../../fullFlat.png");*/
 /*}*/

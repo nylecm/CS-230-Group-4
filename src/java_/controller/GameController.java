@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -29,11 +30,13 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -210,12 +213,12 @@ public class GameController implements Initializable {
      * Is set to the corners of the Game Board View to solve
      * any centering issues.
      */
-    private final Image CORNER_PLACEHOLDER = new Image("src/view/res/img/gui/cornerPlaceholder.png");
+    private final Image CORNER_PLACEHOLDER = new Image("/view/res/img/gui/cornerPlaceholder.png");
 
     /**
      * The image for edge tiles for insertion.
      */
-    private final Image EDGE_TILE = new Image("src/view/res/img/gui/edgeTile.png");
+    private final Image EDGE_TILE = new Image("/view/res/img/gui/edgeTile.png");
 
     /**
      * The width of the FloorTile displayed on the
@@ -288,6 +291,15 @@ public class GameController implements Initializable {
         actionTilePlayed = false;
         numberOfMoves = DEFAULT_NUMBER_OF_MOVES;
         floorTileInserted = false;
+
+        //TODO Move somewhere else
+        BackgroundFill backgroundFill = null;
+        try {
+            backgroundFill = new BackgroundFill(new ImagePattern(new Image(String.valueOf(new File("src/view/res/img/oberon_from_discord.png").toURI().toURL()))), CornerRadii.EMPTY, Insets.EMPTY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        background.setBackground(new Background(backgroundFill));
 
         //TODO Replace with isometric view
         displayGameView();
@@ -570,7 +582,7 @@ public class GameController implements Initializable {
             setActionTileEventHandlers(actionTileImageView);
 
             //Add to GUI
-            actionTileImageView.setX(playersActionTiles.getChildren().size() * 50);
+//            actionTileImageView.setX(playersActionTiles.getChildren().size() * 50);
             playersActionTiles.getChildren().add(actionTileImageView);
         }
         playersActionTilesHolder.getChildren().clear();
