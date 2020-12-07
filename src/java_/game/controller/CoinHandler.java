@@ -36,13 +36,13 @@ public class CoinHandler {
      * @throws FileNotFoundException If the file containing the user coin details cannot be found.
      */
     public static void updateCoins(Player[] players, int winningPlayerIndex) throws FileNotFoundException {
-        int nTurns = GameService.getInstance().getTurnCount(); //todo uncomment
+        int nTurns = GameService.getInstance().getTurnCount();
         //int nTurns = 100; //testing only.
 
         // Calculate number of coins that ought to be given out:
         int nPlayers = players.length;
         int effort = nTurns / nPlayers;
-        int winningCoins = (int) (effort * FACTOR * WINNING_MULTIPLIER); //todo balancing ...
+        int winningCoins = (int) (effort * FACTOR * WINNING_MULTIPLIER);
         int losingCoins = (int) (effort * FACTOR * LOSING_MULTIPLIER);
 
         // Gives player's their earned coins:
@@ -79,7 +79,7 @@ public class CoinHandler {
         }
 
         in.close();
-        //todo remove array list after fixing printWriter
+
         //Write all the new file lines
         PrintWriter lineWriter = new PrintWriter(new File(PLAYER_COINS_FILEPATH));
         for (String newFileLine : newFileLines) {

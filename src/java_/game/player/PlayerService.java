@@ -53,7 +53,7 @@ public class PlayerService {
             throw new IllegalStateException(BACKTRACK_EFFECT_PREVIOUSLY_APPLIED_TO_PLAYER);
         } else {
             if (gameService.getGameBoard().isBacktrackPossible(playerNum)) {
-                gameService.getGameBoard().backtrack(playerNum, TARGET_NUMBER_OF_BACKTRACKS); //todo magic number
+                gameService.getGameBoard().backtrack(playerNum, TARGET_NUMBER_OF_BACKTRACKS);
             } else {
                 throw new IllegalStateException(BACK_TRACK_EFFECT_IS_NOT_POSSIBLE);
             }

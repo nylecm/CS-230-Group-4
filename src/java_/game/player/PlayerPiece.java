@@ -33,11 +33,6 @@ public class PlayerPiece {
         image = new Image(String.valueOf(imageFile.toURI().toURL()));
     }
 
-    @Deprecated //fixme test only
-    public PlayerPiece() {
-        previousPlayerPiecePositions = new Stack<>();
-    }
-
     /**
      * Returns the image representing PlayerPiece.
      *
@@ -47,7 +42,11 @@ public class PlayerPiece {
         return image;
     }
 
-    //todo javadoc this + update
+    /**
+     * Gets image file.
+     *
+     * @return this player's image file.
+     */
     public File getImageFile() {
         return imageFile;
     }

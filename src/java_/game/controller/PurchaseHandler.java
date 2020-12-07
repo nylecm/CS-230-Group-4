@@ -177,7 +177,7 @@ public class PurchaseHandler {
      * @param isFirstPlayer True if the player is the first playr of the game.
      * @throws IOException If the player already exists.
      */
-    public static void addNewPlayer(String username, boolean isFirstPlayer) throws IOException { //todo remove boolean parameter?
+    public static void addNewPlayer(String username, boolean isFirstPlayer) throws IOException {
         SimpleDateFormat yyyyddmm = new SimpleDateFormat(DATE_FORMAT);
         Calendar calendar = Calendar.getInstance();
         String dateToday = yyyyddmm.format(calendar.getTime());

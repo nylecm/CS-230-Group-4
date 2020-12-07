@@ -208,7 +208,7 @@ public class GameService {
     (int nRows, int nCols, int nFixedTiles, ArrayList<FloorTile> floorTiles) {
         FloorTile[] floorTilesForGameBoard = new FloorTile[(nRows * nCols) - nFixedTiles];
 
-        for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) { //todo check if there are enough tiles for the game board...
+        for (int i = 0; i < (nRows * nCols) - nFixedTiles; i++) {
             int rotationAmount = ThreadLocalRandom.current().nextInt(0, MAX_ROTATION_BOUND);
             FloorTile newFloorTile = floorTiles.get(0);
             newFloorTile.rotate(rotationAmount);
@@ -248,7 +248,7 @@ public class GameService {
     private Position[] readPlayerPiecePositions(int nPlayers, Scanner in) {
         Position[] positions = new Position[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-            int startRow = in.nextInt(); //todo load player piece positions...
+            int startRow = in.nextInt();
             int startCol = in.nextInt();
             positions[i] = new Position(startRow, startCol);
         }
@@ -260,7 +260,7 @@ public class GameService {
      *
      * @param f The file used to load the instance of GameService.
      * @throws FileNotFoundException If the specified file cannot be found
-     * @throws MalformedURLException //todo
+     * @throws MalformedURLException If problem converiting file to URL.
      */
     public void loadSavedInstance(File f) throws FileNotFoundException, MalformedURLException {
         remake();
@@ -316,7 +316,7 @@ public class GameService {
      * @param in       The scanner that reads the PlayerPieces from a file.
      * @param nPlayers The number of players with the PlayerPieces.
      * @return The array of PlayerPieces with PlayerPiece images.
-     * @throws MalformedURLException //todo
+     * @throws MalformedURLException If there are problems converting file to url.
      */
     private PlayerPiece[] getSavedPlayerPieceImages(Scanner in, int nPlayers) throws MalformedURLException {
         PlayerPiece[] playerPieces = new PlayerPiece[nPlayers];
@@ -436,7 +436,7 @@ public class GameService {
      * @param saveFileName The name of the file in which the game data is to be stored.
      * @throws IOException If a file cannot be created due to an invalid file path.
      */
-    public void save(String saveFileName) throws IOException { //todo
+    public void save(String saveFileName) throws IOException {
         File gameSaveFile = createFile(saveFileName);
 
         PrintWriter out = new PrintWriter(gameSaveFile);
@@ -533,9 +533,9 @@ public class GameService {
      * Writes GameBoard instance details to a file including tiles and their types, fixed tile positions and tile rotations.
      *
      * @param out      The writer which writes the GameBoard instance details to a file.
-     * @param nPlayers //todo?
+     * @param nPlayers number of players.
      */
-    private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) { //todo....
+    private void writeGameBoardInstanceTileDetails(PrintWriter out, int nPlayers) {
         for (int i = 0; i < gameBoard.getnRows(); i++) {
             for (int j = 0; j < gameBoard.getnCols(); j++) {
                 out.print(gameBoard.getTileAt(i, j).getType());
@@ -590,7 +590,7 @@ public class GameService {
      * @param out The writer which writes all player details to a file.
      */
     private void writePlayerInstanceDetailsForAllPlayers(PrintWriter out) {
-        System.out.println(playerService.getPlayers().length); //fixme
+        System.out.println(playerService.getPlayers().length);
         for (int i = 0; i < playerService.getPlayers().length; i++) {
             writePlayerInstanceDetails(out, i);
         }

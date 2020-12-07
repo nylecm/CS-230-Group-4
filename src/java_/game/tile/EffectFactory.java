@@ -27,9 +27,9 @@ public class EffectFactory {
             } else if (type == TileType.FIRE) {
                 return new AreaEffect(EffectType.FIRE, THREE_BY_THREE_EFFECT_RADIUS, GameService.getInstance().getPlayerService().getPlayers().length);
             } else if (type == TileType.BACKTRACK) {
-                return new PlayerEffect(EffectType.BACKTRACK); //todo get user input for target...
+                return new PlayerEffect(EffectType.BACKTRACK);
             } else if (type == TileType.DOUBLE_MOVE) {
-                return new PlayerEffect(EffectType.DOUBLE_MOVE); //todo -"-
+                return new PlayerEffect(EffectType.DOUBLE_MOVE);
             }
         }
         throw new IllegalArgumentException(TILE_NO_EFFECT_MESSAGE);
