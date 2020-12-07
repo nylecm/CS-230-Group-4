@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,10 +34,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -137,6 +136,12 @@ public class GameController implements Initializable {
      */
     @FXML
     private VBox playerQueue;
+
+    /**
+     * Holds the animation images for radar in the GUI
+     */
+    @FXML
+    private VBox radarHolder;
 
     /** A button to end the current player's
      * turn.
@@ -347,6 +352,8 @@ public class GameController implements Initializable {
                 dragboard.setContent(content);
             }
         });
+
+        animateRadar();
     }
 
     /**
@@ -1597,5 +1604,36 @@ public class GameController implements Initializable {
             );
             timeline.play();
         }
+    }
+
+    private void animateRadar() {
+        List<ImageView> radarImageViews = new ArrayList<>();
+        for (int i = 1; i <= 24; i++) {
+            Image radarImage = new Image("resources/radar" + i + ".png");
+            ImageView radarImageView = new ImageView(radarImage);
+            radarImageView.setFitWidth(80);
+            radarImageView.setFitHeight(80);
+            radarImageViews.add(radarImageView);
+        }
+
+        Group radar = new Group();
+
+        radarHolder.getChildren().add(radar);
+
+        radar.getChildren().add(radarImageViews.get(0));
+
+        Timeline t = new Timeline();
+        t.setCycleCount(Timeline.INDEFINITE);
+
+        for (int i = 1; i < radarImageViews.size(); i++) {
+            int j = i;
+            t.getKeyFrames().add(new KeyFrame(
+                    Duration.millis(j * 100),
+                    (ActionEvent event) -> {
+                        radar.getChildren().setAll(radarImageViews.get(j));
+                    }
+            ));
+        }
+        t.play();
     }
 }
