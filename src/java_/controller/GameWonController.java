@@ -18,6 +18,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the game won screen that is displayed when a player wins the game.
+ */
 public class GameWonController implements Initializable {
 
     @FXML
@@ -30,12 +33,22 @@ public class GameWonController implements Initializable {
     private static final String MAIN_MENU_PATH = "../../view/layout/mainMenu.fxml";
     private static final String URANUS_BACKGROUND_PATH = "src/view/res/img/space_uranus.png";
 
+    /**
+     * Returns the user to the main menu.
+     * @param e The action of the main menu button being clicked.
+     * @throws IOException If the main menu file path is incorrect.
+     */
     public void onBackToMainMenuButtonClicked(ActionEvent e) throws IOException {
         Stage currentStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         Pane mainMenu = (Pane) FXMLLoader.load(getClass().getResource(MAIN_MENU_PATH));
         currentStage.setScene(new Scene(mainMenu));
     }
 
+    /**
+     * Initialises the game won controller, giving it a background image and displaying the player that won the game.
+     * @param location The location (not used).
+     * @param resources The resources (not used).
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         BackgroundImage backgroundImage = null;
