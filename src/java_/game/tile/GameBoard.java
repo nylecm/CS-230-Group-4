@@ -18,7 +18,7 @@ import java.util.*;
  * The operations that can be performed on the game board include inserting tiles,
  * moving player pieces, and applying & refreshing area effects (ie fire & ice).
  *
- * @author nylecm, sam cox, waleed ashraf (in order of descending contribution)
+ * @author nylecm, sam cox, waleed ashraf, Matej Hladky (in order of descending contribution)
  */
 public class GameBoard {
 

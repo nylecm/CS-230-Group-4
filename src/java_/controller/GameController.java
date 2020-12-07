@@ -1,27 +1,25 @@
 package java_.controller;
 
 
-import com.sun.xml.internal.ws.api.FeatureConstructor;
 import java_.game.controller.CoinHandler;
 import java_.game.controller.GameService;
 import java_.game.controller.LeaderboardHandler;
-import java_.game.player.Player;
-import java_.game.player.PlayerPiece;
+import java_.game.player.Player;;
 import java_.game.tile.*;
 import java_.util.Position;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -32,10 +30,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -46,17 +42,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * Works as a controller and view entity between the main game window
+ * and related backend classes.
+ * Takes care of the moves, animation and effects, and updating the data
+ * in those backend classes.
+ *
+ * @author Matej Hladky
+ */
 public class GameController implements Initializable {
 
+    /**
+     * Reference to the GameService singleton.
+     */
     private GameService gameService;
 
+    /**
+     * Reference to the current Game Board.
+     */
     private GameBoard gameBoard;
 
+    /**
+     * A width of the FloorTile displayed on the
+     * screen.
+     */
     private static final int TILE_WIDTH = 70;
 
+    /**
+     * A height of the FloorTile displayed on the
+     * screen.
+     */
     private  static final int TILE_HEIGHT = 70;
 
     private static final int PLAYER_PIECE_WIDTH = 28;
@@ -566,9 +583,9 @@ public class GameController implements Initializable {
 
             //PlayerPieceImageView dropped
             if (playerPieceGroup.getChildren().contains(source)) {
-                movePlayerPieceImageView(source, floorTileImageView);
+                movePlayerPieceImageView(source, floorTileImageView, event);
 
-            //ActionTileImageView dropped
+                //ActionTileImageView dropped
             } else if (playersActionTiles.getChildren().contains(source)) {
                 //TODO String not very sensible
                 if (getActionTileEffectType(source).equals("AreaEffect")) {
@@ -579,7 +596,7 @@ public class GameController implements Initializable {
                     } else {
                         displayError(CANT_SET_LOCATION_ON_FIRE_MSG);
                     }
-                //Is Player Effect ActionTile
+                    //Is Player Effect ActionTile
                 } else {
                     displayError(PLAYEREFFECT_USED_ON_FLOORTILE_MSG);
                 }
@@ -655,7 +672,7 @@ public class GameController implements Initializable {
                                 getItemRow((ImageView) t) == targetFloorTileRow)
                         .collect(Collectors.toList()).get(0);
 
-                movePlayerPieceImageView(source, (ImageView) targetFloorTile);
+                movePlayerPieceImageView(source, (ImageView) targetFloorTile, event);
             }
         });
     }
@@ -743,7 +760,9 @@ public class GameController implements Initializable {
                 playerPiecesOutOfBounds.add(playerPiece);
             }
         }
-        setPlayerPieceImageViewPosition((ImageView) playerPiecesOutOfBounds.get(0), getItemRow((ImageView) playerPiecesOutOfBounds.get(0)), getItemCol((ImageView) playerPiecesOutOfBounds.get(0)));
+        if (!playerPiecesOutOfBounds.isEmpty()){
+            setPlayerPieceImageViewPosition((ImageView) playerPiecesOutOfBounds.get(0), getItemRow((ImageView) playerPiecesOutOfBounds.get(0)), getItemCol((ImageView) playerPiecesOutOfBounds.get(0)));
+        }
 
         for (Node tileWithEffect : effectsToMove) {
             if (row < col) {
@@ -854,7 +873,7 @@ public class GameController implements Initializable {
             }
             //Return back if yeeted out
             if (playerPiece.getLayoutX() < 0) {
-                playerPiece.setLayoutX((gameBoardView.getWidth() - 1) * TILE_HEIGHT);
+                playerPiece.setLayoutX((gameBoardView.getWidth() - 1) * TILE_WIDTH);
                 playerPiecesOutOfBounds.add(playerPiece);
             }
             if (playerPiece.getLayoutX() > gameBoardView.getWidth() * TILE_WIDTH) {
@@ -862,7 +881,9 @@ public class GameController implements Initializable {
                 playerPiecesOutOfBounds.add(playerPiece);
             }
         }
-        setPlayerPieceImageViewPosition((ImageView) playerPiecesOutOfBounds.get(0), getItemRow((ImageView) playerPiecesOutOfBounds.get(0)), getItemCol((ImageView) playerPiecesOutOfBounds.get(0)));
+        if (!playerPiecesOutOfBounds.isEmpty()){
+            setPlayerPieceImageViewPosition((ImageView) playerPiecesOutOfBounds.get(0), getItemRow((ImageView) playerPiecesOutOfBounds.get(0)), getItemCol((ImageView) playerPiecesOutOfBounds.get(0)));
+        }
 
         for (Node tileWithEffect : effectsToMove) {
             if (col < row) {
@@ -921,7 +942,7 @@ public class GameController implements Initializable {
         });
 
         endTurnButton.setOnMouseReleased(event -> {
-           endTurnButton.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0.5, 0, 3)");
+            endTurnButton.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0.5, 0, 3)");
         });
 
         if (drawnTile instanceof FloorTile && !floorTileInserted) {
@@ -987,7 +1008,7 @@ public class GameController implements Initializable {
         return false;
     }
 
-    private void movePlayerPieceImageView(ImageView playerPieceImageView, ImageView targetFloorTileImageView) {
+    private void movePlayerPieceImageView(ImageView playerPieceImageView, ImageView targetFloorTileImageView, Event event) {
         int sourceFloorTileCol = getItemCol(playerPieceImageView);
         int sourceFloorTileRow = getItemRow(playerPieceImageView);
 
@@ -1029,10 +1050,12 @@ public class GameController implements Initializable {
                 try {
                     LeaderboardHandler.updateLeaderboard(gameService.getPlayerService().getPlayers(), gameBoard.getPlayerByPlayerPieceImage(playerPieceImageView.getImage()));
                     CoinHandler.updateCoins(gameService.getPlayerService().getPlayers(), gameBoard.getPlayerByPlayerPieceImage(playerPieceImageView.getImage()));
+                    Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    Pane game = (Pane) FXMLLoader.load(getClass().getResource("../../view/layout/GameWon.fxml"));
+                    currentStage.setScene(new Scene(game));
                 } catch (Exception e) {
                     System.out.println("ey");
                 }
-                System.exit(0);
             }
         }
     }
