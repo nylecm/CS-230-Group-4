@@ -1,9 +1,0 @@
-3`oberon_1`5`4`0`
-0`0`1`3`2`0`
-src\view\res\img\player_piece\alien_ufo_1.png`src\view\res\img\player_piece\alien_ufo_2.png`src\view\res\img\player_piece\homer.png`
-nylecm`0`0`
-nylecm1`0`0`
-nylecm2`0`0`
-straight`false`0`straight`false`0`straight`false`0`straight`false`0`straight`false`0`goal`true`0`t_shaped`true`1`corner`false`0`corner`false`0`corner`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`t_shaped`false`0`
-13`ice`t_shaped`ice`backtrack`t_shaped`fire`t_shaped`backtrack`double_move`t_shaped`ice`t_shaped`straight`
-3`0`3`fire`3`1`3`fire`4`0`3`fire`4`1`3`fire`
