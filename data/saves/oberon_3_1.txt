@@ -1,0 +1,9 @@
+4`oberon_3`6`6`0`
+1`0`0`0`3`5`0`5`
+src\view\res\img\player_piece\black_temp_pp.jpg`src\view\res\img\player_piece\red_temp_pp.jpg`src\view\res\img\player_piece\yellow_temp_pp.jpg`src\view\res\img\player_piece\blue_temp_pp.jpg`
+nylecm1`1`double_move`0`
+nylecm`0`0`
+nylecm2`0`0`
+nylecm3`0`0`
+straight`false`2`straight`false`3`straight`false`1`straight`false`1`straight`false`3`straight`false`1`straight`false`3`straight`false`2`straight`false`3`corner`true`2`straight`false`1`straight`false`3`straight`false`2`corner`true`1`straight`false`1`t_shaped`true`0`straight`false`1`straight`false`2`straight`false`1`straight`false`3`straight`false`2`goal`true`0`straight`false`3`straight`false`2`straight`false`3`straight`false`2`corner`true`3`straight`false`3`straight`false`3`straight`false`1`straight`false`2`straight`false`1`corner`true`2`straight`false`3`straight`false`1`straight`true`0`
+65`corner`double_move`corner`double_move`t_shaped`fire`ice`corner`fire`corner`ice`corner`ice`ice`ice`corner`corner`fire`fire`fire`double_move`backtrack`backtrack`ice`fire`fire`ice`ice`corner`ice`corner`fire`ice`fire`corner`corner`double_move`t_shaped`ice`backtrack`fire`corner`corner`corner`double_move`corner`ice`double_move`ice`ice`corner`corner`double_move`corner`backtrack`ice`backtrack`corner`fire`t_shaped`straight`double_move`corner`backtrack`fire`
